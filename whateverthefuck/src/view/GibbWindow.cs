@@ -36,7 +36,7 @@ namespace whateverthefuck.src.view
             base.OnLoad(e);
             if (LoadResetEvent != null) LoadResetEvent.Set();
         }
-        GameEntity ge = new GameEntity();
+
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
@@ -48,7 +48,10 @@ namespace whateverthefuck.src.view
 
             var drawAdapter = new DrawAdapter();
 
-            ge.Draw(drawAdapter);
+            foreach (var drawable in GUI.GetAllDrawables())
+            {
+                drawable.Draw(drawAdapter);
+            }
 
             this.SwapBuffers();
             GL.PopMatrix();

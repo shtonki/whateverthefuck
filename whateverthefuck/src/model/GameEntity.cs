@@ -15,12 +15,18 @@ namespace whateverthefuck.src.model
 
         public override void Draw(DrawAdapter drawAdapter)
         {
-            float x1 = x / 100f;
-            float y1 = y / 100f;
+            float x1 = x / 1000f;
+            float y1 = y / 1000f;
             float x2 = x1 + 0.1f;
             float y2 = y1 + 0.1f;
 
             drawAdapter.fillRectangle(x1, y1, x2, y2, Color.White);
+        }
+
+        public void Step()
+        {
+            x++;
+            y++;
         }
     }
 }

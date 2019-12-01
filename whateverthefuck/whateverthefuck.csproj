@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\model\GameEntity.cs" />
+    <Compile Include="src\model\GameState.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\view\Drawable.cs" />
     <Compile Include="src\view\DrawAdapter.cs" />

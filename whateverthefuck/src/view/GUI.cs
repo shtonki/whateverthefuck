@@ -9,8 +9,6 @@ namespace whateverthefuck.src.view
 {
     static class GUI
     {
-        private const int TickRate = 100;
-        
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
         /// of said window to be called. Roughly speaking.
@@ -23,11 +21,16 @@ namespace whateverthefuck.src.view
             loadre.Wait();
         }
 
+        public static IEnumerable<Drawable> GetAllDrawables()
+        {
+            return Program.GameState.AllEntities;
+        }
+
         private static void LaunchGameWindow(object o)
         {
             ManualResetEventSlim loadre = (ManualResetEventSlim)o;
             var frame = new GibbWindow(loadre);
-            frame.Run(TickRate, 0);
+            frame.Run(0, 0);
         }
 
     }
