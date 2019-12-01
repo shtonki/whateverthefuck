@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.view
 {
@@ -35,7 +36,7 @@ namespace whateverthefuck.src.view
             base.OnLoad(e);
             if (LoadResetEvent != null) LoadResetEvent.Set();
         }
-
+        GameEntity ge = new GameEntity();
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
@@ -45,8 +46,9 @@ namespace whateverthefuck.src.view
             GL.ClearColor(Color.Fuchsia);
             GL.PushMatrix();
 
-            DrawAdapter drawAdapter = new DrawAdapter();
-            drawAdapter.fillRectangle(0f, 0f, 1f, 1f, Color.Black);
+            var drawAdapter = new DrawAdapter();
+
+            ge.Draw(drawAdapter);
 
             this.SwapBuffers();
             GL.PopMatrix();
