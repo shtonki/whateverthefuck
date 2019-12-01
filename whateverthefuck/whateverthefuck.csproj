@@ -38,6 +38,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\control\GameAction.cs" />
+    <Compile Include="src\control\HotkeyMapping.cs" />
+    <Compile Include="src\control\Input.cs" />
+    <Compile Include="src\control\InputUnion.cs" />
     <Compile Include="src\model\GameEntity.cs" />
     <Compile Include="src\model\GameState.cs" />
     <Compile Include="src\Program.cs" />

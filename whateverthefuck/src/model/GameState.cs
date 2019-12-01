@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using whateverthefuck.src.control;
 
 namespace whateverthefuck.src.model
 {
     class GameState
     {
         public List<GameEntity> AllEntities = new List<GameEntity>();
+
+        private Hero Hero;
 
         private Timer TickTimer;
 
@@ -24,6 +27,11 @@ namespace whateverthefuck.src.model
             {
                 entity.Step();
             }
+        }
+
+        internal void ActivateAction(GameAction gameAction)
+        {
+            throw new NotImplementedException();
         }
     }
 }

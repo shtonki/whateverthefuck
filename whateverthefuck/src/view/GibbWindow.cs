@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
+using whateverthefuck.src.control;
 using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.view
@@ -55,6 +57,26 @@ namespace whateverthefuck.src.view
 
             this.SwapBuffers();
             GL.PopMatrix();
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            Input.Handle(new InputUnion(InputUnion.Directions.Down, e.Button));
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            Input.Handle(new InputUnion(InputUnion.Directions.Up, e.Button));
+        }
+
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            Input.Handle(new InputUnion(e.IsRepeat ? InputUnion.Directions.Repeat : InputUnion.Directions.Down, e.Key));
+        }
+
+        protected override void OnKeyUp(KeyboardKeyEventArgs e)
+        {
+            Input.Handle(new InputUnion(e.IsRepeat ? InputUnion.Directions.Repeat : InputUnion.Directions.Up, e.Key));
         }
 
     }
