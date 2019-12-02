@@ -10,22 +10,28 @@ namespace whateverthefuck.src.model
 {
     class GameEntity : Drawable
     {
-        public float x;
-        public float y;
+        public GameCoordinate Location { get; } = new GameCoordinate(0, 0);
 
+        protected Color DrawColor = Color.Black;
 
         public override void Draw(DrawAdapter drawAdapter)
         {
-            float x1 = x / 1000f;
-            float y1 = y / 1000f;
+            float x1 = Location.X;
+            float y1 = Location.Y;
             float x2 = x1 + 0.1f;
             float y2 = y1 + 0.1f;
 
-            drawAdapter.fillRectangle(x1, y1, x2, y2, Color.White);
+            drawAdapter.fillRectangle(x1, y1, x2, y2, DrawColor);
         }
 
         public virtual void Step()
         {
+            var movement = CalculateMovement();
+        }
+
+        public virtual GameCoordinate CalculateMovement()
+        {
+            return new GameCoordinate(0, 0);
         }
     }
 }

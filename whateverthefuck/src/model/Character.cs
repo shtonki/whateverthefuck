@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model
 {
     class MovementStruct
     {
@@ -18,7 +12,7 @@ namespace whateverthefuck.src.model
     class Character : GameEntity
     {
         public MovementStruct Movements { get; set; } = new MovementStruct();
-        public float MoveSpeed = 5.1f;
+        public float MoveSpeed = 0.01f;
 
         public void SetMovementUpwards(bool move)
         {
@@ -46,22 +40,22 @@ namespace whateverthefuck.src.model
 
             if (Movements.Upwards)
             {
-                y += MoveSpeed;
+                Location.Y += MoveSpeed;
             }
 
             if (Movements.Downwards)
             {
-                y -= MoveSpeed;
+                Location.Y -= MoveSpeed;
             }
 
             if (Movements.Leftwards)
             {
-                x -= MoveSpeed;
+                Location.X -= MoveSpeed;
             }
 
             if (Movements.Rightwards)
             {
-                x += MoveSpeed;
+                Location.X += MoveSpeed;
             }
         }
     }

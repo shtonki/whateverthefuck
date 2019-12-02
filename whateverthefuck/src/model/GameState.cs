@@ -19,6 +19,11 @@ namespace whateverthefuck.src.model
             Hero = new Hero();
             AllEntities.Add(Hero);
 
+            var npc1 = new Character();
+            npc1.Location.X = 0.5f;
+            npc1.Location.Y = 0.5f;
+            AllEntities.Add(npc1);
+
             TickTimer = new Timer(Step, null, 0, 10);
         }
 
