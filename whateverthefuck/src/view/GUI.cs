@@ -9,6 +9,8 @@ namespace whateverthefuck.src.view
 {
     static class GUI
     {
+        public static Camera Camera;
+
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
         /// of said window to be called. Roughly speaking.
