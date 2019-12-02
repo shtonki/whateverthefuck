@@ -14,6 +14,12 @@
         public MovementStruct Movements { get; set; } = new MovementStruct();
         public float MoveSpeed = 0.01f;
 
+
+        public Character()
+        {
+            Movable = true;
+        }
+
         public void SetMovementUpwards(bool move)
         {
             Movements.Upwards = move;

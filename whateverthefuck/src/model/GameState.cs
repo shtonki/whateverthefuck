@@ -19,11 +19,22 @@ namespace whateverthefuck.src.model
             Hero = new Hero();
             AllEntities.Add(Hero);
 
-            var npc1 = new Character();
-            npc1.Location.X = 0.5f;
-            npc1.Location.Y = 0.5f;
-            npc1.Size.Y = 0.55f;
-            AllEntities.Add(npc1);
+            GameEntity entity;
+
+            entity = new Block();
+            entity.Location.X = 0.5f;
+            entity.Location.Y = 0.5f;
+            AllEntities.Add(entity);
+
+            entity = new Block();
+            entity.Location.X = 0.6f;
+            entity.Location.Y = 0.5f;
+            AllEntities.Add(entity);
+
+            entity = new Block();
+            entity.Location.X = 0.7f;
+            entity.Location.Y = 0.5f;
+            AllEntities.Add(entity);
 
             TickTimer = new Timer(Step, null, 0, 10);
         }
@@ -36,9 +47,18 @@ namespace whateverthefuck.src.model
             }
 
             var collisions = DetectCollisions();
+            collisions.Sort((r1, r2) => r1.Overlap.CompareTo(-r2.Overlap));
 
             foreach (var collision in collisions)
             {
+
+                // checking and not handling because at this point in time it shouldn't occur but it might at some point
+                // and it seems to bug out instead of erroring out
+                if (collision.EntityI.MovementCache.X == 0 &&
+                    collision.EntityI.MovementCache.Y == 0 &&
+                    collision.EntityJ.MovementCache.X == 0 &&
+                    collision.EntityJ.MovementCache.Y == 0) { throw new Exception("if this happens we're in trouble"); }
+
                 if (collision.Direction == CollisionDirection.Left)
                 {
                     var ishare = collision.EntityI.MovementCache.X / (collision.EntityI.MovementCache.X + collision.EntityJ.MovementCache.X);
@@ -70,6 +90,7 @@ namespace whateverthefuck.src.model
                     collision.EntityI.Location.Y -= ishare * collision.Overlap;
                     collision.EntityJ.Location.Y += jshare * collision.Overlap;
                 }
+
             }
         }
 
@@ -84,6 +105,8 @@ namespace whateverthefuck.src.model
                 for (int j = i+1; j < AllEntities.Count; j++)
                 {
                     var entityJ = AllEntities[j];
+
+                    if (!entityI.Movable && !entityJ.Movable) { continue; }
 
                     var check1 = entityI.Left < entityJ.Right;
                     var check2 = entityI.Right > entityJ.Left;

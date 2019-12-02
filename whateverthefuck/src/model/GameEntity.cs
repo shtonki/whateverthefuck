@@ -15,6 +15,7 @@ namespace whateverthefuck.src.model
         
         // retains the last movement made
         public GameCoordinate MovementCache { get; private set; }
+        public bool Movable { get; protected set; }
 
         public float Left => Location.X;
         public float Right => Location.X + Size.X;
