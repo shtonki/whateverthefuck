@@ -50,9 +50,12 @@
     <Compile Include="src\model\Hero.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\util\Logging.cs" />
+    <Compile Include="src\view\Camera.cs" />
+    <Compile Include="src\view\Coordinate.cs" />
     <Compile Include="src\view\Drawable.cs" />
     <Compile Include="src\view\DrawAdapter.cs" />
     <Compile Include="src\view\GibbWindow.cs" />
+    <Compile Include="src\view\GLCoordinate.cs" />
     <Compile Include="src\view\GUI.cs" />
   </ItemGroup>
   <ItemGroup>

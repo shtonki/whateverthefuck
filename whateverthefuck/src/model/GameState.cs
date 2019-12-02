@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using whateverthefuck.src.control;
+using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
 {
@@ -18,6 +19,7 @@ namespace whateverthefuck.src.model
         {
             Hero = new Hero();
             AllEntities.Add(Hero);
+            GUI.Camera = new FollowCamera(Hero);
 
             GameEntity entity;
 
@@ -203,6 +205,16 @@ namespace whateverthefuck.src.model
                 case GameAction.HeroWalkRightwardsStop:
                 {
                     Hero.SetMovementRightwards(false);
+                } break;
+
+                case GameAction.CameraZoomIn:
+                {
+                    GUI.Camera.Zoom.ZoomIn();
+                } break;
+
+                case GameAction.CameraZoomOut:
+                {
+                    GUI.Camera.Zoom.ZoomOut();
                 } break;
 
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");

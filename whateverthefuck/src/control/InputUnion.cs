@@ -26,25 +26,6 @@ namespace whateverthefuck.src.control
             Key = key;
         }
 
-#if false
-        public override string ToString()
-        {
-            if (IsKeyboardInput)
-            {
-                return KeyboardArgs.Key.ToString();
-            }
-            if (IsGamePadInput)
-            {
-                return GamePadButtonArgs.ToString();
-            }
-            if (IsMouseInput)
-            {
-                return MouseButtonArgs.ToString();
-            }
-            return "Failed to stringify InputUnion";
-        }
-
-#endif
         public bool Equals(InputUnion other)
         {
             return Direction == other.Direction &&
