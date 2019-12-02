@@ -16,7 +16,8 @@ namespace whateverthefuck.src.model
 
         public GameState()
         {
-            AllEntities.Add(new GameEntity());
+            Hero = new Hero();
+            AllEntities.Add(Hero);
 
             TickTimer = new Timer(Step, null, 0, 10);
         }
@@ -29,9 +30,52 @@ namespace whateverthefuck.src.model
             }
         }
 
-        internal void ActivateAction(GameAction gameAction)
+        public void ActivateAction(GameAction gameAction)
         {
-            throw new NotImplementedException();
+            switch (gameAction)
+            {
+                case GameAction.HeroWalkUpwards:
+                {
+                    Hero.SetMovementUpwards(true);
+                } break;
+
+                case GameAction.HeroWalkUpwardsStop:
+                {
+                    Hero.SetMovementUpwards(false);
+                } break;
+
+                case GameAction.HeroWalkDownwards:
+                {
+                    Hero.SetMovementDownwards(true);
+                } break;
+
+                case GameAction.HeroWalkDownwardsStop:
+                {
+                    Hero.SetMovementDownwards(false);
+                } break;
+
+                case GameAction.HeroWalkLeftwards:
+                {
+                    Hero.SetMovementLeftwards(true);
+                } break;
+
+                case GameAction.HeroWalkLeftwardsStop:
+                {
+                    Hero.SetMovementLeftwards(false);
+                } break;
+
+                case GameAction.HeroWalkRightwards:
+                {
+                    Hero.SetMovementRightwards(true);
+                } break;
+
+                case GameAction.HeroWalkRightwardsStop:
+                {
+                    Hero.SetMovementRightwards(false);
+                } break;
+
+                default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
+            }
         }
     }
 }

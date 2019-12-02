@@ -42,9 +42,12 @@
     <Compile Include="src\control\HotkeyMapping.cs" />
     <Compile Include="src\control\Input.cs" />
     <Compile Include="src\control\InputUnion.cs" />
+    <Compile Include="src\model\Character.cs" />
     <Compile Include="src\model\GameEntity.cs" />
     <Compile Include="src\model\GameState.cs" />
+    <Compile Include="src\model\Hero.cs" />
     <Compile Include="src\Program.cs" />
+    <Compile Include="src\util\Logging.cs" />
     <Compile Include="src\view\Drawable.cs" />
     <Compile Include="src\view\DrawAdapter.cs" />
     <Compile Include="src\view\GibbWindow.cs" />

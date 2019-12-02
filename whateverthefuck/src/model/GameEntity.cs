@@ -10,8 +10,9 @@ namespace whateverthefuck.src.model
 {
     class GameEntity : Drawable
     {
-        int x;
-        int y;
+        public float x;
+        public float y;
+
 
         public override void Draw(DrawAdapter drawAdapter)
         {
@@ -23,10 +24,8 @@ namespace whateverthefuck.src.model
             drawAdapter.fillRectangle(x1, y1, x2, y2, Color.White);
         }
 
-        public void Step()
+        public virtual void Step()
         {
-            x++;
-            y++;
         }
     }
 }

@@ -11,8 +11,14 @@ namespace whateverthefuck.src.control
         
         static Input()
         {
-            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, Key.W), GameAction.HeroWalk));
-            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Up, Key.W), GameAction.HeroStopWalk));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, Key.W), GameAction.HeroWalkUpwards));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Up, Key.W), GameAction.HeroWalkUpwardsStop));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, Key.S), GameAction.HeroWalkDownwards));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Up, Key.S), GameAction.HeroWalkDownwardsStop));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, Key.A), GameAction.HeroWalkLeftwards));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Up, Key.A), GameAction.HeroWalkLeftwardsStop));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, Key.D), GameAction.HeroWalkRightwards));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Up, Key.D), GameAction.HeroWalkRightwardsStop));
         }
 
         public static void Handle(InputUnion input)

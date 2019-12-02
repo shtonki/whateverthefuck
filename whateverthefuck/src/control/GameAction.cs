@@ -8,7 +8,13 @@ namespace whateverthefuck.src.control
 {
     enum GameAction
     {
-        HeroWalk,
-        HeroStopWalk,
+        HeroWalkUpwards,
+        HeroWalkUpwardsStop,
+        HeroWalkDownwards,
+        HeroWalkDownwardsStop,
+        HeroWalkLeftwards,
+        HeroWalkLeftwardsStop,
+        HeroWalkRightwards,
+        HeroWalkRightwardsStop,
     }
 }
