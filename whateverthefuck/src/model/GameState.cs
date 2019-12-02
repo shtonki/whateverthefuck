@@ -39,8 +39,37 @@ namespace whateverthefuck.src.model
 
             foreach (var collision in collisions)
             {
-                collision.EntityI.UndoLastMovement();
-                collision.EntityJ.UndoLastMovement();
+                if (collision.Direction == CollisionDirection.Left)
+                {
+                    var ishare = collision.EntityI.MovementCache.X / (collision.EntityI.MovementCache.X + collision.EntityJ.MovementCache.X);
+                    var jshare = 1 - ishare;
+                    collision.EntityI.Location.X -= ishare * collision.Overlap;
+                    collision.EntityJ.Location.X += jshare * collision.Overlap;
+                }
+
+                else if (collision.Direction == CollisionDirection.Right)
+                {
+                    var ishare = collision.EntityI.MovementCache.X / (collision.EntityI.MovementCache.X + collision.EntityJ.MovementCache.X);
+                    var jshare = 1 - ishare;
+                    collision.EntityI.Location.X += ishare * collision.Overlap;
+                    collision.EntityJ.Location.X -= jshare * collision.Overlap;
+                }
+
+                else if (collision.Direction == CollisionDirection.Top)
+                {
+                    var ishare = collision.EntityI.MovementCache.Y / (collision.EntityI.MovementCache.Y + collision.EntityJ.MovementCache.Y);
+                    var jshare = 1 - ishare;
+                    collision.EntityI.Location.Y += ishare * collision.Overlap;
+                    collision.EntityJ.Location.Y -= jshare * collision.Overlap;
+                }
+
+                else if (collision.Direction == CollisionDirection.Bottom)
+                {
+                    var ishare = collision.EntityI.MovementCache.Y / (collision.EntityI.MovementCache.Y + collision.EntityJ.MovementCache.Y);
+                    var jshare = 1 - ishare;
+                    collision.EntityI.Location.Y -= ishare * collision.Overlap;
+                    collision.EntityJ.Location.Y += jshare * collision.Overlap;
+                }
             }
         }
 
@@ -79,7 +108,7 @@ namespace whateverthefuck.src.model
                         if (d == y1) { direction = CollisionDirection.Bottom; }
                         if (d == y2) { direction = CollisionDirection.Top; }
 
-                        collisions.Add(new CollisionRecord(entityI, entityJ, direction));
+                        collisions.Add(new CollisionRecord(entityI, entityJ, direction, d));
                     }
                 }
             }
@@ -98,11 +127,14 @@ namespace whateverthefuck.src.model
             public GameEntity EntityJ { get; }
             public CollisionDirection Direction { get; }
 
-            public CollisionRecord(GameEntity entityI, GameEntity entityJ, CollisionDirection direction)
+            public float Overlap { get; }
+
+            public CollisionRecord(GameEntity entityI, GameEntity entityJ, CollisionDirection direction, float overlap)
             {
                 EntityI = entityI;
                 EntityJ = entityJ;
                 Direction = direction;
+                Overlap = overlap;
             }
         }
 

@@ -14,7 +14,7 @@ namespace whateverthefuck.src.model
         public GameCoordinate Size { get; } = new GameCoordinate(0.1f, 0.1f);
         
         // retains the last movement made
-        private GameCoordinate MovementCache;
+        public GameCoordinate MovementCache { get; private set; }
 
         public float Left => Location.X;
         public float Right => Location.X + Size.X;
@@ -41,11 +41,6 @@ namespace whateverthefuck.src.model
             Location.Y += MovementCache.Y;
         }
 
-        public void UndoLastMovement()
-        {
-            Location.X -= MovementCache.X;
-            Location.Y -= MovementCache.Y;
-        }
 
         public virtual GameCoordinate CalculateMovement()
         {
