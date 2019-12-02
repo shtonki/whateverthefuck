@@ -22,6 +22,7 @@ namespace whateverthefuck.src.model
             var npc1 = new Character();
             npc1.Location.X = 0.5f;
             npc1.Location.Y = 0.5f;
+            npc1.Size.Y = 0.55f;
             AllEntities.Add(npc1);
 
             TickTimer = new Timer(Step, null, 0, 10);
@@ -32,6 +33,76 @@ namespace whateverthefuck.src.model
             foreach (var entity in AllEntities)
             {
                 entity.Step();
+            }
+
+            var collisions = DetectCollisions();
+
+            foreach (var collision in collisions)
+            {
+                collision.EntityI.UndoLastMovement();
+                collision.EntityJ.UndoLastMovement();
+            }
+        }
+
+        private List<CollisionRecord> DetectCollisions()
+        {
+            var collisions = new List<CollisionRecord>();
+
+            for (int i = 0; i < AllEntities.Count; i++)
+            {
+                var entityI = AllEntities[i];
+
+                for (int j = i+1; j < AllEntities.Count; j++)
+                {
+                    var entityJ = AllEntities[j];
+
+                    var check1 = entityI.Left < entityJ.Right;
+                    var check2 = entityI.Right > entityJ.Left;
+                    var check3 = entityI.Top > entityJ.Bottom;
+                    var check4 = entityI.Bottom < entityJ.Top;
+
+                    var collision = check1 && check2 && check3 && check4;
+
+                    if (collision)
+                    {
+                        var x1 = entityI.Right - entityJ.Left;
+                        var x2 = entityJ.Right - entityI.Left;
+                        var y1 = entityI.Top - entityJ.Bottom;
+                        var y2 = entityJ.Top - entityI.Bottom;
+
+                        var d = Math.Min(Math.Min(Math.Min(x1, x2), y1), y2);
+
+                        CollisionDirection direction = CollisionDirection.None;
+
+                        if (d == x1) { direction = CollisionDirection.Left; }
+                        if (d == x2) { direction = CollisionDirection.Right; }
+                        if (d == y1) { direction = CollisionDirection.Bottom; }
+                        if (d == y2) { direction = CollisionDirection.Top; }
+
+                        collisions.Add(new CollisionRecord(entityI, entityJ, direction));
+                    }
+                }
+            }
+
+            return collisions;
+        }
+
+        enum CollisionDirection
+        {
+            None, Left, Right, Top, Bottom,
+        }
+
+        struct CollisionRecord
+        {
+            public GameEntity EntityI { get; }
+            public GameEntity EntityJ { get; }
+            public CollisionDirection Direction { get; }
+
+            public CollisionRecord(GameEntity entityI, GameEntity entityJ, CollisionDirection direction)
+            {
+                EntityI = entityI;
+                EntityJ = entityJ;
+                Direction = direction;
             }
         }
 

@@ -34,29 +34,17 @@
             Movements.Rightwards = move;
         }
 
-        public override void Step()
+        public override GameCoordinate CalculateMovement()
         {
-            base.Step();
+            var xMove = 0.0f;
+            var yMove = 0.0f;
 
-            if (Movements.Upwards)
-            {
-                Location.Y += MoveSpeed;
-            }
+            if (Movements.Upwards) { yMove += MoveSpeed; }
+            if (Movements.Downwards) { yMove -= MoveSpeed; }
+            if (Movements.Leftwards) { xMove -= MoveSpeed; }
+            if (Movements.Rightwards) { xMove += MoveSpeed; }
 
-            if (Movements.Downwards)
-            {
-                Location.Y -= MoveSpeed;
-            }
-
-            if (Movements.Leftwards)
-            {
-                Location.X -= MoveSpeed;
-            }
-
-            if (Movements.Rightwards)
-            {
-                Location.X += MoveSpeed;
-            }
+            return new GameCoordinate(xMove, yMove);
         }
     }
 }

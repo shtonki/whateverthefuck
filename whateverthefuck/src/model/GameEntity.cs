@@ -11,6 +11,16 @@ namespace whateverthefuck.src.model
     class GameEntity : Drawable
     {
         public GameCoordinate Location { get; } = new GameCoordinate(0, 0);
+        public GameCoordinate Size { get; } = new GameCoordinate(0.1f, 0.1f);
+        
+        // retains the last movement made
+        private GameCoordinate MovementCache;
+
+        public float Left => Location.X;
+        public float Right => Location.X + Size.X;
+        public float Bottom => Location.Y;
+        public float Top => Location.Y + Size.Y;
+        public GameCoordinate Center => new GameCoordinate(Location.X + Size.X / 2, Location.Y + Size.Y / 2);
 
         protected Color DrawColor = Color.Black;
 
@@ -18,15 +28,23 @@ namespace whateverthefuck.src.model
         {
             float x1 = Location.X;
             float y1 = Location.Y;
-            float x2 = x1 + 0.1f;
-            float y2 = y1 + 0.1f;
+            float x2 = x1 + Size.X;
+            float y2 = y1 + Size.Y;
 
             drawAdapter.fillRectangle(x1, y1, x2, y2, DrawColor);
         }
 
         public virtual void Step()
         {
-            var movement = CalculateMovement();
+            MovementCache = CalculateMovement();
+            Location.X += MovementCache.X;
+            Location.Y += MovementCache.Y;
+        }
+
+        public void UndoLastMovement()
+        {
+            Location.X -= MovementCache.X;
+            Location.Y -= MovementCache.Y;
         }
 
         public virtual GameCoordinate CalculateMovement()
