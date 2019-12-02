@@ -16,5 +16,9 @@ namespace whateverthefuck.src.control
         HeroWalkLeftwardsStop,
         HeroWalkRightwards,
         HeroWalkRightwardsStop,
+
+
+        CameraZoomOut,
+        CameraZoomIn,
     }
 }

@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
 {
-    public class GameCoordinate 
+    public class GameCoordinate : Coordinate
     {
-        public float X { get; set; }
-        public float Y { get; set; }
-
-        public GameCoordinate(float x, float y)
+        public GameCoordinate(float x, float y) : base(x, y)
         {
-            X = x;
-            Y = y;
+
         }
 
         public GameCoordinate Add(float x, float y)
