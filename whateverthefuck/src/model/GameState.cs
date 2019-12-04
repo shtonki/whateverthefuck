@@ -22,8 +22,6 @@ namespace whateverthefuck.src.model
             AllEntities.Add(Hero);
             GUI.Camera = new FollowCamera(Hero);
 
-            GameEntity entity;
-
             TickTimer = new Timer(Step, null, 0, 10);
 
             Map map = new Map(420);

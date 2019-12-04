@@ -30,7 +30,7 @@ namespace whateverthefuck.src.view
 
     abstract class Camera
     {
-        public virtual Coordinate Location { get; }
+        public virtual Coordinate Location { get; protected set; }
         public virtual Zoomer Zoom { get; }
 
         public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
@@ -69,9 +69,6 @@ namespace whateverthefuck.src.view
 
     class StaticCamera : Camera
     {
-        public GameCoordinate Location { get; }
-        public Zoomer Zoom { get; } = new Zoomer();
-
         public StaticCamera(GameCoordinate origin)
         {
             Location = origin;
