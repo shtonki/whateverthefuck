@@ -49,6 +49,7 @@
     <Compile Include="src\model\GameState.cs" />
     <Compile Include="src\model\Hero.cs" />
     <Compile Include="src\Program.cs" />
+    <Compile Include="src\util\Coloring.cs" />
     <Compile Include="src\util\Logging.cs" />
     <Compile Include="src\view\Camera.cs" />
     <Compile Include="src\view\Coordinate.cs" />
