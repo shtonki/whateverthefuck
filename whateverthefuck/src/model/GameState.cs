@@ -18,27 +18,17 @@ namespace whateverthefuck.src.model
         public GameState()
         {
             Hero = new Hero();
+            Hero.Location = new GameCoordinate(-0.2f, -0.2f);
             AllEntities.Add(Hero);
             GUI.Camera = new FollowCamera(Hero);
 
             GameEntity entity;
 
-            entity = new Block();
-            entity.Location.X = 0.5f;
-            entity.Location.Y = 0.5f;
-            AllEntities.Add(entity);
-
-            entity = new Block();
-            entity.Location.X = 0.6f;
-            entity.Location.Y = 0.5f;
-            AllEntities.Add(entity);
-
-            entity = new Block();
-            entity.Location.X = 0.7f;
-            entity.Location.Y = 0.5f;
-            AllEntities.Add(entity);
-
             TickTimer = new Timer(Step, null, 0, 10);
+
+            Map map = new Map(420);
+            AllEntities.AddRange(map.Entities);
+            
         }
 
         private void Step(object state)

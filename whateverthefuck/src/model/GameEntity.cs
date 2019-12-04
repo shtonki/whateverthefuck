@@ -10,8 +10,8 @@ namespace whateverthefuck.src.model
 {
     class GameEntity : Drawable
     {
-        public GameCoordinate Location { get; } = new GameCoordinate(0, 0);
-        public GameCoordinate Size { get; } = new GameCoordinate(0.1f, 0.1f);
+        public GameCoordinate Location { get; set; } = new GameCoordinate(0, 0);
+        public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
         
         // retains the last movement made
         public GameCoordinate MovementCache { get; private set; }
