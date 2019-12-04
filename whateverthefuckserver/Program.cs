@@ -12,13 +12,13 @@ namespace whateverthefuckserver
     {
         private static GameServer GameServer;
 
-        public static WhateverServerConnection ServerConnection;
+        public static WhateverServer ServerConnection;
 
         public static void Main(string[] args)
         {
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
 
-            ServerConnection = new WhateverServerConnection();
+            ServerConnection = new WhateverServer();
             ServerConnection.StartListening();
 
             GameServer = new GameServer();

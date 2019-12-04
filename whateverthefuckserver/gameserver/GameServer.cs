@@ -3,7 +3,7 @@ using whateverthefuck.src.util;
 using System.Threading;
 using whateverthefuckserver.network;
 using System.Collections.Generic;
-using whateverthefuck.network.messages;
+using whateverthefuck.src.network.messages;
 
 namespace whateverthefuckserver
 {
@@ -21,7 +21,6 @@ namespace whateverthefuckserver
         public void Tick()
         {
             Program.ServerConnection.SendMessageToEveryone(new LogMessage("we tickers now " + i++));
-            Logging.Log("Ticking");
         }
     }
 }

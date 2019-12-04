@@ -29,8 +29,6 @@ namespace whateverthefuck.src.model
             AllEntities.AddRange(Map.CreateRoom(EntityGenerator, 0, 0, 6, 6));
 
             AddEntity(new Mob(IdGenerator.GenerateNextIdentifier()));
-
-            EntitySerializer.WriteToJsonFile("apa.json", AllEntities);
         }
 
         public void AddEntity(GameEntity entity)

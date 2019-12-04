@@ -55,6 +55,7 @@
     <Compile Include="src\network\messages\LogMessage.cs" />
     <Compile Include="src\network\messages\WhateverthefuckMessage.cs" />
     <Compile Include="src\network\WhateverClientConnection.cs" />
+    <Compile Include="src\network\WhateverthefuckConnection.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\util\Coloring.cs" />
     <Compile Include="src\util\Logging.cs" />

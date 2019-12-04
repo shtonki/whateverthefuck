@@ -1,27 +1,32 @@
 ﻿using System.Net.Sockets;
 using System.Threading;
-using whateverthefuck.network.messages;
+using whateverthefuck.src.network.messages;
 using whateverthefuck.src.util;
 using System.Linq;
 using System;
 
-namespace whateverthefuck.network
+namespace whateverthefuck.src.network
 {
-    class WhateverClientConnection
+    class WhateverClientConnection : WhateverthefuckConnection
     {
-        private bool arabsarebeingapaininmyass = true;
+        private const bool arabsarebeingapaininmyass = true;
 
         private const string ServerIp = "98.128.171.8";
         private const string BackupServerIp = "127.0.0.1";
         private const int ServerPort = 13000;
 
         private TcpClient ServerConnection;
-        private NetworkStream ServerStream;
 
-        private byte[] HeaderBuffer = new byte[WhateverthefuckMessage.HeaderSize];
 
-        public WhateverClientConnection()
+        public WhateverClientConnection() : base(ConnectToServer())
         {
+
+        }
+
+        private static NetworkStream ConnectToServer()
+        {
+            TcpClient ServerConnection;
+
             try
             {
                 if (arabsarebeingapaininmyass)
@@ -41,30 +46,20 @@ namespace whateverthefuck.network
                 Logging.Log("Connected to backup server.");
             }
 
-            ServerStream = ServerConnection.GetStream();
-
-            Thread ReceiveThread = new Thread(ReceiveLoop);
-            ReceiveThread.Start();
+            return ServerConnection.GetStream();
         }
 
-        private void ReceiveLoop()
+        protected override void HandleMessage(WhateverthefuckMessage message)
         {
-            while (true)
+            switch (message.MessageType)
             {
-                int bytesRead = ServerStream.Read(HeaderBuffer, 0, WhateverthefuckMessage.HeaderSize);
-                if (bytesRead != WhateverthefuckMessage.HeaderSize) { throw new Exception("error reading message header"); }
+                case MessageType.LogMessage:
+                {
+                    LogMessage logMessage = (LogMessage)message;
+                    Logging.Log("Message from server: " + logMessage.Message, Logging.LoggingLevel.Info);
+                } break;
 
-                MessageType messageType = (MessageType)HeaderBuffer[0];
-                int messageLength = (HeaderBuffer[1]) | (HeaderBuffer[2] << 8);
-
-                byte[] BodyBuffer = new byte[messageLength];
-                bytesRead = ServerStream.Read(BodyBuffer, 0, messageLength);
-                if (bytesRead != messageLength) { throw new Exception("error reading message body"); }
-
-                var message = WhateverthefuckMessage.Decode(messageType, BodyBuffer);
-                LogMessage msg = (LogMessage)message;
-
-                Logging.Log(msg.Message, Logging.LoggingLevel.Info);
+                default: throw new NotImplementedException();
             }
         }
     }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.network.messages
+﻿
+namespace whateverthefuck.src.network.messages
 {
     public class LogMessage : WhateverthefuckMessage
     {
@@ -20,7 +15,7 @@ namespace whateverthefuck.network.messages
             Message = message;
         }
 
-        public override byte[] EncodeBody()
+        protected override byte[] EncodeBody()
         {
             return System.Text.Encoding.ASCII.GetBytes(Message);
         }

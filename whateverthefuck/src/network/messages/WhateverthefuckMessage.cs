@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.util;
-using whateverthefuck.network.messages;
+using whateverthefuck.src.network.messages;
 
-namespace whateverthefuck.network.messages
+namespace whateverthefuck.src.network.messages
 {
     public abstract class WhateverthefuckMessage
     {
@@ -15,7 +15,7 @@ namespace whateverthefuck.network.messages
         public const int HeaderSize = TypeSize + LengthSize;
         
 
-        protected MessageType MessageType { get; }
+        public MessageType MessageType { get; }
 
         protected WhateverthefuckMessage(MessageType messageType)
         {
@@ -56,7 +56,7 @@ namespace whateverthefuck.network.messages
             }
         }
 
-        public abstract byte[] EncodeBody();
+        protected abstract byte[] EncodeBody();
     }
 
     public enum MessageType

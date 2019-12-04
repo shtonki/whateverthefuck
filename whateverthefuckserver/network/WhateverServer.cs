@@ -6,54 +6,40 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using whateverthefuck.network.messages;
+using whateverthefuck.src.network;
+using whateverthefuck.src.network.messages;
 using whateverthefuck.src.util;
 
 namespace whateverthefuckserver.network
 {
-    class WhateverServerConnection
+    class WhateverServer
     {
         TcpListener server = null;
-        List<TcpClient> ActiveClients = new List<TcpClient>();
+        List<WhateverthefuckServerConnection> ActiveConnections = new List<WhateverthefuckServerConnection>();
 
         public void StartListening()
         {
-            Thread listenThread = new Thread(ListenThread);
+            Thread listenThread = new Thread(ListenForNewConnections);
             listenThread.Start();
-
         }
 
         public void SendMessageToEveryone(WhateverthefuckMessage message)
         {
-            byte[] msg = message.Encode();
-            Console.WriteLine(hackmethefuckup(msg));
+            // todo we encode the message seperately for each client
 
-            foreach (var client in ActiveClients)
+            foreach (var client in ActiveConnections)
             {
-                Logging.Log(System.Text.Encoding.ASCII.GetString(msg));
-                NetworkStream stream = client.GetStream();
-                stream.Write(msg, 0, msg.Length);
+                client.SendMessage(message);
             }
-        }
-
-        private string hackmethefuckup(byte[] bs)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            foreach (var b in bs)
-            {
-                sb.Append((int)b);
-                sb.Append(",");
-            }
-            return sb.ToString();
         }
 
         private void AddClient(TcpClient client)
         {
-            ActiveClients.Add(client);
+            ActiveConnections.Add(new WhateverthefuckServerConnection(client.GetStream()));
+            Logging.Log("Client has connected.", Logging.LoggingLevel.Info);
         }
 
-        private void ListenThread()
+        private void ListenForNewConnections()
         {
             try
             {

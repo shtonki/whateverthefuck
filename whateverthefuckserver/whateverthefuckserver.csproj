@@ -38,8 +38,9 @@
   <ItemGroup>
     <Compile Include="gameserver\GameServer.cs" />
     <Compile Include="network\NetworkEntityInfo.cs" />
+    <Compile Include="network\WhateverthefuckServerConnection.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="network\WhateverServerConnection.cs" />
+    <Compile Include="network\WhateverServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\whateverthefuck\whateverthefuck.csproj">

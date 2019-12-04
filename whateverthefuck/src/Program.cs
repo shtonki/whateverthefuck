@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.network;
 using whateverthefuck.src.model;
+using whateverthefuck.src.network;
 using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 

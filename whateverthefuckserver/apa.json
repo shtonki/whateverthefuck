@@ -1,0 +1,382 @@
+{
+  "$type": "System.Collections.Generic.List`1[[whateverthefuck.src.model.GameEntity, whateverthefuck]], mscorlib",
+  "$values": [
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 0
+      },
+      "Left": 0.0,
+      "Right": 0.1,
+      "Bottom": 0.0,
+      "Top": 0.1,
+      "Center": {
+        "X": 0.05,
+        "Y": 0.05
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.0,
+        "Y": 0.0
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 1
+      },
+      "Left": 0.0,
+      "Right": 0.1,
+      "Bottom": 0.5,
+      "Top": 0.6,
+      "Center": {
+        "X": 0.05,
+        "Y": 0.55
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.0,
+        "Y": 0.5
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 2
+      },
+      "Left": 0.1,
+      "Right": 0.2,
+      "Bottom": 0.0,
+      "Top": 0.1,
+      "Center": {
+        "X": 0.15,
+        "Y": 0.05
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.1,
+        "Y": 0.0
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 3
+      },
+      "Left": 0.1,
+      "Right": 0.2,
+      "Bottom": 0.5,
+      "Top": 0.6,
+      "Center": {
+        "X": 0.15,
+        "Y": 0.55
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.1,
+        "Y": 0.5
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 4
+      },
+      "Left": 0.2,
+      "Right": 0.3,
+      "Bottom": 0.0,
+      "Top": 0.1,
+      "Center": {
+        "X": 0.25,
+        "Y": 0.05
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.2,
+        "Y": 0.0
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 5
+      },
+      "Left": 0.2,
+      "Right": 0.3,
+      "Bottom": 0.5,
+      "Top": 0.6,
+      "Center": {
+        "X": 0.25,
+        "Y": 0.55
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.2,
+        "Y": 0.5
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 6
+      },
+      "Left": 0.3,
+      "Right": 0.4,
+      "Bottom": 0.0,
+      "Top": 0.1,
+      "Center": {
+        "X": 0.350000024,
+        "Y": 0.05
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.3,
+        "Y": 0.0
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 7
+      },
+      "Left": 0.3,
+      "Right": 0.4,
+      "Bottom": 0.5,
+      "Top": 0.6,
+      "Center": {
+        "X": 0.350000024,
+        "Y": 0.55
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.3,
+        "Y": 0.5
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 8
+      },
+      "Left": 0.4,
+      "Right": 0.5,
+      "Bottom": 0.0,
+      "Top": 0.1,
+      "Center": {
+        "X": 0.450000018,
+        "Y": 0.05
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.4,
+        "Y": 0.0
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 9
+      },
+      "Left": 0.4,
+      "Right": 0.5,
+      "Bottom": 0.5,
+      "Top": 0.6,
+      "Center": {
+        "X": 0.450000018,
+        "Y": 0.55
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.4,
+        "Y": 0.5
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 10
+      },
+      "Left": 0.5,
+      "Right": 0.6,
+      "Bottom": 0.0,
+      "Top": 0.1,
+      "Center": {
+        "X": 0.55,
+        "Y": 0.05
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.5,
+        "Y": 0.0
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 0,
+      "Identifier": {
+        "Id": 11
+      },
+      "Left": 0.5,
+      "Right": 0.6,
+      "Bottom": 0.5,
+      "Top": 0.6,
+      "Center": {
+        "X": 0.55,
+        "Y": 0.55
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.5,
+        "Y": 0.5
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.entities.Mob, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+      "MovementCache": {
+        "X": 0.0,
+        "Y": 0.0
+      },
+      "Movable": false,
+      "ControlInfo": 2,
+      "Identifier": {
+        "Id": 12
+      },
+      "Left": 0.0,
+      "Right": 0.1,
+      "Bottom": 0.0,
+      "Top": 0.1,
+      "Center": {
+        "X": 0.05,
+        "Y": 0.05
+      },
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.0,
+        "Y": 0.0
+      }
+    }
+  ]
+}
