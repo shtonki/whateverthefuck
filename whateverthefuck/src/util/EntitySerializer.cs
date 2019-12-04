@@ -31,7 +31,7 @@ namespace whateverthefuck.src.util
 
             if (READ)
             {
-
+                if (!File.Exists("testfile.json")) return;
                 JObject entitiesList = ReadFromJsonFile<JObject>("testfile.json");
                 JArray entities = entitiesList["$values"] as JArray;
                 foreach (var entity in entities)
