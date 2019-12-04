@@ -54,6 +54,7 @@
     <Compile Include="src\util\Coloring.cs" />
     <Compile Include="src\util\Logging.cs" />
     <Compile Include="src\util\EntitySerializer.cs" />
+    <Compile Include="src\util\RNG.cs" />
     <Compile Include="src\view\Camera.cs" />
     <Compile Include="src\view\Coordinate.cs" />
     <Compile Include="src\view\Drawable.cs" />
