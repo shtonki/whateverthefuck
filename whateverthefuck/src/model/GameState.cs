@@ -27,8 +27,7 @@ namespace whateverthefuck.src.model
 
             Map map = new Map(420);
             AllEntities.AddRange(map.Entities);
-            EntitySerializer es = new EntitySerializer();
-            es.DoTests();
+            AllEntities.AddRange(EntitySerializer.LoadEntitiesFromFile("testfile"));
         }
 
         private void Step(object state)
