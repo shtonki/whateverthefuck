@@ -3,6 +3,7 @@ using whateverthefuck.src.util;
 using System.Threading;
 using whateverthefuckserver.network;
 using System.Collections.Generic;
+using whateverthefuck.network.messages;
 
 namespace whateverthefuckserver
 {
@@ -16,10 +17,11 @@ namespace whateverthefuckserver
             GameState = new GameState();
             TickTimer = new Timer((_) => Tick(), null, 0, 10);
         }
-
+        int i = 0;
         public void Tick()
         {
-
+            Program.ServerConnection.SendMessageToEveryone(new LogMessage("we tickers now " + i++));
+            Logging.Log("Ticking");
         }
     }
 }

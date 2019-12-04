@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using whateverthefuck.network.messages;
 using whateverthefuck.src.util;
 
 namespace whateverthefuckserver.network
@@ -20,17 +21,31 @@ namespace whateverthefuckserver.network
             Thread listenThread = new Thread(ListenThread);
             listenThread.Start();
 
-            while (true)
-            {
-                foreach (var client in ActiveClients)
-                {
-                    byte[] msg = System.Text.Encoding.ASCII.GetBytes("big nerd ");
-                    NetworkStream stream = client.GetStream();
-                    stream.Write(msg, 0, msg.Length);
-                }
+        }
 
-                Thread.Sleep(1000);
+        public void SendMessageToEveryone(WhateverthefuckMessage message)
+        {
+            byte[] msg = message.Encode();
+            Console.WriteLine(hackmethefuckup(msg));
+
+            foreach (var client in ActiveClients)
+            {
+                Logging.Log(System.Text.Encoding.ASCII.GetString(msg));
+                NetworkStream stream = client.GetStream();
+                stream.Write(msg, 0, msg.Length);
             }
+        }
+
+        private string hackmethefuckup(byte[] bs)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var b in bs)
+            {
+                sb.Append((int)b);
+                sb.Append(",");
+            }
+            return sb.ToString();
         }
 
         private void AddClient(TcpClient client)

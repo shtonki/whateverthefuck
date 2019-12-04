@@ -1,4 +1,4 @@
-﻿namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model.entities
 {
     abstract class Character : GameEntity
     {

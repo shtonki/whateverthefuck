@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using whateverthefuck.src.util;
 
-namespace whateverthefuck.src.model
+namespace whateverthefuck.src.model.entities
 {
     class Block : GameEntity
     {

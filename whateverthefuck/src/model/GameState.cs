@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using whateverthefuck.src.control;
+using whateverthefuck.src.model.entities;
+using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
@@ -14,13 +16,26 @@ namespace whateverthefuck.src.model
 
         private Timer StepTimer;
 
-        private EntityGenerator EntityGenerator = new EntityGenerator();
+        private IdentifierGenerator IdGenerator = new IdentifierGenerator();
+
+        private EntityGenerator EntityGenerator;
 
         public GameState()
         {
+            EntityGenerator = new EntityGenerator(IdGenerator);
+
             StepTimer = new Timer(Step, null, 0, 10);
 
             AllEntities.AddRange(Map.CreateRoom(EntityGenerator, 0, 0, 6, 6));
+
+            AddEntity(new Mob(IdGenerator.GenerateNextIdentifier()));
+
+            EntitySerializer.WriteToJsonFile("apa.json", AllEntities);
+        }
+
+        public void AddEntity(GameEntity entity)
+        {
+            AllEntities.Add(entity);
         }
 
         private void Step(object state)

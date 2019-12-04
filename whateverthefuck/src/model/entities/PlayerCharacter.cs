@@ -2,7 +2,7 @@
 using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 
-namespace whateverthefuck.src.model
+namespace whateverthefuck.src.model.entities
 {
     class PlayerCharacter : Character
     {

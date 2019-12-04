@@ -37,9 +37,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gameserver\GameServer.cs" />
-    <Compile Include="network\WhateverthefuckMessage.cs" />
+    <Compile Include="network\NetworkEntityInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="network\WhateverClientConnection.cs" />
     <Compile Include="network\WhateverServerConnection.cs" />
   </ItemGroup>
   <ItemGroup>

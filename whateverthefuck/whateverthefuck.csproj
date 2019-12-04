@@ -45,12 +45,16 @@
     <Compile Include="src\model\entities\Block.cs" />
     <Compile Include="src\model\entities\Character.cs" />
     <Compile Include="src\model\entities\Door.cs" />
+    <Compile Include="src\model\entities\Mob.cs" />
     <Compile Include="src\model\GameCoordinate.cs" />
     <Compile Include="src\model\GameEntity.cs" />
     <Compile Include="src\model\GameState.cs" />
     <Compile Include="src\model\entities\PlayerCharacter.cs" />
     <Compile Include="src\model\Map.cs" />
     <Compile Include="src\model\EntityGenerator.cs" />
+    <Compile Include="src\network\messages\LogMessage.cs" />
+    <Compile Include="src\network\messages\WhateverthefuckMessage.cs" />
+    <Compile Include="src\network\WhateverClientConnection.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\util\Coloring.cs" />
     <Compile Include="src\util\Logging.cs" />
@@ -72,6 +76,7 @@
     <Reference Include="OpenTK, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.3.1.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

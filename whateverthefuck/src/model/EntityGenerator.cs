@@ -4,12 +4,18 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using whateverthefuck.src.model.entities;
 
 namespace whateverthefuck.src.model
 {
     public class EntityGenerator
     {
-        private IdentifierGenerator IdGenerator = new IdentifierGenerator();
+        private IdentifierGenerator IdGenerator;
+
+        public EntityGenerator(IdentifierGenerator idGenerator)
+        {
+            IdGenerator = idGenerator;
+        }
 
         public GameEntity GenerateBlock(GameCoordinate size, GameCoordinate location)
         {
