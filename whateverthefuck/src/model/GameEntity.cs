@@ -10,6 +10,7 @@ namespace whateverthefuck.src.model
 {
     class GameEntity : Drawable
     {
+
         public GameCoordinate Location { get; } = new GameCoordinate(0, 0);
         public GameCoordinate Size { get; } = new GameCoordinate(0.1f, 0.1f);
         
@@ -23,7 +24,14 @@ namespace whateverthefuck.src.model
         public float Top => Location.Y + Size.Y;
         public GameCoordinate Center => new GameCoordinate(Location.X + Size.X / 2, Location.Y + Size.Y / 2);
 
+
+
         protected Color DrawColor = Color.Black;
+
+        public GameEntity()
+        {
+            Location = new GameCoordinate(0, 0);
+        }
 
         public override void Draw(DrawAdapter drawAdapter)
         {
