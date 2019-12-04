@@ -44,12 +44,15 @@ namespace whateverthefuck.src.model
             foreach (var collision in collisions)
             {
 
-                // checking and not handling because at this point in time it shouldn't occur but it might at some point
-                // and it seems to bug out instead of erroring out
                 if (collision.EntityI.MovementCache.X == 0 &&
                     collision.EntityI.MovementCache.Y == 0 &&
                     collision.EntityJ.MovementCache.X == 0 &&
-                    collision.EntityJ.MovementCache.Y == 0) { throw new Exception("if this happens we're in trouble"); }
+                    collision.EntityJ.MovementCache.Y == 0) 
+                { 
+                	// we have most likely managed to put one object on another at which point
+                	// we let them stay there until something moves.
+                	continue;
+                }
 
                 if (collision.Direction == CollisionDirection.Left)
                 {
