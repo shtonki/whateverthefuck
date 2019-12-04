@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
+    <Compile Include="WhateverClientConnection.cs" />
     <Compile Include="WhateverServerConnection.cs" />
   </ItemGroup>
   <ItemGroup>

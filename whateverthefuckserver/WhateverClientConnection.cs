@@ -19,6 +19,11 @@ namespace whateverthefuckserver
         {
             ServerConnection = new TcpClient(SERVER_IP, SERVER_PORT);
             ServerStream = ServerConnection.GetStream();
+
+            while (true)
+            {
+                int i = 2;
+            }
         }
     }
 }
