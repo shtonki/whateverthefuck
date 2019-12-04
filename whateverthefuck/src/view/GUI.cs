@@ -26,7 +26,7 @@ namespace whateverthefuck.src.view
 
         public static IEnumerable<Drawable> GetAllDrawables()
         {
-            return GameState.AllEntities;
+            return Program.GameState.AllEntities;
         }
 
         private static void LaunchGameWindow(object o)
