@@ -8,7 +8,7 @@ namespace whateverthefuck.src.view
 {
     abstract class Drawable
     {
-        public Coordinate Location { get; }
+        public virtual Coordinate Location { get; set; }
         public abstract void Draw(DrawAdapter drawAdapter);
     }
 }
