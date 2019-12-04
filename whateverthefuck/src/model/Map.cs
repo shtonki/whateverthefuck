@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
 {

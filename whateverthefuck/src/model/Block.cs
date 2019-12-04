@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.model
 {
@@ -12,6 +13,11 @@ namespace whateverthefuck.src.model
         public Block(Color color)
         {
             DrawColor = color;
+        }
+
+        public Block()
+        {
+            DrawColor = Coloring.RandomColor();
         }
     }
 }

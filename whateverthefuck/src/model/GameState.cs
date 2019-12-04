@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using whateverthefuck.src.control;
+using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
@@ -26,7 +27,8 @@ namespace whateverthefuck.src.model
 
             Map map = new Map(420);
             AllEntities.AddRange(map.Entities);
-            
+            EntitySerializer es = new EntitySerializer();
+            es.DoTests();
         }
 
         private void Step(object state)

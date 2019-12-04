@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.view
 {
@@ -25,7 +26,7 @@ namespace whateverthefuck.src.view
 
         public static IEnumerable<Drawable> GetAllDrawables()
         {
-            return Program.GameState.AllEntities;
+            return GameState.AllEntities;
         }
 
         private static void LaunchGameWindow(object o)
