@@ -31,7 +31,6 @@ namespace whateverthefuck.src.util
 
             if (READ)
             {
-                if (!File.Exists("testfile.json")) return;
                 JObject entitiesList = ReadFromJsonFile<JObject>("testfile.json");
                 JArray entities = entitiesList["$values"] as JArray;
                 foreach (var entity in entities)
@@ -46,6 +45,8 @@ namespace whateverthefuck.src.util
 
         public static List<GameEntity> LoadEntitiesFromFile(string filename)
         {
+            if (!File.Exists(filename + ".json")) return new List<GameEntity>();
+
             List<GameEntity> vars = new List<GameEntity>();
             JObject entitiesList = ReadFromJsonFile<JObject>(filename + ".json");
             JArray entities = entitiesList["$values"] as JArray;
