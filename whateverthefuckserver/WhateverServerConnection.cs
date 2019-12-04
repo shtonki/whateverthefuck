@@ -18,13 +18,13 @@ namespace whateverthefuckserver
         {
             Thread listenThread = new Thread(ListenThread);
             listenThread.Start();
+            Console.WriteLine("Listening to connections...");
 
             while (true)
             {
-                byte[] buffer = new byte[255];
                 foreach (var client in ActiveClients)
                 {
-                    byte[] msg = System.Text.Encoding.ASCII.GetBytes("big nerd");
+                    byte[] msg = System.Text.Encoding.ASCII.GetBytes("big nerd ");
                     NetworkStream stream = client.GetStream();
                     stream.Write(msg, 0, msg.Length);
                 }

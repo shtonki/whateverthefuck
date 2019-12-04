@@ -9,5 +9,13 @@ namespace whateverthefuckserver
 {
     class Program
     {
+        public static void Main(string[] args)
+        {
+            WhateverServerConnection wsc = new WhateverServerConnection();
+            wsc.StartListening();
+            Console.WriteLine(@"Console.WriteLine(""Console.WriteLine");
+
+        }
+        
     }
 }
