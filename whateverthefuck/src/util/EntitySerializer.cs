@@ -63,7 +63,7 @@ namespace whateverthefuck.src.util
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("fucked up deserializing " + entity.GetType() + e);
+                    Logging.Log("fucked up deserializing " + entity.GetType() + e);
                 }
             }
 

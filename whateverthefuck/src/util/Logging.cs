@@ -9,26 +9,26 @@ namespace whateverthefuck.src.util
 {
     public abstract class LoggingOutput
     {
-        protected LoggingOutput(Logger.LoggingLevel loggingLevel, bool enabled)
+        protected LoggingOutput(Logging.LoggingLevel loggingLevel, bool enabled)
         {
             LoggingLevel = loggingLevel;
             Enabled = enabled;
         }
 
-        protected bool DoWrite(Logger.LoggingLevel l) => Enabled && l >= LoggingLevel;
+        protected bool DoWrite(Logging.LoggingLevel l) => Enabled && l >= LoggingLevel;
 
-        protected Logger.LoggingLevel LoggingLevel { get; set; }
+        protected Logging.LoggingLevel LoggingLevel { get; set; }
         protected bool Enabled { get; set; }
-        public abstract void Write(string message, Logger.LoggingLevel loggingLevel);
+        public abstract void Write(string message, Logging.LoggingLevel loggingLevel);
     }
 
     public class ConsoleOutput : LoggingOutput
     {
-        public ConsoleOutput(Logger.LoggingLevel loggingLevel, bool enabled) : base(loggingLevel, enabled)
+        public ConsoleOutput(Logging.LoggingLevel loggingLevel, bool enabled) : base(loggingLevel, enabled)
         {
         }
 
-        public override void Write(string message, Logger.LoggingLevel loggingLevel)
+        public override void Write(string message, Logging.LoggingLevel loggingLevel)
         {
             if (!DoWrite(loggingLevel)) return;
 
@@ -39,12 +39,12 @@ namespace whateverthefuck.src.util
     public class FileOutput : LoggingOutput
     {
         private string filePath;
-        public FileOutput(Logger.LoggingLevel loggingLevel, bool enabled) : base(loggingLevel, enabled)
+        public FileOutput(Logging.LoggingLevel loggingLevel, bool enabled) : base(loggingLevel, enabled)
         {
             filePath = "log.txt";
         }
 
-        public override void Write(string message, Logger.LoggingLevel loggingLevel)
+        public override void Write(string message, Logging.LoggingLevel loggingLevel)
         {
             if (!DoWrite(loggingLevel)) return;
             using (StreamWriter sw = File.AppendText(filePath))
@@ -54,7 +54,7 @@ namespace whateverthefuck.src.util
         }
     }
 
-    public static class Logger
+    public static class Logging
     {
         public enum LoggingLevel
         {

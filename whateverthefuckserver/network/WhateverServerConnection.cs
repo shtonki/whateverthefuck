@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using whateverthefuck.src.util;
 
 namespace whateverthefuckserver.network
 {
@@ -18,7 +19,6 @@ namespace whateverthefuckserver.network
         {
             Thread listenThread = new Thread(ListenThread);
             listenThread.Start();
-            Console.WriteLine("Listening to connections...");
 
             while (true)
             {
@@ -36,7 +36,6 @@ namespace whateverthefuckserver.network
         private void AddClient(TcpClient client)
         {
             ActiveClients.Add(client);
-            Console.WriteLine("we adding client now");
         }
 
         private void ListenThread()
@@ -58,7 +57,7 @@ namespace whateverthefuckserver.network
             }
             catch (SocketException e)
             {
-                Console.WriteLine("SocketException: {0}", e);
+                Logging.Log(String.Format("SocketException: {0}", e), Logging.LoggingLevel.Error);
             }
             finally
             {

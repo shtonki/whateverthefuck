@@ -15,8 +15,8 @@ namespace whateverthefuck
 
         public static void Main(String[] args)
         {
-            Logger.AddLoggingOutput(new ConsoleOutput(Logger.LoggingLevel.All, true));
-            Logger.Log("Started Logger");
+            Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
+            Logging.Log("Started Logger");
             GUI.CreateGameWindow();
         }
     }
