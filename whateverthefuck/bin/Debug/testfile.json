@@ -1,0 +1,31 @@
+{
+  "$type": "System.Collections.Generic.List`1[[whateverthefuck.src.model.GameEntity, whateverthefuck]], mscorlib",
+  "$values": [
+    {
+      "$type": "whateverthefuck.src.model.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": -0.85,
+        "Y": -0.45
+      }
+    },
+    {
+      "$type": "whateverthefuck.src.model.Block, whateverthefuck",
+      "Size": {
+        "X": 0.1,
+        "Y": 0.1
+      },
+
+      "Location": {
+        "$type": "whateverthefuck.src.model.GameCoordinate, whateverthefuck",
+        "X": 0.25,
+        "Y": 0.3
+      }
+    }
+  ]
+}
