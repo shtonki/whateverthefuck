@@ -39,7 +39,7 @@ namespace whateverthefuck.src.model
             float x2 = x1 + Size.X;
             float y2 = y1 + Size.Y;
 
-            drawAdapter.fillRectangle(x1, y1, x2, y2, DrawColor);
+            drawAdapter.FillRectangle(x1, y1, x2, y2, DrawColor, Rotation);
         }
 
         public virtual void Step()

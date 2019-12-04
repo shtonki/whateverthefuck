@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using whateverthefuck.src.util;
+using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
 {
@@ -6,7 +8,7 @@ namespace whateverthefuck.src.model
     {
         public Hero()
         {
-            DrawColor = Color.Peru;
+            DrawColor = Coloring.RandomColor();
         }
     }
 }
