@@ -10,9 +10,12 @@ namespace whateverthefuck.src.model
 {
     class GameEntity : Drawable
     {
-        public GameCoordinate Location { get; } = new GameCoordinate(0, 0);
-
         protected Color DrawColor = Color.Black;
+
+        public GameEntity()
+        {
+            Location = new GameCoordinate(0, 0);
+        }
 
         public override void Draw(DrawAdapter drawAdapter)
         {
