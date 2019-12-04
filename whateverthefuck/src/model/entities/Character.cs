@@ -1,21 +1,12 @@
 ﻿namespace whateverthefuck.src.model
 {
-    class MovementStruct
-    {
-        public bool Upwards { get; set; }
-        public bool Downwards { get; set; }
-        public bool Rightwards { get; set; }
-        public bool Leftwards { get; set; }
-
-    }
-
-    class Character : GameEntity
+    abstract class Character : GameEntity
     {
         public MovementStruct Movements { get; set; } = new MovementStruct();
         public float MoveSpeed = 0.01f;
 
 
-        public Character()
+        public Character(ControlInfo controlInfo, EntityIdentifier identifier) : base(controlInfo, identifier)
         {
             Movable = true;
         }
@@ -52,5 +43,14 @@
 
             return new GameCoordinate(xMove, yMove);
         }
+    }
+
+    class MovementStruct
+    {
+        public bool Upwards { get; set; }
+        public bool Downwards { get; set; }
+        public bool Rightwards { get; set; }
+        public bool Leftwards { get; set; }
+
     }
 }

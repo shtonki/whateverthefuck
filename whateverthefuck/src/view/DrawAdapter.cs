@@ -6,7 +6,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace whateverthefuck.src.view
 {
-    class DrawAdapter
+    public class DrawAdapter
     {
         public DrawAdapter()
         {

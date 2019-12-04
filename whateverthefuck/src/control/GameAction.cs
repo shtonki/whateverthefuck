@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace whateverthefuck.src.control
 {
-    enum GameAction
+    public enum GameAction
     {
         HeroWalkUpwards,
         HeroWalkUpwardsStop,

@@ -12,9 +12,8 @@ namespace whateverthefuck.src.model
     /// </summary>
     class Door : GameEntity
     {
-        Door()
+        Door(EntityIdentifier identifier) : base(ControlInfo.NoControl, identifier)
         {
-            Size = new GameCoordinate(0.1f, 0.1f);
         }
     }
 }

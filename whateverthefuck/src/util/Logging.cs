@@ -65,7 +65,7 @@ namespace whateverthefuck.src.util
             Fatal,
         }
 
-        private static LoggingLevel defaultLevel;
+        private static LoggingLevel defaultLevel = LoggingLevel.All;
 
         private static List<LoggingOutput> outputs = new List<LoggingOutput>();
 
@@ -79,12 +79,12 @@ namespace whateverthefuck.src.util
             outputs.Add(loutput);
         }
 
-        public static void Write(string message)
+        public static void Log(string message)
         {
-            Write(message, defaultLevel);
+            Log(message, defaultLevel);
         }
 
-        public static void Write(string message, LoggingLevel l)
+        public static void Log(string message, LoggingLevel l)
         {
             foreach (var output in outputs)
             {

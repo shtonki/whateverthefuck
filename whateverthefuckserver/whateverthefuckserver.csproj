@@ -36,9 +36,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="gameserver\GameServer.cs" />
+    <Compile Include="network\WhateverthefuckMessage.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="WhateverClientConnection.cs" />
-    <Compile Include="WhateverServerConnection.cs" />
+    <Compile Include="network\WhateverClientConnection.cs" />
+    <Compile Include="network\WhateverServerConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\whateverthefuck\whateverthefuck.csproj">

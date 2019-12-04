@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace whateverthefuckserver
+namespace whateverthefuckserver.network
 {
     class WhateverServerConnection
     {

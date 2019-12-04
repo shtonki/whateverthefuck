@@ -20,6 +20,7 @@ namespace whateverthefuck.src.util
 
             if (WRITE)
             {
+#if false
                 List<GameEntity> entitiesToWrite = new List<GameEntity>();
                 Block pat = new Block();
                 entitiesToWrite.Add(pat);
@@ -27,6 +28,7 @@ namespace whateverthefuck.src.util
                 entitiesToWrite.Add(dude);
 
                 WriteToJsonFile("testfile.json", entitiesToWrite);
+#endif
             }
 
             if (READ)

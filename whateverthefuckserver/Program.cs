@@ -13,9 +13,6 @@ namespace whateverthefuckserver
         {
             WhateverServerConnection wsc = new WhateverServerConnection();
             wsc.StartListening();
-            Console.WriteLine(@"Console.WriteLine(""Console.WriteLine");
-
         }
-        
     }
 }

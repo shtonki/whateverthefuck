@@ -2,32 +2,25 @@
 using System.Collections.Generic;
 using System.Threading;
 using whateverthefuck.src.control;
-using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
 {
-    class GameState
+    public class GameState
     {
         public List<GameEntity> AllEntities = new List<GameEntity>();
 
-        private Hero Hero;
+        private PlayerCharacter Hero;
 
-        private Timer TickTimer;
+        private Timer StepTimer;
 
+        private EntityGenerator EntityGenerator = new EntityGenerator();
 
         public GameState()
         {
-            Hero = new Hero();
-            Hero.Location = new GameCoordinate(-0.2f, -0.2f);
-            AllEntities.Add(Hero);
-            GUI.Camera = new FollowCamera(Hero);
+            StepTimer = new Timer(Step, null, 0, 10);
 
-            TickTimer = new Timer(Step, null, 0, 10);
-
-            Map map = new Map(420);
-            AllEntities.AddRange(map.Entities);
-            AllEntities.AddRange(EntitySerializer.LoadEntitiesFromFile("testfile"));
+            AllEntities.AddRange(Map.CreateRoom(EntityGenerator, 0, 0, 6, 6));
         }
 
         private void Step(object state)
@@ -212,5 +205,6 @@ namespace whateverthefuck.src.model
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
             }
         }
+
     }
 }

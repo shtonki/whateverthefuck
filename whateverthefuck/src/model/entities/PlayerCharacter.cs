@@ -4,9 +4,9 @@ using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
 {
-    class Hero : Character
+    class PlayerCharacter : Character
     {
-        public Hero()
+        public PlayerCharacter(ControlInfo controlInfo, EntityIdentifier identifier) : base(controlInfo, identifier)
         {
             DrawColor = Coloring.RandomColor();
         }
