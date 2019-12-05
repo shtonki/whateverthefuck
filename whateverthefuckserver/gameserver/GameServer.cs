@@ -7,6 +7,7 @@ using whateverthefuck.src.network.messages;
 using System.Linq;
 using whateverthefuck.src.model.entities;
 using System;
+using whateverthefuckserver.storage;
 
 namespace whateverthefuckserver
 {
@@ -15,11 +16,20 @@ namespace whateverthefuckserver
         private GameState GameState;
         private Timer TickTimer;
         private List<WhateverthefuckServerConnection> Players = new List<WhateverthefuckServerConnection>();
-
+        private IStorage storage;
         public GameServer()
         {
             GameState = new GameState(true);
             TickTimer = new Timer((_) => Tick(), null, 0, 10);
+            try
+            {
+                 storage = new Mongo();
+            }
+            catch (Exception e)
+            {
+                storage = new DummyStorage();
+            }
+            storage.AddEntry("Players", null);
         }
 
         public void AddPlayer(WhateverthefuckServerConnection playerConnection)
