@@ -7,24 +7,11 @@ using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.network.messages
 {
-    public struct EntityLocationInfo
-    {
-        public int Identifier { get; }
-        public float X { get; }
-        public float Y { get; }
-
-        public EntityLocationInfo(int id, float x, float y)
-        {
-            Identifier = id;
-            X = x;
-            Y = y;
-        }
-    }
+    
 
     public class UpdateEntityLocationsMessage : WhateverthefuckMessage
     {
-        private const char InfoSeperator = ',';
-        private const char EntitySeperator = ';';
+        private const char Separator = ';';
 
         public List<EntityLocationInfo> EntityInfos { get; }
 
@@ -44,15 +31,11 @@ namespace whateverthefuck.src.network.messages
 
             var str = System.Text.Encoding.ASCII.GetString(bytes);
 
-            var infostrings = str.Split(EntitySeperator);
+            var infostrings = str.Split(Separator);
 
             foreach (var info in infostrings)
             {
-                var data = info.Split(InfoSeperator);
-                int id = Int32.Parse(data[0]);
-                float X = float.Parse(data[1]);
-                float Y = float.Parse(data[2]);
-                EntityInfos.Add(new EntityLocationInfo(id, X, Y));
+                EntityInfos.Add(EntityLocationInfo.Decode(System.Text.Encoding.ASCII.GetBytes(info)));
             }
         }
 
@@ -64,10 +47,8 @@ namespace whateverthefuck.src.network.messages
 
             foreach (var entity in EntityInfos)
             {
-                string id = entity.Identifier.ToString();
-                string X = entity.X.ToString("0.00");
-                string Y = entity.Y.ToString("0.00");
-                sb.Append(String.Format("{0}{3}{1}{3}{2}{4}", id, X, Y, InfoSeperator, EntitySeperator));
+                sb.Append(entity.Encode());
+                sb.Append(Separator);
             }
 
             if (sb.Length > 0) { sb.Length--; }

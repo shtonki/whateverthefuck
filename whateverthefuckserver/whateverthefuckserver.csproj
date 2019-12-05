@@ -40,7 +40,7 @@
     <Compile Include="network\NetworkEntityInfo.cs" />
     <Compile Include="network\WhateverthefuckServerConnection.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="network\WhateverServer.cs" />
+    <Compile Include="network\WhateverConnectionListeningServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\whateverthefuck\whateverthefuck.csproj">

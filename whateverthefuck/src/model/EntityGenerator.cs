@@ -24,6 +24,15 @@ namespace whateverthefuck.src.model
             b.Location = location;
             return b;
         }
+
+        public PlayerCharacter GeneratePlayerCharacter(GameCoordinate location, bool controlled)
+        {
+            PlayerCharacter pc = new PlayerCharacter(controlled ? ControlInfo.ClientControl : ControlInfo.ServerControl,
+                IdGenerator.GenerateNextIdentifier());
+            pc.Location = location;
+
+            return pc;
+        }
     }
 
     public class IdentifierGenerator

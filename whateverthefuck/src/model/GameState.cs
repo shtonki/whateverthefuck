@@ -19,7 +19,7 @@ namespace whateverthefuck.src.model
 
         private IdentifierGenerator IdGenerator = new IdentifierGenerator();
 
-        private EntityGenerator EntityGenerator;
+        public EntityGenerator EntityGenerator { get; private set; }
 
         private bool ServerMode;
 
@@ -31,14 +31,25 @@ namespace whateverthefuck.src.model
 
             StepTimer = new Timer(Step, null, 0, 10);
 
-            //AllEntities.AddRange(Map.CreateRoom(EntityGenerator, 0, 0, 6, 6));
-
             AddEntity(new Mob(IdGenerator.GenerateNextIdentifier()));
         }
 
         public void AddEntity(GameEntity entity)
         {
             AllEntities.Add(entity);
+        }
+
+        public void AddPlayerCharacter(EntityLocationInfo info)
+        {
+            PlayerCharacter pc = new PlayerCharacter(ControlInfo.ServerControl, new EntityIdentifier(info.Identifier));
+            pc.Location = new GameCoordinate(info.X, info.Y);
+            AddEntity(pc);
+        }
+
+        public void TakeControl(int identifier)
+        {
+            Hero = (PlayerCharacter)GetEntityById(identifier);
+            Hero.SetControl(ControlInfo.ClientControl);
         }
 
         public void UpdateLocations(IEnumerable<EntityLocationInfo> infos)
@@ -54,13 +65,15 @@ namespace whateverthefuck.src.model
             return AllEntities.Find(e => e.Identifier.Id == id);
         }
 
-        private void Step(object state)
+        private void ClientStep()
         {
-            if (!ServerMode)
-            {
-                return;
-            }
+            if (Hero == null) { return; }
+            Hero.Step();
+            Program.ServerConnection.SendMessage(new UpdatePlayerCharacterLocationMessage(Hero));
+        }
 
+        private void ServerStep()
+        {
             foreach (var entity in AllEntities)
             {
                 entity.Step();
@@ -75,11 +88,11 @@ namespace whateverthefuck.src.model
                 if (collision.EntityI.MovementCache.X == 0 &&
                     collision.EntityI.MovementCache.Y == 0 &&
                     collision.EntityJ.MovementCache.X == 0 &&
-                    collision.EntityJ.MovementCache.Y == 0) 
-                { 
-                	// we have most likely managed to put one object on another at which point
-                	// we let them stay there until something moves.
-                	continue;
+                    collision.EntityJ.MovementCache.Y == 0)
+                {
+                    // we have most likely managed to put one object on another at which point
+                    // we let them stay there until something moves.
+                    continue;
                 }
 
                 if (collision.Direction == CollisionDirection.Left)
@@ -114,6 +127,18 @@ namespace whateverthefuck.src.model
                     collision.EntityJ.Location.Y += jshare * collision.Overlap;
                 }
 
+            }
+        }
+
+        private void Step(object state)
+        {
+            if (ServerMode)
+            {
+                ServerStep();
+            }
+            else
+            {
+                ClientStep();
             }
         }
 

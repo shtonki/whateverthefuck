@@ -52,8 +52,11 @@
     <Compile Include="src\model\entities\PlayerCharacter.cs" />
     <Compile Include="src\model\Map.cs" />
     <Compile Include="src\model\EntityGenerator.cs" />
+    <Compile Include="src\network\messages\AddPlayerCharacterMessage.cs" />
+    <Compile Include="src\network\messages\GrantControlMessage.cs" />
     <Compile Include="src\network\messages\LogMessage.cs" />
     <Compile Include="src\network\messages\UpdateEntityLocationsMessage.cs" />
+    <Compile Include="src\network\messages\UpdatePlayerCharacterLocation.cs" />
     <Compile Include="src\network\messages\WhateverthefuckMessage.cs" />
     <Compile Include="src\network\WhateverClientConnection.cs" />
     <Compile Include="src\network\WhateverthefuckConnection.cs" />

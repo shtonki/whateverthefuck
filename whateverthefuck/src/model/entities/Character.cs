@@ -1,6 +1,6 @@
 ﻿namespace whateverthefuck.src.model.entities
 {
-    abstract class Character : GameEntity
+    public abstract class Character : GameEntity
     {
         public MovementStruct Movements { get; set; } = new MovementStruct();
         public float MoveSpeed = 0.01f;
@@ -45,7 +45,7 @@
         }
     }
 
-    class MovementStruct
+    public class MovementStruct
     {
         public bool Upwards { get; set; }
         public bool Downwards { get; set; }

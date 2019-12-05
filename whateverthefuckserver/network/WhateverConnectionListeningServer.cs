@@ -12,7 +12,7 @@ using whateverthefuck.src.util;
 
 namespace whateverthefuckserver.network
 {
-    class WhateverServer
+    class WhateverConnectionListeningServer
     {
         TcpListener server = null;
         List<WhateverthefuckServerConnection> ActiveConnections = new List<WhateverthefuckServerConnection>();
@@ -35,8 +35,11 @@ namespace whateverthefuckserver.network
 
         private void AddClient(TcpClient client)
         {
-            ActiveConnections.Add(new WhateverthefuckServerConnection(client.GetStream()));
+            var connection = new WhateverthefuckServerConnection(client.GetStream());
+            
+            ActiveConnections.Add(connection);
             Logging.Log("Client has connected.", Logging.LoggingLevel.Info);
+            Program.GameServer.AddPlayer(connection);
         }
 
         private void ListenForNewConnections()

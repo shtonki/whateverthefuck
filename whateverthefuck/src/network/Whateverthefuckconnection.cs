@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Threading;
 using whateverthefuck.src.network.messages;
+using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.network
 {
@@ -17,10 +18,16 @@ namespace whateverthefuck.src.network
             new Thread(ReceiveLoop).Start();
         }
 
-        public void SendMessage(WhateverthefuckMessage message)
+        public  void SendMessage(WhateverthefuckMessage message)
         {
             var bytes = message.Encode();
             NetworkStream.Write(bytes, 0, bytes.Length);
+
+            if (false)
+            {
+                Logging.Log("MessageType" + message.MessageType.ToString() + ", payload: '" + 
+                    System.Text.Encoding.ASCII.GetString(bytes) + "'", Logging.LoggingLevel.Info);
+            }
         }
 
         protected abstract void HandleMessage(WhateverthefuckMessage message);

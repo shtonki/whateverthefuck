@@ -62,6 +62,18 @@ namespace whateverthefuck.src.network
                     Program.GameState.UpdateLocations(updateMessage.EntityInfos);
                 } break;
 
+                case MessageType.AddPlayerCharacterMessage:
+                {
+                    AddPlayerCharacterMessage addPlayerCharacterMessage = (AddPlayerCharacterMessage)message;
+                    Program.GameState.AddPlayerCharacter(addPlayerCharacterMessage.HeroInfo);
+                } break;
+
+                case MessageType.GrantControlMessage:
+                {
+                    GrantControlMessage controlMessage = (GrantControlMessage)message;
+                    Program.GameState.TakeControl(controlMessage.Id);
+                } break;
+                    
                 default: throw new NotImplementedException();
             }
         }

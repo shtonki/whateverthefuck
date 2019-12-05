@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.util;
 using whateverthefuck.src.network.messages;
+using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.network.messages
 {
@@ -54,6 +55,21 @@ namespace whateverthefuck.src.network.messages
                     return new UpdateEntityLocationsMessage(body);
                 }
 
+                case MessageType.AddPlayerCharacterMessage:
+                {
+                    return new AddPlayerCharacterMessage(body);
+                }
+
+                case MessageType.GrantControlMessage:
+                {
+                    return new GrantControlMessage(body);
+                }
+
+                case MessageType.UpdatePlayerCharacterLocation:
+                    {
+                        return new UpdatePlayerCharacterLocationMessage(body);
+                    }
+
                 default:
                 {
                     throw new Exception("received wonky message header");
@@ -64,9 +80,51 @@ namespace whateverthefuck.src.network.messages
         protected abstract byte[] EncodeBody();
     }
 
+    public class EntityLocationInfo
+    {
+        private const char InfoSeperator = ',';
+
+
+        public int Identifier { get; }
+        public float X { get; }
+        public float Y { get; }
+
+        public EntityLocationInfo(GameEntity entity) : this(entity.Identifier.Id, entity.Location.X, entity.Location.Y)
+        {
+
+        }
+
+        public EntityLocationInfo(int id, float x, float y)
+        {
+            Identifier = id;
+            X = x;
+            Y = y;
+        }
+
+        public string Encode()
+        {
+            return Identifier.ToString() + InfoSeperator + X.ToString("0.00") + InfoSeperator + Y.ToString("0.00");
+        }
+
+        public static EntityLocationInfo Decode(byte[] data)
+        {
+            string str = System.Text.Encoding.ASCII.GetString(data);
+
+            var dataStrings = str.Split(InfoSeperator);
+            int id = Int32.Parse(dataStrings[0]);
+            float X = float.Parse(dataStrings[1]);
+            float Y = float.Parse(dataStrings[2]);
+            return new EntityLocationInfo(id, X, Y);
+        }
+
+    }
+
     public enum MessageType
     {
         Log,
         UpdateEntityLocations,
+        AddPlayerCharacterMessage,
+        GrantControlMessage,
+        UpdatePlayerCharacterLocation,
     }
 }

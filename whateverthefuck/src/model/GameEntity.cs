@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 using static whateverthefuck.src.model.EntityGenerator;
 
@@ -18,7 +19,7 @@ namespace whateverthefuck.src.model
         public GameCoordinate MovementCache { get; private set; } // retains the last movement made
         public bool Movable { get; protected set; }
 
-        public ControlInfo ControlInfo { get; }
+        public ControlInfo ControlInfo { get; private set; }
         public EntityIdentifier Identifier { get; }
 
         public GameEntity(ControlInfo controllerInfo, EntityIdentifier identifier) : base(new GameCoordinate(0, 0))
@@ -59,6 +60,12 @@ namespace whateverthefuck.src.model
             return new GameCoordinate(0, 0);
         }
 
+
+        public void SetControl(ControlInfo control)
+        {
+            ControlInfo = control;
+            Logging.Log(String.Format("Setting control of {0} to {1}", Identifier.Id, control));
+        }
     }
 
     public class EntityIdentifier

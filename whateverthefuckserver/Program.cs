@@ -10,15 +10,15 @@ namespace whateverthefuckserver
 {
     class Program
     {
-        private static GameServer GameServer;
+        public static GameServer GameServer { get; private set; }
 
-        public static WhateverServer ServerConnection;
+        public static WhateverConnectionListeningServer ServerConnection;
 
         public static void Main(string[] args)
         {
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
 
-            ServerConnection = new WhateverServer();
+            ServerConnection = new WhateverConnectionListeningServer();
             ServerConnection.StartListening();
 
             GameServer = new GameServer();

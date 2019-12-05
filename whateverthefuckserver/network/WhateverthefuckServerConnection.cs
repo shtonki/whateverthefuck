@@ -19,7 +19,16 @@ namespace whateverthefuckserver.network
 
         protected override void HandleMessage(WhateverthefuckMessage message)
         {
-            throw new NotImplementedException();
+            switch (message.MessageType)
+            {
+                case MessageType.UpdatePlayerCharacterLocation:
+                {
+                    UpdatePlayerCharacterLocationMessage updatePlayerCharacterLocationMessage = (UpdatePlayerCharacterLocationMessage)message;
+                    Program.GameServer.UpdatePlayerCharacterLocation(updatePlayerCharacterLocationMessage.PlayerCharacterLocationInfo);
+                } break;
+
+                default: throw new NotImplementedException();
+            }
         }
     }
 }

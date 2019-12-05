@@ -10,13 +10,15 @@ namespace whateverthefuck
     {
         public static GameState GameState = new GameState(false);
 
+        public static WhateverClientConnection ServerConnection { get; private set; }
+
         public static void Main(String[] args)
         {
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
             Logging.Log("Started Logger");
             GUI.CreateGameWindow();
 
-            WhateverClientConnection c = new WhateverClientConnection();
+            ServerConnection = new WhateverClientConnection();
         }
     }
 }
