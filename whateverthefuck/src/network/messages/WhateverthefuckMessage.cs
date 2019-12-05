@@ -44,14 +44,19 @@ namespace whateverthefuck.src.network.messages
         {
             switch (type)
             {
-                case MessageType.LogMessage:
+                case MessageType.Log:
                 {
                     return new LogMessage(body);
-                } 
+                }
+
+                case MessageType.UpdateEntityLocations:
+                {
+                    return new UpdateEntityLocationsMessage(body);
+                }
 
                 default:
                 {
-                    throw new Exception("received wonky message");
+                    throw new Exception("received wonky message header");
                 }
             }
         }
@@ -61,6 +66,7 @@ namespace whateverthefuck.src.network.messages
 
     public enum MessageType
     {
-        LogMessage,
+        Log,
+        UpdateEntityLocations,
     }
 }

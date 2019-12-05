@@ -15,9 +15,6 @@ namespace whateverthefuck.src.network
         private const string BackupServerIp = "127.0.0.1";
         private const int ServerPort = 13000;
 
-        private TcpClient ServerConnection;
-
-
         public WhateverClientConnection() : base(ConnectToServer())
         {
 
@@ -39,7 +36,7 @@ namespace whateverthefuck.src.network
                     Logging.Log("Connected to main server.");
                 }
             }
-            catch(SocketException e)
+            catch(SocketException)
             {
                 Logging.Log("Failed to connect to main server, attempting to connect to backup.");
                 ServerConnection = new TcpClient(BackupServerIp, ServerPort);
@@ -53,10 +50,16 @@ namespace whateverthefuck.src.network
         {
             switch (message.MessageType)
             {
-                case MessageType.LogMessage:
+                case MessageType.Log:
                 {
                     LogMessage logMessage = (LogMessage)message;
                     Logging.Log("Message from server: " + logMessage.Message, Logging.LoggingLevel.Info);
+                } break;
+
+                case MessageType.UpdateEntityLocations:
+                {
+                    UpdateEntityLocationsMessage updateMessage = (UpdateEntityLocationsMessage)message;
+                    Program.GameState.UpdateLocations(updateMessage.EntityInfos);
                 } break;
 
                 default: throw new NotImplementedException();

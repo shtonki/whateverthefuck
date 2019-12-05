@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using whateverthefuck.src.control;
 using whateverthefuck.src.model.entities;
+using whateverthefuck.src.network.messages;
 using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 
@@ -20,13 +21,17 @@ namespace whateverthefuck.src.model
 
         private EntityGenerator EntityGenerator;
 
-        public GameState()
+        private bool ServerMode;
+
+        public GameState(bool serverMode)
         {
+            ServerMode = serverMode;
+
             EntityGenerator = new EntityGenerator(IdGenerator);
 
             StepTimer = new Timer(Step, null, 0, 10);
 
-            AllEntities.AddRange(Map.CreateRoom(EntityGenerator, 0, 0, 6, 6));
+            //AllEntities.AddRange(Map.CreateRoom(EntityGenerator, 0, 0, 6, 6));
 
             AddEntity(new Mob(IdGenerator.GenerateNextIdentifier()));
         }
@@ -36,8 +41,26 @@ namespace whateverthefuck.src.model
             AllEntities.Add(entity);
         }
 
+        public void UpdateLocations(IEnumerable<EntityLocationInfo> infos)
+        {
+            foreach (var info in infos)
+            {
+                GetEntityById(info.Identifier).Location = new GameCoordinate(info.X, info.Y);
+            }
+        }
+
+        public GameEntity GetEntityById(int id)
+        {
+            return AllEntities.Find(e => e.Identifier.Id == id);
+        }
+
         private void Step(object state)
         {
+            if (!ServerMode)
+            {
+                return;
+            }
+
             foreach (var entity in AllEntities)
             {
                 entity.Step();

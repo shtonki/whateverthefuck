@@ -5,12 +5,12 @@ namespace whateverthefuck.src.network.messages
     {
         public string Message { get; }
 
-        public LogMessage(byte[] body) : base(MessageType.LogMessage)
+        public LogMessage(byte[] body) : base(MessageType.Log)
         {
             Message = System.Text.Encoding.ASCII.GetString(body);
         }
 
-        public LogMessage(string message) : base(MessageType.LogMessage)
+        public LogMessage(string message) : base(MessageType.Log)
         {
             Message = message;
         }

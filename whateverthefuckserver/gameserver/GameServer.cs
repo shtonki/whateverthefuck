@@ -4,6 +4,7 @@ using System.Threading;
 using whateverthefuckserver.network;
 using System.Collections.Generic;
 using whateverthefuck.src.network.messages;
+using System.Linq;
 
 namespace whateverthefuckserver
 {
@@ -14,13 +15,14 @@ namespace whateverthefuckserver
 
         public GameServer()
         {
-            GameState = new GameState();
+            GameState = new GameState(true);
             TickTimer = new Timer((_) => Tick(), null, 0, 10);
         }
-        int i = 0;
+
         public void Tick()
         {
-            Program.ServerConnection.SendMessageToEveryone(new LogMessage("we tickers now " + i++));
+            var es = GameState.AllEntities.Where(e => e.ControlInfo != ControlInfo.NoControl);
+            Program.ServerConnection.SendMessageToEveryone(new UpdateEntityLocationsMessage(es));
         }
     }
 }

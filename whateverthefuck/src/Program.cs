@@ -8,7 +8,7 @@ namespace whateverthefuck
 {
     class Program
     {
-        public static GameState GameState = new GameState();
+        public static GameState GameState = new GameState(false);
 
         public static void Main(String[] args)
         {
