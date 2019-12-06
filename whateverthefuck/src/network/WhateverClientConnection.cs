@@ -75,6 +75,11 @@ namespace whateverthefuck.src.network
                     Program.GameStateManager.TakeControl(controlMessage.Id);
                 } break;
 
+                case MessageType.DeleteGameEntityMessage:
+                {
+                    DeleteGameEntityMessage deleteMessage = (DeleteGameEntityMessage)message;
+                     Program.GameStateManager.RemoveEntity(deleteMessage.Identifier);
+                } break;
                 default: throw new NotImplementedException();
             }
         }

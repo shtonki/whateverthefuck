@@ -35,12 +35,20 @@ namespace whateverthefuckserver
                 {
                 }
             }).Start();
+
+
         }
 
         public void AddUser(User user)
         {
+            foreach (var entity in GameState.AllEntities)
+            {
+                user.PlayerConnection.SendMessage(new CreateGameEntityMessage(entity));
+            }
+
             PlayingUsers.Add(user);
             SpawnUserAsPlayerCharacter(user);
+
         }
 
         public void SpawnUserAsPlayerCharacter(User user)
@@ -51,7 +59,9 @@ namespace whateverthefuckserver
         public void RemoveUser(User user)
         {
             PlayingUsers.Remove(user);
-            GameState.RemoveEntity(user.HeroIdentifier);
+            var hero = GameState.GetEntityById(user.HeroIdentifier.Id);
+            GameState.RemoveEntity(hero);
+            SendMessageToAllPlayers(new DeleteGameEntityMessage(hero));
         }
 
         public void UpdatePlayerCharacterLocation(int id, MovementStruct movementStruct)

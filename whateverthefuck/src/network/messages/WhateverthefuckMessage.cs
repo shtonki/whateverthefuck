@@ -76,6 +76,11 @@ namespace whateverthefuck.src.network.messages
                         return new SendLoginCredentialsMessage(body);
                     }
 
+                case MessageType.DeleteGameEntityMessage:
+                    {
+                        return new DeleteGameEntityMessage(body);
+                    }
+
                 default:
                     {
                         throw new Exception("received wonky message header");
@@ -132,9 +137,10 @@ namespace whateverthefuck.src.network.messages
     {
         Log,
         UpdateEntityLocations,
-        CreateGameEntityMessage,
         GrantControlMessage,
         UpdatePlayerControlMessage,
         LoginCredentialsMessage,
+        CreateGameEntityMessage,
+        DeleteGameEntityMessage,
     }
 }

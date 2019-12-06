@@ -27,6 +27,7 @@ namespace whateverthefuck.src.model
             TickTimer = new Timer(_ => Tick(), null, 0, 10);
         }
 
+
         private void Tick()
         {
             if (Hero == null)
@@ -43,6 +44,11 @@ namespace whateverthefuck.src.model
             entity.Identifier = new EntityIdentifier(info.LocationInfo.Identifier);
             entity.Location = new GameCoordinate(info.LocationInfo.X, info.LocationInfo.Y);
             GameState.AddEntity(entity);
+        }
+
+        public void RemoveEntity(EntityIdentifier id)
+        {
+            GameState.RemoveEntity(id);
         }
 
         public void TakeControl(int identifier)
