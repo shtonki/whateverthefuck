@@ -8,6 +8,9 @@ namespace whateverthefuck.src.network
 {
     public abstract class WhateverthefuckConnection
     {
+        private const bool LogOutgoingMessages = true;
+        private const bool LogIncomingMessages = true;
+
         private NetworkStream NetworkStream;
 
         private byte[] HeaderBuffer = new byte[WhateverthefuckMessage.HeaderSize];
@@ -30,9 +33,9 @@ namespace whateverthefuck.src.network
 
             }
 
-            if (true)
+            if (LogOutgoingMessages)
             {
-                Logging.Log("MessageType" + message.MessageType.ToString() + ", payload: '" + 
+                Logging.Log("-> MessageType" + message.MessageType.ToString() + ", payload: '" + 
                     System.Text.Encoding.ASCII.GetString(bytes) + "'", Logging.LoggingLevel.Info);
             }
         }
@@ -74,6 +77,12 @@ namespace whateverthefuck.src.network
                 if (bytesRead != messageLength) { throw new Exception("error reading message body"); }
 
                 var message = WhateverthefuckMessage.Decode(messageType, BodyBuffer);
+
+                if (LogIncomingMessages)
+                {
+                    Logging.Log("<- MessageType" + message.MessageType.ToString() + ", payload: '" +
+                        System.Text.Encoding.ASCII.GetString(BodyBuffer) + "'", Logging.LoggingLevel.Info);
+                }
 
                 HandleMessage(message);
             }
