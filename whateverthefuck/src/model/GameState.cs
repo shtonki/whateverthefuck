@@ -22,8 +22,6 @@ namespace whateverthefuck.src.model
         public GameState()
         {
             EntityGenerator = new EntityGenerator(IdGenerator);
-
-            AddEntity(new Mob(IdGenerator.GenerateNextIdentifier()));
         }
 
         public void AddEntity(GameEntity entity)

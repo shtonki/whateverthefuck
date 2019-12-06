@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.model.entities;
+using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.network.messages
 {
@@ -18,12 +19,12 @@ namespace whateverthefuck.src.network.messages
 
         public GrantControlMessage(byte[] body) : base(MessageType.GrantControlMessage)
         {
-            Id = DecodeInt(body);
+            Id = WhateverEncoding.DecodeInt(body);
         }
 
         protected override byte[] EncodeBody()
         {
-            return EncodeInt(Id);
+            return WhateverEncoding.EncodeInt(Id);
         }
     }
 }

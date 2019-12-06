@@ -56,9 +56,9 @@ namespace whateverthefuck.src.network.messages
                         return new UpdateEntityLocationsMessage(body);
                     }
 
-                case MessageType.AddPlayerCharacterMessage:
+                case MessageType.CreateGameEntityMessage:
                     {
-                        return new AddPlayerCharacterMessage(body);
+                        return new CreateGameEntityMessage(body);
                     }
 
                 case MessageType.GrantControlMessage:
@@ -85,25 +85,6 @@ namespace whateverthefuck.src.network.messages
 
         protected abstract byte[] EncodeBody();
 
-        protected byte[] EncodeInt(int value)
-        {
-            byte[] bytes = new byte[sizeof(int)];
-
-            bytes[0] = (byte)(value >> 24);
-            bytes[1] = (byte)(value >> 16);
-            bytes[2] = (byte)(value >> 8);
-            bytes[3] = (byte)value;
-
-            return bytes;
-        }
-
-        protected int DecodeInt(byte[] body)
-        {
-            return (body[0] << 24) |
-                   (body[1] << 16) |
-                   (body[2] << 8) |
-                   (body[3]);
-        }
     }
 
 
@@ -128,6 +109,7 @@ namespace whateverthefuck.src.network.messages
             Y = y;
         }
 
+        // todo should encode to byte[] like a sane person
         public string Encode()
         {
             return Identifier.ToString() + InfoSeperator + X.ToString("0.00", CultureInfo.InvariantCulture) + InfoSeperator + Y.ToString("0.00", CultureInfo.InvariantCulture);
@@ -150,7 +132,7 @@ namespace whateverthefuck.src.network.messages
     {
         Log,
         UpdateEntityLocations,
-        AddPlayerCharacterMessage,
+        CreateGameEntityMessage,
         GrantControlMessage,
         UpdatePlayerControlMessage,
         LoginCredentialsMessage,

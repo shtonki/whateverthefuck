@@ -63,10 +63,10 @@ namespace whateverthefuck.src.network
                     Program.GameStateManager.UpdateLocations(updateMessage.EntityInfos);
                 } break;
 
-                case MessageType.AddPlayerCharacterMessage:
+                case MessageType.CreateGameEntityMessage:
                 {
-                    AddPlayerCharacterMessage addPlayerCharacterMessage = (AddPlayerCharacterMessage)message;
-                    Program.GameStateManager.AddPlayerCharacter(addPlayerCharacterMessage.HeroInfo);
+                    CreateGameEntityMessage createGameEntityMessage = (CreateGameEntityMessage)message;
+                    Program.GameStateManager.CreateEntity(createGameEntityMessage.CreateEntityInfo);
                 } break;
 
                 case MessageType.GrantControlMessage:

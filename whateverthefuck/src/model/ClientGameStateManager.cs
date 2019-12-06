@@ -37,11 +37,12 @@ namespace whateverthefuck.src.model
             Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(Hero));
         }
 
-        public void AddPlayerCharacter(EntityLocationInfo info)
+        public void CreateEntity(CreateEntityInfo info)
         {
-            PlayerCharacter pc = new PlayerCharacter(new EntityIdentifier(info.Identifier));
-            pc.Location = new GameCoordinate(info.X, info.Y);
-            GameState.AddEntity(pc);
+            var entity = GameState.EntityGenerator.GenerateEntity(info.EntityType);
+            entity.Identifier = new EntityIdentifier(info.LocationInfo.Identifier);
+            entity.Location = new GameCoordinate(info.LocationInfo.X, info.LocationInfo.Y);
+            GameState.AddEntity(entity);
         }
 
         public void TakeControl(int identifier)

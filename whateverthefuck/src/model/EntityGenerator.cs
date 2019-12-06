@@ -17,22 +17,31 @@ namespace whateverthefuck.src.model
             IdGenerator = idGenerator;
         }
 
-        public GameEntity GenerateBlock(GameCoordinate size, GameCoordinate location)
+        public GameEntity GenerateEntity(EntityType type)
         {
-            Block b = new Block(IdGenerator.GenerateNextIdentifier(), Color.Teal);
-            b.Size = size;
-            b.Location = location;
-            return b;
+            switch (type)
+            {
+                case EntityType.Block:
+                {
+                    return new Block(IdGenerator.GenerateNextIdentifier(), Color.Teal);
+                }
+
+                case EntityType.NPC:
+                {
+                    return new NPC(IdGenerator.GenerateNextIdentifier());
+                }
+
+                case EntityType.PlayerCharacter:
+                {
+                    return new PlayerCharacter(IdGenerator.GenerateNextIdentifier());
+                }
+
+                default: throw new Exception();
+            }
         }
 
-        public PlayerCharacter GeneratePlayerCharacter(GameCoordinate location, bool controlled)
-        {
-            PlayerCharacter pc = new PlayerCharacter(IdGenerator.GenerateNextIdentifier());
-            pc.Location = location;
-
-            return pc;
-        }
     }
+
 
     public class IdentifierGenerator
     {

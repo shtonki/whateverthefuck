@@ -15,15 +15,17 @@ namespace whateverthefuck.src.model
     {
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
+        public EntityType EntityType { get; }
         
         public GameCoordinate MovementCache { get; private set; } // retains the last movement made
         public bool Movable { get; protected set; }
 
-        public EntityIdentifier Identifier { get; }
+        public EntityIdentifier Identifier { get; set; }
 
-        public GameEntity(EntityIdentifier identifier) : base(new GameCoordinate(0, 0))
+        public GameEntity(EntityIdentifier identifier, EntityType type) : base(new GameCoordinate(0, 0))
         {
             Identifier = identifier;
+            EntityType = type;
         }
 
         public float Left => Location.X;
@@ -68,12 +70,13 @@ namespace whateverthefuck.src.model
             Id = id;
         }
     }
-#if false
-    public enum ControlInfo
+
+
+    public enum EntityType
     {
-        NoControl,
-        ClientControl,
-        ServerControl,
+        PlayerCharacter,
+        Block,
+        NPC,
+        Door,
     }
-#endif
 }

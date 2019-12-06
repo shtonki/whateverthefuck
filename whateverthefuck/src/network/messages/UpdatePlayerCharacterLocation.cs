@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.model.entities;
+using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.network.messages
 {
@@ -20,7 +21,7 @@ namespace whateverthefuck.src.network.messages
 
         public UpdatePlayerControlMessage(byte[] body) : base(MessageType.UpdatePlayerControlMessage)
         {
-            EntityId = DecodeInt(body.Take(sizeof(int)).ToArray());
+            EntityId = WhateverEncoding.DecodeInt(body.Take(sizeof(int)).ToArray());
             MovementStruct = MovementStruct.Decode(body.Skip(sizeof(int)).ToArray());
         }
 
@@ -28,7 +29,7 @@ namespace whateverthefuck.src.network.messages
         {
             var movementArray = MovementStruct.Encode();
             var encoded = new byte[sizeof(int) + movementArray.Length];
-            Array.Copy(EncodeInt(EntityId), 0, encoded, 0, sizeof(int));
+            Array.Copy(WhateverEncoding.EncodeInt(EntityId), 0, encoded, 0, sizeof(int));
             Array.Copy(movementArray, 0, encoded, sizeof(int), movementArray.Length);
 
             return encoded;

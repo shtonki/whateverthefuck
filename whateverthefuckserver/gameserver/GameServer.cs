@@ -62,11 +62,12 @@ namespace whateverthefuckserver
 
         private void SpawnPlayerCharacter(User user)
         {
-            var pc = GameState.EntityGenerator.GeneratePlayerCharacter(new GameCoordinate(0, 0), false);
+            var pc = GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter);
+            pc.Location = new GameCoordinate(0, 0);
             GameState.AddEntity(pc);
             user.HeroIdentifier = pc.Identifier;
-            SendMessageToAllPlayers(new AddPlayerCharacterMessage(pc));
-            user.PlayerConnection.SendMessage(new GrantControlMessage(pc));
+            SendMessageToAllPlayers(new CreateGameEntityMessage(pc));
+            user.PlayerConnection.SendMessage(new GrantControlMessage((PlayerCharacter)pc));
         }
 
         private void SendMessageToAllPlayers(WhateverthefuckMessage message)

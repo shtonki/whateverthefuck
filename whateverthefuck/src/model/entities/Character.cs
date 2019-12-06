@@ -8,7 +8,7 @@ namespace whateverthefuck.src.model.entities
         public float MoveSpeed = 0.01f;
 
 
-        public Character(EntityIdentifier identifier) : base(identifier)
+        public Character(EntityIdentifier identifier, EntityType entityType) : base(identifier, entityType)
         {
             Movable = true;
         }

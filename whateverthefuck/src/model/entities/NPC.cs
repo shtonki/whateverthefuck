@@ -3,9 +3,9 @@ using System.Drawing;
 
 namespace whateverthefuck.src.model.entities
 {
-    class Mob : GameEntity
+    class NPC : GameEntity
     {
-        public Mob(EntityIdentifier identifier) : base(identifier)
+        public NPC(EntityIdentifier identifier) : base(identifier, EntityType.NPC)
         {
             DrawColor = Color.Red;
             Movable = true;
