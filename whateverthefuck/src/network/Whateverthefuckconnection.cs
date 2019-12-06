@@ -8,8 +8,8 @@ namespace whateverthefuck.src.network
 {
     public abstract class WhateverthefuckConnection
     {
-        private const bool LogOutgoingMessages = true;
-        private const bool LogIncomingMessages = true;
+        private const bool LogOutgoingMessages = false;
+        private const bool LogIncomingMessages = false;
 
         private NetworkStream NetworkStream;
 

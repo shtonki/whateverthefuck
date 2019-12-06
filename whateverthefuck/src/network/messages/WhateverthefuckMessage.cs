@@ -104,7 +104,7 @@ namespace whateverthefuck.src.network.messages
 
     public class EntityLocationInfo
     {
-        private const char InfoSeperator = ',';
+        private const char InfoSeperator = '&';
 
 
         public int Identifier { get; }
@@ -125,7 +125,7 @@ namespace whateverthefuck.src.network.messages
 
         public string Encode()
         {
-            return Identifier.ToString() + InfoSeperator + X.ToString("0.00") + InfoSeperator + Y.ToString("0.00");
+            return Identifier.ToString() + InfoSeperator + X.ToString("0.00", CultureInfo.InvariantCulture) + InfoSeperator + Y.ToString("0.00", CultureInfo.InvariantCulture);
         }
 
         public static EntityLocationInfo Decode(byte[] data)
