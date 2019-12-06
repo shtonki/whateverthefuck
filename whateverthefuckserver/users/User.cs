@@ -11,14 +11,13 @@ namespace whateverthefuckserver.users
     class User
     {
         public WhateverthefuckServerConnection PlayerConnection { get; }
-        public string Username { get; }
+        public string Username { get; set; }
 
         public EntityIdentifier HeroIdentifier { get; set; }
 
-        public User(WhateverthefuckServerConnection playerConnection, string username)
+        public User(WhateverthefuckServerConnection playerConnection)
         {
             PlayerConnection = playerConnection;
-            Username = username;
         }
     }
 }

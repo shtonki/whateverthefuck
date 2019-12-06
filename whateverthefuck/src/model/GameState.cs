@@ -32,6 +32,16 @@ namespace whateverthefuck.src.model
             Logging.Log("Added ID: " + entity.Identifier.Id);
         }
 
+        public void RemoveEntity(GameEntity entity)
+        {
+            EntityList.Remove(entity);
+        }
+
+        public void RemoveEntity(EntityIdentifier id)
+        {
+            EntityList.RemoveAll(e => e.Identifier.Id == id.Id);
+        }
+
         public GameEntity GetEntityById(int id)
         {
             return EntityList.Find(e => e.Identifier.Id == id);

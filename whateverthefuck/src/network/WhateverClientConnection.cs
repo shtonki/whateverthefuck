@@ -75,10 +75,13 @@ namespace whateverthefuck.src.network
                     Program.GameStateManager.TakeControl(controlMessage.Id);
                 } break;
 
- 
-
                 default: throw new NotImplementedException();
             }
+        }
+
+        protected override void HandleConnectionDeath()
+        {
+            throw new NotImplementedException();
         }
     }
 }

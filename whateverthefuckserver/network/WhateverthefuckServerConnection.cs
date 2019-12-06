@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.network;
 using whateverthefuck.src.network.messages;
+using whateverthefuckserver.users;
 
 namespace whateverthefuckserver.network
 {
@@ -15,6 +16,11 @@ namespace whateverthefuckserver.network
         public WhateverthefuckServerConnection(NetworkStream stream) : base(stream)
         {
 
+        }
+
+        protected override void HandleConnectionDeath()
+        {
+            LoginServer.Logout(this);
         }
 
         protected override void HandleMessage(WhateverthefuckMessage message)
@@ -30,7 +36,7 @@ namespace whateverthefuckserver.network
                 case MessageType.LoginCredentialsMessage:
                 {
                     SendLoginCredentialsMessage credentialsMessage = (SendLoginCredentialsMessage)message;
-                    Program.GameServer.LoginPlayer(this, credentialsMessage.LoginCredentials);         
+                    LoginServer.Login(new User(this), credentialsMessage.LoginCredentials);         
                 } break;
                 default: throw new NotImplementedException();
             }

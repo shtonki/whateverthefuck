@@ -8,7 +8,7 @@ namespace whateverthefuck.src.network
 {
     public abstract class WhateverthefuckConnection
     {
-        private const bool LogOutgoingMessages = true;
+        private const bool LogOutgoingMessages = false;
         private const bool LogIncomingMessages = false;
 
         private NetworkStream NetworkStream;
@@ -42,10 +42,7 @@ namespace whateverthefuck.src.network
 
         protected abstract void HandleMessage(WhateverthefuckMessage message);
 
-        private void HandleConnectionDeath()
-        {
-            Logging.Log("Connection to user died.", Logging.LoggingLevel.Info);
-        }
+        protected abstract void HandleConnectionDeath();
 
         private void ReceiveLoop()
         {

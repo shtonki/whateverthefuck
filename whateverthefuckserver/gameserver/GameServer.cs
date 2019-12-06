@@ -9,6 +9,7 @@ using whateverthefuck.src.model.entities;
 using System;
 using whateverthefuck.src.network;
 using whateverthefuckserver.storage;
+using whateverthefuckserver.users;
 
 namespace whateverthefuckserver
 {
@@ -17,7 +18,7 @@ namespace whateverthefuckserver
         public GameState GameState { get; private set; }
         public IStorage Storage { get; private set; }
         private Timer TickTimer;
-        private List<WhateverthefuckServerConnection> Players = new List<WhateverthefuckServerConnection>();
+        private List<User> PlayingUsers = new List<User>();
         public GameServer()
         {
             GameState = new GameState();
@@ -36,19 +37,21 @@ namespace whateverthefuckserver
             }).Start();
         }
 
-        public void LoginPlayer(WhateverthefuckServerConnection playerConnection, LoginCredentials loginCredentials)
+        public void AddUser(User user)
         {
-            Logging.Log("Welcome " + loginCredentials.Username);
-            Players.Add(playerConnection);
-
-
-            var pc = SpawnPlayerCharacter(playerConnection);
-            playerConnection.SendMessage(new GrantControlMessage(pc));
+            PlayingUsers.Add(user);
+            SpawnUserAsPlayerCharacter(user);
         }
 
-        public void RemovePlayer(WhateverthefuckServerConnection playerConnection)
+        public void SpawnUserAsPlayerCharacter(User user)
         {
-            Players.Remove(playerConnection);
+            SpawnPlayerCharacter(user);
+        }
+
+        public void RemoveUser(User user)
+        {
+            PlayingUsers.Remove(user);
+            GameState.RemoveEntity(user.HeroIdentifier);
         }
 
         public void UpdatePlayerCharacterLocation(int id, MovementStruct movementStruct)
@@ -57,22 +60,22 @@ namespace whateverthefuckserver
             pc.Movements = movementStruct;
         }
 
-        private PlayerCharacter SpawnPlayerCharacter(WhateverthefuckServerConnection playerConnection)
+        private void SpawnPlayerCharacter(User user)
         {
             var pc = GameState.EntityGenerator.GeneratePlayerCharacter(new GameCoordinate(0, 0), false);
             GameState.AddEntity(pc);
+            user.HeroIdentifier = pc.Identifier;
             SendMessageToAllPlayers(new AddPlayerCharacterMessage(pc));
-
-            return pc;
+            user.PlayerConnection.SendMessage(new GrantControlMessage(pc));
         }
 
         private void SendMessageToAllPlayers(WhateverthefuckMessage message)
         {
             // todo we encode the message seperately for each client
 
-            foreach (var client in Players)
+            foreach (var user in PlayingUsers)
             {
-                client.SendMessage(message);
+                user.PlayerConnection.SendMessage(message);
             }
         }
 
