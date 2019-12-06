@@ -55,7 +55,16 @@ namespace whateverthefuck.src.model
         {
             foreach (var info in infos)
             {
-                GetEntityById(info.Identifier).Location = new GameCoordinate(info.X, info.Y);
+                var updatee = GetEntityById(info.Identifier);
+
+                if (updatee == null)
+                {
+                    Logging.Log("Got position of Entity we don't think exists.", Logging.LoggingLevel.Warning);
+                }
+                else
+                {
+                    updatee.Location = new GameCoordinate(info.X, info.Y);
+                }
             }
         }
 

@@ -24,8 +24,11 @@ namespace whateverthefuckserver
 
             GameServer = new GameServer();
 
-            GUI.CreateGameWindow();
-            GUI.ForceToDrawGameState = GameServer.GameState;
+            if (false)
+            {
+                GUI.CreateGameWindow();
+                GUI.ForceToDrawGameState = GameServer.GameState;
+            }
         }
     }
 }

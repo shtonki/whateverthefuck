@@ -23,7 +23,7 @@ namespace whateverthefuck.src.network
             var bytes = message.Encode();
             NetworkStream.Write(bytes, 0, bytes.Length);
 
-            if (true)
+            if (false)
             {
                 Logging.Log("MessageType" + message.MessageType.ToString() + ", payload: '" + 
                     System.Text.Encoding.ASCII.GetString(bytes) + "'", Logging.LoggingLevel.Info);

@@ -8,6 +8,7 @@ namespace whateverthefuck.src.model.entities
         public Mob(EntityIdentifier identifier) : base(identifier)
         {
             DrawColor = Color.Red;
+            Movable = true;
         }
 
         int ctr = 0;
