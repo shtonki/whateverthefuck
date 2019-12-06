@@ -9,7 +9,7 @@ namespace whateverthefuck.src.network
 {
     class WhateverClientConnection : WhateverthefuckConnection
     {
-        private const bool arabsarebeingapaininmyass = true;
+        private const bool arabsarebeingapaininmyass = false;
 
         private const string ServerIp = "98.128.171.8";
         private const string BackupServerIp = "127.0.0.1";

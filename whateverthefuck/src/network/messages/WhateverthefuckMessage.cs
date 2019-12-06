@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using whateverthefuck.src.util;
 using whateverthefuck.src.network.messages;
 using whateverthefuck.src.model;
+using System.Globalization;
 
 namespace whateverthefuck.src.network.messages
 {
@@ -133,8 +134,8 @@ namespace whateverthefuck.src.network.messages
 
             var dataStrings = str.Split(InfoSeperator);
             int id = Int32.Parse(dataStrings[0]);
-            float X = float.Parse(dataStrings[1]);
-            float Y = float.Parse(dataStrings[2]);
+            float X = float.Parse(dataStrings[1], CultureInfo.InvariantCulture);
+            float Y = float.Parse(dataStrings[2], CultureInfo.InvariantCulture);
             return new EntityLocationInfo(id, X, Y);
         }
 

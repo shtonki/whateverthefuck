@@ -30,7 +30,7 @@ namespace whateverthefuck.src.network
 
             }
 
-            if (false)
+            if (true)
             {
                 Logging.Log("MessageType" + message.MessageType.ToString() + ", payload: '" + 
                     System.Text.Encoding.ASCII.GetString(bytes) + "'", Logging.LoggingLevel.Info);
