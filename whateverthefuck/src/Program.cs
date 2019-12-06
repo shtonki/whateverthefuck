@@ -16,9 +16,15 @@ namespace whateverthefuck
         {
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
             Logging.Log("Started Logger");
+
             GUI.CreateGameWindow();
 
+            ConfigFile cf = new ConfigFile("config.json");
+
             ServerConnection = new WhateverClientConnection();
+
+            UserLogin.Login(cf.ConfigInfo.LoginCredentials);
+
         }
     }
 }

@@ -9,6 +9,8 @@ namespace whateverthefuckserver.storage
     interface IStorage
     {
         void AddEntry(string collectionName, IStorable entry);
+        void AddJson(string collectionName, object o);
+        void AddBson(string collectionName, object o);
     }
 
     interface IStorable

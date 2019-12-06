@@ -12,5 +12,15 @@ namespace whateverthefuckserver.storage
         {
 
         }
+
+        public void AddJson(string collectionName, object o)
+        {
+
+        }
+
+        public void AddBson(string collectionName, object o)
+        {
+            
+        }
     }
 }

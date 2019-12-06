@@ -7,44 +7,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using whateverthefuck.src.model;
+using whateverthefuck.src.model.entities;
 
 
 namespace whateverthefuck.src.util
 {
-    class EntitySerializer
+    public class JsonIO
     {
-        public void DoTests()
-        {
-            bool WRITE = false;
-            bool READ = true;
-
-            if (WRITE)
-            {
-#if false
-                List<GameEntity> entitiesToWrite = new List<GameEntity>();
-                Block pat = new Block();
-                entitiesToWrite.Add(pat);
-                Block dude = new Block();
-                entitiesToWrite.Add(dude);
-
-                WriteToJsonFile("testfile.json", entitiesToWrite);
-#endif
-            }
-
-            if (READ)
-            {
-                JObject entitiesList = ReadFromJsonFile<JObject>("testfile.json");
-                JArray entities = entitiesList["$values"] as JArray;
-                foreach (var entity in entities)
-                {
-                    string sType = entity["$type"].ToString();
-                    Type entityType = Type.GetType(sType);
-                    dynamic xd = JsonConvert.DeserializeObject(entity.ToString(), entityType);
-                   // GameState.AllEntities.Add(xd as GameEntity);
-                }
-            }
-        }
-
         public static List<GameEntity> LoadEntitiesFromFile(string filename)
         {
             if (!File.Exists(filename + ".json")) return new List<GameEntity>();
@@ -68,6 +37,16 @@ namespace whateverthefuck.src.util
             }
 
             return vars;
+        }
+
+
+        public static T ConvertToString<T>(string json)
+        {
+            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
         /// <summary>
@@ -103,6 +82,25 @@ namespace whateverthefuck.src.util
             }
         }
 
+        public static string ConvertToJson<T>(T objectToWrite) where T : new()
+        {
+            try
+            {
+                return JsonConvert.SerializeObject(objectToWrite, typeof(GameEntity),
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.None,
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                        Formatting = Formatting.Indented
+                    });
+            }
+            catch(Exception e)
+            {
+                Logging.Log("Could not serialize " + objectToWrite + ": " + e);
+                return "";
+            }
+        }
+
         /// <summary>
         /// Reads an object instance from an Json file.
         /// <para>Object type must have a parameterless constructor.</para>
@@ -127,24 +125,6 @@ namespace whateverthefuck.src.util
             {
                 if (reader != null)
                     reader.Close();
-            }
-        }
-
-
-        public class ConcreteConverter<T> : JsonConverter
-        {
-            public override bool CanConvert(Type objectType) => true;
-
-            public override object ReadJson(JsonReader reader,
-                Type objectType, object existingValue, JsonSerializer serializer)
-            {
-                return serializer.Deserialize<T>(reader);
-            }
-
-            public override void WriteJson(JsonWriter writer,
-                object value, JsonSerializer serializer)
-            {
-                serializer.Serialize(writer, value);
             }
         }
     }

@@ -71,6 +71,11 @@ namespace whateverthefuck.src.network.messages
                         return new UpdatePlayerControlMessage(body);
                     }
 
+                case MessageType.SendLoginCredentials:
+                    {
+                        return new SendLoginCredentialsMessage(body);
+                    }
+
                 default:
                     {
                         throw new Exception("received wonky message header");
@@ -148,5 +153,6 @@ namespace whateverthefuck.src.network.messages
         AddPlayerCharacterMessage,
         GrantControlMessage,
         UpdatePlayerControlMessage,
+        SendLoginCredentials,
     }
 }

@@ -9,39 +9,20 @@ using System.Threading.Tasks;
 using whateverthefuck.src.network;
 using whateverthefuck.src.network.messages;
 using whateverthefuck.src.util;
+using whateverthefuckserver.storage;
 
 namespace whateverthefuckserver.network
 {
     class WhateverConnectionListeningServer
     {
         TcpListener server = null;
-        List<WhateverthefuckServerConnection> ActiveConnections = new List<WhateverthefuckServerConnection>();
 
         public void StartListening()
         {
             Thread listenThread = new Thread(ListenForNewConnections);
             listenThread.Start();
         }
-
-        public void SendMessageToEveryone(WhateverthefuckMessage message)
-        {
-            // todo we encode the message seperately for each client
-
-            foreach (var client in ActiveConnections)
-            {
-                client.SendMessage(message);
-            }
-        }
-
-        private void AddClient(TcpClient client)
-        {
-            var connection = new WhateverthefuckServerConnection(client.GetStream());
-            
-            ActiveConnections.Add(connection);
-            Logging.Log("Client has connected.", Logging.LoggingLevel.Info);
-            Program.GameServer.AddPlayer(connection);
-        }
-
+        
         private void ListenForNewConnections()
         {
             try
@@ -56,7 +37,7 @@ namespace whateverthefuckserver.network
                 {
                     TcpClient client = server.AcceptTcpClient();
 
-                    AddClient(client);
+                    new WhateverthefuckServerConnection(client.GetStream());
                 }
             }
             catch (SocketException e)

@@ -9,32 +9,23 @@ namespace whateverthefuck.src.network
 {
     class WhateverClientConnection : WhateverthefuckConnection
     {
-        private const bool arabsarebeingapaininmyass = false;
-
         private const string ServerIp = "98.128.171.8";
         private const string BackupServerIp = "127.0.0.1";
         private const int ServerPort = 13000;
 
         public WhateverClientConnection() : base(ConnectToServer())
         {
-
+            
         }
 
         private static NetworkStream ConnectToServer()
         {
             TcpClient ServerConnection;
-
+            
             try
             {
-                if (arabsarebeingapaininmyass)
-                {
-                    throw new SocketException();
-                }
-                else
-                {
-                    ServerConnection = new TcpClient(ServerIp, ServerPort);
-                    Logging.Log("Connected to main server.");
-                }
+                ServerConnection = new TcpClient(ServerIp, ServerPort);
+                Logging.Log("Connected to main server.");
             }
             catch(SocketException)
             {
@@ -73,7 +64,9 @@ namespace whateverthefuck.src.network
                     GrantControlMessage controlMessage = (GrantControlMessage)message;
                     Program.GameStateManager.TakeControl(controlMessage.Id);
                 } break;
-                    
+
+ 
+
                 default: throw new NotImplementedException();
             }
         }
