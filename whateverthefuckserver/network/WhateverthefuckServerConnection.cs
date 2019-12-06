@@ -21,10 +21,10 @@ namespace whateverthefuckserver.network
         {
             switch (message.MessageType)
             {
-                case MessageType.UpdatePlayerCharacterLocation:
+                case MessageType.UpdatePlayerControlMessage:
                 {
-                    UpdatePlayerCharacterLocationMessage updatePlayerCharacterLocationMessage = (UpdatePlayerCharacterLocationMessage)message;
-                    Program.GameServer.UpdatePlayerCharacterLocation(updatePlayerCharacterLocationMessage.PlayerCharacterLocationInfo);
+                    UpdatePlayerControlMessage updatePlayerCharacterLocationMessage = (UpdatePlayerControlMessage)message;
+                    Program.GameServer.UpdatePlayerCharacterLocation(updatePlayerCharacterLocationMessage.EntityId, updatePlayerCharacterLocationMessage.MovementStruct);
                 } break;
 
                 default: throw new NotImplementedException();

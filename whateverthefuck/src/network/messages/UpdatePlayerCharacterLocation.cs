@@ -7,23 +7,31 @@ using whateverthefuck.src.model.entities;
 
 namespace whateverthefuck.src.network.messages
 {
-    public class UpdatePlayerCharacterLocationMessage : WhateverthefuckMessage
+    public class UpdatePlayerControlMessage : WhateverthefuckMessage
     {
-        public EntityLocationInfo PlayerCharacterLocationInfo { get; }
+        public int EntityId { get; }
+        public MovementStruct MovementStruct { get; }
 
-        public UpdatePlayerCharacterLocationMessage(PlayerCharacter pc) : base(MessageType.UpdatePlayerCharacterLocation)
+        public UpdatePlayerControlMessage(PlayerCharacter pc) : base(MessageType.UpdatePlayerControlMessage)
         {
-            PlayerCharacterLocationInfo = new EntityLocationInfo(pc);
+            MovementStruct = pc.Movements;
+            EntityId = pc.Identifier.Id;
         }
 
-        public UpdatePlayerCharacterLocationMessage(byte[] body) : base(MessageType.UpdatePlayerCharacterLocation)
+        public UpdatePlayerControlMessage(byte[] body) : base(MessageType.UpdatePlayerControlMessage)
         {
-            PlayerCharacterLocationInfo = EntityLocationInfo.Decode(body);
+            EntityId = DecodeInt(body.Take(sizeof(int)).ToArray());
+            MovementStruct = MovementStruct.Decode(body.Skip(sizeof(int)).ToArray());
         }
 
         protected override byte[] EncodeBody()
         {
-            return System.Text.Encoding.ASCII.GetBytes(PlayerCharacterLocationInfo.Encode());
+            var movementArray = MovementStruct.Encode();
+            var encoded = new byte[sizeof(int) + movementArray.Length];
+            Array.Copy(EncodeInt(EntityId), 0, encoded, 0, sizeof(int));
+            Array.Copy(movementArray, 0, encoded, sizeof(int), movementArray.Length);
+
+            return encoded;
         }
     }
 }

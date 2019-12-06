@@ -12,7 +12,7 @@ namespace whateverthefuck.src.model.entities
     /// </summary>
     class Door : GameEntity
     {
-        Door(EntityIdentifier identifier) : base(ControlInfo.NoControl, identifier)
+        Door(EntityIdentifier identifier) : base(identifier)
         {
         }
     }

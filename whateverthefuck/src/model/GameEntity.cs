@@ -19,12 +19,10 @@ namespace whateverthefuck.src.model
         public GameCoordinate MovementCache { get; private set; } // retains the last movement made
         public bool Movable { get; protected set; }
 
-        public ControlInfo ControlInfo { get; private set; }
         public EntityIdentifier Identifier { get; }
 
-        public GameEntity(ControlInfo controllerInfo, EntityIdentifier identifier) : base(new GameCoordinate(0, 0))
+        public GameEntity(EntityIdentifier identifier) : base(new GameCoordinate(0, 0))
         {
-            ControlInfo = controllerInfo;
             Identifier = identifier;
         }
 
@@ -59,13 +57,6 @@ namespace whateverthefuck.src.model
         {
             return new GameCoordinate(0, 0);
         }
-
-
-        public void SetControl(ControlInfo control)
-        {
-            ControlInfo = control;
-            Logging.Log(String.Format("Setting control of {0} to {1}", Identifier.Id, control));
-        }
     }
 
     public class EntityIdentifier
@@ -77,10 +68,12 @@ namespace whateverthefuck.src.model
             Id = id;
         }
     }
+#if false
     public enum ControlInfo
     {
         NoControl,
         ClientControl,
         ServerControl,
     }
+#endif
 }

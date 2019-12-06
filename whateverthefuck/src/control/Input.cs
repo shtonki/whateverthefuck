@@ -30,7 +30,7 @@ namespace whateverthefuck.src.control
             {
                 if (input.Equals(hotkey.Hotkey))
                 {
-                    Program.GameState.ActivateAction(hotkey.GameAction);
+                    Program.GameStateManager.ActivateAction(hotkey.GameAction);
                 }
             }
         }

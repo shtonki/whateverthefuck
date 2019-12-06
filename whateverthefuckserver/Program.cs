@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.util;
+using whateverthefuck.src.view;
 using whateverthefuckserver.network;
 
 namespace whateverthefuckserver
@@ -22,6 +23,12 @@ namespace whateverthefuckserver
             ServerConnection.StartListening();
 
             GameServer = new GameServer();
+
+            if (false)
+            {
+                GUI.CreateGameWindow();
+                GUI.ForceToDrawGameState = GameServer.GameState;
+            }
         }
     }
 }

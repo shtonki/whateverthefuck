@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using whateverthefuck.src.util;
 using whateverthefuck.src.network.messages;
 using whateverthefuck.src.model;
+using System.Globalization;
 
 namespace whateverthefuck.src.network.messages
 {
@@ -14,7 +15,7 @@ namespace whateverthefuck.src.network.messages
         private const int TypeSize = 1;
         private const int LengthSize = 2;
         public const int HeaderSize = TypeSize + LengthSize;
-        
+
 
         public MessageType MessageType { get; }
 
@@ -46,43 +47,64 @@ namespace whateverthefuck.src.network.messages
             switch (type)
             {
                 case MessageType.Log:
-                {
-                    return new LogMessage(body);
-                }
+                    {
+                        return new LogMessage(body);
+                    }
 
                 case MessageType.UpdateEntityLocations:
-                {
-                    return new UpdateEntityLocationsMessage(body);
-                }
+                    {
+                        return new UpdateEntityLocationsMessage(body);
+                    }
 
                 case MessageType.AddPlayerCharacterMessage:
-                {
-                    return new AddPlayerCharacterMessage(body);
-                }
+                    {
+                        return new AddPlayerCharacterMessage(body);
+                    }
 
                 case MessageType.GrantControlMessage:
-                {
-                    return new GrantControlMessage(body);
-                }
-
-                case MessageType.UpdatePlayerCharacterLocation:
                     {
-                        return new UpdatePlayerCharacterLocationMessage(body);
+                        return new GrantControlMessage(body);
+                    }
+
+                case MessageType.UpdatePlayerControlMessage:
+                    {
+                        return new UpdatePlayerControlMessage(body);
                     }
 
                 default:
-                {
-                    throw new Exception("received wonky message header");
-                }
+                    {
+                        throw new Exception("received wonky message header");
+                    }
             }
         }
 
         protected abstract byte[] EncodeBody();
+
+        protected byte[] EncodeInt(int value)
+        {
+            byte[] bytes = new byte[sizeof(int)];
+
+            bytes[0] = (byte)(value >> 24);
+            bytes[1] = (byte)(value >> 16);
+            bytes[2] = (byte)(value >> 8);
+            bytes[3] = (byte)value;
+
+            return bytes;
+        }
+
+        protected int DecodeInt(byte[] body)
+        {
+            return (body[0] << 24) |
+                   (body[1] << 16) |
+                   (body[2] << 8) |
+                   (body[3]);
+        }
     }
+
 
     public class EntityLocationInfo
     {
-        private const char InfoSeperator = ',';
+        private const char InfoSeperator = '&';
 
 
         public int Identifier { get; }
@@ -103,7 +125,7 @@ namespace whateverthefuck.src.network.messages
 
         public string Encode()
         {
-            return Identifier.ToString() + InfoSeperator + X.ToString("0.00") + InfoSeperator + Y.ToString("0.00");
+            return Identifier.ToString() + InfoSeperator + X.ToString("0.00", CultureInfo.InvariantCulture) + InfoSeperator + Y.ToString("0.00", CultureInfo.InvariantCulture);
         }
 
         public static EntityLocationInfo Decode(byte[] data)
@@ -112,8 +134,8 @@ namespace whateverthefuck.src.network.messages
 
             var dataStrings = str.Split(InfoSeperator);
             int id = Int32.Parse(dataStrings[0]);
-            float X = float.Parse(dataStrings[1]);
-            float Y = float.Parse(dataStrings[2]);
+            float X = float.Parse(dataStrings[1], CultureInfo.InvariantCulture);
+            float Y = float.Parse(dataStrings[2], CultureInfo.InvariantCulture);
             return new EntityLocationInfo(id, X, Y);
         }
 
@@ -125,6 +147,6 @@ namespace whateverthefuck.src.network.messages
         UpdateEntityLocations,
         AddPlayerCharacterMessage,
         GrantControlMessage,
-        UpdatePlayerCharacterLocation,
+        UpdatePlayerControlMessage,
     }
 }

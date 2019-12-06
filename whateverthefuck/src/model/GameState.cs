@@ -11,74 +11,33 @@ namespace whateverthefuck.src.model
 {
     public class GameState
     {
-        public List<GameEntity> AllEntities = new List<GameEntity>();
+        private List<GameEntity> EntityList { get; } = new List<GameEntity>();
 
-        private PlayerCharacter Hero;
-
-        private Timer StepTimer;
+        public IEnumerable<GameEntity> AllEntities => EntityList;
 
         private IdentifierGenerator IdGenerator = new IdentifierGenerator();
 
         public EntityGenerator EntityGenerator { get; private set; }
 
-        private bool ServerMode;
-
-        public GameState(bool serverMode)
+        public GameState()
         {
-            ServerMode = serverMode;
-
             EntityGenerator = new EntityGenerator(IdGenerator);
-
-            StepTimer = new Timer(Step, null, 0, 10);
 
             AddEntity(new Mob(IdGenerator.GenerateNextIdentifier()));
         }
 
         public void AddEntity(GameEntity entity)
         {
-            AllEntities.Add(entity);
-        }
-
-        public void AddPlayerCharacter(EntityLocationInfo info)
-        {
-            PlayerCharacter pc = new PlayerCharacter(ControlInfo.ServerControl, new EntityIdentifier(info.Identifier));
-            pc.Location = new GameCoordinate(info.X, info.Y);
-            AddEntity(pc);
-        }
-
-        public void TakeControl(int identifier)
-        {
-            Hero = (PlayerCharacter)GetEntityById(identifier);
-            Hero.SetControl(ControlInfo.ClientControl);
-        }
-
-        public void UpdateLocations(IEnumerable<EntityLocationInfo> infos)
-        {
-            foreach (var info in infos)
-            {
-                GetEntityById(info.Identifier).Location = new GameCoordinate(info.X, info.Y);
-            }
+            EntityList.Add(entity);
         }
 
         public GameEntity GetEntityById(int id)
         {
-            return AllEntities.Find(e => e.Identifier.Id == id);
+            return EntityList.Find(e => e.Identifier.Id == id);
         }
 
-        private void ClientStep()
+        private void HandleCollisions()
         {
-            if (Hero == null) { return; }
-            Hero.Step();
-            Program.ServerConnection.SendMessage(new UpdatePlayerCharacterLocationMessage(Hero));
-        }
-
-        private void ServerStep()
-        {
-            foreach (var entity in AllEntities)
-            {
-                entity.Step();
-            }
-
             var collisions = DetectCollisions();
             collisions.Sort((r1, r2) => r1.Overlap.CompareTo(-r2.Overlap));
 
@@ -130,29 +89,27 @@ namespace whateverthefuck.src.model
             }
         }
 
-        private void Step(object state)
+        public void Step()
         {
-            if (ServerMode)
+            foreach (var entity in EntityList)
             {
-                ServerStep();
+                entity.Step();
             }
-            else
-            {
-                ClientStep();
-            }
+
+            HandleCollisions();
         }
 
         private List<CollisionRecord> DetectCollisions()
         {
             var collisions = new List<CollisionRecord>();
 
-            for (int i = 0; i < AllEntities.Count; i++)
+            for (int i = 0; i < EntityList.Count; i++)
             {
-                var entityI = AllEntities[i];
+                var entityI = EntityList[i];
 
-                for (int j = i+1; j < AllEntities.Count; j++)
+                for (int j = i+1; j < EntityList.Count; j++)
                 {
-                    var entityJ = AllEntities[j];
+                    var entityJ = EntityList[j];
 
                     if (!entityI.Movable && !entityJ.Movable) { continue; }
 
@@ -208,64 +165,5 @@ namespace whateverthefuck.src.model
                 Overlap = overlap;
             }
         }
-
-        public void ActivateAction(GameAction gameAction)
-        {
-            switch (gameAction)
-            {
-                case GameAction.HeroWalkUpwards:
-                {
-                    Hero.SetMovementUpwards(true);
-                } break;
-
-                case GameAction.HeroWalkUpwardsStop:
-                {
-                    Hero.SetMovementUpwards(false);
-                } break;
-
-                case GameAction.HeroWalkDownwards:
-                {
-                    Hero.SetMovementDownwards(true);
-                } break;
-
-                case GameAction.HeroWalkDownwardsStop:
-                {
-                    Hero.SetMovementDownwards(false);
-                } break;
-
-                case GameAction.HeroWalkLeftwards:
-                {
-                    Hero.SetMovementLeftwards(true);
-                } break;
-
-                case GameAction.HeroWalkLeftwardsStop:
-                {
-                    Hero.SetMovementLeftwards(false);
-                } break;
-
-                case GameAction.HeroWalkRightwards:
-                {
-                    Hero.SetMovementRightwards(true);
-                } break;
-
-                case GameAction.HeroWalkRightwardsStop:
-                {
-                    Hero.SetMovementRightwards(false);
-                } break;
-
-                case GameAction.CameraZoomIn:
-                {
-                    GUI.Camera.Zoom.ZoomIn();
-                } break;
-
-                case GameAction.CameraZoomOut:
-                {
-                    GUI.Camera.Zoom.ZoomOut();
-                } break;
-
-                default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
-            }
-        }
-
     }
 }

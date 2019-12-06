@@ -9,7 +9,7 @@ namespace whateverthefuck.src.network
 {
     class WhateverClientConnection : WhateverthefuckConnection
     {
-        private const bool arabsarebeingapaininmyass = true;
+        private const bool arabsarebeingapaininmyass = false;
 
         private const string ServerIp = "98.128.171.8";
         private const string BackupServerIp = "127.0.0.1";
@@ -59,19 +59,19 @@ namespace whateverthefuck.src.network
                 case MessageType.UpdateEntityLocations:
                 {
                     UpdateEntityLocationsMessage updateMessage = (UpdateEntityLocationsMessage)message;
-                    Program.GameState.UpdateLocations(updateMessage.EntityInfos);
+                    Program.GameStateManager.UpdateLocations(updateMessage.EntityInfos);
                 } break;
 
                 case MessageType.AddPlayerCharacterMessage:
                 {
                     AddPlayerCharacterMessage addPlayerCharacterMessage = (AddPlayerCharacterMessage)message;
-                    Program.GameState.AddPlayerCharacter(addPlayerCharacterMessage.HeroInfo);
+                    Program.GameStateManager.AddPlayerCharacter(addPlayerCharacterMessage.HeroInfo);
                 } break;
 
                 case MessageType.GrantControlMessage:
                 {
                     GrantControlMessage controlMessage = (GrantControlMessage)message;
-                    Program.GameState.TakeControl(controlMessage.Id);
+                    Program.GameStateManager.TakeControl(controlMessage.Id);
                 } break;
                     
                 default: throw new NotImplementedException();

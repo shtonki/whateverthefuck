@@ -8,6 +8,9 @@ namespace whateverthefuck.src.network
 {
     public abstract class WhateverthefuckConnection
     {
+        private const bool LogOutgoingMessages = false;
+        private const bool LogIncomingMessages = false;
+
         private NetworkStream NetworkStream;
 
         private byte[] HeaderBuffer = new byte[WhateverthefuckMessage.HeaderSize];
@@ -21,23 +24,50 @@ namespace whateverthefuck.src.network
         public  void SendMessage(WhateverthefuckMessage message)
         {
             var bytes = message.Encode();
-            NetworkStream.Write(bytes, 0, bytes.Length);
-
-            if (false)
+            try
             {
-                Logging.Log("MessageType" + message.MessageType.ToString() + ", payload: '" + 
+                NetworkStream.Write(bytes, 0, bytes.Length);
+            }
+            catch(System.IO.IOException)
+            {
+
+            }
+
+            if (LogOutgoingMessages)
+            {
+                Logging.Log("-> MessageType" + message.MessageType.ToString() + ", payload: '" + 
                     System.Text.Encoding.ASCII.GetString(bytes) + "'", Logging.LoggingLevel.Info);
             }
         }
 
         protected abstract void HandleMessage(WhateverthefuckMessage message);
 
+        private void HandleConnectionDeath()
+        {
+            Logging.Log("Connection to user died.", Logging.LoggingLevel.Info);
+        }
+
         private void ReceiveLoop()
         {
             while (true)
             {
-                int bytesRead = NetworkStream.Read(HeaderBuffer, 0, WhateverthefuckMessage.HeaderSize);
-                if (bytesRead != WhateverthefuckMessage.HeaderSize) { throw new Exception("error reading message header"); }
+                int bytesRead;
+
+
+                try
+                {
+                    bytesRead = NetworkStream.Read(HeaderBuffer, 0, WhateverthefuckMessage.HeaderSize);
+                }
+                catch (System.IO.IOException)
+                {
+                    HandleConnectionDeath();
+                    return;
+                }
+                if (bytesRead != WhateverthefuckMessage.HeaderSize) 
+                {
+                    Logging.Log("Broken message header.", Logging.LoggingLevel.Error);
+                    continue;
+                }
 
                 MessageType messageType = (MessageType)HeaderBuffer[0];
                 int messageLength = (HeaderBuffer[1]) | (HeaderBuffer[2] << 8);
@@ -47,6 +77,12 @@ namespace whateverthefuck.src.network
                 if (bytesRead != messageLength) { throw new Exception("error reading message body"); }
 
                 var message = WhateverthefuckMessage.Decode(messageType, BodyBuffer);
+
+                if (LogIncomingMessages)
+                {
+                    Logging.Log("<- MessageType" + message.MessageType.ToString() + ", payload: '" +
+                        System.Text.Encoding.ASCII.GetString(BodyBuffer) + "'", Logging.LoggingLevel.Info);
+                }
 
                 HandleMessage(message);
             }

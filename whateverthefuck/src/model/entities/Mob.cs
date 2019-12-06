@@ -5,9 +5,10 @@ namespace whateverthefuck.src.model.entities
 {
     class Mob : GameEntity
     {
-        public Mob(EntityIdentifier identifier) : base(ControlInfo.ServerControl, identifier)
+        public Mob(EntityIdentifier identifier) : base(identifier)
         {
             DrawColor = Color.Red;
+            Movable = true;
         }
 
         int ctr = 0;
