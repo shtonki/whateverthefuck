@@ -7,7 +7,7 @@ using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.view
 {
-    class Zoomer
+    public class Zoomer
     {
         public float CurrentZoom { get; set; } = 1.8f;
 
@@ -28,7 +28,7 @@ namespace whateverthefuck.src.view
         }
     }
 
-    abstract class Camera
+    public abstract class Camera
     {
         public virtual Coordinate Location { get; protected set; }
         public virtual Zoomer Zoom { get; }

@@ -14,7 +14,7 @@ namespace whateverthefuck.src.network.messages
         private const int TypeSize = 1;
         private const int LengthSize = 2;
         public const int HeaderSize = TypeSize + LengthSize;
-        
+
 
         public MessageType MessageType { get; }
 
@@ -46,39 +46,60 @@ namespace whateverthefuck.src.network.messages
             switch (type)
             {
                 case MessageType.Log:
-                {
-                    return new LogMessage(body);
-                }
+                    {
+                        return new LogMessage(body);
+                    }
 
                 case MessageType.UpdateEntityLocations:
-                {
-                    return new UpdateEntityLocationsMessage(body);
-                }
+                    {
+                        return new UpdateEntityLocationsMessage(body);
+                    }
 
                 case MessageType.AddPlayerCharacterMessage:
-                {
-                    return new AddPlayerCharacterMessage(body);
-                }
+                    {
+                        return new AddPlayerCharacterMessage(body);
+                    }
 
                 case MessageType.GrantControlMessage:
-                {
-                    return new GrantControlMessage(body);
-                }
-
-                case MessageType.UpdatePlayerCharacterLocation:
                     {
-                        return new UpdatePlayerCharacterLocationMessage(body);
+                        return new GrantControlMessage(body);
+                    }
+
+                case MessageType.UpdatePlayerControlMessage:
+                    {
+                        return new UpdatePlayerControlMessage(body);
                     }
 
                 default:
-                {
-                    throw new Exception("received wonky message header");
-                }
+                    {
+                        throw new Exception("received wonky message header");
+                    }
             }
         }
 
         protected abstract byte[] EncodeBody();
+
+        protected byte[] EncodeInt(int value)
+        {
+            byte[] bytes = new byte[sizeof(int)];
+
+            bytes[0] = (byte)(value >> 24);
+            bytes[1] = (byte)(value >> 16);
+            bytes[2] = (byte)(value >> 8);
+            bytes[3] = (byte)value;
+
+            return bytes;
+        }
+
+        protected int DecodeInt(byte[] body)
+        {
+            return (body[0] << 24) |
+                   (body[1] << 16) |
+                   (body[2] << 8) |
+                   (body[3]);
+        }
     }
+
 
     public class EntityLocationInfo
     {
@@ -125,6 +146,6 @@ namespace whateverthefuck.src.network.messages
         UpdateEntityLocations,
         AddPlayerCharacterMessage,
         GrantControlMessage,
-        UpdatePlayerCharacterLocation,
+        UpdatePlayerControlMessage,
     }
 }

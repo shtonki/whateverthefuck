@@ -18,22 +18,12 @@ namespace whateverthefuck.src.network.messages
 
         public GrantControlMessage(byte[] body) : base(MessageType.GrantControlMessage)
         {
-            Id = (body[0] << 24) |
-                 (body[1] << 16) |
-                 (body[2] << 8)  |
-                 (body[3]);
+            Id = DecodeInt(body);
         }
 
         protected override byte[] EncodeBody()
         {
-            byte[] bytes = new byte[4];
-
-            bytes[0] = (byte)(Id >> 24);
-            bytes[1] = (byte)(Id >> 16);
-            bytes[2] = (byte)(Id >> 8);
-            bytes[3] = (byte)Id;
-
-            return bytes;
+            return EncodeInt(Id);
         }
     }
 }

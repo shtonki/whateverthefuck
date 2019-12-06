@@ -1,4 +1,6 @@
-﻿namespace whateverthefuck.src.model.entities
+﻿using System;
+
+namespace whateverthefuck.src.model.entities
 {
     public abstract class Character : GameEntity
     {
@@ -6,7 +8,7 @@
         public float MoveSpeed = 0.01f;
 
 
-        public Character(ControlInfo controlInfo, EntityIdentifier identifier) : base(controlInfo, identifier)
+        public Character(EntityIdentifier identifier) : base(identifier)
         {
             Movable = true;
         }
@@ -52,5 +54,26 @@
         public bool Rightwards { get; set; }
         public bool Leftwards { get; set; }
 
+
+        public byte[] Encode()
+        {
+            return new byte[] { 
+                Convert.ToByte(Upwards),
+                Convert.ToByte(Downwards),
+                Convert.ToByte(Rightwards),
+                Convert.ToByte(Leftwards),
+            };
+        }
+
+        public static MovementStruct Decode(byte[] bs)
+        {
+            MovementStruct rt = new MovementStruct();
+            rt.Upwards = bs[0] > 0;
+            rt.Downwards = bs[1] > 0;
+            rt.Rightwards = bs[2] > 0;
+            rt.Leftwards = bs[3] > 0;
+
+            return rt;
+        }
     }
 }

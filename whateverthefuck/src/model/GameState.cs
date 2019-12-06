@@ -41,7 +41,7 @@ namespace whateverthefuck.src.model
 
         public void AddPlayerCharacter(EntityLocationInfo info)
         {
-            PlayerCharacter pc = new PlayerCharacter(ControlInfo.ServerControl, new EntityIdentifier(info.Identifier));
+            PlayerCharacter pc = new PlayerCharacter(new EntityIdentifier(info.Identifier));
             pc.Location = new GameCoordinate(info.X, info.Y);
             AddEntity(pc);
         }
@@ -49,7 +49,6 @@ namespace whateverthefuck.src.model
         public void TakeControl(int identifier)
         {
             Hero = (PlayerCharacter)GetEntityById(identifier);
-            Hero.SetControl(ControlInfo.ClientControl);
         }
 
         public void UpdateLocations(IEnumerable<EntityLocationInfo> infos)
@@ -68,8 +67,7 @@ namespace whateverthefuck.src.model
         private void ClientStep()
         {
             if (Hero == null) { return; }
-            Hero.Step();
-            Program.ServerConnection.SendMessage(new UpdatePlayerCharacterLocationMessage(Hero));
+            Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(Hero));
         }
 
         private void ServerStep()

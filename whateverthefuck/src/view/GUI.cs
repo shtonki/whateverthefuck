@@ -8,9 +8,11 @@ using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.view
 {
-    static class GUI
+    public static class GUI
     {
         public static Camera Camera;
+
+        public static GameState ForceToDrawGameState { get; set; }
 
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
@@ -26,6 +28,10 @@ namespace whateverthefuck.src.view
 
         public static IEnumerable<Drawable> GetAllDrawables()
         {
+            if (ForceToDrawGameState != null)
+            {
+                return ForceToDrawGameState.AllEntities;
+            }
             return Program.GameState.AllEntities;
         }
 
