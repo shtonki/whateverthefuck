@@ -32,7 +32,7 @@ namespace whateverthefuck.src.view
             {
                 return ForceToDrawGameState.AllEntities;
             }
-            return Program.GameState.AllEntities;
+            return Program.GameStateManager.GameState.AllEntities;
         }
 
         private static void LaunchGameWindow(object o)

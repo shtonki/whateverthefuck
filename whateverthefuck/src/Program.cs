@@ -8,7 +8,7 @@ namespace whateverthefuck
 {
     class Program
     {
-        public static GameState GameState = new GameState(false);
+        public static ClientGameStateManager GameStateManager = new ClientGameStateManager();
 
         public static WhateverClientConnection ServerConnection { get; private set; }
 

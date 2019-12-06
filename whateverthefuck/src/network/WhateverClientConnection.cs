@@ -59,19 +59,19 @@ namespace whateverthefuck.src.network
                 case MessageType.UpdateEntityLocations:
                 {
                     UpdateEntityLocationsMessage updateMessage = (UpdateEntityLocationsMessage)message;
-                    Program.GameState.UpdateLocations(updateMessage.EntityInfos);
+                    Program.GameStateManager.UpdateLocations(updateMessage.EntityInfos);
                 } break;
 
                 case MessageType.AddPlayerCharacterMessage:
                 {
                     AddPlayerCharacterMessage addPlayerCharacterMessage = (AddPlayerCharacterMessage)message;
-                    Program.GameState.AddPlayerCharacter(addPlayerCharacterMessage.HeroInfo);
+                    Program.GameStateManager.AddPlayerCharacter(addPlayerCharacterMessage.HeroInfo);
                 } break;
 
                 case MessageType.GrantControlMessage:
                 {
                     GrantControlMessage controlMessage = (GrantControlMessage)message;
-                    Program.GameState.TakeControl(controlMessage.Id);
+                    Program.GameStateManager.TakeControl(controlMessage.Id);
                 } break;
                     
                 default: throw new NotImplementedException();

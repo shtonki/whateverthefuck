@@ -18,7 +18,7 @@ namespace whateverthefuckserver
 
         public GameServer()
         {
-            GameState = new GameState(true);
+            GameState = new GameState();
             TickTimer = new Timer((_) => Tick(), null, 0, 10);
         }
 
@@ -27,6 +27,11 @@ namespace whateverthefuckserver
             Players.Add(playerConnection);
             var pc = SpawnPlayerCharacter();
             playerConnection.SendMessage(new GrantControlMessage(pc));
+        }
+
+        public void RemovePlayer(WhateverthefuckServerConnection playerConnection)
+        {
+            Players.Remove(playerConnection);
         }
 
         public void UpdatePlayerCharacterLocation(int id, MovementStruct movementStruct)
@@ -56,6 +61,8 @@ namespace whateverthefuckserver
 
         public void Tick()
         {
+            GameState.Step();
+
             var es = GameState.AllEntities.Where(e => e.Movable);
             SendMessageToAllPlayers(new UpdateEntityLocationsMessage(es));
         }

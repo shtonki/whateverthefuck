@@ -21,7 +21,14 @@ namespace whateverthefuck.src.network
         public  void SendMessage(WhateverthefuckMessage message)
         {
             var bytes = message.Encode();
-            NetworkStream.Write(bytes, 0, bytes.Length);
+            try
+            {
+                NetworkStream.Write(bytes, 0, bytes.Length);
+            }
+            catch(System.IO.IOException)
+            {
+
+            }
 
             if (false)
             {
@@ -32,12 +39,32 @@ namespace whateverthefuck.src.network
 
         protected abstract void HandleMessage(WhateverthefuckMessage message);
 
+        private void HandleConnectionDeath()
+        {
+            Logging.Log("Connection to user died.", Logging.LoggingLevel.Info);
+        }
+
         private void ReceiveLoop()
         {
             while (true)
             {
-                int bytesRead = NetworkStream.Read(HeaderBuffer, 0, WhateverthefuckMessage.HeaderSize);
-                if (bytesRead != WhateverthefuckMessage.HeaderSize) { throw new Exception("error reading message header"); }
+                int bytesRead;
+
+
+                try
+                {
+                    bytesRead = NetworkStream.Read(HeaderBuffer, 0, WhateverthefuckMessage.HeaderSize);
+                }
+                catch (System.IO.IOException)
+                {
+                    HandleConnectionDeath();
+                    return;
+                }
+                if (bytesRead != WhateverthefuckMessage.HeaderSize) 
+                {
+                    Logging.Log("Broken message header.", Logging.LoggingLevel.Error);
+                    continue;
+                }
 
                 MessageType messageType = (MessageType)HeaderBuffer[0];
                 int messageLength = (HeaderBuffer[1]) | (HeaderBuffer[2] << 8);
