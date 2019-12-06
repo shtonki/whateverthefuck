@@ -13,12 +13,12 @@ namespace whateverthefuck.src.network.messages
     {
         public LoginCredentials LoginCredentials { get; private set; }
 
-        public SendLoginCredentialsMessage(LoginCredentials loginCredentials) : base(MessageType.SendLoginCredentials)
+        public SendLoginCredentialsMessage(LoginCredentials loginCredentials) : base(MessageType.LoginCredentialsMessage)
         {
             LoginCredentials = loginCredentials;
         }
 
-        public SendLoginCredentialsMessage(byte[] body) : base(MessageType.SendLoginCredentials)
+        public SendLoginCredentialsMessage(byte[] body) : base(MessageType.LoginCredentialsMessage)
         {
             var json = System.Text.Encoding.ASCII.GetString(body);
             LoginCredentials = JsonIO.ConvertToString<LoginCredentials>(json);

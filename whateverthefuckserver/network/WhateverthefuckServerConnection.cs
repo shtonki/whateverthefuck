@@ -27,7 +27,7 @@ namespace whateverthefuckserver.network
                     Program.GameServer.UpdatePlayerCharacterLocation(updatePlayerCharacterLocationMessage.EntityId, updatePlayerCharacterLocationMessage.MovementStruct);
                 } break;
 
-                case MessageType.SendLoginCredentials:
+                case MessageType.LoginCredentialsMessage:
                 {
                     SendLoginCredentialsMessage credentialsMessage = (SendLoginCredentialsMessage)message;
                     Program.GameServer.LoginPlayer(this, credentialsMessage.LoginCredentials);         

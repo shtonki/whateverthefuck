@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gameserver\GameServer.cs" />
+    <Compile Include="network\LoginServer.cs" />
     <Compile Include="network\NetworkEntityInfo.cs" />
     <Compile Include="network\WhateverthefuckServerConnection.cs" />
     <Compile Include="Program.cs" />
@@ -47,6 +48,7 @@
     <Compile Include="storage\DummyStorage.cs" />
     <Compile Include="storage\IStorage.cs" />
     <Compile Include="storage\Mongo.cs" />
+    <Compile Include="users\User.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\whateverthefuck\whateverthefuck.csproj">

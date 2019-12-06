@@ -21,13 +21,16 @@ namespace whateverthefuckserver
 
             ServerConnection = new WhateverConnectionListeningServer();
             ServerConnection.StartListening();
+            Logging.Log("Started Listening for Connections", Logging.LoggingLevel.Info);
 
             GameServer = new GameServer();
+            Logging.Log("Started Game Server", Logging.LoggingLevel.Info);
 
             if (false)
             {
                 GUI.CreateGameWindow();
                 GUI.ForceToDrawGameState = GameServer.GameState;
+                Logging.Log("Created Game Window", Logging.LoggingLevel.Info);
             }
         }
     }

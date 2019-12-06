@@ -29,6 +29,7 @@ namespace whateverthefuck.src.model
         public void AddEntity(GameEntity entity)
         {
             EntityList.Add(entity);
+            Logging.Log("Added ID: " + entity.Identifier.Id);
         }
 
         public GameEntity GetEntityById(int id)

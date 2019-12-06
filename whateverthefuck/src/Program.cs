@@ -15,15 +15,19 @@ namespace whateverthefuck
         public static void Main(String[] args)
         {
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
-            Logging.Log("Started Logger");
+            Logging.Log("Started Logger", Logging.LoggingLevel.Info);
 
             GUI.CreateGameWindow();
+            Logging.Log("Created Game Window", Logging.LoggingLevel.Info);
 
             ConfigFile cf = new ConfigFile("config.json");
+            Logging.Log("Loaded Config File", Logging.LoggingLevel.Info);
 
             ServerConnection = new WhateverClientConnection();
+            Logging.Log("Connected to Server", Logging.LoggingLevel.Info);
 
             UserLogin.Login(cf.ConfigInfo.LoginCredentials);
+            Logging.Log(String.Format("Logged on to Server as {0}", cf.ConfigInfo.LoginCredentials.Username), Logging.LoggingLevel.Info);
 
         }
     }

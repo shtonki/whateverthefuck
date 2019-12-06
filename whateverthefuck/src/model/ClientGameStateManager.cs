@@ -72,61 +72,61 @@ namespace whateverthefuck.src.model
             {
                 case GameAction.HeroWalkUpwards:
                     {
-                        Hero.SetMovementUpwards(true);
+                        Hero?.SetMovementUpwards(true);
                     }
                     break;
 
                 case GameAction.HeroWalkUpwardsStop:
                     {
-                        Hero.SetMovementUpwards(false);
+                        Hero?.SetMovementUpwards(false);
                     }
                     break;
 
                 case GameAction.HeroWalkDownwards:
                     {
-                        Hero.SetMovementDownwards(true);
+                        Hero?.SetMovementDownwards(true);
                     }
                     break;
 
                 case GameAction.HeroWalkDownwardsStop:
                     {
-                        Hero.SetMovementDownwards(false);
+                        Hero?.SetMovementDownwards(false);
                     }
                     break;
 
                 case GameAction.HeroWalkLeftwards:
                     {
-                        Hero.SetMovementLeftwards(true);
+                        Hero?.SetMovementLeftwards(true);
                     }
                     break;
 
                 case GameAction.HeroWalkLeftwardsStop:
                     {
-                        Hero.SetMovementLeftwards(false);
+                        Hero?.SetMovementLeftwards(false);
                     }
                     break;
 
                 case GameAction.HeroWalkRightwards:
                     {
-                        Hero.SetMovementRightwards(true);
+                        Hero?.SetMovementRightwards(true);
                     }
                     break;
 
                 case GameAction.HeroWalkRightwardsStop:
                     {
-                        Hero.SetMovementRightwards(false);
+                        Hero?.SetMovementRightwards(false);
                     }
                     break;
 
                 case GameAction.CameraZoomIn:
                     {
-                        GUI.Camera.Zoom.ZoomIn();
+                        GUI.Camera?.Zoom.ZoomIn();
                     }
                     break;
 
                 case GameAction.CameraZoomOut:
                     {
-                        GUI.Camera.Zoom.ZoomOut();
+                        GUI.Camera?.Zoom.ZoomOut();
                     }
                     break;
 

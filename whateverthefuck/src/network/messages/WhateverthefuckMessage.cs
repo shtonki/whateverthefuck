@@ -71,7 +71,7 @@ namespace whateverthefuck.src.network.messages
                         return new UpdatePlayerControlMessage(body);
                     }
 
-                case MessageType.SendLoginCredentials:
+                case MessageType.LoginCredentialsMessage:
                     {
                         return new SendLoginCredentialsMessage(body);
                     }
@@ -153,6 +153,6 @@ namespace whateverthefuck.src.network.messages
         AddPlayerCharacterMessage,
         GrantControlMessage,
         UpdatePlayerControlMessage,
-        SendLoginCredentials,
+        LoginCredentialsMessage,
     }
 }

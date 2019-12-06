@@ -15,7 +15,7 @@ namespace whateverthefuckserver.storage
         public Mongo()
         {
             var connectionString = "mongodb://localhost:27017";
-            client = new MongoClient(connectionString);
+            client = new MongoClient(new MongoClientSettings { Server = new MongoServerAddress(connectionString), SocketTimeout = new TimeSpan(0, 0, 0, 2), WaitQueueTimeout = new TimeSpan(0, 0, 0, 2), ConnectTimeout = new TimeSpan(0, 0, 0, 2) });
 
             var dbList = client.ListDatabases().ToList();
             Logging.Log("The list of databases on this server is: ");

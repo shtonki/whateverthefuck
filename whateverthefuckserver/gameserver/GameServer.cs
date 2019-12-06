@@ -15,29 +15,34 @@ namespace whateverthefuckserver
     class GameServer
     {
         public GameState GameState { get; private set; }
-        public IStorage Storage { get; }
+        public IStorage Storage { get; private set; }
         private Timer TickTimer;
         private List<WhateverthefuckServerConnection> Players = new List<WhateverthefuckServerConnection>();
         public GameServer()
         {
             GameState = new GameState();
             TickTimer = new Timer((_) => Tick(), null, 0, 10);
-            try
-            {
-                 Storage = new Mongo();
-            }
-            catch (Exception e)
+
+            new Thread((ob) =>
             {
                 Storage = new DummyStorage();
-            }
-            //Storage.AddEntry("JsonCollection", null);
+                try
+                {
+                    Storage = new Mongo();
+                }
+                catch (Exception e)
+                {
+                }
+            }).Start();
         }
 
         public void LoginPlayer(WhateverthefuckServerConnection playerConnection, LoginCredentials loginCredentials)
         {
             Logging.Log("Welcome " + loginCredentials.Username);
+            Players.Add(playerConnection);
 
-            var pc = SpawnPlayerCharacter();
+
+            var pc = SpawnPlayerCharacter(playerConnection);
             playerConnection.SendMessage(new GrantControlMessage(pc));
         }
 
@@ -52,7 +57,7 @@ namespace whateverthefuckserver
             pc.Movements = movementStruct;
         }
 
-        private PlayerCharacter SpawnPlayerCharacter()
+        private PlayerCharacter SpawnPlayerCharacter(WhateverthefuckServerConnection playerConnection)
         {
             var pc = GameState.EntityGenerator.GeneratePlayerCharacter(new GameCoordinate(0, 0), false);
             GameState.AddEntity(pc);

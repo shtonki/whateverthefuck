@@ -12,7 +12,6 @@ namespace whateverthefuck.src.network
     {
         public static void Login(LoginCredentials loginCreds)
         {
-
             Program.ServerConnection.SendMessage(new SendLoginCredentialsMessage(loginCreds));
         }
     }

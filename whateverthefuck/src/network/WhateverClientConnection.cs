@@ -9,6 +9,9 @@ namespace whateverthefuck.src.network
 {
     class WhateverClientConnection : WhateverthefuckConnection
     {
+
+        private const bool ConnectToLocalhostFirst = true;
+
         private const string ServerIp = "98.128.171.8";
         private const string BackupServerIp = "127.0.0.1";
         private const int ServerPort = 13000;
@@ -21,13 +24,20 @@ namespace whateverthefuck.src.network
         private static NetworkStream ConnectToServer()
         {
             TcpClient ServerConnection;
-            
+
             try
             {
-                ServerConnection = new TcpClient(ServerIp, ServerPort);
-                Logging.Log("Connected to main server.");
+                if (ConnectToLocalhostFirst)
+                {
+                    throw new SocketException();
+                }
+                else
+                {
+                    ServerConnection = new TcpClient(ServerIp, ServerPort);
+                    Logging.Log("Connected to main server.");
+                }
             }
-            catch(SocketException)
+            catch (SocketException)
             {
                 Logging.Log("Failed to connect to main server, attempting to connect to backup.");
                 ServerConnection = new TcpClient(BackupServerIp, ServerPort);
