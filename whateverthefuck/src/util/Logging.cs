@@ -86,9 +86,11 @@ namespace whateverthefuck.src.util
 
         public static void Log(string message, LoggingLevel l)
         {
+            var printedMessage = DateTime.Now.ToString("HH’:’mm’:’ss.fffffff") + ": " + message;
+
             foreach (var output in outputs)
             {
-                output.Write(message, l);
+                output.Write(printedMessage, l);
             }
         }
     }

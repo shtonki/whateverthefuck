@@ -20,16 +20,48 @@ namespace whateverthefuck.src.model
 
         public GameState GameState { get; set; }
 
+        private Dictionary<int, SpicyClass> SpicyDictionary = new Dictionary<int, SpicyClass>();
+        private bool UseSmoothing = true;
+
+        private const int TickInterval = 10;
+
         public ClientGameStateManager()
         {
             GameState = new GameState();
 
-            TickTimer = new Timer(_ => Tick(), null, 0, 10);
+            TickTimer = new Timer(_ => Tick(), null, 0, TickInterval);
         }
 
+        const int div = 4;
+        const int mul = div - 1;
 
         private void Tick()
         {
+            if (UseSmoothing)
+            {
+                foreach (var entity in GameState.AllEntities)
+                {
+                    if (SpicyDictionary.ContainsKey(entity.Identifier.Id))
+                    {
+                        var spicyEntry = SpicyDictionary[entity.Identifier.Id];
+
+                        var locX = mul * entity.Location.X / div + spicyEntry.NewLocation.X / div;
+                        var locY = mul * entity.Location.Y / div + spicyEntry.NewLocation.Y / div;
+
+                        var loc = new GameCoordinate(locX, locY);
+                        var diff = loc - (GameCoordinate)entity.Location;
+
+                        var newSpeedX = spicyEntry.Speed.X / 2 + diff.X / 2;
+                        var newSpeedY = spicyEntry.Speed.Y / 2 + diff.Y / 2;
+
+                        var newSpeed = new GameCoordinate(newSpeedX, newSpeedY);
+
+                        entity.Location = newSpeed + (GameCoordinate)entity.Location;
+                        spicyEntry.Speed = newSpeed;
+                    }
+                }
+            }
+
             if (Hero == null)
             {
                 return;
@@ -56,22 +88,45 @@ namespace whateverthefuck.src.model
             Hero = (PlayerCharacter)GameState.GetEntityById(identifier);
         }
 
+        private Semaphore UpdateLocationSemaphore = new Semaphore(1, 1);
+
         public void UpdateLocations(IEnumerable<EntityLocationInfo> infos)
         {
-            foreach (var info in infos)
+            if (UpdateLocationSemaphore.WaitOne(new TimeSpan(1)))
             {
-                var updatee = GameState.GetEntityById(info.Identifier);
+                var newTick = DateTime.UtcNow;
 
-                if (updatee == null)
+                foreach (var info in infos)
                 {
-                    Logging.Log("Got position of Entity we don't think exists.", Logging.LoggingLevel.Warning);
+                    var updatee = GameState.GetEntityById(info.Identifier);
+
+                    if (updatee == null)
+                    {
+                        Logging.Log("Got position of Entity we don't think exists.", Logging.LoggingLevel.Warning);
+                    }
+                    else if (UseSmoothing)
+                    {
+
+                        if (!SpicyDictionary.ContainsKey(updatee.Identifier.Id))
+                        {
+                            var spicy = new SpicyClass(updatee.Identifier.Id);
+                            SpicyDictionary.Add(updatee.Identifier.Id, spicy);
+                        }
+
+                        var newLocation = new GameCoordinate(info.X, info.Y);
+                        var spicyEntry = SpicyDictionary[updatee.Identifier.Id].NewLocation = newLocation;
+                    }
+                    else
+                    {
+                        updatee.Location = new GameCoordinate(info.X, info.Y);
+                    }
                 }
-                else
-                {
-                    updatee.Location = new GameCoordinate(info.X, info.Y);
-                }
+                UpdateLocationSemaphore.Release();
             }
+            else
+            {
         }
+    }
 
         public void ActivateAction(GameAction gameAction)
         {
@@ -141,5 +196,18 @@ namespace whateverthefuck.src.model
             }
         }
 
+    }
+
+    class SpicyClass
+    {
+        public int Id { get; }
+        public GameCoordinate NewLocation { get; set; }
+        public GameCoordinate Speed { get; set; }
+
+        public SpicyClass(int id)
+        {
+            Id = id;
+            Speed = new GameCoordinate(0, 0);
+        }
     }
 }

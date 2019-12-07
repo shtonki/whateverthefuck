@@ -22,7 +22,7 @@ namespace whateverthefuckserver
         public GameServer()
         {
             GameState = new GameState();
-            TickTimer = new Timer((_) => Tick(), null, 0, 10);
+            TickTimer = new Timer((_) => Tick(), null, 0, 1);
 
             new Thread((ob) =>
             {

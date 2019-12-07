@@ -17,7 +17,7 @@ namespace whateverthefuck.src.model
 
         public EntityType EntityType { get; }
         
-        public GameCoordinate MovementCache { get; private set; } // retains the last movement made
+        public GameCoordinate MovementCache { get; set; } // retains the last movement made
         public bool Movable { get; protected set; }
 
         public EntityIdentifier Identifier { get; set; }
@@ -34,7 +34,7 @@ namespace whateverthefuck.src.model
         public float Top => Location.Y + Size.Y;
         public GameCoordinate Center => new GameCoordinate(Location.X + Size.X / 2, Location.Y + Size.Y / 2);
 
-
+        private GameCoordinate _location { get; set; }
 
         protected Color DrawColor = Color.Black;
 
@@ -51,8 +51,7 @@ namespace whateverthefuck.src.model
         public virtual void Step()
         {
             MovementCache = CalculateMovement();
-            Location.X += MovementCache.X;
-            Location.Y += MovementCache.Y;
+            Location = (GameCoordinate)Location + MovementCache;
         }
 
         public virtual GameCoordinate CalculateMovement()
