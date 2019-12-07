@@ -16,15 +16,32 @@ namespace whateverthefuck.src.model
 
             var blockers = looked.Where(e => e.BlocksLOS);
 
-            PointF p1 = new PointF(looker.Center.X, looker.Center.Y);
+            PointF lookerPOV = new PointF(looker.Center.X, looker.Center.Y);
 
             foreach (var target in looked)
             {
                 if (target == looker) { continue; }
 
-                PointF p2 = new PointF(target.Center.X, target.Center.Y);
+                PointF p1 = new PointF(target.Left, target.Top);
+                PointF p2 = new PointF(target.Right, target.Top);
+                PointF p3 = new PointF(target.Right, target.Bottom);
+                PointF p4 = new PointF(target.Left, target.Bottom);
 
-                var blocked = blockers.Any(blocker => blocker != looker && blocker != target && LineIntersectsRect(p1, p2, blocker));
+                var blocked = blockers.Any(blocker => blocker != target && blocker != looker && 
+                (
+                LineIntersectsRect(lookerPOV, p1, blocker) &&
+                LineIntersectsRect(lookerPOV, p2, blocker) && 
+                LineIntersectsRect(lookerPOV, p3, blocker) && 
+                LineIntersectsRect(lookerPOV, p4, blocker) 
+                ));
+#if true
+
+#else
+                (!LineIntersectsRect(lookerPOV, p1, blocker) ||
+                 !LineIntersectsRect(lookerPOV, p2, blocker) ||
+                 !LineIntersectsRect(lookerPOV, p3, blocker) ||
+                 !LineIntersectsRect(lookerPOV, p4, blocker))
+#endif
 
                 if (!blocked)
                 {
