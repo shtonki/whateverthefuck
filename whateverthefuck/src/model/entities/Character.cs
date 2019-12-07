@@ -4,6 +4,8 @@ namespace whateverthefuck.src.model.entities
 {
     public abstract class Character : GameEntity
     {
+        private const float OneOverSquareRootOfTwo = 0.70710678118f;
+
         public MovementStruct Movements { get; set; } = new MovementStruct();
         public float MoveSpeed = 0.01f;
 
@@ -38,10 +40,17 @@ namespace whateverthefuck.src.model.entities
             var xMove = 0.0f;
             var yMove = 0.0f;
 
-            if (Movements.Upwards) { yMove += MoveSpeed; }
-            if (Movements.Downwards) { yMove -= MoveSpeed; }
-            if (Movements.Leftwards) { xMove -= MoveSpeed; }
-            if (Movements.Rightwards) { xMove += MoveSpeed; }
+            var speed = MoveSpeed;
+
+            if ((Movements.Upwards ^ Movements.Downwards) & (Movements.Leftwards ^ Movements.Rightwards))
+            {
+                speed = speed * OneOverSquareRootOfTwo;
+            }
+
+            if (Movements.Upwards) { yMove += speed; }
+            if (Movements.Downwards) { yMove -= speed; }
+            if (Movements.Leftwards) { xMove -= speed; }
+            if (Movements.Rightwards) { xMove += speed; }
 
             return new GameCoordinate(xMove, yMove);
         }
