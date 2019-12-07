@@ -42,6 +42,11 @@ namespace whateverthefuckserver
             Block block = (Block)GameState.EntityGenerator.GenerateEntity(EntityType.Block);
             block.Location = new GameCoordinate(0.5f, 0.5f);
             GameState.AddEntity(block);
+
+            block = (Block)GameState.EntityGenerator.GenerateEntity(EntityType.Block);
+            block.Location = new GameCoordinate(0.5f, 0.7f);
+            GameState.AddEntity(block);
+
         }
 
         public void AddUser(User user)

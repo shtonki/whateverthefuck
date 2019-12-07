@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -39,27 +40,7 @@ namespace whateverthefuck.src.model
         {
             if (UseSmoothing)
             {
-                foreach (var entity in GameState.AllEntities)
-                {
-                    if (SpicyDictionary.ContainsKey(entity.Identifier.Id))
-                    {
-                        var spicyEntry = SpicyDictionary[entity.Identifier.Id];
-
-                        var locX = mul * entity.Location.X / div + spicyEntry.NewLocation.X / div;
-                        var locY = mul * entity.Location.Y / div + spicyEntry.NewLocation.Y / div;
-
-                        var loc = new GameCoordinate(locX, locY);
-                        var diff = loc - (GameCoordinate)entity.Location;
-
-                        var newSpeedX = spicyEntry.Speed.X / 2 + diff.X / 2;
-                        var newSpeedY = spicyEntry.Speed.Y / 2 + diff.Y / 2;
-
-                        var newSpeed = new GameCoordinate(newSpeedX, newSpeedY);
-
-                        entity.Location = newSpeed + (GameCoordinate)entity.Location;
-                        spicyEntry.Speed = newSpeed;
-                    }
-                }
+                SmoothMovements();
             }
 
             if (Hero == null)
@@ -68,6 +49,94 @@ namespace whateverthefuck.src.model
             }
 
             Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(Hero));
+            
+            GUI.Extras = UpdateLOS().Cast<Drawable>().ToList();
+        }
+
+
+        private void SmoothMovements()
+        {
+            foreach (var entity in GameState.AllEntities)
+            {
+                if (SpicyDictionary.ContainsKey(entity.Identifier.Id))
+                {
+                    var spicyEntry = SpicyDictionary[entity.Identifier.Id];
+
+                    var locX = mul * entity.Location.X / div + spicyEntry.NewLocation.X / div;
+                    var locY = mul * entity.Location.Y / div + spicyEntry.NewLocation.Y / div;
+
+                    var loc = new GameCoordinate(locX, locY);
+                    var diff = loc - (GameCoordinate)entity.Location;
+
+                    var newSpeedX = spicyEntry.Speed.X / 2 + diff.X / 2;
+                    var newSpeedY = spicyEntry.Speed.Y / 2 + diff.Y / 2;
+
+                    var newSpeed = new GameCoordinate(newSpeedX, newSpeedY);
+
+                    entity.Location = newSpeed + (GameCoordinate)entity.Location;
+                    spicyEntry.Speed = newSpeed;
+                }
+            }
+        }
+
+        public class Rectangle : Drawable
+        {
+            public float X1;
+            public float Y1;
+            public float X2;
+            public float Y2;
+
+            public Rectangle(GameEntity o) : base(new GameCoordinate(0, 0))
+            {
+                X1 = o.Left;
+                Y1 = o.Bottom;
+                X2 = o.Right;
+                Y2 = o.Top;
+            }
+
+            public override void DrawMe(DrawAdapter drawAdapter)
+            {
+                drawAdapter.FillLine(X1, Y1, X2, Y1, Color.White);
+                drawAdapter.FillLine(X2, Y1, X2, Y2, Color.White);
+                drawAdapter.FillLine(X2, Y2, X1, Y2, Color.White);
+                drawAdapter.FillLine(X1, Y2, X1, Y1, Color.White);
+            }
+        }
+
+        public class Line : Drawable
+        {
+            public float X1;
+            public float Y1;
+            public float X2;
+            public float Y2;
+
+            public Line(GameEntity o, GameEntity e) : base(new GameCoordinate(0, 0))
+            {
+                X1 = o.Center.X;
+                Y1 = o.Center.Y;
+                X2 = e.Center.X;
+                Y2 = e.Center.Y;
+            }
+
+            public override void DrawMe(DrawAdapter drawAdapter)
+            {
+                drawAdapter.FillLine(X1, Y1, X2, Y2, Color.White);
+            }
+        }
+
+        private List<Drawable> UpdateLOS()
+        {
+            var rt = new List<Drawable>();
+            var inLOS = LineOfSight.CheckLOS(Hero, GameState.AllEntities);
+
+            foreach (var e in GameState.AllEntities)
+            {
+                e.Invisible = !inLOS.Contains(e);
+                rt.Add(new Line(Hero, e));
+                rt.Add(new Rectangle(e));
+            }
+
+            return rt;
         }
 
         public void CreateEntity(CreateEntityInfo info)
