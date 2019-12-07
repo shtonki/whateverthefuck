@@ -14,6 +14,11 @@ namespace whateverthefuck.src.network.messages
     {
         public LoginCredentialBody Body { get; private set; }
 
+        public LoginCredentialsMessage() : base(MessageType.LoginCredentialsMessage)
+        {
+            Body = new LoginCredentialBody();
+        }
+
         public LoginCredentialsMessage(LoginCredentials loginCredentials) : base(MessageType.LoginCredentialsMessage)
         {
             Body = new LoginCredentialBody(loginCredentials.Username);

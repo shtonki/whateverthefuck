@@ -39,12 +39,21 @@ namespace whateverthefuck.src.network.messages
     public struct UpdatePlayerControlBody : MessageBody
     {
         public int EntityId { get; }
-        public MovementStruct MovementStruct { get; }
+        //public MovementStruct MovementStruct { get; }
+        public bool Upwards { get; }
+        public bool Downwards { get; }
+        public bool Leftwards { get; }
+        public bool Rightwards { get; }
+
+        public MovementStruct MovementStruct => new MovementStruct(Upwards, Downwards, Rightwards, Leftwards);
 
         public UpdatePlayerControlBody(Character entity) : this()
         {
             EntityId = entity.Identifier.Id;
-            MovementStruct = entity.Movements;
+            Upwards = entity.Movements.Upwards;
+            Downwards = entity.Movements.Downwards;
+            Leftwards = entity.Movements.Leftwards;
+            Rightwards = entity.Movements.Rightwards;
         }
     }
 }

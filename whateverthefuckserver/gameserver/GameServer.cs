@@ -68,7 +68,7 @@ namespace whateverthefuckserver
             SendMessageToAllPlayers(new DeleteGameEntityMessage(hero));
         }
 
-        public void UpdatePlayerCharacterLocation(int id, MovementStruct movementStruct)
+        public void UpdatePlayerCharacterMovementStruct(int id, MovementStruct movementStruct)
         {
             PlayerCharacter pc = (PlayerCharacter)GameState.GetEntityById(id);
             pc.Movements = movementStruct;

@@ -53,10 +53,10 @@ namespace whateverthefuck.src.model
             foreach (var collision in collisions)
             {
 
-                if (collision.EntityI.MovementCache.X == 0 &&
-                    collision.EntityI.MovementCache.Y == 0 &&
-                    collision.EntityJ.MovementCache.X == 0 &&
-                    collision.EntityJ.MovementCache.Y == 0)
+                if (collision.EntityI?.MovementCache.X == 0 &&
+                    collision.EntityI?.MovementCache.Y == 0 &&
+                    collision.EntityJ?.MovementCache.X == 0 &&
+                    collision.EntityJ?.MovementCache.Y == 0)
                 {
                     // we have most likely managed to put one object on another at which point
                     // we let them stay there until something moves.

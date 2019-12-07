@@ -30,7 +30,8 @@ namespace whateverthefuckserver.network
                 case MessageType.UpdatePlayerControlMessage:
                 {
                     UpdatePlayerControlMessage updatePlayerCharacterLocationMessage = (UpdatePlayerControlMessage)message;
-                    Program.GameServer.UpdatePlayerCharacterLocation(updatePlayerCharacterLocationMessage.Body.EntityId, updatePlayerCharacterLocationMessage.Body.MovementStruct);
+                    Program.GameServer.UpdatePlayerCharacterMovementStruct(updatePlayerCharacterLocationMessage.Body.EntityId, 
+                        updatePlayerCharacterLocationMessage.Body.MovementStruct);
                 } break;
 
                 case MessageType.LoginCredentialsMessage:

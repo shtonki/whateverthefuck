@@ -21,7 +21,7 @@ namespace whateverthefuck.src.network.messages
         public const int HeaderSize = 4;
 
 
-        private struct Header
+        public struct WhateverMessageHeader
         {
             public byte Type { get; set; }
             public ushort Size { get; set; }
@@ -74,6 +74,11 @@ namespace whateverthefuck.src.network.messages
                     return new UpdateEntityLocationsMessage();
                 }
 
+                case MessageType.LoginCredentialsMessage:
+                {
+                    return new LoginCredentialsMessage();
+                }
+
                 default: throw new NotImplementedException();
             }
         }
@@ -82,7 +87,7 @@ namespace whateverthefuck.src.network.messages
         {
             byte[] contentBytes = message.EncodeBody();
 
-            Header header = new Header();
+            WhateverMessageHeader header = new WhateverMessageHeader();
             header.Type = (byte)message.MessageType;
             header.Size = (ushort)contentBytes.Length;
             byte[] headerBytes = GetBytes(header);
@@ -94,19 +99,33 @@ namespace whateverthefuck.src.network.messages
             return GetBytes(GetBody());
         }
 
-        public static WhateverthefuckMessage DecodeMessage(byte[] message)
-        {
-            Header header = new Header();
-            header = (Header)FromBytes(message, header);
-            int headerSize = Marshal.SizeOf(header);
 
+        public static WhateverthefuckMessage DecodeMessage(byte[] bs)
+        {
+            WhateverMessageHeader header = ParseHeader(bs);
+
+            int headerSize = Marshal.SizeOf(header);
 
             var messageType = (MessageType)header.Type;
             var bodyLength = header.Size;
 
             var wmessage = FromMessageTypex(messageType);
 
-            wmessage.DecodeBody(message, headerSize);
+            wmessage.DecodeBody(bs, headerSize);
+
+            return wmessage;
+        }
+
+        public static WhateverthefuckMessage DecodeMessage(WhateverMessageHeader header, byte[] body)
+        {
+            int headerSize = Marshal.SizeOf(header);
+
+            var messageType = (MessageType)header.Type;
+            var bodyLength = header.Size;
+
+            var wmessage = FromMessageTypex(messageType);
+
+            wmessage.DecodeBody(body, 0);
 
             return wmessage;
         }
@@ -123,7 +142,12 @@ namespace whateverthefuck.src.network.messages
 
         protected abstract void SetBody(MessageBody body);
 
-
+        public static WhateverMessageHeader ParseHeader(byte[] message)
+        {
+            WhateverMessageHeader header = new WhateverMessageHeader();
+            header = (WhateverMessageHeader)FromBytes(message, header);
+            return header;
+        }
 
         protected static byte[] GetBytes(object str)
         {
@@ -145,7 +169,9 @@ namespace whateverthefuck.src.network.messages
 
             Marshal.Copy(arr, startIndex, ptr, size);
 
-            str = Marshal.PtrToStructure(ptr, str.GetType());
+
+            var typ = str.GetType();
+            str = Marshal.PtrToStructure(ptr, typ);
             Marshal.FreeHGlobal(ptr);
 
             return str;

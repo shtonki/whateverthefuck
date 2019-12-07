@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using whateverthefuck.src.network.messages;
 using whateverthefuck.src.util;
+using static whateverthefuck.src.network.messages.WhateverthefuckMessage;
 
 namespace whateverthefuck.src.network
 {
@@ -21,7 +23,7 @@ namespace whateverthefuck.src.network
             new Thread(ReceiveLoop).Start();
         }
 
-        public  void SendMessage(WhateverthefuckMessage message)
+        public void SendMessage(WhateverthefuckMessage message)
         {
             byte[] bytes = WhateverthefuckMessage.EncodeMessage(message);
             try
@@ -52,7 +54,6 @@ namespace whateverthefuck.src.network
             {
                 int bytesRead;
 
-
                 try
                 {
                     bytesRead = NetworkStream.Read(HeaderBuffer, 0, WhateverthefuckMessage.HeaderSize);
@@ -67,16 +68,18 @@ namespace whateverthefuck.src.network
                     Logging.Log("Broken message header.", Logging.LoggingLevel.Error);
                     continue;
                 }
-                throw new NotImplementedException();
-                MessageType messageType = (MessageType)HeaderBuffer[0];
-                int messageLength = (HeaderBuffer[1]) | (HeaderBuffer[2] << 8);
+
+                WhateverMessageHeader header = WhateverthefuckMessage.ParseHeader(HeaderBuffer);
+
+                MessageType messageType = (MessageType)header.Type;
+                int messageLength = header.Size;
 
                 byte[] BodyBuffer = new byte[messageLength];
                 bytesRead = NetworkStream.Read(BodyBuffer, 0, messageLength);
                 if (bytesRead != messageLength) { throw new Exception("error reading message body"); }
 
                 //var message = WhateverthefuckMessage.Decode(messageType, BodyBuffer);
-                WhateverthefuckMessage message;
+                WhateverthefuckMessage message = WhateverthefuckMessage.DecodeMessage(header, BodyBuffer);
 
                 if (LogIncomingMessages)
                 {

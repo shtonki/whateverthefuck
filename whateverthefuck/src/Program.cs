@@ -16,46 +16,19 @@ namespace whateverthefuck
 
         public static WhateverClientConnection ServerConnection { get; private set; }
 
-        struct WriteMe
-        {
-            public int Val { get; set; }
-            public string Str { get; set; }
-
-            public WriteMe(int val, string str)
-            {
-                Val = val;
-                Str = str;
-            }
-        }
-
         public static void Main(String[] args)
         {
-#if true
-            PlayerCharacter exampleEntity = new PlayerCharacter(new EntityIdentifier(4));
-            exampleEntity.Movements.Downwards = true;
-            exampleEntity.Movements.Leftwards = true;
-            exampleEntity.Location = new GameCoordinate(0.4f, 2.2f);
+#if false
+            PlayerCharacter pc = new PlayerCharacter(new EntityIdentifier(420));
+            pc.Movements.Downwards = true;
+            UpdatePlayerControlMessage message = new UpdatePlayerControlMessage(pc);
 
-            WhateverthefuckMessage example;
+            byte[] bs = WhateverthefuckMessage.EncodeMessage(message);
 
-            var entities = new GameEntity[] { exampleEntity, 
-                new Block(new EntityIdentifier(7), Color.Beige),
-                new Block(new EntityIdentifier(7), Color.Beige),
-            };
+            var newMessage = WhateverthefuckMessage.DecodeMessage(bs);
 
-            //example = new ExampleMessage(4 , 4.20f);
-            //example = new CreateGameEntityMessage(exampleEntity);
-            //example = new DeleteGameEntityMessage(exampleEntity);
-            //example = new GrantControlMessage(exampleEntity);
-            //example = new LogMessage("Calling all Jan Michaels");
-            //example = new UpdatePlayerControlMessage(exampleEntity);
-            example = new UpdateEntityLocationsMessage(entities);
-
-            var bs = WhateverthefuckMessage.EncodeMessage(example);
-            var rebuiltMessage = WhateverthefuckMessage.DecodeMessage(bs);
-            int i = 5;
+            int i = 0;
 #else
-
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
 
             Logging.Log("Running version: " + WhateverthefuckVersion.CurrentVersion.ToString());
@@ -72,6 +45,6 @@ namespace whateverthefuck
             UserLogin.Login(cf.ConfigInfo.LoginCredentials);
             Logging.Log(String.Format("Logged on to Server as {0}", cf.ConfigInfo.LoginCredentials.Username), Logging.LoggingLevel.Info);
 #endif
-        }
+            }
     }
 }

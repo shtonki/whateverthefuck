@@ -6,7 +6,7 @@ namespace whateverthefuck.src.model.entities
     {
         private const float OneOverSquareRootOfTwo = 0.70710678118f;
 
-        public MovementStruct Movements { get; set; } = new MovementStruct();
+        public MovementStruct Movements { get; set; } = new MovementStruct(false, false, false, false);
         public float MoveSpeed = 0.01f;
 
 
@@ -63,5 +63,12 @@ namespace whateverthefuck.src.model.entities
         public bool Rightwards { get; set; }
         public bool Leftwards { get; set; }
 
+        public MovementStruct(bool upwards, bool downwards, bool rightwards, bool leftwards)
+        {
+            Upwards = upwards;
+            Downwards = downwards;
+            Rightwards = rightwards;
+            Leftwards = leftwards;
+        }
     }
 }
