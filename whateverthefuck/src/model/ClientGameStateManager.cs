@@ -73,8 +73,8 @@ namespace whateverthefuck.src.model
         public void CreateEntity(CreateEntityInfo info)
         {
             var entity = GameState.EntityGenerator.GenerateEntity(info.EntityType);
-            entity.Identifier = new EntityIdentifier(info.LocationInfo.Identifier);
-            entity.Location = new GameCoordinate(info.LocationInfo.X, info.LocationInfo.Y);
+            entity.Identifier = new EntityIdentifier(info.Identifier);
+            entity.Location = new GameCoordinate(info.X, info.Y);
             GameState.AddEntity(entity);
         }
 

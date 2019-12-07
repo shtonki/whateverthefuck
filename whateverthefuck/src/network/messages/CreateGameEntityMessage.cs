@@ -12,11 +12,11 @@ namespace whateverthefuck.src.network.messages
 {
     public class CreateGameEntityMessage : WhateverthefuckMessage
     {
-        public CreateEntityInfo CreateEntityInfo { get; }
+        public CreateEntityInfo CreateEntityInfo { get; private set; }
 
-        public CreateGameEntityMessage(byte[] body) : base(MessageType.CreateGameEntityMessage)
+        public CreateGameEntityMessage() : base(MessageType.CreateGameEntityMessage)
         {
-            CreateEntityInfo = (CreateEntityInfo)FromBytes(body, CreateEntityInfo);
+            CreateEntityInfo = new CreateEntityInfo();
         }
 
         public CreateGameEntityMessage(GameEntity hero) : base(MessageType.CreateGameEntityMessage)
@@ -24,19 +24,58 @@ namespace whateverthefuck.src.network.messages
             CreateEntityInfo = new CreateEntityInfo(hero);
         }
 
-        public byte[] EncodeBodyButPublic()
-        {
-            return EncodeBody();
-        }
-
         protected override byte[] EncodeBody()
         {
             return GetBytes(CreateEntityInfo);
         }
+
+        protected override object EncodeBodyx()
+        {
+            return CreateEntityInfo;
+        }
+
+        protected override MessageBody GetBodyx()
+        {
+            return CreateEntityInfo;
+        }
+
+        protected override void SetBodyx(MessageBody body)
+        {
+            CreateEntityInfo = (CreateEntityInfo)body;
+        }
     }
 
-    public struct CreateEntityInfo
+    public struct CreateEntityInfo : MessageBody
     {
+#if true
+        public EntityType EntityType;
+        public int Identifier;
+        public float X;
+        public float Y;
+        public float Z;
+        public float xd;
+
+        public CreateEntityInfo(GameEntity entity) : this(
+            entity.EntityType,
+            entity.Identifier.Id,
+            entity.Location.X,
+            entity.Location.Y, 
+            4f,
+            20f
+            )
+        {
+        }
+
+        public CreateEntityInfo(EntityType entityType, int identifier, float x, float y, float z, float xd)
+        {
+            EntityType = entityType;
+            Identifier = identifier;
+            X = x;
+            Y = y;
+            Z = z;
+            this.xd = xd;
+        }
+#else
         public EntityType EntityType { get; }
 
         public EntityLocationInfo LocationInfo { get; }
@@ -76,5 +115,6 @@ namespace whateverthefuck.src.network.messages
             Array.Copy(locationInfo, 0, bytes, type.Length, locationInfo.Length);
             return bytes;
         }
+#endif
     }
 }

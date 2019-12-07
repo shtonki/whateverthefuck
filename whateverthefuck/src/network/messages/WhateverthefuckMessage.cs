@@ -11,23 +11,20 @@ using System.Runtime.InteropServices;
 
 namespace whateverthefuck.src.network.messages
 {
-    public abstract class WhateverthefuckMessage
+    public class WhateverthefuckMessage
     {
         private const int TypeSize = 1;
         private const int LengthSize = 2;
         public const int HeaderSize = TypeSize + LengthSize;
 
-        class Content
+        private struct Header
         {
-            public MessageType Type { get; }
-            public UInt16 Length { get; }
-
-            public Content(MessageType type, ushort length)
-            {
-                Type = type;
-                Length = length;
-            }
+            public byte Type { get; set; }
+            public ushort Size { get; set; }
         }
+
+        public MessageType MessageType { get; private set; }
+
 
         protected static byte[] GetBytes(object str)
         {
@@ -41,36 +38,72 @@ namespace whateverthefuck.src.network.messages
             return arr;
         }
 
-        protected static object FromBytes(byte[] arr, object str)
+        protected static object FromBytes(IEnumerable<byte> bs, object str, int startIndex = 0)
         {
+            byte[] arr = bs.ToArray();
+
             int size = Marshal.SizeOf(str.GetType());
             IntPtr ptr = Marshal.AllocHGlobal(size);
 
-            Marshal.Copy(arr, 0, ptr, size);
+            Marshal.Copy(arr, startIndex, ptr, size);
 
-            str = (object)Marshal.PtrToStructure(ptr, str.GetType());
+            str = Marshal.PtrToStructure(ptr, str.GetType());
             Marshal.FreeHGlobal(ptr);
 
             return str;
         }
 
 
-        public MessageType MessageType { get; }
 
         protected WhateverthefuckMessage(MessageType messageType)
         {
             MessageType = messageType;
         }
 
+        public static WhateverthefuckMessage FromMessageTypex(MessageType type)
+        {
+            switch (type)
+            {
+                case MessageType.CreateGameEntityMessage:
+                    {
+                        return new CreateGameEntityMessage();
+                    }
+
+                default: throw new NotImplementedException();
+            }
+        }
+
         public byte[] EncodeX()
         {
-            byte[] contentBytes = GetBytes(EncodeBodyx());
-            byte[] headerBytes = GetBytes(new Content(MessageType, (ushort)contentBytes.Length));
-            byte[] bytes = new byte[headerBytes.Length + contentBytes.Length];
+            byte[] contentBytes = GetBytes(GetBodyx());
+
+            Header header = new Header();
+            header.Type = (byte)MessageType;
+            header.Size = (ushort)contentBytes.Length;
+            byte[] headerBytes = GetBytes(header);
+            //byte[] bytes = new byte[headerBytes.Length + contentBytes.Length];
             return headerBytes.Concat(contentBytes).ToArray();
-            //Array.Copy(headerBytes, 0, bytes, 0, headerBytes.Length);
-            //Array.Copy()
         }
+
+        public static WhateverthefuckMessage DecodeX(byte[] message)
+        {
+            Header header = new Header();
+            header = (Header)FromBytes(message, header);
+            int headerSize = Marshal.SizeOf(header);
+
+
+            var messageType = (MessageType)header.Type;
+            var bodyLength = header.Size;
+
+            var wmessage = FromMessageTypex(messageType);
+
+            MessageBody body = (MessageBody)wmessage.GetBodyx();
+            body = (MessageBody)FromBytes(message, body, headerSize);
+            wmessage.SetBodyx(body);
+
+            return wmessage;
+        }
+
 
         public byte[] Encode()
         {
@@ -106,7 +139,8 @@ namespace whateverthefuck.src.network.messages
 
                 case MessageType.CreateGameEntityMessage:
                     {
-                        return new CreateGameEntityMessage(body);
+                        //return new CreateGameEntityMessage(body);
+                        return null;
                     }
 
                 case MessageType.GrantControlMessage:
@@ -136,15 +170,34 @@ namespace whateverthefuck.src.network.messages
             }
         }
 
-        protected abstract byte[] EncodeBody();
+        protected virtual byte[] EncodeBody()
+        {
+            throw new NotImplementedException();
+        }
 
         protected virtual object EncodeBodyx()
         {
             throw new NotImplementedException();
         }
+
+        protected virtual MessageBody GetBodyx()
+        {
+            if (MessageType == MessageType.CreateGameEntityMessage)
+            {
+                CreateGameEntityMessage thisAsCGEM = (CreateGameEntityMessage)this;
+
+            }
+
+            throw new NotImplementedException();
+        }
+
+        protected virtual void SetBodyx(MessageBody body)
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public abstract class MessageBody
+    public interface MessageBody
     {
 
     }

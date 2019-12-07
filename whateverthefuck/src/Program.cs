@@ -30,16 +30,14 @@ namespace whateverthefuck
         public static void Main(String[] args)
         {
 #if true
-            int length;
-
             NPC npc = new NPC(new EntityIdentifier(4));
             CreateGameEntityMessage message = new CreateGameEntityMessage(npc);
-            byte[] bs = message.EncodeBodyButPublic();
+            byte[] bs = message.EncodeX();
 
-            CreateGameEntityMessage reconstructedMessage = new CreateGameEntityMessage(bs);
+            CreateGameEntityMessage reconstructedMessage = (CreateGameEntityMessage)WhateverthefuckMessage.DecodeX(bs);
 
             Console.WriteLine(reconstructedMessage.CreateEntityInfo.EntityType);
-            Console.WriteLine(reconstructedMessage.CreateEntityInfo.LocationInfo.Identifier);
+            Console.WriteLine(reconstructedMessage.CreateEntityInfo.Identifier);
 #else
 
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
