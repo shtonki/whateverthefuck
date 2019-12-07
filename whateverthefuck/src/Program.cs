@@ -25,6 +25,7 @@ namespace whateverthefuck
 
             byte[] bs = WhateverthefuckMessage.EncodeMessage(message);
 
+
             var newMessage = WhateverthefuckMessage.DecodeMessage(bs);
 
             int i = 0;

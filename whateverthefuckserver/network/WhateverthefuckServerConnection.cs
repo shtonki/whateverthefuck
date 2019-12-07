@@ -29,15 +29,14 @@ namespace whateverthefuckserver.network
             {
                 case MessageType.UpdatePlayerControlMessage:
                 {
-                    UpdatePlayerControlMessage updatePlayerCharacterLocationMessage = (UpdatePlayerControlMessage)message;
-                    Program.GameServer.UpdatePlayerCharacterMovementStruct(updatePlayerCharacterLocationMessage.Body.EntityId, 
-                        updatePlayerCharacterLocationMessage.Body.MovementStruct);
+                    UpdatePlayerControlBody updatePlayerChatacterLocationBody = (UpdatePlayerControlBody)message.MessageBody;
+                    Program.GameServer.UpdatePlayerCharacterMovementStruct(updatePlayerChatacterLocationBody.EntityId, updatePlayerChatacterLocationBody.MovementStruct);
                 } break;
 
                 case MessageType.LoginCredentialsMessage:
                 {
-                    LoginCredentialsMessage credentialsMessage = (LoginCredentialsMessage)message;
-                    LoginServer.Login(new User(this), new LoginCredentials(credentialsMessage.Body.Username));         
+                    LoginCredentialBody loginBody = (LoginCredentialBody) message.MessageBody;
+                    LoginServer.Login(new User(this), new LoginCredentials(loginBody.Username));         
                 } break;
                 default: throw new NotImplementedException();
             }

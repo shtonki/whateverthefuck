@@ -40,6 +40,7 @@ namespace whateverthefuckserver
             GameState.AddEntity(mob);
 
             Block block = (Block)GameState.EntityGenerator.GenerateEntity(EntityType.Block);
+            block.Location = new GameCoordinate(0.5f, 0.5f);
             GameState.AddEntity(block);
         }
 

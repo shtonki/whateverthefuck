@@ -11,28 +11,14 @@ namespace whateverthefuck.src.network.messages
 {
     public class UpdatePlayerControlMessage : WhateverthefuckMessage
     {
-
-        public UpdatePlayerControlBody Body { get; private set; }
-
         public UpdatePlayerControlMessage() : base(MessageType.UpdatePlayerControlMessage)
         {
-            Body = new UpdatePlayerControlBody();
+            MessageBody = new UpdatePlayerControlBody();
         }
 
         public UpdatePlayerControlMessage(Character pc) : base(MessageType.UpdatePlayerControlMessage)
         {
-            Body = new UpdatePlayerControlBody(pc);
-        }
-
-
-        protected override MessageBody GetBody()
-        {
-            return Body;
-        }
-
-        protected override void SetBody(MessageBody body)
-        {
-            Body = (UpdatePlayerControlBody)body;
+            MessageBody = new UpdatePlayerControlBody(pc);
         }
     }
 

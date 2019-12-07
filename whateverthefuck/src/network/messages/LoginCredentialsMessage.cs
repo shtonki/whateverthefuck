@@ -12,26 +12,14 @@ namespace whateverthefuck.src.network.messages
 {
     public class LoginCredentialsMessage : WhateverthefuckMessage
     {
-        public LoginCredentialBody Body { get; private set; }
-
         public LoginCredentialsMessage() : base(MessageType.LoginCredentialsMessage)
         {
-            Body = new LoginCredentialBody();
+            MessageBody = new LoginCredentialBody();
         }
 
         public LoginCredentialsMessage(LoginCredentials loginCredentials) : base(MessageType.LoginCredentialsMessage)
         {
-            Body = new LoginCredentialBody(loginCredentials.Username);
-        }
-
-        protected override MessageBody GetBody()
-        {
-            return Body;
-        }
-
-        protected override void SetBody(MessageBody body)
-        {
-            Body = (LoginCredentialBody)body;
+            MessageBody = new LoginCredentialBody(loginCredentials.Username);
         }
     }
 
