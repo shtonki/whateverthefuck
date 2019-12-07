@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace whateverthefuck.src.model.entities
 {
-    class NPC : GameEntity
+    public class NPC : GameEntity
     {
         public NPC(EntityIdentifier identifier) : base(identifier, EntityType.NPC)
         {

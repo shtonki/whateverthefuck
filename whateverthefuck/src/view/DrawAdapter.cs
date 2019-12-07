@@ -12,19 +12,9 @@ namespace whateverthefuck.src.view
         {
         }
 
-        public void blowme()
+        public void Translate(float x, float y)
         {
-            GL.Color4(Color.Black);
-
-            GL.Begin(PrimitiveType.Quads);
-
-
-            GL.Vertex2(0f, 0f);
-            GL.Vertex2(0f, 1f);
-            GL.Vertex2(1f, 1f);
-            GL.Vertex2(1f, 0f);
-
-            GL.End();
+            GL.Translate(x, y, 0);
         }
         
         public void FillRectangle(float x1, float y1, float x2, float y2, Color c, float rotation = 0)

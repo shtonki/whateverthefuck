@@ -36,7 +36,8 @@ namespace whateverthefuckserver
                 }
             }).Start();
 
-
+            NPC mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC);
+            GameState.AddEntity(mob);
         }
 
         public void AddUser(User user)

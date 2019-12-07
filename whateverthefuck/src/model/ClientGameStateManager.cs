@@ -21,7 +21,7 @@ namespace whateverthefuck.src.model
         public GameState GameState { get; set; }
 
         private Dictionary<int, SpicyClass> SpicyDictionary = new Dictionary<int, SpicyClass>();
-        private bool UseSmoothing = true;
+        private bool UseSmoothing = false;
 
         private const int TickInterval = 10;
 
@@ -86,6 +86,12 @@ namespace whateverthefuck.src.model
         public void TakeControl(int identifier)
         {
             Hero = (PlayerCharacter)GameState.GetEntityById(identifier);
+            CenterCameraOn(Hero);
+        }
+
+        public void CenterCameraOn(GameEntity entity)
+        {
+            GUI.Camera = new FollowCamera(Hero);
         }
 
         private Semaphore UpdateLocationSemaphore = new Semaphore(1, 1);

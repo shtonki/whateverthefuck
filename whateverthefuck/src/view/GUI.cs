@@ -10,7 +10,7 @@ namespace whateverthefuck.src.view
 {
     public static class GUI
     {
-        public static Camera Camera;
+        public static Camera Camera { get; set; }
 
         public static GameState ForceToDrawGameState { get; set; }
 

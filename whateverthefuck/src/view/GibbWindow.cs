@@ -48,7 +48,11 @@ namespace whateverthefuck.src.view
             GL.ClearColor(Color.Fuchsia);
             GL.PushMatrix();
             //GL.Scale(GUI.Camera.Zoom.CurrentZoom, GUI.Camera.Zoom.CurrentZoom, 0);
-            //GL.Translate(-GUI.Camera.Location.X, -GUI.Camera.Location.Y,  0);
+            if (GUI.Camera != null)
+            {
+                GL.Translate(-GUI.Camera.Location.X, -GUI.Camera.Location.Y, 0);
+            }
+
             var drawAdapter = new DrawAdapter();
 
             foreach (var drawable in GUI.GetAllDrawables())
