@@ -1,0 +1,12 @@
+Set version in whateverthefuck/src/util/WhateverthefuckVersion.cs
+Commit
+Run prepare_release.bat
+Zip folders in release/currentrelease
+Rename release/currentrelease
+Remove unneeded release folders
+Edit release/history.txt
+Commit
+Reset version in whateverthefuck/src/util/WhateverthefuckVersion.cs
+Commit
+
+Done
