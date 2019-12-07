@@ -69,11 +69,16 @@ namespace whateverthefuck.src.network.messages
                         return new CreateGameEntityMessage();
                     }
 
+                case MessageType.ExampleMessage:
+                    {
+                        return new ExampleMessage();
+                    }
+
                 default: throw new NotImplementedException();
             }
         }
 
-        public byte[] EncodeX()
+        public byte[] Encode()
         {
             byte[] contentBytes = GetBytes(GetBodyx());
 
@@ -85,7 +90,7 @@ namespace whateverthefuck.src.network.messages
             return headerBytes.Concat(contentBytes).ToArray();
         }
 
-        public static WhateverthefuckMessage DecodeX(byte[] message)
+        public static WhateverthefuckMessage Decode(byte[] message)
         {
             Header header = new Header();
             header = (Header)FromBytes(message, header);
@@ -105,7 +110,7 @@ namespace whateverthefuck.src.network.messages
         }
 
 
-        public byte[] Encode()
+        public byte[] EncodeO()
         {
             var body = EncodeBody();
             byte typeByte = (byte)MessageType;
@@ -123,7 +128,7 @@ namespace whateverthefuck.src.network.messages
             return message;
         }
 
-        public static WhateverthefuckMessage Decode(MessageType type, byte[] body)
+        public static WhateverthefuckMessage DecodeO(MessageType type, byte[] body)
         {
             switch (type)
             {
@@ -185,7 +190,6 @@ namespace whateverthefuck.src.network.messages
             if (MessageType == MessageType.CreateGameEntityMessage)
             {
                 CreateGameEntityMessage thisAsCGEM = (CreateGameEntityMessage)this;
-
             }
 
             throw new NotImplementedException();
@@ -252,5 +256,6 @@ namespace whateverthefuck.src.network.messages
         LoginCredentialsMessage,
         CreateGameEntityMessage,
         DeleteGameEntityMessage,
+        ExampleMessage,
     }
 }

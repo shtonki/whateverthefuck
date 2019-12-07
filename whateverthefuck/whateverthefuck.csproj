@@ -57,6 +57,7 @@
     <Compile Include="src\model\EntityGenerator.cs" />
     <Compile Include="src\network\messages\CreateGameEntityMessage.cs" />
     <Compile Include="src\network\messages\DeleteGameEntityMessage.cs" />
+    <Compile Include="src\network\messages\ExampleMessage.cs" />
     <Compile Include="src\network\messages\GrantControlMessage.cs" />
     <Compile Include="src\network\messages\LogMessage.cs" />
     <Compile Include="src\network\messages\SendLoginCredentialsMessage.cs" />

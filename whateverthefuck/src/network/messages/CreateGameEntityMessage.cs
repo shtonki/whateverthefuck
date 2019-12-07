@@ -45,6 +45,7 @@ namespace whateverthefuck.src.network.messages
         }
     }
 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct CreateEntityInfo : MessageBody
     {
 #if true

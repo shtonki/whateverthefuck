@@ -67,7 +67,7 @@ namespace whateverthefuck.src.network
                     Logging.Log("Broken message header.", Logging.LoggingLevel.Error);
                     continue;
                 }
-
+                throw new NotImplementedException();
                 MessageType messageType = (MessageType)HeaderBuffer[0];
                 int messageLength = (HeaderBuffer[1]) | (HeaderBuffer[2] << 8);
 
@@ -75,7 +75,8 @@ namespace whateverthefuck.src.network
                 bytesRead = NetworkStream.Read(BodyBuffer, 0, messageLength);
                 if (bytesRead != messageLength) { throw new Exception("error reading message body"); }
 
-                var message = WhateverthefuckMessage.Decode(messageType, BodyBuffer);
+                //var message = WhateverthefuckMessage.Decode(messageType, BodyBuffer);
+                WhateverthefuckMessage message;
 
                 if (LogIncomingMessages)
                 {
