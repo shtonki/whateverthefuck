@@ -30,13 +30,13 @@ namespace whateverthefuckserver.network
                 case MessageType.UpdatePlayerControlMessage:
                 {
                     UpdatePlayerControlMessage updatePlayerCharacterLocationMessage = (UpdatePlayerControlMessage)message;
-                    Program.GameServer.UpdatePlayerCharacterLocation(updatePlayerCharacterLocationMessage.EntityId, updatePlayerCharacterLocationMessage.MovementStruct);
+                    Program.GameServer.UpdatePlayerCharacterLocation(updatePlayerCharacterLocationMessage.Body.EntityId, updatePlayerCharacterLocationMessage.Body.MovementStruct);
                 } break;
 
                 case MessageType.LoginCredentialsMessage:
                 {
-                    SendLoginCredentialsMessage credentialsMessage = (SendLoginCredentialsMessage)message;
-                    LoginServer.Login(new User(this), credentialsMessage.LoginCredentials);         
+                    LoginCredentialsMessage credentialsMessage = (LoginCredentialsMessage)message;
+                    LoginServer.Login(new User(this), new LoginCredentials(credentialsMessage.Body.Username));         
                 } break;
                 default: throw new NotImplementedException();
             }

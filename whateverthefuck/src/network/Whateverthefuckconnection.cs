@@ -23,7 +23,7 @@ namespace whateverthefuck.src.network
 
         public  void SendMessage(WhateverthefuckMessage message)
         {
-            var bytes = message.Encode();
+            byte[] bytes = WhateverthefuckMessage.EncodeMessage(message);
             try
             {
                 NetworkStream.Write(bytes, 0, bytes.Length);

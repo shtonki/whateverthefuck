@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using whateverthefuck.src.model;
 using whateverthefuck.src.model.entities;
 using whateverthefuck.src.util;
 
@@ -10,21 +12,33 @@ namespace whateverthefuck.src.network.messages
 {
     public class GrantControlMessage : WhateverthefuckMessage
     {
-        public int Id { get; }
+        public GrantControlBody Body { get; private set; }
 
-        public GrantControlMessage(PlayerCharacter pc) : base(MessageType.GrantControlMessage)
+        public GrantControlMessage(GameEntity entity) : base(MessageType.DeleteGameEntityMessage)
         {
-            Id = pc.Identifier.Id;
+            Body = new GrantControlBody(entity);
         }
 
-        public GrantControlMessage(byte[] body) : base(MessageType.GrantControlMessage)
+        protected override MessageBody GetBody()
         {
-            Id = WhateverEncoding.DecodeInt(body);
+            return Body;
         }
 
-        protected override byte[] EncodeBody()
+        protected override void SetBody(MessageBody body)
         {
-            return WhateverEncoding.EncodeInt(Id);
+            Body = (GrantControlBody)body;
+        }
+    }
+
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct GrantControlBody : MessageBody
+    {
+        public int Id;
+
+        public GrantControlBody(GameEntity entity)
+        {
+            Id = entity.Identifier.Id;
         }
     }
 }

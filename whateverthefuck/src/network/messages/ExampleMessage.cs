@@ -9,18 +9,24 @@ namespace whateverthefuck.src.network.messages
 {
     class ExampleMessage : WhateverthefuckMessage
     {
-        private ExampleBody Body = new ExampleBody(4, 20.0f);
+        public ExampleBody Body { get; private set; }
 
         public ExampleMessage() : base(MessageType.ExampleMessage)
         {
+            Body = new ExampleBody(0, 0);
         }
 
-        protected override MessageBody GetBodyx()
+        public ExampleMessage(int a, float b) : base(MessageType.ExampleMessage)
+        {
+            Body = new ExampleBody(a, b);
+        }
+
+        protected override MessageBody GetBody()
         {
             return Body;
         }
 
-        protected override void SetBodyx(MessageBody body)
+        protected override void SetBody(MessageBody body)
         {
             Body = (ExampleBody)body;
         }
@@ -29,11 +35,11 @@ namespace whateverthefuck.src.network.messages
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     struct ExampleBody : MessageBody
     {
-        int a;
-        float b;
+        public int a;
+        public float b;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)]
-        string bs;
+        public string bs;
 
         public ExampleBody(int a, float b)
         {

@@ -30,10 +30,11 @@ namespace whateverthefuck
         public static void Main(String[] args)
         {
 #if true
-            WhateverthefuckMessage example = new ExampleMessage();
-            byte[] bs = example.Encode();
+            WhateverthefuckMessage example = new ExampleMessage(4 , 4.20f);
+            var bs = WhateverthefuckMessage.EncodeMessage(example);
 
-            var rebuiltMessage = WhateverthefuckMessage.Decode(bs);
+
+            var rebuiltMessage = WhateverthefuckMessage.DecodeMessage(bs);
             int i = 5;
 #else
 

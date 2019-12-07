@@ -60,7 +60,7 @@
     <Compile Include="src\network\messages\ExampleMessage.cs" />
     <Compile Include="src\network\messages\GrantControlMessage.cs" />
     <Compile Include="src\network\messages\LogMessage.cs" />
-    <Compile Include="src\network\messages\SendLoginCredentialsMessage.cs" />
+    <Compile Include="src\network\messages\LoginCredentialsMessage.cs" />
     <Compile Include="src\network\messages\UpdateEntityLocationsMessage.cs" />
     <Compile Include="src\network\messages\UpdatePlayerCharacterLocation.cs" />
     <Compile Include="src\network\messages\WhateverthefuckMessage.cs" />
@@ -72,7 +72,6 @@
     <Compile Include="src\util\Coloring.cs" />
     <Compile Include="src\util\ConfigFile.cs" />
     <Compile Include="src\util\WhateverthefuckVersion.cs" />
-    <Compile Include="src\util\WhateverEncoding.cs" />
     <Compile Include="src\util\Logging.cs" />
     <Compile Include="src\util\JsonIO.cs" />
     <Compile Include="src\util\RNG.cs" />

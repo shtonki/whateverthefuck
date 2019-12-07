@@ -15,7 +15,7 @@ namespace whateverthefuck.src.network.messages
 
         public List<EntityLocationInfo> EntityInfos { get; }
 
-        public UpdateEntityLocationsMessage(IEnumerable<GameEntity> entities) : base(MessageType.UpdateEntityLocations)
+        public UpdateEntityLocationsMessage(IEnumerable<GameEntity> entities) : base(MessageType.UpdateEntityLocationsMessage)
         {
             EntityInfos = new List<EntityLocationInfo>();
 
@@ -25,7 +25,7 @@ namespace whateverthefuck.src.network.messages
             }
         }
 
-        public UpdateEntityLocationsMessage(byte[] bytes) : base(MessageType.UpdateEntityLocations)
+        public UpdateEntityLocationsMessage(byte[] bytes) : base(MessageType.UpdateEntityLocationsMessage)
         {
             EntityInfos = new List<EntityLocationInfo>();
 
@@ -38,6 +38,8 @@ namespace whateverthefuck.src.network.messages
                 EntityInfos.Add(EntityLocationInfo.Decode(System.Text.Encoding.ASCII.GetBytes(info)));
             }
         }
+
+        
 
         protected override byte[] EncodeBody()
         {
@@ -55,5 +57,16 @@ namespace whateverthefuck.src.network.messages
 
             return System.Text.Encoding.ASCII.GetBytes(sb.ToString());
         }
+
+        protected override MessageBody GetBody()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void SetBody(MessageBody body)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

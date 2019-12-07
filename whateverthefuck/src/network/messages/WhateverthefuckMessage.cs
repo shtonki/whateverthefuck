@@ -11,11 +11,15 @@ using System.Runtime.InteropServices;
 
 namespace whateverthefuck.src.network.messages
 {
-    public class WhateverthefuckMessage
+    public abstract class WhateverthefuckMessage
     {
+#if false
         private const int TypeSize = 1;
         private const int LengthSize = 2;
-        public const int HeaderSize = TypeSize + LengthSize;
+
+#endif
+        public const int HeaderSize = 4;
+
 
         private struct Header
         {
@@ -24,35 +28,6 @@ namespace whateverthefuck.src.network.messages
         }
 
         public MessageType MessageType { get; private set; }
-
-
-        protected static byte[] GetBytes(object str)
-        {
-            int size = Marshal.SizeOf(str);
-            byte[] arr = new byte[size];
-
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(str, ptr, true);
-            Marshal.Copy(ptr, arr, 0, size);
-            Marshal.FreeHGlobal(ptr);
-            return arr;
-        }
-
-        protected static object FromBytes(IEnumerable<byte> bs, object str, int startIndex = 0)
-        {
-            byte[] arr = bs.ToArray();
-
-            int size = Marshal.SizeOf(str.GetType());
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-
-            Marshal.Copy(arr, startIndex, ptr, size);
-
-            str = Marshal.PtrToStructure(ptr, str.GetType());
-            Marshal.FreeHGlobal(ptr);
-
-            return str;
-        }
-
 
 
         protected WhateverthefuckMessage(MessageType messageType)
@@ -78,19 +53,23 @@ namespace whateverthefuck.src.network.messages
             }
         }
 
-        public byte[] Encode()
+        public static byte[] EncodeMessage(WhateverthefuckMessage message)
         {
-            byte[] contentBytes = GetBytes(GetBodyx());
+            byte[] contentBytes = message.EncodeBody();
 
             Header header = new Header();
-            header.Type = (byte)MessageType;
+            header.Type = (byte)message.MessageType;
             header.Size = (ushort)contentBytes.Length;
             byte[] headerBytes = GetBytes(header);
-            //byte[] bytes = new byte[headerBytes.Length + contentBytes.Length];
             return headerBytes.Concat(contentBytes).ToArray();
         }
 
-        public static WhateverthefuckMessage Decode(byte[] message)
+        protected virtual byte[] EncodeBody()
+        {
+            return GetBytes(GetBody());
+        }
+
+        public static WhateverthefuckMessage DecodeMessage(byte[] message)
         {
             Header header = new Header();
             header = (Header)FromBytes(message, header);
@@ -102,108 +81,54 @@ namespace whateverthefuck.src.network.messages
 
             var wmessage = FromMessageTypex(messageType);
 
-            MessageBody body = (MessageBody)wmessage.GetBodyx();
-            body = (MessageBody)FromBytes(message, body, headerSize);
-            wmessage.SetBodyx(body);
+            wmessage.DecodeBody(message, headerSize);
 
             return wmessage;
         }
 
-
-        public byte[] EncodeO()
+        protected virtual void DecodeBody(byte[] bs, int arrayOffset)
         {
-            var body = EncodeBody();
-            byte typeByte = (byte)MessageType;
-            if (body.Length > Int16.MaxValue) { Logging.Log("we have big message and big problem.", Logging.LoggingLevel.Error); }
-            Int16 lengthBytes = (short)body.Length;
-            byte lengthLowEndian = (byte)(lengthBytes & 0xFF);
-            byte lengthHighEndian = (byte)(lengthBytes >> 8);
-
-            byte[] message = new byte[HeaderSize + body.Length];
-            message[0] = typeByte;
-            message[1] = lengthLowEndian;
-            message[2] = lengthHighEndian;
-            Array.Copy(body, 0, message, 3, body.Length);
-
-            return message;
+            MessageBody body = (MessageBody)GetBody();
+            body = (MessageBody)FromBytes(bs, body, arrayOffset);
+            SetBody(body);
+            //return body;
         }
 
-        public static WhateverthefuckMessage DecodeO(MessageType type, byte[] body)
+        protected abstract MessageBody GetBody();
+
+        protected abstract void SetBody(MessageBody body);
+
+
+
+        protected static byte[] GetBytes(object str)
         {
-            switch (type)
-            {
-                case MessageType.Log:
-                    {
-                        return new LogMessage(body);
-                    }
+            int size = Marshal.SizeOf(str);
+            byte[] arr = new byte[size];
 
-                case MessageType.UpdateEntityLocations:
-                    {
-                        return new UpdateEntityLocationsMessage(body);
-                    }
-
-                case MessageType.CreateGameEntityMessage:
-                    {
-                        //return new CreateGameEntityMessage(body);
-                        return null;
-                    }
-
-                case MessageType.GrantControlMessage:
-                    {
-                        return new GrantControlMessage(body);
-                    }
-
-                case MessageType.UpdatePlayerControlMessage:
-                    {
-                        return new UpdatePlayerControlMessage(body);
-                    }
-
-                case MessageType.LoginCredentialsMessage:
-                    {
-                        return new SendLoginCredentialsMessage(body);
-                    }
-
-                case MessageType.DeleteGameEntityMessage:
-                    {
-                        return new DeleteGameEntityMessage(body);
-                    }
-
-                default:
-                    {
-                        throw new Exception("received wonky message header");
-                    }
-            }
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(str, ptr, true);
+            Marshal.Copy(ptr, arr, 0, size);
+            Marshal.FreeHGlobal(ptr);
+            return arr;
         }
-
-        protected virtual byte[] EncodeBody()
+        protected static object FromBytes(IEnumerable<byte> bs, object str, int startIndex = 0)
         {
-            throw new NotImplementedException();
-        }
+            byte[] arr = bs.ToArray();
 
-        protected virtual object EncodeBodyx()
-        {
-            throw new NotImplementedException();
-        }
+            int size = Marshal.SizeOf(str.GetType());
+            IntPtr ptr = Marshal.AllocHGlobal(size);
 
-        protected virtual MessageBody GetBodyx()
-        {
-            if (MessageType == MessageType.CreateGameEntityMessage)
-            {
-                CreateGameEntityMessage thisAsCGEM = (CreateGameEntityMessage)this;
-            }
+            Marshal.Copy(arr, startIndex, ptr, size);
 
-            throw new NotImplementedException();
-        }
+            str = Marshal.PtrToStructure(ptr, str.GetType());
+            Marshal.FreeHGlobal(ptr);
 
-        protected virtual void SetBodyx(MessageBody body)
-        {
-            throw new NotImplementedException();
+            return str;
         }
     }
 
     public interface MessageBody
     {
-
     }
 
 
@@ -249,8 +174,8 @@ namespace whateverthefuck.src.network.messages
 
     public enum MessageType
     {
-        Log,
-        UpdateEntityLocations,
+        LogMessage,
+        UpdateEntityLocationsMessage,
         GrantControlMessage,
         UpdatePlayerControlMessage,
         LoginCredentialsMessage,

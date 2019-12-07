@@ -1,23 +1,36 @@
 ﻿
+using System.Runtime.InteropServices;
+
 namespace whateverthefuck.src.network.messages
 {
     public class LogMessage : WhateverthefuckMessage
     {
-        public string Message { get; }
+        public LogBody Body { get; private set; }
 
-        public LogMessage(byte[] body) : base(MessageType.Log)
+        public LogMessage() : base(MessageType.LogMessage)
         {
-            Message = System.Text.Encoding.ASCII.GetString(body);
         }
 
-        public LogMessage(string message) : base(MessageType.Log)
+        protected override MessageBody GetBody()
         {
-            Message = message;
+            return Body;
         }
 
-        protected override byte[] EncodeBody()
+        protected override void SetBody(MessageBody body)
         {
-            return System.Text.Encoding.ASCII.GetBytes(Message);
+            Body = (LogBody)body;
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct LogBody : MessageBody
+    {
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+        public string Username;
+
+        public LogBody(string username)
+        {
+            Username = username;
         }
     }
 }

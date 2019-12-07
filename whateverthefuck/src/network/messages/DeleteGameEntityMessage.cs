@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.model;
@@ -10,22 +11,33 @@ namespace whateverthefuck.src.network.messages
 {
     public class DeleteGameEntityMessage : WhateverthefuckMessage
     {
-        public EntityIdentifier Identifier { get; }
+        public DeleteGameEntityBody Body { get; private set; }
 
         public DeleteGameEntityMessage(GameEntity entity) : base(MessageType.DeleteGameEntityMessage)
         {
-            Identifier = entity.Identifier;
+            Body = new DeleteGameEntityBody(entity);
         }
 
-        public DeleteGameEntityMessage(byte[] body) : base(MessageType.DeleteGameEntityMessage)
+        protected override MessageBody GetBody()
         {
-            Identifier = new EntityIdentifier(WhateverEncoding.DecodeInt(body));
+            return Body;
         }
 
-        protected override byte[] EncodeBody()
+        protected override void SetBody(MessageBody body)
         {
-            return WhateverEncoding.EncodeInt(Identifier.Id);
-            throw new NotImplementedException();
+            Body = (DeleteGameEntityBody)body;
+        }
+    }
+
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct DeleteGameEntityBody : MessageBody
+    {
+        public int Id;
+
+        public DeleteGameEntityBody(GameEntity entity)
+        {
+            Id = entity.Identifier.Id;
         }
     }
 }

@@ -4,6 +4,7 @@ using whateverthefuck.src.network.messages;
 using whateverthefuck.src.util;
 using System.Linq;
 using System;
+using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.network
 {
@@ -51,13 +52,13 @@ namespace whateverthefuck.src.network
         {
             switch (message.MessageType)
             {
-                case MessageType.Log:
+                case MessageType.LogMessage:
                 {
                     LogMessage logMessage = (LogMessage)message;
-                    Logging.Log("Message from server: " + logMessage.Message, Logging.LoggingLevel.Info);
+                    Logging.Log("Message from server: " + logMessage.Body.Username, Logging.LoggingLevel.Info);
                 } break;
 
-                case MessageType.UpdateEntityLocations:
+                case MessageType.UpdateEntityLocationsMessage:
                 {
                     UpdateEntityLocationsMessage updateMessage = (UpdateEntityLocationsMessage)message;
                     Program.GameStateManager.UpdateLocations(updateMessage.EntityInfos);
@@ -72,13 +73,13 @@ namespace whateverthefuck.src.network
                 case MessageType.GrantControlMessage:
                 {
                     GrantControlMessage controlMessage = (GrantControlMessage)message;
-                    Program.GameStateManager.TakeControl(controlMessage.Id);
+                    Program.GameStateManager.TakeControl(controlMessage.Body.Id);
                 } break;
 
                 case MessageType.DeleteGameEntityMessage:
                 {
                     DeleteGameEntityMessage deleteMessage = (DeleteGameEntityMessage)message;
-                     Program.GameStateManager.RemoveEntity(deleteMessage.Identifier);
+                     Program.GameStateManager.RemoveEntity(new EntityIdentifier(deleteMessage.Body.Id));
                 } break;
                 default: throw new NotImplementedException();
             }
