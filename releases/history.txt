@@ -1,0 +1,9 @@
+
+	* Release Version 0.0.1.1
+	* 2019-12-06
+	* Seba
+	*
+	* Initial build
+	* Rudimentary movement
+	* Rudimentary multiplayer
+
