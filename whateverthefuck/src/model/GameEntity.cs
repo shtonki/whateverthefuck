@@ -23,6 +23,8 @@ namespace whateverthefuck.src.model
 
         public bool BlocksLOS = true;
 
+        public int LOSGraceTicks = 0; 
+
         public EntityIdentifier Identifier { get; set; }
 
         public GameEntity(EntityIdentifier identifier, EntityType type) : base(new GameCoordinate(0, 0))

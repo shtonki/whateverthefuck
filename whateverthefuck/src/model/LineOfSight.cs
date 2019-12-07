@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
 {
@@ -11,6 +12,8 @@ namespace whateverthefuck.src.model
     {
         public static IEnumerable<GameEntity> CheckLOS(GameEntity looker, IEnumerable<GameEntity> looked)
         {
+            var extras = new List<Drawable>();
+
             var rt = new List<GameEntity>();
             rt.Add(looker);
 
@@ -27,23 +30,29 @@ namespace whateverthefuck.src.model
                 PointF p3 = new PointF(target.Right, target.Bottom);
                 PointF p4 = new PointF(target.Left, target.Bottom);
 
-                var blocked = blockers.Any(blocker => blocker != target && blocker != looker && 
-                (
-                LineIntersectsRect(lookerPOV, p1, blocker) &&
-                LineIntersectsRect(lookerPOV, p2, blocker) && 
-                LineIntersectsRect(lookerPOV, p3, blocker) && 
-                LineIntersectsRect(lookerPOV, p4, blocker) 
-                ));
-#if true
+                bool visionBlockedP1 = false;
+                bool visionBlockedP2 = false;
+                bool visionBlockedP3 = false;
+                bool visionBlockedP4 = false;
 
-#else
-                (!LineIntersectsRect(lookerPOV, p1, blocker) ||
-                 !LineIntersectsRect(lookerPOV, p2, blocker) ||
-                 !LineIntersectsRect(lookerPOV, p3, blocker) ||
-                 !LineIntersectsRect(lookerPOV, p4, blocker))
-#endif
+                foreach (var blocker in blockers)
+                {
+                    if (blocker == target || blocker == looker)
+                    {
+                        continue;
+                    }
 
-                if (!blocked)
+                    visionBlockedP1 |= LineIntersectsRect(lookerPOV, p1, blocker);
+                    visionBlockedP2 |= LineIntersectsRect(lookerPOV, p2, blocker);
+                    visionBlockedP3 |= LineIntersectsRect(lookerPOV, p3, blocker);
+                    visionBlockedP4 |= LineIntersectsRect(lookerPOV, p4, blocker);
+                }
+
+
+                if (!visionBlockedP1 ||
+                    !visionBlockedP2   ||
+                    !visionBlockedP3   ||
+                    !visionBlockedP4)
                 {
                     rt.Add(target);
                 }
@@ -56,7 +65,7 @@ namespace whateverthefuck.src.model
 
         private static bool LineIntersectsRect(PointF p1, PointF p2, GameEntity ge)
         {
-            RectangleF r = new RectangleF(ge.Location.X, ge.Location.Y, ge.Size.X, ge.Size.Y);
+            RectangleF r = new RectangleF(ge.Location.X, ge.Location.Y, ge.Size.X - 0.001f, ge.Size.Y - 0.001f); ;
             return LineIntersectsLine(p1, p2, new PointF(r.X, r.Y), new PointF(r.X + r.Width, r.Y)) ||
                    LineIntersectsLine(p1, p2, new PointF(r.X + r.Width, r.Y), new PointF(r.X + r.Width, r.Y + r.Height)) ||
                    LineIntersectsLine(p1, p2, new PointF(r.X + r.Width, r.Y + r.Height), new PointF(r.X, r.Y + r.Height)) ||

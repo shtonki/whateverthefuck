@@ -49,8 +49,8 @@ namespace whateverthefuck.src.model
             }
 
             Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(Hero));
-            
-            GUI.Extras = UpdateLOS().Cast<Drawable>().ToList();
+
+            UpdateLOS();
         }
 
 
@@ -103,40 +103,22 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public class Line : Drawable
+        
+
+        private void UpdateLOS()
         {
-            public float X1;
-            public float Y1;
-            public float X2;
-            public float Y2;
-
-            public Line(GameEntity o, GameEntity e) : base(new GameCoordinate(0, 0))
-            {
-                X1 = o.Center.X;
-                Y1 = o.Center.Y;
-                X2 = e.Center.X;
-                Y2 = e.Center.Y;
-            }
-
-            public override void DrawMe(DrawAdapter drawAdapter)
-            {
-                drawAdapter.FillLine(X1, Y1, X2, Y2, Color.White);
-            }
-        }
-
-        private List<Drawable> UpdateLOS()
-        {
-            var rt = new List<Drawable>();
             var inLOS = LineOfSight.CheckLOS(Hero, GameState.AllEntities);
+
+            foreach (var e in inLOS)
+            {
+                e.LOSGraceTicks = 5;
+            }
 
             foreach (var e in GameState.AllEntities)
             {
-                e.Invisible = !inLOS.Contains(e);
-                rt.Add(new Line(Hero, e));
-                rt.Add(new Rectangle(e));
+                e.LOSGraceTicks--;
+                e.Invisible = e.LOSGraceTicks < 0;
             }
-
-            return rt;
         }
 
         public void CreateEntity(CreateEntityInfo info)
