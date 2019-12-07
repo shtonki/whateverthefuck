@@ -21,7 +21,7 @@ namespace whateverthefuck.src.model
         public GameState GameState { get; set; }
 
         private Dictionary<int, SpicyClass> SpicyDictionary = new Dictionary<int, SpicyClass>();
-        private bool UseSmoothing = false;
+        private bool UseSmoothing = true;
 
         private const int TickInterval = 10;
 
