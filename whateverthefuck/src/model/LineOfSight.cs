@@ -61,11 +61,11 @@ namespace whateverthefuck.src.model
             return rt;
         }
 
-
+        private const float Spacing = 0.005f;
 
         private static bool LineIntersectsRect(PointF p1, PointF p2, GameEntity ge)
         {
-            RectangleF r = new RectangleF(ge.Location.X, ge.Location.Y, ge.Size.X - 0.001f, ge.Size.Y - 0.001f); ;
+            RectangleF r = new RectangleF(ge.Location.X + Spacing, ge.Location.Y + Spacing, ge.Size.X - Spacing, ge.Size.Y - Spacing); ;
             return LineIntersectsLine(p1, p2, new PointF(r.X, r.Y), new PointF(r.X + r.Width, r.Y)) ||
                    LineIntersectsLine(p1, p2, new PointF(r.X + r.Width, r.Y), new PointF(r.X + r.Width, r.Y + r.Height)) ||
                    LineIntersectsLine(p1, p2, new PointF(r.X + r.Width, r.Y + r.Height), new PointF(r.X, r.Y + r.Height)) ||
