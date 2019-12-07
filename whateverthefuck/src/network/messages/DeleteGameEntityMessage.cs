@@ -11,26 +11,14 @@ namespace whateverthefuck.src.network.messages
 {
     public class DeleteGameEntityMessage : WhateverthefuckMessage
     {
-        public DeleteGameEntityBody Body { get; private set; }
-
         public DeleteGameEntityMessage() : base(MessageType.DeleteGameEntityMessage)
         {
-            Body = new DeleteGameEntityBody();
+            MessageBody = new DeleteGameEntityBody();
         }
 
         public DeleteGameEntityMessage(GameEntity entity) : base(MessageType.DeleteGameEntityMessage)
         {
-            Body = new DeleteGameEntityBody(entity);
-        }
-
-        protected override MessageBody GetBody()
-        {
-            return Body;
-        }
-
-        protected override void SetBody(MessageBody body)
-        {
-            Body = (DeleteGameEntityBody)body;
+            MessageBody = new DeleteGameEntityBody(entity);
         }
     }
 

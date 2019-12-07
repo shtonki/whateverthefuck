@@ -9,26 +9,14 @@ namespace whateverthefuck.src.network.messages
 {
     class ExampleMessage : WhateverthefuckMessage
     {
-        public ExampleBody Body { get; private set; }
-
         public ExampleMessage() : base(MessageType.ExampleMessage)
         {
-            Body = new ExampleBody(0, 0);
+            MessageBody = new ExampleBody(0, 0);
         }
 
         public ExampleMessage(int a, float b) : base(MessageType.ExampleMessage)
         {
-            Body = new ExampleBody(a, b);
-        }
-
-        protected override MessageBody GetBody()
-        {
-            return Body;
-        }
-
-        protected override void SetBody(MessageBody body)
-        {
-            Body = (ExampleBody)body;
+            MessageBody = new ExampleBody(a, b);
         }
     }
 

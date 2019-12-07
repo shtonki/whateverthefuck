@@ -12,26 +12,14 @@ namespace whateverthefuck.src.network.messages
 {
     public class CreateGameEntityMessage : WhateverthefuckMessage
     {
-        public CreateEntityInfo CreateEntityInfo { get; private set; }
-
         public CreateGameEntityMessage() : base(MessageType.CreateGameEntityMessage)
         {
-            CreateEntityInfo = new CreateEntityInfo();
+            MessageBody = new CreateEntityInfo();
         }
 
         public CreateGameEntityMessage(GameEntity hero) : base(MessageType.CreateGameEntityMessage)
         {
-            CreateEntityInfo = new CreateEntityInfo(hero);
-        }
-
-        protected override MessageBody GetBody()
-        {
-            return CreateEntityInfo;
-        }
-
-        protected override void SetBody(MessageBody body)
-        {
-            CreateEntityInfo = (CreateEntityInfo)body;
+            MessageBody = new CreateEntityInfo(hero);
         }
     }
 

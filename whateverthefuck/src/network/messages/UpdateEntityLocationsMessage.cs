@@ -57,16 +57,5 @@ namespace whateverthefuck.src.network.messages
 
             return System.Text.Encoding.ASCII.GetBytes(sb.ToString());
         }
-
-        protected override MessageBody GetBody()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void SetBody(MessageBody body)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

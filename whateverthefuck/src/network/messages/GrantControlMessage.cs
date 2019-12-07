@@ -12,26 +12,14 @@ namespace whateverthefuck.src.network.messages
 {
     public class GrantControlMessage : WhateverthefuckMessage
     {
-        public GrantControlBody Body { get; private set; }
-
         public GrantControlMessage() : base(MessageType.GrantControlMessage)
         {
-            Body = new GrantControlBody();
+            MessageBody = new GrantControlBody();
         }
 
         public GrantControlMessage(GameEntity entity) : base(MessageType.GrantControlMessage)
         {
-            Body = new GrantControlBody(entity);
-        }
-
-        protected override MessageBody GetBody()
-        {
-            return Body;
-        }
-
-        protected override void SetBody(MessageBody body)
-        {
-            Body = (GrantControlBody)body;
+            MessageBody = new GrantControlBody(entity);
         }
     }
 

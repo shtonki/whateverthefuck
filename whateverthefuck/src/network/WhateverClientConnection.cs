@@ -55,7 +55,8 @@ namespace whateverthefuck.src.network
                 case MessageType.LogMessage:
                 {
                     LogMessage logMessage = (LogMessage)message;
-                    Logging.Log("Message from server: " + logMessage.Body.Message, Logging.LoggingLevel.Info);
+                    LogBody logBody = (LogBody) message.MessageBody;
+                    Logging.Log("Message from server: " + logBody.Message, Logging.LoggingLevel.Info);
                 } break;
 
                 case MessageType.UpdateEntityLocationsMessage:
@@ -66,20 +67,21 @@ namespace whateverthefuck.src.network
 
                 case MessageType.CreateGameEntityMessage:
                 {
-                    CreateGameEntityMessage createGameEntityMessage = (CreateGameEntityMessage)message;
-                    Program.GameStateManager.CreateEntity(createGameEntityMessage.CreateEntityInfo);
+                    CreateEntityInfo info = (CreateEntityInfo)message.MessageBody;
+                    Program.GameStateManager.CreateEntity(info);
                 } break;
 
                 case MessageType.GrantControlMessage:
                 {
-                    GrantControlMessage controlMessage = (GrantControlMessage)message;
-                    Program.GameStateManager.TakeControl(controlMessage.Body.Id);
+                    GrantControlBody controlBody = (GrantControlBody) message.MessageBody;
+                    Program.GameStateManager.TakeControl(controlBody.Id);
                 } break;
 
                 case MessageType.DeleteGameEntityMessage:
                 {
                     DeleteGameEntityMessage deleteMessage = (DeleteGameEntityMessage)message;
-                     Program.GameStateManager.RemoveEntity(new EntityIdentifier(deleteMessage.Body.Id));
+                    DeleteGameEntityBody deleteBody = (DeleteGameEntityBody)message.MessageBody;
+                    Program.GameStateManager.RemoveEntity(new EntityIdentifier(deleteBody.Id));
                 } break;
                 default: throw new NotImplementedException();
             }

@@ -28,7 +28,7 @@ namespace whateverthefuck.src.network.messages
         }
 
         public MessageType MessageType { get; private set; }
-
+        public MessageBody MessageBody { get; set; }
 
         protected WhateverthefuckMessage(MessageType messageType)
         {
@@ -86,7 +86,7 @@ namespace whateverthefuck.src.network.messages
 
         protected virtual byte[] EncodeBody()
         {
-            return GetBytes(GetBody());
+            return GetBytes(MessageBody);
         }
 
         public static WhateverthefuckMessage DecodeMessage(byte[] message)
@@ -108,15 +108,16 @@ namespace whateverthefuck.src.network.messages
 
         protected virtual void DecodeBody(byte[] bs, int arrayOffset)
         {
-            MessageBody body = (MessageBody)GetBody();
+            MessageBody body = MessageBody;
             body = (MessageBody)FromBytes(bs, body, arrayOffset);
             SetBody(body);
             //return body;
         }
 
-        protected abstract MessageBody GetBody();
-
-        protected abstract void SetBody(MessageBody body);
+        protected void SetBody(MessageBody body)
+        {
+            MessageBody = body;
+        }
 
 
 
