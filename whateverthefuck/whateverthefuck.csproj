@@ -69,6 +69,7 @@
     <Compile Include="src\Program.cs" />
     <Compile Include="src\util\Coloring.cs" />
     <Compile Include="src\util\ConfigFile.cs" />
+    <Compile Include="src\util\WhateverthefuckVersion.cs" />
     <Compile Include="src\util\WhateverEncoding.cs" />
     <Compile Include="src\util\Logging.cs" />
     <Compile Include="src\util\JsonIO.cs" />

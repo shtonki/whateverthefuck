@@ -19,6 +19,8 @@ namespace whateverthefuckserver
         {
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
 
+            Logging.Log("Running version: " + WhateverthefuckVersion.CurrentVersion.ToString());
+
             ServerConnection = new WhateverConnectionListeningServer();
             ServerConnection.StartListening();
             Logging.Log("Started Listening for Connections", Logging.LoggingLevel.Info);
