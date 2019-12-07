@@ -69,6 +69,11 @@ namespace whateverthefuck.src.network.messages
                     return new UpdatePlayerControlMessage();
                 }
 
+                case MessageType.UpdateEntityLocationsMessage:
+                {
+                    return new UpdateEntityLocationsMessage();
+                }
+
                 default: throw new NotImplementedException();
             }
         }

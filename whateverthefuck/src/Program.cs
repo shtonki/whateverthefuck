@@ -34,14 +34,22 @@ namespace whateverthefuck
             PlayerCharacter exampleEntity = new PlayerCharacter(new EntityIdentifier(4));
             exampleEntity.Movements.Downwards = true;
             exampleEntity.Movements.Leftwards = true;
+            exampleEntity.Location = new GameCoordinate(0.4f, 2.2f);
+
             WhateverthefuckMessage example;
+
+            var entities = new GameEntity[] { exampleEntity, 
+                new Block(new EntityIdentifier(7), Color.Beige),
+                new Block(new EntityIdentifier(7), Color.Beige),
+            };
 
             //example = new ExampleMessage(4 , 4.20f);
             //example = new CreateGameEntityMessage(exampleEntity);
             //example = new DeleteGameEntityMessage(exampleEntity);
             //example = new GrantControlMessage(exampleEntity);
             //example = new LogMessage("Calling all Jan Michaels");
-            example = new UpdatePlayerControlMessage(exampleEntity);
+            //example = new UpdatePlayerControlMessage(exampleEntity);
+            example = new UpdateEntityLocationsMessage(entities);
 
             var bs = WhateverthefuckMessage.EncodeMessage(example);
             var rebuiltMessage = WhateverthefuckMessage.DecodeMessage(bs);

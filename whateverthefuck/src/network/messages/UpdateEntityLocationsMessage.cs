@@ -13,7 +13,7 @@ namespace whateverthefuck.src.network.messages
     {
         private const char Separator = ';';
 
-        public List<EntityLocationInfo> EntityInfos { get; }
+        public List<EntityLocationInfo> EntityInfos { get; private set; }
 
         public UpdateEntityLocationsMessage(IEnumerable<GameEntity> entities) : base(MessageType.UpdateEntityLocationsMessage)
         {
@@ -25,8 +25,16 @@ namespace whateverthefuck.src.network.messages
             }
         }
 
-        public UpdateEntityLocationsMessage(byte[] bytes) : base(MessageType.UpdateEntityLocationsMessage)
+        public UpdateEntityLocationsMessage() : base(MessageType.UpdateEntityLocationsMessage)
         {
+            EntityInfos = new List<EntityLocationInfo>();
+        }
+
+        protected override void DecodeBody(byte[] bs, int arrayOffset)
+        {
+            byte[] bytes = new byte[bs.Length - arrayOffset];
+            Array.Copy(bs, arrayOffset, bytes, 0, bytes.Length);
+
             EntityInfos = new List<EntityLocationInfo>();
 
             var str = System.Text.Encoding.ASCII.GetString(bytes);
@@ -38,8 +46,6 @@ namespace whateverthefuck.src.network.messages
                 EntityInfos.Add(EntityLocationInfo.Decode(System.Text.Encoding.ASCII.GetBytes(info)));
             }
         }
-
-        
 
         protected override byte[] EncodeBody()
         {
