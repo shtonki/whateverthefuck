@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using whateverthefuck.src.model;
 using whateverthefuck.src.model.entities;
@@ -30,10 +31,19 @@ namespace whateverthefuck
         public static void Main(String[] args)
         {
 #if true
-            WhateverthefuckMessage example = new ExampleMessage(4 , 4.20f);
+            PlayerCharacter exampleEntity = new PlayerCharacter(new EntityIdentifier(4));
+            exampleEntity.Movements.Downwards = true;
+            exampleEntity.Movements.Leftwards = true;
+            WhateverthefuckMessage example;
+
+            //example = new ExampleMessage(4 , 4.20f);
+            //example = new CreateGameEntityMessage(exampleEntity);
+            //example = new DeleteGameEntityMessage(exampleEntity);
+            //example = new GrantControlMessage(exampleEntity);
+            //example = new LogMessage("Calling all Jan Michaels");
+            example = new UpdatePlayerControlMessage(exampleEntity);
+
             var bs = WhateverthefuckMessage.EncodeMessage(example);
-
-
             var rebuiltMessage = WhateverthefuckMessage.DecodeMessage(bs);
             int i = 5;
 #else

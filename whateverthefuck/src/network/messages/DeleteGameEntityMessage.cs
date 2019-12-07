@@ -13,6 +13,11 @@ namespace whateverthefuck.src.network.messages
     {
         public DeleteGameEntityBody Body { get; private set; }
 
+        public DeleteGameEntityMessage() : base(MessageType.DeleteGameEntityMessage)
+        {
+            Body = new DeleteGameEntityBody();
+        }
+
         public DeleteGameEntityMessage(GameEntity entity) : base(MessageType.DeleteGameEntityMessage)
         {
             Body = new DeleteGameEntityBody(entity);

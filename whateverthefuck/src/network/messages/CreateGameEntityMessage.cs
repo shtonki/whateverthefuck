@@ -42,28 +42,22 @@ namespace whateverthefuck.src.network.messages
         public int Identifier;
         public float X;
         public float Y;
-        public float Z;
-        public float xd;
 
         public CreateEntityInfo(GameEntity entity) : this(
             entity.EntityType,
             entity.Identifier.Id,
             entity.Location.X,
-            entity.Location.Y, 
-            4f,
-            20f
+            entity.Location.Y
             )
         {
         }
 
-        public CreateEntityInfo(EntityType entityType, int identifier, float x, float y, float z, float xd)
+        public CreateEntityInfo(EntityType entityType, int identifier, float x, float y)
         {
             EntityType = entityType;
             Identifier = identifier;
             X = x;
             Y = y;
-            Z = z;
-            this.xd = xd;
         }
     }
 }

@@ -14,7 +14,12 @@ namespace whateverthefuck.src.network.messages
     {
         public GrantControlBody Body { get; private set; }
 
-        public GrantControlMessage(GameEntity entity) : base(MessageType.DeleteGameEntityMessage)
+        public GrantControlMessage() : base(MessageType.GrantControlMessage)
+        {
+            Body = new GrantControlBody();
+        }
+
+        public GrantControlMessage(GameEntity entity) : base(MessageType.GrantControlMessage)
         {
             Body = new GrantControlBody(entity);
         }

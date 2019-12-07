@@ -55,7 +55,7 @@ namespace whateverthefuck.src.network
                 case MessageType.LogMessage:
                 {
                     LogMessage logMessage = (LogMessage)message;
-                    Logging.Log("Message from server: " + logMessage.Body.Username, Logging.LoggingLevel.Info);
+                    Logging.Log("Message from server: " + logMessage.Body.Message, Logging.LoggingLevel.Info);
                 } break;
 
                 case MessageType.UpdateEntityLocationsMessage:

@@ -11,6 +11,12 @@ namespace whateverthefuck.src.network.messages
         {
         }
 
+        public LogMessage(string message) : base(MessageType.LogMessage)
+        {
+            Body = new LogBody(message);
+        }
+
+
         protected override MessageBody GetBody()
         {
             return Body;
@@ -26,11 +32,11 @@ namespace whateverthefuck.src.network.messages
     public struct LogBody : MessageBody
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        public string Username;
+        public string Message;
 
-        public LogBody(string username)
+        public LogBody(string message)
         {
-            Username = username;
+            Message = message;
         }
     }
 }

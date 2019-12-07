@@ -40,14 +40,34 @@ namespace whateverthefuck.src.network.messages
             switch (type)
             {
                 case MessageType.CreateGameEntityMessage:
-                    {
-                        return new CreateGameEntityMessage();
-                    }
+                {
+                    return new CreateGameEntityMessage();
+                }
 
                 case MessageType.ExampleMessage:
-                    {
-                        return new ExampleMessage();
-                    }
+                {
+                    return new ExampleMessage();
+                }
+
+                case MessageType.DeleteGameEntityMessage:
+                {
+                    return new DeleteGameEntityMessage();
+                }
+
+                case MessageType.GrantControlMessage:
+                {
+                    return new GrantControlMessage();
+                }
+
+                case MessageType.LogMessage:
+                {
+                    return new LogMessage();
+                }
+
+                case MessageType.UpdatePlayerControlMessage:
+                {
+                    return new UpdatePlayerControlMessage();
+                }
 
                 default: throw new NotImplementedException();
             }

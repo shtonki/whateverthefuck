@@ -14,6 +14,11 @@ namespace whateverthefuck.src.network.messages
 
         public UpdatePlayerControlBody Body { get; private set; }
 
+        public UpdatePlayerControlMessage() : base(MessageType.UpdatePlayerControlMessage)
+        {
+            Body = new UpdatePlayerControlBody();
+        }
+
         public UpdatePlayerControlMessage(Character pc) : base(MessageType.UpdatePlayerControlMessage)
         {
             Body = new UpdatePlayerControlBody(pc);
