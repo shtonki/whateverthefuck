@@ -30,7 +30,9 @@ namespace whateverthefuckserver.storage
             var db = client.GetDatabase(DB_NAME);
             db.CreateCollection(collectionName, new CreateCollectionOptions
             {
+#pragma warning disable CS0618 // Type or member is obsolete
                 AutoIndexId = false,
+#pragma warning restore CS0618 // Type or member is obsolete
             });
         }
 

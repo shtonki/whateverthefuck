@@ -30,9 +30,11 @@ namespace whateverthefuckserver
 
             if (false)
             {
+#pragma warning disable CS0162 // Unreachable code detected
                 GUI.CreateGameWindow();
                 GUI.ForceToDrawGameState = GameServer.GameState;
                 Logging.Log("Created Game Window", Logging.LoggingLevel.Info);
+#pragma warning restore CS0162 // Unreachable code detected
             }
         }
     }

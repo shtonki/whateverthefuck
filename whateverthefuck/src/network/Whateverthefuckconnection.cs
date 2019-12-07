@@ -35,8 +35,10 @@ namespace whateverthefuck.src.network
 
             if (LogOutgoingMessages)
             {
-                Logging.Log("-> MessageType" + message.MessageType.ToString() + ", payload: '" + 
+#pragma warning disable CS0162 // Unreachable code detected
+                Logging.Log("-> MessageType" + message.MessageType.ToString() + ", payload: '" +
                     System.Text.Encoding.ASCII.GetString(bytes) + "'", Logging.LoggingLevel.Info);
+#pragma warning restore CS0162 // Unreachable code detected
             }
         }
 
@@ -77,8 +79,10 @@ namespace whateverthefuck.src.network
 
                 if (LogIncomingMessages)
                 {
+#pragma warning disable CS0162 // Unreachable code detected
                     Logging.Log("<- MessageType" + message.MessageType.ToString() + ", payload: '" +
                         System.Text.Encoding.ASCII.GetString(BodyBuffer) + "'", Logging.LoggingLevel.Info);
+#pragma warning restore CS0162 // Unreachable code detected
                 }
 
                 HandleMessage(message);

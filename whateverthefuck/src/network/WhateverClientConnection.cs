@@ -10,7 +10,7 @@ namespace whateverthefuck.src.network
     class WhateverClientConnection : WhateverthefuckConnection
     {
 
-        private const bool ConnectToLocalhostFirst = true;
+        private const bool ConnectToLocalhostFirst = false;
 
         private const string ServerIp = "98.128.171.8";
         private const string BackupServerIp = "127.0.0.1";

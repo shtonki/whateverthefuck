@@ -31,7 +31,7 @@ namespace whateverthefuckserver
                 {
                     Storage = new Mongo();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                 }
             }).Start();

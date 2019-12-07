@@ -18,7 +18,7 @@ namespace whateverthefuck.src.util
             {
                 ConfigInfo = JsonIO.ReadFromJsonFile<ConfigInfo>(path);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ConfigInfo = new ConfigInfo();
                 ConfigInfo.LoginCredentials = new LoginCredentials("Mankey");
