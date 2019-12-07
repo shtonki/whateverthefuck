@@ -38,6 +38,9 @@ namespace whateverthefuckserver
 
             NPC mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC);
             GameState.AddEntity(mob);
+
+            Block block = (Block)GameState.EntityGenerator.GenerateEntity(EntityType.Block);
+            GameState.AddEntity(block);
         }
 
         public void AddUser(User user)

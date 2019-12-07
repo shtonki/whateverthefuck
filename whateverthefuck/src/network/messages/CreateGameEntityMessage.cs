@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.model;
@@ -15,7 +16,7 @@ namespace whateverthefuck.src.network.messages
 
         public CreateGameEntityMessage(byte[] body) : base(MessageType.CreateGameEntityMessage)
         {
-            CreateEntityInfo = CreateEntityInfo.Decode(body);
+            CreateEntityInfo = (CreateEntityInfo)FromBytes(body, CreateEntityInfo);
         }
 
         public CreateGameEntityMessage(GameEntity hero) : base(MessageType.CreateGameEntityMessage)
@@ -23,13 +24,18 @@ namespace whateverthefuck.src.network.messages
             CreateEntityInfo = new CreateEntityInfo(hero);
         }
 
+        public byte[] EncodeBodyButPublic()
+        {
+            return EncodeBody();
+        }
+
         protected override byte[] EncodeBody()
         {
-            return CreateEntityInfo.Encode();
+            return GetBytes(CreateEntityInfo);
         }
     }
 
-    public class CreateEntityInfo
+    public struct CreateEntityInfo
     {
         public EntityType EntityType { get; }
 

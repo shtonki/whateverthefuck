@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
 using whateverthefuck.src.model;
+using whateverthefuck.src.model.entities;
 using whateverthefuck.src.network;
+using whateverthefuck.src.network.messages;
 using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 
@@ -12,8 +15,33 @@ namespace whateverthefuck
 
         public static WhateverClientConnection ServerConnection { get; private set; }
 
+        struct WriteMe
+        {
+            public int Val { get; set; }
+            public string Str { get; set; }
+
+            public WriteMe(int val, string str)
+            {
+                Val = val;
+                Str = str;
+            }
+        }
+
         public static void Main(String[] args)
         {
+#if true
+            int length;
+
+            NPC npc = new NPC(new EntityIdentifier(4));
+            CreateGameEntityMessage message = new CreateGameEntityMessage(npc);
+            byte[] bs = message.EncodeBodyButPublic();
+
+            CreateGameEntityMessage reconstructedMessage = new CreateGameEntityMessage(bs);
+
+            Console.WriteLine(reconstructedMessage.CreateEntityInfo.EntityType);
+            Console.WriteLine(reconstructedMessage.CreateEntityInfo.LocationInfo.Identifier);
+#else
+
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
 
             Logging.Log("Running version: " + WhateverthefuckVersion.CurrentVersion.ToString());
@@ -29,7 +57,7 @@ namespace whateverthefuck
 
             UserLogin.Login(cf.ConfigInfo.LoginCredentials);
             Logging.Log(String.Format("Logged on to Server as {0}", cf.ConfigInfo.LoginCredentials.Username), Logging.LoggingLevel.Info);
-
+#endif
         }
     }
 }

@@ -7,6 +7,7 @@ using whateverthefuck.src.util;
 using whateverthefuck.src.network.messages;
 using whateverthefuck.src.model;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace whateverthefuck.src.network.messages
 {
@@ -16,12 +17,59 @@ namespace whateverthefuck.src.network.messages
         private const int LengthSize = 2;
         public const int HeaderSize = TypeSize + LengthSize;
 
+        class Content
+        {
+            public MessageType Type { get; }
+            public UInt16 Length { get; }
+
+            public Content(MessageType type, ushort length)
+            {
+                Type = type;
+                Length = length;
+            }
+        }
+
+        protected static byte[] GetBytes(object str)
+        {
+            int size = Marshal.SizeOf(str);
+            byte[] arr = new byte[size];
+
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(str, ptr, true);
+            Marshal.Copy(ptr, arr, 0, size);
+            Marshal.FreeHGlobal(ptr);
+            return arr;
+        }
+
+        protected static object FromBytes(byte[] arr, object str)
+        {
+            int size = Marshal.SizeOf(str.GetType());
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+
+            Marshal.Copy(arr, 0, ptr, size);
+
+            str = (object)Marshal.PtrToStructure(ptr, str.GetType());
+            Marshal.FreeHGlobal(ptr);
+
+            return str;
+        }
+
 
         public MessageType MessageType { get; }
 
         protected WhateverthefuckMessage(MessageType messageType)
         {
             MessageType = messageType;
+        }
+
+        public byte[] EncodeX()
+        {
+            byte[] contentBytes = GetBytes(EncodeBodyx());
+            byte[] headerBytes = GetBytes(new Content(MessageType, (ushort)contentBytes.Length));
+            byte[] bytes = new byte[headerBytes.Length + contentBytes.Length];
+            return headerBytes.Concat(contentBytes).ToArray();
+            //Array.Copy(headerBytes, 0, bytes, 0, headerBytes.Length);
+            //Array.Copy()
         }
 
         public byte[] Encode()
@@ -90,13 +138,22 @@ namespace whateverthefuck.src.network.messages
 
         protected abstract byte[] EncodeBody();
 
+        protected virtual object EncodeBodyx()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public abstract class MessageBody
+    {
+
     }
 
 
-    public class EntityLocationInfo
+
+    public struct EntityLocationInfo
     {
         private const char InfoSeperator = '&';
-
 
         public int Identifier { get; }
         public float X { get; }
@@ -114,7 +171,7 @@ namespace whateverthefuck.src.network.messages
             Y = y;
         }
 
-        // todo should encode to byte[] like a sane person
+        // todo should encode to byte[] like a sane person                                                                                                                     
         public string Encode()
         {
             return Identifier.ToString() + InfoSeperator + X.ToString("0.00", CultureInfo.InvariantCulture) + InfoSeperator + Y.ToString("0.00", CultureInfo.InvariantCulture);

@@ -73,6 +73,9 @@ namespace whateverthefuck.src.model
 
     public enum EntityType
     {
+        None,
+
+
         PlayerCharacter,
         Block,
         NPC,
