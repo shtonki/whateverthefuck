@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using OpenTK.Input;
 using whateverthefuck.src.control;
 using whateverthefuck.src.model.entities;
 using whateverthefuck.src.network.messages;
@@ -129,10 +130,29 @@ namespace whateverthefuck.src.model
                 }
                 UpdateLocationSemaphore.Release();
             }
-            else
-            {
         }
-    }
+
+        public void HandleClick(MouseButtonEventArgs me, GameCoordinate clicked)
+        {
+            Logging.Log(clicked.ToString());
+            if (me.Button == MouseButton.Left && me.IsPressed)
+            {
+                Logging.Log("Left down");
+            }
+            else if (me.Button == MouseButton.Left && !me.IsPressed)
+            {
+                Logging.Log("Left up");
+            }
+
+            if (me.Button == MouseButton.Right && me.IsPressed)
+            {
+                Logging.Log("Right down");
+            }
+            else if (me.Button == MouseButton.Right && !me.IsPressed)
+            {
+                Logging.Log("Right up");
+            }
+        }
 
         public void ActivateAction(GameAction gameAction)
         {
@@ -197,26 +217,6 @@ namespace whateverthefuck.src.model
                     {
                         Logging.Log("Zoom out not implemented", Logging.LoggingLevel.Info);
                         GUI.Camera?.Zoom.ZoomOut();
-                    } break;
-
-                case GameAction.MouseLeftDown:
-                    {
-                        Logging.Log("Mouse Left Down not implemented", Logging.LoggingLevel.Info);
-                    } break;
-
-                case GameAction.MouseLeftUp:
-                    {
-                        Logging.Log("Mouse Left Down not implemented", Logging.LoggingLevel.Info);
-                    }  break;
-
-                case GameAction.MouseRightDown:
-                    {
-                        Logging.Log("Mouse Right Down not implemented", Logging.LoggingLevel.Info);
-                    } break;
-
-                case GameAction.MouseRightUp:
-                    {
-                        Logging.Log("Mouse Right Up not implemented", Logging.LoggingLevel.Info);
                     } break;
 
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
