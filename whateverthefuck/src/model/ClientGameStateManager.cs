@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using whateverthefuck.src.control;
 using whateverthefuck.src.model.entities;
@@ -183,7 +184,34 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public void HandleClick(MouseButtonEventArgs me, GameCoordinate clicked)
+        public void HandleGUIClick(MouseButtonEventArgs me, GLCoordinate clicked)
+        {
+            foreach (var guiComponent in GUI.GUIComponents)
+            {
+                if (guiComponent.Contains(clicked))
+                {
+                    if (me.Button == MouseButton.Left && me.IsPressed)
+                    {
+                        guiComponent.OnLeftMouseDown();
+                    }
+                    else if (me.Button == MouseButton.Left && !me.IsPressed)
+                    {
+                        guiComponent.OnLeftMouseUp();
+                    }
+
+                    if (me.Button == MouseButton.Right && me.IsPressed)
+                    {
+                        guiComponent.OnRightMouseDown();
+                    }
+                    else if (me.Button == MouseButton.Right && !me.IsPressed)
+                    {
+                        guiComponent.OnRightMouseUp();
+                    }
+                }
+            }
+        }
+
+        public void HandleWorldClick(MouseButtonEventArgs me, GameCoordinate clicked)
         {
             if (me.Button == MouseButton.Left && me.IsPressed)
             {

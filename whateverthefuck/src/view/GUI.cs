@@ -16,6 +16,7 @@ namespace whateverthefuck.src.view
 
         public static GameState ForceToDrawGameState { get; set; }
         public static List<Drawable> Extras { get; set; } = new List<Drawable>();
+        public static List<GUIComponent> GUIComponents { get; set; } = new List<GUIComponent>();
 
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
@@ -41,16 +42,9 @@ namespace whateverthefuck.src.view
                 entities = Program.GameStateManager.GameState.AllEntities;
             }
 
-            var GUIComponents = new List<GUIComponent>()
-            {
-                new Button(new GLCoordinate(-1f, -1f), new GLCoordinate(0.1f, 0.1f)),
-
-            };
-
 
             return entities
                 .Concat(Extras)
-                .Concat(GUIComponents)
                 ;
         }
 
@@ -61,5 +55,9 @@ namespace whateverthefuck.src.view
             frame.Run(0, 0);
         }
 
+        public static void LoadGUI()
+        {
+            GUIComponents.Add(new Button(new GLCoordinate(-1f, -1f), new GLCoordinate(0.1f, 0.1f)));
+        }
     }
 }
