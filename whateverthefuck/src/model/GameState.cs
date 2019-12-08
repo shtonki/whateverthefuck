@@ -99,32 +99,47 @@ namespace whateverthefuck.src.model
                 {
                     var ishare = collision.EntityI.MovementCache.X / (collision.EntityI.MovementCache.X + collision.EntityJ.MovementCache.X);
                     var jshare = 1 - ishare;
-                    collision.EntityI.Location.X -= ishare * collision.Overlap;
-                    collision.EntityJ.Location.X += jshare * collision.Overlap;
+                    if (!float.IsNaN(ishare))
+                    { 
+                        collision.EntityI.Location.X -= ishare * collision.Overlap;
+                        collision.EntityJ.Location.X += jshare * collision.Overlap;
+                    }
                 }
 
                 else if (collision.Direction == CollisionDirection.Right)
                 {
                     var ishare = collision.EntityI.MovementCache.X / (collision.EntityI.MovementCache.X + collision.EntityJ.MovementCache.X);
                     var jshare = 1 - ishare;
-                    collision.EntityI.Location.X += ishare * collision.Overlap;
-                    collision.EntityJ.Location.X -= jshare * collision.Overlap;
+
+                    if (!float.IsNaN(ishare))
+                    {
+                        collision.EntityI.Location.X += ishare * collision.Overlap;
+                        collision.EntityJ.Location.X -= jshare * collision.Overlap;
+                    }
                 }
 
                 else if (collision.Direction == CollisionDirection.Top)
                 {
                     var ishare = collision.EntityI.MovementCache.Y / (collision.EntityI.MovementCache.Y + collision.EntityJ.MovementCache.Y);
                     var jshare = 1 - ishare;
-                    collision.EntityI.Location.Y += ishare * collision.Overlap;
-                    collision.EntityJ.Location.Y -= jshare * collision.Overlap;
+
+                    if (!float.IsNaN(ishare))
+                    {
+                        collision.EntityI.Location.Y += ishare * collision.Overlap;
+                        collision.EntityJ.Location.Y -= jshare * collision.Overlap;
+                    }
                 }
 
                 else if (collision.Direction == CollisionDirection.Bottom)
                 {
                     var ishare = collision.EntityI.MovementCache.Y / (collision.EntityI.MovementCache.Y + collision.EntityJ.MovementCache.Y);
                     var jshare = 1 - ishare;
-                    collision.EntityI.Location.Y -= ishare * collision.Overlap;
-                    collision.EntityJ.Location.Y += jshare * collision.Overlap;
+
+                    if (!float.IsNaN(ishare))
+                    {
+                        collision.EntityI.Location.Y -= ishare * collision.Overlap;
+                        collision.EntityJ.Location.Y += jshare * collision.Overlap;
+                    }
                 }
 
             }
