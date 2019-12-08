@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace whateverthefuck.src.view.guicomponents
 {
-    class Button : GUIComponent
+    class Button : GUIComponent, IClickable
     {
         private GLCoordinate Size;
         private Button(Coordinate location) : base(location)

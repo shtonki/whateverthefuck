@@ -43,7 +43,7 @@ namespace whateverthefuck.src.view
 
             var GUIComponents = new List<GUIComponent>()
             {
-                new Button(new GLCoordinate(-0.4f, 0.0f), new GLCoordinate(0.2f, 0.2f)),
+                new Button(new GLCoordinate(-1f, -1f), new GLCoordinate(0.1f, 0.1f)),
 
             };
 
