@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace whateverthefuck.src.view
 {
     public class Zoomer
     {
-        public float CurrentZoom { get; set; } = 1.8f;
+        public float CurrentZoom { get; set; } = 1.0f;
 
         private float MinZoom { get; } = 0.4f;
         private float MaxZoom { get; } = 1.8f;
@@ -42,7 +43,7 @@ namespace whateverthefuck.src.view
 
         public GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
         {
-            throw new NotImplementedException();
+            return new GameCoordinate((glCoordinate.X / Zoom.CurrentZoom + Location.X), (glCoordinate.Y / Zoom.CurrentZoom - Location.Y));
         }
     }
 
@@ -62,7 +63,7 @@ namespace whateverthefuck.src.view
             get
             {
                 if (Following?.Location == null) return new GameCoordinate(0, 0);
-                return Following.Location;
+                return Following.Center;
             }
         }
     }
