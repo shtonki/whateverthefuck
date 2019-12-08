@@ -188,15 +188,36 @@ namespace whateverthefuck.src.model
 
                 case GameAction.CameraZoomIn:
                     {
+                        Logging.Log("Zoom in not implemented", Logging.LoggingLevel.Info);
                         GUI.Camera?.Zoom.ZoomIn();
                     }
                     break;
 
                 case GameAction.CameraZoomOut:
                     {
+                        Logging.Log("Zoom out not implemented", Logging.LoggingLevel.Info);
                         GUI.Camera?.Zoom.ZoomOut();
-                    }
-                    break;
+                    } break;
+
+                case GameAction.MouseLeftDown:
+                    {
+                        Logging.Log("Mouse Left Down not implemented", Logging.LoggingLevel.Info);
+                    } break;
+
+                case GameAction.MouseLeftUp:
+                    {
+                        Logging.Log("Mouse Left Down not implemented", Logging.LoggingLevel.Info);
+                    }  break;
+
+                case GameAction.MouseRightDown:
+                    {
+                        Logging.Log("Mouse Right Down not implemented", Logging.LoggingLevel.Info);
+                    } break;
+
+                case GameAction.MouseRightUp:
+                    {
+                        Logging.Log("Mouse Right Up not implemented", Logging.LoggingLevel.Info);
+                    } break;
 
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
             }

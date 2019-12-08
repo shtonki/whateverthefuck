@@ -69,6 +69,18 @@ namespace whateverthefuck.src.view
             Input.Handle(new InputUnion(InputUnion.Directions.Down, e.Button));
         }
 
+        protected override void OnMouseWheel(MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                Input.Handle(new InputUnion(InputUnion.Directions.Down, MouseButton.Middle));
+            }
+            else
+            {
+                Input.Handle(new InputUnion(InputUnion.Directions.Up, MouseButton.Middle));
+            }
+        }
+
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             Input.Handle(new InputUnion(InputUnion.Directions.Up, e.Button));

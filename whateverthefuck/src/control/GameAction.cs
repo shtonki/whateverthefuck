@@ -17,6 +17,10 @@ namespace whateverthefuck.src.control
         HeroWalkRightwards,
         HeroWalkRightwardsStop,
 
+        MouseLeftDown,
+        MouseLeftUp,
+        MouseRightDown,
+        MouseRightUp,
 
         CameraZoomOut,
         CameraZoomIn,

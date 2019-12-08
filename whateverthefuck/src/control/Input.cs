@@ -20,9 +20,12 @@ namespace whateverthefuck.src.control
             HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, Key.D), GameAction.HeroWalkRightwards));
             HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Up, Key.D), GameAction.HeroWalkRightwardsStop));
 
-            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Button3), GameAction.CameraZoomIn));
-            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Button4), GameAction.CameraZoomOut));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Middle), GameAction.CameraZoomIn));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Up, MouseButton.Middle), GameAction.CameraZoomOut));
+
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Left), GameAction.MouseLeftDown));
         }
+
 
         public static void Handle(InputUnion input)
         {
