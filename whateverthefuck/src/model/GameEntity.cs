@@ -21,6 +21,8 @@ namespace whateverthefuck.src.model
         public GameCoordinate MovementCache { get; set; }
         public bool Movable { get; protected set; }
 
+        public bool Collidable = true;
+
         public bool BlocksLOS = true;
 
         public int LOSGraceTicks = 0; 

@@ -39,19 +39,24 @@ namespace whateverthefuckserver
             NPC mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC);
             GameState.AddEntity(mob);
 
-            Block block = (Block)GameState.EntityGenerator.GenerateEntity(EntityType.Block);
-            block.Location = new GameCoordinate(0.6f, 0.0f);
-            GameState.AddEntity(block);
+            GameEntity e = GameState.EntityGenerator.GenerateEntity(EntityType.Block);
+            e.Location = new GameCoordinate(0.6f, 0.0f);
+            GameState.AddEntity(e);
 
-            block = (Block)GameState.EntityGenerator.GenerateEntity(EntityType.Block);
-            block.Location = new GameCoordinate(0.6f, 0.9f);
-            GameState.AddEntity(block);
+            e = GameState.EntityGenerator.GenerateEntity(EntityType.Block);
+            e.Location = new GameCoordinate(0.6f, 0.9f);
+            GameState.AddEntity(e);
 #if true
             for (int i = 0; i < 10; i++)
             {
-                 block = (Block)GameState.EntityGenerator.GenerateEntity(EntityType.Block);
-                block.Location = new GameCoordinate(0.5f, i*0.1f);
-                GameState.AddEntity(block);
+
+                e = GameState.EntityGenerator.GenerateEntity(EntityType.Block);
+                if (i == 4 || i == 5)
+                {
+                    e = GameState.EntityGenerator.GenerateEntity(EntityType.Door);
+                }
+                e.Location = new GameCoordinate(0.5f, i*0.1f);
+                GameState.AddEntity(e);
             }
 #endif
         }

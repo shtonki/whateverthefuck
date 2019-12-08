@@ -116,10 +116,12 @@ namespace whateverthefuck.src.model
             for (int i = 0; i < EntityList.Count; i++)
             {
                 var entityI = EntityList[i];
+                if (!entityI.Collidable) { continue; }
 
                 for (int j = i+1; j < EntityList.Count; j++)
                 {
                     var entityJ = EntityList[j];
+                    if (!entityJ.Collidable) { continue; }
 
                     if (!entityI.Movable && !entityJ.Movable) { continue; }
 

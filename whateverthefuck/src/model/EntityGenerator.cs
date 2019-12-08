@@ -36,6 +36,11 @@ namespace whateverthefuck.src.model
                     return new PlayerCharacter(IdGenerator.GenerateNextIdentifier());
                 }
 
+                case EntityType.Door:
+                {
+                    return new Door(IdGenerator.GenerateNextIdentifier());
+                }
+
                 default: throw new Exception();
             }
         }
