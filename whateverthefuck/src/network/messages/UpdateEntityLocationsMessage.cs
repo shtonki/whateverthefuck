@@ -32,10 +32,15 @@ namespace whateverthefuck.src.network.messages
 
         protected override void DecodeBody(byte[] bs, int arrayOffset)
         {
+            EntityInfos = new List<EntityLocationInfo>();
+
+            if (bs.Length == 0)
+            {
+                return;
+            }
+
             byte[] bytes = new byte[bs.Length - arrayOffset];
             Array.Copy(bs, arrayOffset, bytes, 0, bytes.Length);
-
-            EntityInfos = new List<EntityLocationInfo>();
 
             var str = System.Text.Encoding.ASCII.GetString(bytes);
 

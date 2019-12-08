@@ -17,13 +17,13 @@ namespace whateverthefuck.src.model
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
         public EntityType EntityType { get; }
-        
-        public GameCoordinate MovementCache { get; set; }
+
+        public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
         public bool Movable { get; protected set; }
 
         public bool Collidable = true;
 
-        public bool BlocksLOS = true;
+        public bool BlocksLOS { get; protected set; } = true;
 
         public int LOSGraceTicks = 0; 
 
@@ -87,5 +87,6 @@ namespace whateverthefuck.src.model
         Block,
         NPC,
         Door,
+        Floor,
     }
 }

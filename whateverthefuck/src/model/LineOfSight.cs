@@ -61,7 +61,7 @@ namespace whateverthefuck.src.model
             return rt;
         }
 
-        private const float Spacing = 0.005f;
+        private const float Spacing = 0;
 
         private static bool LineIntersectsRect(PointF p1, PointF p2, GameEntity ge)
         {
@@ -88,7 +88,7 @@ namespace whateverthefuck.src.model
             q = (l1p1.Y - l2p1.Y) * (l1p2.X - l1p1.X) - (l1p1.X - l2p1.X) * (l1p2.Y - l1p1.Y);
             float s = q / d;
 
-            if( r < 0 || r > 1 || s < 0 || s > 1 )
+            if( r <= 0 || r >= 1 || s <= 0 || s >= 1 )
             {
                 return false;
             }

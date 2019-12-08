@@ -41,6 +41,11 @@ namespace whateverthefuck.src.model
                     return new Door(IdGenerator.GenerateNextIdentifier());
                 }
 
+                case EntityType.Floor:
+                {
+                    return new Floor(IdGenerator.GenerateNextIdentifier());
+                }
+
                 default: throw new Exception();
             }
         }

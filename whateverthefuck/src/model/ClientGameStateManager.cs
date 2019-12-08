@@ -52,6 +52,8 @@ namespace whateverthefuck.src.model
             Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(Hero));
 
             UpdateLOS();
+
+            GameState.UpdateLists();
         }
 
 

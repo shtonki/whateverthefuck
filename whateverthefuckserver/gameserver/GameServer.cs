@@ -57,6 +57,16 @@ namespace whateverthefuckserver
                 }
                 e.Location = new GameCoordinate(0.5f, i*0.1f);
                 GameState.AddEntity(e);
+
+                if (i > 0 && i < 9)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        e = GameState.EntityGenerator.GenerateEntity(EntityType.Floor);
+                        e.Location = new GameCoordinate(0.6f + 0.1f * j, i * 0.1f);
+                        GameState.AddEntity(e);
+                    }
+                }
             }
 #endif
         }

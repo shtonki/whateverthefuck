@@ -49,6 +49,7 @@
     <Compile Include="src\model\entities\Block.cs" />
     <Compile Include="src\model\entities\Character.cs" />
     <Compile Include="src\model\entities\Door.cs" />
+    <Compile Include="src\model\entities\Floor.cs" />
     <Compile Include="src\model\entities\NPC.cs" />
     <Compile Include="src\model\GameCoordinate.cs" />
     <Compile Include="src\model\GameEntity.cs" />

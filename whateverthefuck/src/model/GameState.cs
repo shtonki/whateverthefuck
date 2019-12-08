@@ -13,8 +13,32 @@ namespace whateverthefuck.src.model
     public class GameState
     {
         private List<GameEntity> EntityList { get; } = new List<GameEntity>();
+        private List<GameEntity> EntityListSafe { get; set; } = new List<GameEntity>();
 
-        public IEnumerable<GameEntity> AllEntities => EntityList;
+        private List<GameEntity> RemoveUs = new List<GameEntity>();
+        private List<GameEntity> AddUs = new List<GameEntity>();
+        private object LockSafeList = new object();
+
+
+        public IEnumerable<GameEntity> AllEntities => EntityListSafe;
+
+        public void UpdateLists()
+        {
+            lock (LockSafeList)
+            {
+                foreach (var removeMe in RemoveUs)
+                {
+                    EntityList.Remove(removeMe);
+                }
+
+                EntityList.AddRange(AddUs);
+
+                RemoveUs.Clear();
+                AddUs.Clear();
+
+                EntityListSafe = new List<GameEntity>(EntityList);
+            }
+        }
 
         private IdentifierGenerator IdGenerator = new IdentifierGenerator();
 
@@ -27,18 +51,25 @@ namespace whateverthefuck.src.model
 
         public void AddEntity(GameEntity entity)
         {
-            EntityList.Add(entity);
+            lock (LockSafeList)
+            {
+                EntityList.Add(entity);
+            }
+
             Logging.Log("Added ID: " + entity.Identifier.Id);
         }
 
         public void RemoveEntity(GameEntity entity)
         {
-            EntityList.Remove(entity);
+            lock (LockSafeList)
+            {
+                EntityList.Remove(entity);
+            }
         }
 
         public void RemoveEntity(EntityIdentifier id)
         {
-            EntityList.RemoveAll(e => e.Identifier.Id == id.Id);
+            RemoveEntity(GetEntityById(id.Id));
         }
 
         public GameEntity GetEntityById(int id)
@@ -101,12 +132,14 @@ namespace whateverthefuck.src.model
 
         public void Step()
         {
-            foreach (var entity in EntityList)
+            foreach (var entity in AllEntities)
             {
                 entity.Step();
             }
 
             HandleCollisions();
+
+            UpdateLists();
         }
 
         private List<CollisionRecord> DetectCollisions()

@@ -177,6 +177,25 @@ namespace whateverthefuck.src.network.messages
 
             return str;
         }
+
+        public override string ToString()
+        {
+            StringBuilder bodybuild = new StringBuilder();
+            var bb = EncodeBody();
+
+
+            bodybuild.Append(Enum.GetName(typeof(MessageType), MessageType));
+
+            bodybuild.Append("<");
+            foreach (var b in bb)
+            {
+                bodybuild.Append(b.ToString());
+                bodybuild.Append(",");
+            }
+            bodybuild.Append(">");
+
+            return bodybuild.ToString();
+        }
     }
 
     public interface MessageBody
