@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using whateverthefuck.src.model;
+using whateverthefuck.src.view.guicomponents;
 
 namespace whateverthefuck.src.view
 {
@@ -39,8 +41,16 @@ namespace whateverthefuck.src.view
                 entities = Program.GameStateManager.GameState.AllEntities;
             }
 
+            var GUIComponents = new List<GUIComponent>()
+            {
+                new Button(new GLCoordinate(-1f, -1f), new GLCoordinate(0.1f, 0.1f)),
+
+            };
+
+
             return entities
                 .Concat(Extras)
+                .Concat(GUIComponents)
                 ;
         }
 

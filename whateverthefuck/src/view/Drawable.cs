@@ -51,4 +51,5 @@ namespace whateverthefuck.src.view
             Location = location;
         }
     }
+
 }
