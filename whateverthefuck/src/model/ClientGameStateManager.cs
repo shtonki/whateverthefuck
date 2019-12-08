@@ -185,23 +185,22 @@ namespace whateverthefuck.src.model
 
         public void HandleClick(MouseButtonEventArgs me, GameCoordinate clicked)
         {
-            Logging.Log(clicked.ToString());
             if (me.Button == MouseButton.Left && me.IsPressed)
             {
-                Logging.Log("Left down");
+
             }
             else if (me.Button == MouseButton.Left && !me.IsPressed)
             {
-                Logging.Log("Left up");
+
             }
 
             if (me.Button == MouseButton.Right && me.IsPressed)
             {
-                Logging.Log("Right down");
+
             }
             else if (me.Button == MouseButton.Right && !me.IsPressed)
             {
-                Logging.Log("Right up");
+
             }
         }
 
@@ -259,14 +258,12 @@ namespace whateverthefuck.src.model
 
                 case GameAction.CameraZoomIn:
                     {
-                        Logging.Log("Zoom in not implemented", Logging.LoggingLevel.Info);
                         GUI.Camera?.Zoom.ZoomIn();
                     }
                     break;
 
                 case GameAction.CameraZoomOut:
                     {
-                        Logging.Log("Zoom out not implemented", Logging.LoggingLevel.Info);
                         GUI.Camera?.Zoom.ZoomOut();
                     } break;
 
