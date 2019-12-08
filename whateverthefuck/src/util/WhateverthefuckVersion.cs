@@ -15,7 +15,7 @@ namespace whateverthefuck.src.util
 
         private const short Pre = short.MaxValue;
 
-        public static WhateverthefuckVersion CurrentVersion => new WhateverthefuckVersion(0, 0, 1, Pre);
+        public static WhateverthefuckVersion CurrentVersion => new WhateverthefuckVersion(0, 0, 1, 2);
 
         private WhateverthefuckVersion(short major, short minor, short build, short revision)
         {
