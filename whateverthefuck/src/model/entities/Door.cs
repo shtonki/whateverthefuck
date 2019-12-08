@@ -10,10 +10,11 @@ namespace whateverthefuck.src.model.entities
     /// <summary>
     /// Doors are defined as holes where there are no blocks.
     /// </summary>
-    class Door : GameEntity
+    public class Door : GameEntity
     {
-        Door(EntityIdentifier identifier) : base(identifier, EntityType.Door)
+        public Door(EntityIdentifier identifier) : base(identifier, EntityType.Door)
         {
+            Collidable = false;
         }
     }
 }

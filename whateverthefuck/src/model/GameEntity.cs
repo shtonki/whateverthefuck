@@ -13,12 +13,19 @@ namespace whateverthefuck.src.model
 {
     abstract public class GameEntity : Drawable
     {
+
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
         public EntityType EntityType { get; }
         
-        public GameCoordinate MovementCache { get; set; } // retains the last movement made
+        public GameCoordinate MovementCache { get; set; }
         public bool Movable { get; protected set; }
+
+        public bool Collidable = true;
+
+        public bool BlocksLOS = true;
+
+        public int LOSGraceTicks = 0; 
 
         public EntityIdentifier Identifier { get; set; }
 
@@ -38,14 +45,14 @@ namespace whateverthefuck.src.model
 
         protected Color DrawColor = Color.Black;
 
-        public override void Draw(DrawAdapter drawAdapter)
+        public override void DrawMe(DrawAdapter drawAdapter)
         {
             float x1 = Location.X;
             float y1 = Location.Y;
             float x2 = x1 + Size.X;
             float y2 = y1 + Size.Y;
 
-            drawAdapter.FillRectangle(x1, y1, x2, y2, DrawColor, Rotation);
+            drawAdapter.FillRectangle(x1, y1, x2, y2, DrawColor);
         }
 
         public virtual void Step()
