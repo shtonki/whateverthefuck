@@ -25,8 +25,8 @@ namespace whateverthefuck.src.control
 
             HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Left), GameAction.MouseLeftDown));
             HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Left), GameAction.MouseLeftUp));
-            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Left), GameAction.MouseRightDown));
-            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Left), GameAction.MouseRightUp));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Right), GameAction.MouseRightDown));
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Right), GameAction.MouseRightUp));
         }
 
 
