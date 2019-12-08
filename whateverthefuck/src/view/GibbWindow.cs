@@ -39,9 +39,26 @@ namespace whateverthefuck.src.view
             if (LoadResetEvent != null) LoadResetEvent.Set();
         }
 
+        private int LastSecond;
+        private int RenderCounter;
+
+
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+
+            var newSecond = DateTime.Now.Second;
+
+            if (newSecond == LastSecond)
+            {
+                RenderCounter++;
+            }
+            else
+            {
+                LastSecond = newSecond;
+                Title = RenderCounter.ToString();
+                RenderCounter = 0;
+            }
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
