@@ -36,6 +36,21 @@ namespace whateverthefuck.src.view
             GL.End();
         }
 
+        public void TraceRectangle(float x1, float y1, float x2, float y2, Color c, float width = 1)
+        {
+            GL.Color4(c);
+
+            GL.LineWidth(width);
+            GL.Begin(PrimitiveType.LineLoop);
+
+            GL.Vertex2(x1, y1);
+            GL.Vertex2(x1, y2);
+            GL.Vertex2(x2, y2);
+            GL.Vertex2(x2, y1);
+
+            GL.End();
+        }
+
         public void FillLine(float xorg, float yorg, float xend, float yend, Color c)
         {
 

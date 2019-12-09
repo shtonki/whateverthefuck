@@ -25,7 +25,7 @@ namespace whateverthefuck.src.model
 
             foreach (var target in looked)
             {
-                if (ShowOutlines)
+                if (true)
                 {
                     extras.Add(new view.Rectangle(target));
                 }
