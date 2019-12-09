@@ -49,14 +49,13 @@ namespace whateverthefuck.src.model
             EntityGenerator = new EntityGenerator(IdGenerator);
         }
 
-        public void AddEntity(GameEntity entity)
+        public void AddEntities(params GameEntity[] entities)
         {
             lock (LockSafeList)
             {
-                EntityList.Add(entity);
+                EntityList.AddRange(entities);
             }
 
-            Logging.Log("Added ID: " + entity.Identifier.Id);
         }
 
         public void RemoveEntity(GameEntity entity)

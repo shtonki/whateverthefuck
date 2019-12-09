@@ -105,7 +105,7 @@ namespace whateverthefuck.src.model
             var entity = GameState.EntityGenerator.GenerateEntity((EntityType)info.EntityType);
             entity.Identifier = new EntityIdentifier(info.Identifier);
             entity.Location = new GameCoordinate(info.X, info.Y);
-            GameState.AddEntity(entity);
+            GameState.AddEntities(entity);
         }
 
         public void RemoveEntity(EntityIdentifier id)

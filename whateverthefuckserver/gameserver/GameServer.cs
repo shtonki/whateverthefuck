@@ -37,38 +37,10 @@ namespace whateverthefuckserver
             }).Start();
 
             NPC mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC);
-            GameState.AddEntity(mob);
+            GameState.AddEntities(mob);
 
-            GameEntity e = GameState.EntityGenerator.GenerateEntity(EntityType.Block);
-            e.Location = new GameCoordinate(0.6f, 0.0f);
-            GameState.AddEntity(e);
-
-            e = GameState.EntityGenerator.GenerateEntity(EntityType.Block);
-            e.Location = new GameCoordinate(0.6f, 0.9f);
-            GameState.AddEntity(e);
-#if true
-            for (int i = 0; i < 10; i++)
-            {
-
-                e = GameState.EntityGenerator.GenerateEntity(EntityType.Block);
-                if (i == 4 || i == 5)
-                {
-                    e = GameState.EntityGenerator.GenerateEntity(EntityType.Door);
-                }
-                e.Location = new GameCoordinate(0.5f, i*0.1f);
-                GameState.AddEntity(e);
-
-                if (i > 0 && i < 9)
-                {
-                    for (int j = 0; j < 5; j++)
-                    {
-                        e = GameState.EntityGenerator.GenerateEntity(EntityType.Floor);
-                        e.Location = new GameCoordinate(0.6f + 0.1f * j, i * 0.1f);
-                        GameState.AddEntity(e);
-                    }
-                }
-            }
-#endif
+            var house = GameState.EntityGenerator.GenerateHouse(5, 5);
+            GameState.AddEntities(house.ToArray());
         }
 
         public void AddUser(User user)
@@ -106,7 +78,7 @@ namespace whateverthefuckserver
         {
             var pc = GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter);
             pc.Location = new GameCoordinate(0, 0);
-            GameState.AddEntity(pc);
+            GameState.AddEntities(pc);
             user.HeroIdentifier = pc.Identifier;
             SendMessageToAllPlayers(new CreateGameEntityMessage(pc));
             user.PlayerConnection.SendMessage(new GrantControlMessage((PlayerCharacter)pc));
