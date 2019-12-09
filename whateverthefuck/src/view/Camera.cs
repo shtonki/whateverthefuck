@@ -43,7 +43,7 @@ namespace whateverthefuck.src.view
 
         public GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
         {
-            return new GameCoordinate((glCoordinate.X / Zoom.CurrentZoom + Location.X), (glCoordinate.Y / Zoom.CurrentZoom - Location.Y));
+            return new GameCoordinate((glCoordinate.X / Zoom.CurrentZoom + Location.X), (-glCoordinate.Y / Zoom.CurrentZoom + Location.Y));
         }
     }
 

@@ -128,6 +128,7 @@ namespace whateverthefuckserver
 
             var es = GameState.AllEntities.Where(e => e.Movable);
             SendMessageToAllPlayers(new UpdateEntityLocationsMessage(es));
+            Logging.Log("Sent updates on " + es.Count());
         }
     }
 }

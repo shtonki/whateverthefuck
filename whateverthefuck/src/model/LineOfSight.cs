@@ -10,7 +10,7 @@ namespace whateverthefuck.src.model
 {
     class LineOfSight
     {
-        private const bool ShowOutlines = false;
+        private const bool ShowOutlines = true;
 
         public static IEnumerable<GameEntity> CheckLOS(GameEntity looker, IEnumerable<GameEntity> looked)
         {
