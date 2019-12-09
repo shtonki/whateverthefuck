@@ -188,14 +188,24 @@ namespace whateverthefuck.src.model
             }
         }
 
+        private GameEntity GetEntityAtLocation(GameCoordinate location)
+        {
+            var mp = new MousePicker();
+            mp.Center = location;
+            var picked = GameState.Intersects(mp);
+            if (picked.Count() == 0) { return null; }
+            return picked.First();
+        }
+
         public void HandleWorldClick(MouseButtonEventArgs me, GameCoordinate clickLocation)
         {
             if (me.Button == MouseButton.Left && me.IsPressed)
             {
-                var mp = new MousePicker();
-                mp.Center = clickLocation;
-                var picked = GameState.Intersects(mp);
-                Logging.Log(picked.Count().ToString());
+                var ge = GetEntityAtLocation(clickLocation);
+                if (ge != null)
+                {
+                    Logging.Log(ge.ToString());
+                }
             }
             else if (me.Button == MouseButton.Left && !me.IsPressed)
             {

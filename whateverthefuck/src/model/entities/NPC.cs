@@ -3,12 +3,13 @@ using System.Drawing;
 
 namespace whateverthefuck.src.model.entities
 {
-    public class NPC : GameEntity
+    public class NPC : Character
     {
         public NPC(EntityIdentifier identifier) : base(identifier, EntityType.NPC)
         {
             DrawColor = Color.Red;
             Movable = true;
+
         }
 
         int ctr = 0;

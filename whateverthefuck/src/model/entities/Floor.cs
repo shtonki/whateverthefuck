@@ -15,7 +15,7 @@ namespace whateverthefuck.src.model.entities
             Collidable = false;
             BlocksLOS = false;
             DrawColor = Color.AntiqueWhite;
-            Height = -1;
+            Height = 0;
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)

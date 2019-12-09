@@ -8,7 +8,7 @@ namespace whateverthefuck.src.model.entities
         public Block(EntityIdentifier id, Color color) : base(id, EntityType.Block)
         {
             DrawColor = color;
-            Height = 3;
+            Height = 100;
         }
     }
 }

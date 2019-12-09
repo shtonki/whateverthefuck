@@ -15,7 +15,7 @@ namespace whateverthefuck.src.model.entities
         public Door(EntityIdentifier identifier) : base(identifier, EntityType.Door)
         {
             Collidable = false;
-            Height = 2;
+            Height = 15;
         }
     }
 }

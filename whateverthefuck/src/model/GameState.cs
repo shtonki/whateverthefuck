@@ -161,7 +161,7 @@ namespace whateverthefuck.src.model
         {
             List<GameEntity> rt = new List<GameEntity>();
 
-            foreach (var entity in EntityList)
+            foreach (var entity in EntityListSafe)
             {
                 if (e != entity && DetectCollisions(e, entity).HasValue)
                 {

@@ -13,6 +13,8 @@ namespace whateverthefuck.src.model.entities
         public Character(EntityIdentifier identifier, EntityType entityType) : base(identifier, entityType)
         {
             Movable = true;
+
+            Height = 10;
         }
 
         public void SetMovementUpwards(bool move)
