@@ -15,19 +15,19 @@ namespace whateverthefuck.src.view.guicomponents
         public Button(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
             BackColor = Color.DarkGoldenrod;
-            OnLeftMouseDown += () =>
+            OnLeftMouseDown += (a) =>
             {
                 Logging.Log(this.GetType() + " was Left Pressed.");
             };
-            OnLeftMouseUp += () =>
+            OnLeftMouseUp += (a) =>
             {
                 Logging.Log(this.GetType() + " was Left Released.");
             };
-            OnRightMouseDown += () =>
+            OnRightMouseDown += (a) =>
             {
                 Logging.Log(this.GetType() + " was Right Pressed.");
             };
-            OnRightMouseUp += () =>
+            OnRightMouseUp += (a) =>
             {
                 Logging.Log(this.GetType() + " was Right Released.");
             };

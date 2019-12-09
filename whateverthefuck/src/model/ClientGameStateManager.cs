@@ -161,28 +161,28 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public void HandleGUIClick(MouseButtonEventArgs me, GLCoordinate clicked)
+        public void HandleGUIClick(MouseButtonEventArgs me, GLCoordinate clickedLocation)
         {
             foreach (var guiComponent in GUI.GUIComponents)
             {
-                if (guiComponent.Contains(clicked))
+                if (guiComponent.Contains(clickedLocation))
                 {
                     if (me.Button == MouseButton.Left && me.IsPressed)
                     {
-                        guiComponent.OnLeftMouseDown();
+                        guiComponent.OnLeftMouseDown(clickedLocation);
                     }
                     else if (me.Button == MouseButton.Left && !me.IsPressed)
                     {
-                        guiComponent.OnLeftMouseUp();
+                        guiComponent.OnLeftMouseUp(clickedLocation);
                     }
 
                     if (me.Button == MouseButton.Right && me.IsPressed)
                     {
-                        guiComponent.OnRightMouseDown();
+                        guiComponent.OnRightMouseDown(clickedLocation);
                     }
                     else if (me.Button == MouseButton.Right && !me.IsPressed)
                     {
-                        guiComponent.OnRightMouseUp();
+                        guiComponent.OnRightMouseUp(clickedLocation);
                     }
                 }
             }

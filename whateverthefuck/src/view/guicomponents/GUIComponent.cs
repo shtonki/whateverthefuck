@@ -14,10 +14,10 @@ namespace whateverthefuck.src.view.guicomponents
         protected GLCoordinate Size;
         protected Color BackColor;
         private Border Border;
-        public Action OnLeftMouseDown = () => { };
-        public Action OnLeftMouseUp = () => { };
-        public Action OnRightMouseDown= () => { };
-        public Action OnRightMouseUp = () => { };
+        public Action<GLCoordinate> OnLeftMouseDown   = (clickedLocation) => { };
+        public Action<GLCoordinate> OnLeftMouseUp     = (clickedLocation) => { };
+        public Action<GLCoordinate> OnRightMouseDown  = (clickedLocation) => { };
+        public Action<GLCoordinate> OnRightMouseUp    = (clickedLocation) => { };
 
         protected GUIComponent(GLCoordinate location, GLCoordinate size) : base(location)
         {

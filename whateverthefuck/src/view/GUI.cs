@@ -61,7 +61,7 @@ namespace whateverthefuck.src.view
         {
             GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
 
-            Frame f = new Frame(new GLCoordinate(-0.4f, -0.4f), new GLCoordinate(0.5f, 0.5f));
+            DraggablePanel f = new DraggablePanel(new GLCoordinate(-0.4f, -0.4f), new GLCoordinate(0.5f, 0.5f));
             Button b1 = new Button(new GLCoordinate(0.1f, 0.1f), new GLCoordinate(0.1f, 0.1f));
             Button b2 = new Button(new GLCoordinate(0.2f, 0.1f), new GLCoordinate(0.1f, 0.1f));
             Button b3 = new Button(new GLCoordinate(0.1f, 0.2f), new GLCoordinate(0.1f, 0.1f));
