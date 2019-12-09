@@ -32,7 +32,7 @@ namespace whateverthefuck.src.view
     public abstract class Camera
     {
         public virtual Coordinate Location { get; protected set; }
-        public virtual Zoomer Zoom { get; }
+        public Zoomer Zoom { get; } = new Zoomer();
 
         public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
         {
@@ -49,8 +49,6 @@ namespace whateverthefuck.src.view
 
     class FollowCamera : Camera
     {
-        public override Zoomer Zoom { get; } = new Zoomer();
-
         private GameEntity Following;
 
         public FollowCamera(GameEntity following)

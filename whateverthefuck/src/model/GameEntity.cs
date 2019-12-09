@@ -15,11 +15,12 @@ namespace whateverthefuck.src.model
     {
 
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
+        public int Height { get; protected set; } = 1;
 
         public EntityType EntityType { get; }
 
         public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
-        public bool Movable { get; protected set; }
+        public bool Movable { get; protected set; } = false;
 
         public bool Collidable = true;
 
@@ -33,6 +34,9 @@ namespace whateverthefuck.src.model
         {
             Identifier = identifier;
             EntityType = type;
+
+            //debug
+            Visible = true;
         }
 
         public float Left => Location.X;
@@ -71,6 +75,11 @@ namespace whateverthefuck.src.model
     {
         public int Id { get; }
 
+        private const int InvalidId = -1;
+
+        public bool IsValid => Id != InvalidId;
+        public static EntityIdentifier Invalid => new EntityIdentifier(InvalidId);
+
         public EntityIdentifier(int id)
         {
             Id = id;
@@ -82,6 +91,7 @@ namespace whateverthefuck.src.model
     {
         None,
 
+        GameMechanic,
 
         PlayerCharacter,
         Block,

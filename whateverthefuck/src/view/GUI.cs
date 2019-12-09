@@ -15,7 +15,7 @@ namespace whateverthefuck.src.view
         public static Camera Camera { get; set; }
 
         public static GameState ForceToDrawGameState { get; set; }
-        public static List<Drawable> Extras { get; set; } = new List<Drawable>();
+        public static List<Drawable> DebugInfo { get; set; } = new List<Drawable>();
         public static List<GUIComponent> GUIComponents { get; set; } = new List<GUIComponent>();
 
         /// <summary>
@@ -24,6 +24,8 @@ namespace whateverthefuck.src.view
         /// </summary>
         public static void CreateGameWindow()
         {
+            Camera = new StaticCamera(new GameCoordinate(0, 0));
+
             ManualResetEventSlim loadre = new ManualResetEventSlim();
             Thread t = new Thread(LaunchGameWindow);
             t.Start(loadre);
@@ -44,7 +46,7 @@ namespace whateverthefuck.src.view
 
 
             return entities
-                .Concat(Extras)
+                .Concat(DebugInfo)
                 ;
         }
 
@@ -57,7 +59,7 @@ namespace whateverthefuck.src.view
 
         public static void LoadGUI()
         {
-            GUIComponents.Add(new Button(new GLCoordinate(-1f, -1f), new GLCoordinate(0.1f, 0.1f)));
+            GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
         }
     }
 }

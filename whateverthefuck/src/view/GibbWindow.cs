@@ -106,16 +106,14 @@ namespace whateverthefuck.src.view
             }
         }
 
-        //@incomplete: throws exception if there are clicks before camera is loaded. 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            var gl = new GLCoordinate(e.X * 2.0f / ClientSize.Width - 1, e.Y * 2.0f / ClientSize.Height - 1);
+            var gl = new GLCoordinate(e.X * 2.0f / ClientSize.Width - 1, -(e.Y * 2.0f / ClientSize.Height - 1));
             GameCoordinate gc = GUI.Camera.GLToGameCoordinate(gl);
             Program.GameStateManager.HandleGUIClick(e, gl);
             Program.GameStateManager.HandleWorldClick(e, gc);
         }
 
-        //@incomplete: throws exception if there are clicks before camera is loaded. 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             var gl = new GLCoordinate(e.X * 2.0f / ClientSize.Width - 1, e.Y * 2.0f / ClientSize.Height - 1);

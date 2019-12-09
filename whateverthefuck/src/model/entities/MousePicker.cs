@@ -8,14 +8,13 @@ using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model.entities
 {
-    class Floor : GameEntity
+    class MousePicker : GameEntity
     {
-        public Floor(EntityIdentifier id) : base(id, EntityType.Floor)
+        public MousePicker() : base(EntityIdentifier.Invalid, EntityType.GameMechanic)
         {
-            Collidable = false;
-            BlocksLOS = false;
-            DrawColor = Color.AntiqueWhite;
-            Height = -1;
+            Visible = true;
+            DrawColor = Color.CornflowerBlue;
+            Size = new GameCoordinate(0.1f, 0.1f);
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)

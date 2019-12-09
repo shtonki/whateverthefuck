@@ -29,17 +29,42 @@ namespace whateverthefuck.src.view
         }
     }
 
+
+    public class Rectangle : Drawable
+    {
+        public float X1;
+        public float Y1;
+        public float X2;
+        public float Y2;
+
+        public Rectangle(GameEntity o) : base(new GameCoordinate(0, 0))
+        {
+            X1 = o.Left;
+            Y1 = o.Bottom;
+            X2 = o.Right;
+            Y2 = o.Top;
+        }
+
+        public override void DrawMe(DrawAdapter drawAdapter)
+        {
+            drawAdapter.FillLine(X1, Y1, X2, Y1, Color.White);
+            drawAdapter.FillLine(X2, Y1, X2, Y2, Color.White);
+            drawAdapter.FillLine(X2, Y2, X1, Y2, Color.White);
+            drawAdapter.FillLine(X1, Y2, X1, Y1, Color.White);
+        }
+    }
+
     public abstract class Drawable
     {
         protected float Rotation { get; set; } = 0;
         public Coordinate Location { get; set; }
 
-        public bool Invisible { get; set; }
+        public bool Visible { get; set; } = true;
 
         public abstract void DrawMe(DrawAdapter drawAdapter);
         public void Draw(DrawAdapter drawAdapter)
         {
-            if (!Invisible)
+            if (Visible)
             {
                 DrawMe(drawAdapter);
             }

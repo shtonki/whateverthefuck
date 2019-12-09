@@ -25,26 +25,31 @@ namespace whateverthefuck.src.network
         private static NetworkStream ConnectToServer()
         {
             TcpClient ServerConnection;
-
-            try
+            while (true)
             {
                 if (ConnectToLocalhostFirst)
                 {
-                    throw new SocketException();
+                    try
+                    {
+                        ServerConnection = new TcpClient(BackupServerIp, ServerPort);
+                        break;
+                    }
+                    catch (SocketException)
+                    {
+                        Logging.Log("Failed to connect to Localhost");
+                    }
                 }
-                else
+                try
                 {
                     ServerConnection = new TcpClient(ServerIp, ServerPort);
-                    Logging.Log("Connected to main server.");
+                    break;
                 }
-            }
-            catch (SocketException)
-            {
-                Logging.Log("Failed to connect to main server, attempting to connect to backup.");
-                ServerConnection = new TcpClient(BackupServerIp, ServerPort);
-                Logging.Log("Connected to backup server.");
-            }
+                catch (SocketException)
+                {
+                    Logging.Log("Failed to connect to main server.");
+                }
 
+            }
             return ServerConnection.GetStream();
         }
 

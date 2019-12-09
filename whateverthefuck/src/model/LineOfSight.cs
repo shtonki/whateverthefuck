@@ -10,6 +10,8 @@ namespace whateverthefuck.src.model
 {
     class LineOfSight
     {
+        private const bool ShowOutlines = false;
+
         public static IEnumerable<GameEntity> CheckLOS(GameEntity looker, IEnumerable<GameEntity> looked)
         {
             var extras = new List<Drawable>();
@@ -23,6 +25,11 @@ namespace whateverthefuck.src.model
 
             foreach (var target in looked)
             {
+                if (ShowOutlines)
+                {
+                    extras.Add(new view.Rectangle(target));
+                }
+
                 if (target == looker) { continue; }
 
                 PointF p1 = new PointF(target.Left, target.Top);
@@ -37,7 +44,9 @@ namespace whateverthefuck.src.model
 
                 foreach (var blocker in blockers)
                 {
-                    if (blocker == target || blocker == looker)
+                    if (blocker == target || blocker == looker
+                        || target.Height > blocker.Height
+                        )
                     {
                         continue;
                     }
@@ -57,7 +66,7 @@ namespace whateverthefuck.src.model
                     rt.Add(target);
                 }
             }
-
+            GUI.DebugInfo = extras;
             return rt;
         }
 

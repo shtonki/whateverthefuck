@@ -82,31 +82,6 @@ namespace whateverthefuck.src.model
                 }
             }
         }
-
-        public class Rectangle : Drawable
-        {
-            public float X1;
-            public float Y1;
-            public float X2;
-            public float Y2;
-
-            public Rectangle(GameEntity o) : base(new GameCoordinate(0, 0))
-            {
-                X1 = o.Left;
-                Y1 = o.Bottom;
-                X2 = o.Right;
-                Y2 = o.Top;
-            }
-
-            public override void DrawMe(DrawAdapter drawAdapter)
-            {
-                drawAdapter.FillLine(X1, Y1, X2, Y1, Color.White);
-                drawAdapter.FillLine(X2, Y1, X2, Y2, Color.White);
-                drawAdapter.FillLine(X2, Y2, X1, Y2, Color.White);
-                drawAdapter.FillLine(X1, Y2, X1, Y1, Color.White);
-            }
-        }
-
         
 
         private void UpdateLOS()
@@ -121,7 +96,7 @@ namespace whateverthefuck.src.model
             foreach (var e in GameState.AllEntities)
             {
                 e.LOSGraceTicks--;
-                e.Invisible = e.LOSGraceTicks < 0;
+                e.Visible = e.LOSGraceTicks > 0;
             }
         }
 
@@ -213,11 +188,13 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public void HandleWorldClick(MouseButtonEventArgs me, GameCoordinate clicked)
+        public void HandleWorldClick(MouseButtonEventArgs me, GameCoordinate clickLocation)
         {
             if (me.Button == MouseButton.Left && me.IsPressed)
             {
-
+                var mp = new MousePicker();
+                mp.Location = clickLocation;
+                GameState.AddEntity(mp);
             }
             else if (me.Button == MouseButton.Left && !me.IsPressed)
             {
