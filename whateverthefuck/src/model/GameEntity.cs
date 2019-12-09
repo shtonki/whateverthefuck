@@ -43,7 +43,11 @@ namespace whateverthefuck.src.model
         public float Right => Location.X + Size.X;
         public float Bottom => Location.Y;
         public float Top => Location.Y + Size.Y;
-        public GameCoordinate Center => new GameCoordinate(Location.X + Size.X / 2, Location.Y + Size.Y / 2);
+        public GameCoordinate Center 
+        { 
+            get { return new GameCoordinate(Location.X + Size.X / 2, Location.Y + Size.Y / 2); } 
+            set { Location = new GameCoordinate(value.X - Size.X / 2, value.Y - Size.Y / 2); }
+        }
 
         private GameCoordinate _location { get; set; }
 

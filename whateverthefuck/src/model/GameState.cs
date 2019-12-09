@@ -157,6 +157,53 @@ namespace whateverthefuck.src.model
             UpdateLists();
         }
 
+        public IEnumerable<GameEntity> Intersects(GameEntity e)
+        {
+            List<GameEntity> rt = new List<GameEntity>();
+
+            foreach (var entity in EntityList)
+            {
+                if (e != entity && DetectCollisions(e, entity).HasValue)
+                {
+                    rt.Add(entity);
+                }
+            }
+            return rt;
+        }
+
+        private CollisionRecord? DetectCollisions(GameEntity entityI, GameEntity entityJ)
+        {
+            var check1 = entityI.Left < entityJ.Right;
+            var check2 = entityI.Right > entityJ.Left;
+            var check3 = entityI.Top > entityJ.Bottom;
+            var check4 = entityI.Bottom < entityJ.Top;
+
+            var collision = check1 && check2 && check3 && check4;
+
+            if (collision)
+            {
+                var x1 = entityI.Right - entityJ.Left;
+                var x2 = entityJ.Right - entityI.Left;
+                var y1 = entityI.Top - entityJ.Bottom;
+                var y2 = entityJ.Top - entityI.Bottom;
+
+                var d = Math.Min(Math.Min(Math.Min(x1, x2), y1), y2);
+
+                CollisionDirection direction = CollisionDirection.None;
+
+                if (d == x1) { direction = CollisionDirection.Left; }
+                if (d == x2) { direction = CollisionDirection.Right; }
+                if (d == y1) { direction = CollisionDirection.Bottom; }
+                if (d == y2) { direction = CollisionDirection.Top; }
+
+                return new CollisionRecord(entityI, entityJ, direction, d);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         private List<CollisionRecord> DetectCollisions()
         {
             var collisions = new List<CollisionRecord>();
@@ -169,34 +216,13 @@ namespace whateverthefuck.src.model
                 for (int j = i+1; j < EntityList.Count; j++)
                 {
                     var entityJ = EntityList[j];
-                    if (!entityJ.Collidable) { continue; }
 
-                    if (!entityI.Movable && !entityJ.Movable) { continue; }
+                    if (!entityJ.Collidable || (!entityI.Movable && !entityJ.Movable)) { continue; }
 
-                    var check1 = entityI.Left < entityJ.Right;
-                    var check2 = entityI.Right > entityJ.Left;
-                    var check3 = entityI.Top > entityJ.Bottom;
-                    var check4 = entityI.Bottom < entityJ.Top;
-
-                    var collision = check1 && check2 && check3 && check4;
-
-                    if (collision)
+                    var collision = DetectCollisions(entityI, entityJ);
+                    if (collision.HasValue)
                     {
-                        var x1 = entityI.Right - entityJ.Left;
-                        var x2 = entityJ.Right - entityI.Left;
-                        var y1 = entityI.Top - entityJ.Bottom;
-                        var y2 = entityJ.Top - entityI.Bottom;
-
-                        var d = Math.Min(Math.Min(Math.Min(x1, x2), y1), y2);
-
-                        CollisionDirection direction = CollisionDirection.None;
-
-                        if (d == x1) { direction = CollisionDirection.Left; }
-                        if (d == x2) { direction = CollisionDirection.Right; }
-                        if (d == y1) { direction = CollisionDirection.Bottom; }
-                        if (d == y2) { direction = CollisionDirection.Top; }
-
-                        collisions.Add(new CollisionRecord(entityI, entityJ, direction, d));
+                        collisions.Add(collision.Value);
                     }
                 }
             }
@@ -216,6 +242,8 @@ namespace whateverthefuck.src.model
             public CollisionDirection Direction { get; }
 
             public float Overlap { get; }
+
+            public bool IsCollision => Direction != CollisionDirection.None;
 
             public CollisionRecord(GameEntity entityI, GameEntity entityJ, CollisionDirection direction, float overlap)
             {

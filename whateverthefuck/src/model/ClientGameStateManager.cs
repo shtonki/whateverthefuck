@@ -193,8 +193,9 @@ namespace whateverthefuck.src.model
             if (me.Button == MouseButton.Left && me.IsPressed)
             {
                 var mp = new MousePicker();
-                mp.Location = clickLocation;
-                GameState.AddEntity(mp);
+                mp.Center = clickLocation;
+                var picked = GameState.Intersects(mp);
+                Logging.Log(picked.Count().ToString());
             }
             else if (me.Button == MouseButton.Left && !me.IsPressed)
             {

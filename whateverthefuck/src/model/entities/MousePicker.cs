@@ -14,12 +14,12 @@ namespace whateverthefuck.src.model.entities
         {
             Visible = true;
             DrawColor = Color.CornflowerBlue;
-            Size = new GameCoordinate(0.1f, 0.1f);
+            Size = new GameCoordinate(0.000001f, 0.000001f);
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            base.DrawMe(drawAdapter);
+
         }
     }
 }
