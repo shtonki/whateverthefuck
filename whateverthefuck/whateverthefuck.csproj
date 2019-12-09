@@ -86,6 +86,7 @@
     <Compile Include="src\view\GLCoordinate.cs" />
     <Compile Include="src\view\GUI.cs" />
     <Compile Include="src\view\guicomponents\Button.cs" />
+    <Compile Include="src\view\guicomponents\Frame.cs" />
     <Compile Include="src\view\guicomponents\GUIComponent.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -16,7 +16,7 @@ namespace whateverthefuck.src.view
         {
             GL.Translate(x, y, 0);
         }
-        
+
         public void Rotate(float angle)
         {
             GL.Rotate(angle, OpenTK.Vector3d.UnitZ);

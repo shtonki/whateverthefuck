@@ -19,13 +19,11 @@ namespace whateverthefuck.src.view.guicomponents
         public Action OnRightMouseDown= () => { };
         public Action OnRightMouseUp = () => { };
 
-        protected GUIComponent(Coordinate location, GLCoordinate size) : base(location)
+        protected GUIComponent(GLCoordinate location, GLCoordinate size) : base(location)
         {
+            BackColor = Color.Aquamarine;
             this.Size = size;
             Border = new Border(Color.Black);
-        }
-        protected GUIComponent(Coordinate location) : this(location, DefaultSize)
-        {
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
