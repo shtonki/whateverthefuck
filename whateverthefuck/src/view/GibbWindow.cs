@@ -42,7 +42,6 @@ namespace whateverthefuck.src.view
         private int LastSecond;
         private int RenderCounter;
 
-
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
@@ -64,18 +63,30 @@ namespace whateverthefuck.src.view
 
             GL.ClearColor(Color.Fuchsia);
             GL.PushMatrix();
+
+
+            var drawAdapter = new DrawAdapter();
+
+            // Draw GUI components
+            foreach (var guiComponent in GUI.GUIComponents)
+            {
+                guiComponent.Draw(drawAdapter);
+            }
+
+            // Take account of Camera location and zoom
             if (GUI.Camera != null)
             {
                 GL.Scale(GUI.Camera.Zoom.CurrentZoom, GUI.Camera.Zoom.CurrentZoom, 0);
                 GL.Translate(-GUI.Camera.Location.X, -GUI.Camera.Location.Y, 0);
             }
 
-            var drawAdapter = new DrawAdapter();
-
+            // Draw entities with account to Camera location and zoom
+            // @Reconsider: refactor GetAllDrawables to GetAllEntities 
             foreach (var drawable in GUI.GetAllDrawables())
             {
                 drawable.Draw(drawAdapter);
             }
+
 
             this.SwapBuffers();
             GL.PopMatrix();
@@ -95,20 +106,22 @@ namespace whateverthefuck.src.view
             }
         }
 
+        //@incomplete: throws exception if there are clicks before camera is loaded. 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             var gl = new GLCoordinate(e.X * 2.0f / ClientSize.Width - 1, e.Y * 2.0f / ClientSize.Height - 1);
             GameCoordinate gc = GUI.Camera.GLToGameCoordinate(gl);
-            
-            Program.GameStateManager.HandleClick(e, gc);
+            Program.GameStateManager.HandleGUIClick(e, gl);
+            Program.GameStateManager.HandleWorldClick(e, gc);
         }
 
+        //@incomplete: throws exception if there are clicks before camera is loaded. 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             var gl = new GLCoordinate(e.X * 2.0f / ClientSize.Width - 1, e.Y * 2.0f / ClientSize.Height - 1);
             GameCoordinate gc = GUI.Camera.GLToGameCoordinate(gl);
-
-            Program.GameStateManager.HandleClick(e, gc);
+            Program.GameStateManager.HandleGUIClick(e, gl);
+            Program.GameStateManager.HandleWorldClick(e, gc);
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)

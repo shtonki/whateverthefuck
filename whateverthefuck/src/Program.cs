@@ -37,6 +37,9 @@ namespace whateverthefuck
             GUI.CreateGameWindow();
             Logging.Log("Created Game Window", Logging.LoggingLevel.Info);
 
+            GUI.LoadGUI();
+            Logging.Log("Loaded GUI Components", Logging.LoggingLevel.Info);
+
             ConfigFile cf = new ConfigFile("config.json");
             Logging.Log("Loaded Config File", Logging.LoggingLevel.Info);
 
