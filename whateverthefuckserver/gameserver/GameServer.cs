@@ -97,9 +97,9 @@ namespace whateverthefuckserver
         public void Tick()
         {
             GameState.Step();
-
+            throw new NotImplementedException();
             var es = GameState.AllEntities.Where(e => e.Movable);
-            SendMessageToAllPlayers(new UpdateEntityLocationsMessage(es));
+            //SendMessageToAllPlayers(new UpdateGameStateMessage(es));
             Logging.Log("Sent updates on " + es.Count());
         }
     }

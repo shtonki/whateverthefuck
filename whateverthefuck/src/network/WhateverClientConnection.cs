@@ -66,8 +66,11 @@ namespace whateverthefuck.src.network
 
                 case MessageType.UpdateEntityLocationsMessage:
                 {
-                    UpdateEntityLocationsMessage updateMessage = (UpdateEntityLocationsMessage)message;
+                        throw new NotImplementedException();
+#if false
+                      UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
                     Program.GameStateManager.UpdateLocations(updateMessage.EntityInfos);
+#endif
                 } break;
 
                 case MessageType.CreateGameEntityMessage:

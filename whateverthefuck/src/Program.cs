@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using whateverthefuck.src.model;
@@ -18,17 +19,16 @@ namespace whateverthefuck
 
         public static void Main(String[] args)
         {
-#if false
-            PlayerCharacter pc = new PlayerCharacter(new EntityIdentifier(420));
-            pc.Movements.Downwards = true;
-            UpdatePlayerControlMessage message = new UpdatePlayerControlMessage(pc);
+#if true
+            List<GameEvent> ges = new List<GameEvent>();
+            ges.Add(new DummyEvent(420));
+            ges.Add(new DummyEvent(69));
 
-            byte[] bs = WhateverthefuckMessage.EncodeMessage(message);
+            UpdateGameStateMessage message = new UpdateGameStateMessage(ges);
+            var bs = WhateverthefuckMessage.EncodeMessage(message);
 
-
-            var newMessage = WhateverthefuckMessage.DecodeMessage(bs);
-
-            int i = 0;
+            var reconstructedMessage = WhateverthefuckMessage.DecodeMessage(bs);
+            int i = 4;
 #else
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
 

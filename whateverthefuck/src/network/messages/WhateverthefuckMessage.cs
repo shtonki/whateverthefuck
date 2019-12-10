@@ -71,7 +71,7 @@ namespace whateverthefuck.src.network.messages
 
                 case MessageType.UpdateEntityLocationsMessage:
                 {
-                    return new UpdateEntityLocationsMessage();
+                    return new UpdateGameStateMessage();
                 }
 
                 case MessageType.LoginCredentialsMessage:
@@ -111,7 +111,7 @@ namespace whateverthefuck.src.network.messages
 
             var wmessage = FromMessageTypex(messageType);
 
-            wmessage.DecodeBody(bs, headerSize);
+            wmessage.DecodeBody(bs.Skip(headerSize).ToArray());
 
             return wmessage;
         }
@@ -125,21 +125,15 @@ namespace whateverthefuck.src.network.messages
 
             var wmessage = FromMessageTypex(messageType);
 
-            wmessage.DecodeBody(body, 0);
+            wmessage.DecodeBody(body);
 
             return wmessage;
         }
 
-        protected virtual void DecodeBody(byte[] bs, int arrayOffset)
+        protected virtual void DecodeBody(byte[] bs)
         {
             MessageBody body = MessageBody;
-            body = (MessageBody)FromBytes(bs, body, arrayOffset);
-            SetBody(body);
-            //return body;
-        }
-
-        protected void SetBody(MessageBody body)
-        {
+            body = (MessageBody)FromBytes(bs, body);
             MessageBody = body;
         }
 
@@ -161,14 +155,14 @@ namespace whateverthefuck.src.network.messages
             Marshal.FreeHGlobal(ptr);
             return arr;
         }
-        protected static object FromBytes(IEnumerable<byte> bs, object str, int startIndex = 0)
+        protected static object FromBytes(IEnumerable<byte> bs, object str)
         {
             byte[] arr = bs.ToArray();
 
             int size = Marshal.SizeOf(str.GetType());
             IntPtr ptr = Marshal.AllocHGlobal(size);
 
-            Marshal.Copy(arr, startIndex, ptr, size);
+            Marshal.Copy(arr, 0, ptr, size);
 
 
             var typ = str.GetType();
