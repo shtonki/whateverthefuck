@@ -54,6 +54,11 @@ namespace whateverthefuck.src.model
                     return new Floor(identifier);
                 }
 
+                case EntityType.Projectile:
+                {
+                    return new Projectile(identifier);
+                }
+
                 default: throw new Exception();
             }
         }
@@ -62,6 +67,8 @@ namespace whateverthefuck.src.model
         {
             var rt = GenerateEntity(e.EntityType, new EntityIdentifier(e.Id));
             rt.Location = new GameCoordinate(e.X, e.Y);
+            rt.CurrentHealth = e.CurrentHealth;
+            rt.MaxHealth = e.MaxHealth;
             return rt;
         }
 

@@ -30,6 +30,11 @@ namespace whateverthefuck.src.model
                     return new UpdateMovementEvent(body);
                 }
 
+                case GameEventType.UseAbility:
+                {
+                    return new UseAbilityEvent(body);
+                }
+
                 default: throw new Exception();
             }
         }
@@ -38,12 +43,55 @@ namespace whateverthefuck.src.model
         public abstract byte[] ToBytes();
     }
 
+    public class UseAbilityEvent : GameEvent
+    {
+        public int Id { get; private set; }
+        public Abilities AbilityType { get; private set; } 
+        public int TargetId { get; private set; }
+
+        public UseAbilityEvent(GameEntity caster, GameEntity Target, Ability ability)
+        {
+            Type = GameEventType.UseAbility;
+            
+            Id = caster.Identifier.Id;
+            AbilityType = ability.AbilityType;
+            TargetId = Target.Identifier.Id;
+        }
+
+
+        public UseAbilityEvent(IEnumerable<byte> bs)
+        {
+            Type = GameEventType.UseAbility;
+
+
+            Id = BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int)); 
+
+            AbilityType = (Abilities)BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int)); 
+
+            TargetId = BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
+        }
+
+        public override byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(Id).Concat(
+                BitConverter.GetBytes((int)AbilityType).Concat(
+                BitConverter.GetBytes(TargetId)))
+                .ToArray();
+        }
+    }
+
+
     public class CreateEntityEvent : GameEvent
     {
         public int Id { get; private set; }
         public EntityType EntityType { get; private set; }
         public float X { get; private set; }
         public float Y { get; private set; }
+        public int CurrentHealth { get; private set; }
+        public int MaxHealth { get; private set; }
 
         public CreateEntityEvent(GameEntity e)
         {
@@ -53,6 +101,8 @@ namespace whateverthefuck.src.model
             EntityType = e.EntityType;
             X = e.Location.X;
             Y = e.Location.Y;
+            CurrentHealth = e.CurrentHealth;
+            MaxHealth = e.MaxHealth;
         }
 
         public CreateEntityEvent(IEnumerable<byte> bs)
@@ -66,9 +116,16 @@ namespace whateverthefuck.src.model
             bs = bs.Skip(sizeof(int));
 
             X = BitConverter.ToSingle(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
+            bs = bs.Skip(sizeof(float));
 
             Y = BitConverter.ToSingle(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(float));
+
+            CurrentHealth = BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
+
+            MaxHealth = BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
         }
 
         public override byte[] ToBytes()
@@ -76,8 +133,10 @@ namespace whateverthefuck.src.model
             return BitConverter.GetBytes(Id).Concat(
                 BitConverter.GetBytes((int)EntityType).Concat(
                 BitConverter.GetBytes(X).Concat(
-                BitConverter.GetBytes(Y))))
-                .ToArray();
+                BitConverter.GetBytes(Y).Concat(
+                BitConverter.GetBytes(CurrentHealth).Concat(
+                BitConverter.GetBytes(MaxHealth)
+                ))))).ToArray();
         }
     }
 
@@ -147,5 +206,7 @@ namespace whateverthefuck.src.model
         Create,
         Destroy,
         Control,
+
+        UseAbility,
     }
 }

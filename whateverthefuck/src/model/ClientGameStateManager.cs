@@ -293,6 +293,15 @@ namespace whateverthefuck.src.model
         {
             switch (gameAction)
             {
+                case GameAction.CastAbility1:
+                {
+                    if (Target != null)
+                    {
+                            Program.ServerConnection.SendMessage(
+                                new UpdateGameStateMessage(new UseAbilityEvent(Hero, Target, new Ability(Abilities.Fireballx))));
+                    }
+                } break;
+
                 case GameAction.HeroWalkUpwards:
                 {
                     HeroMovements.Upwards = (true);

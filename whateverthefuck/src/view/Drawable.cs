@@ -48,6 +48,15 @@ namespace whateverthefuck.src.view
             DrawColor = drawColor;
         }
 
+        public Rectangle(float x1, float y1, float x2, float y2, Color drawColor) : base(new GameCoordinate(0, 0))
+        {
+            X1 = x1;
+            Y1 = y1;
+            X2 = x2;
+            Y2 = y2;
+            DrawColor = drawColor;
+        }
+
         public override void DrawMe(DrawAdapter drawAdapter)
         {
             drawAdapter.FillLine(X1, Y1, X2, Y1, DrawColor);

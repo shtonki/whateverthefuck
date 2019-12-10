@@ -45,6 +45,7 @@
     <Compile Include="src\control\HotkeyMapping.cs" />
     <Compile Include="src\control\Input.cs" />
     <Compile Include="src\control\InputUnion.cs" />
+    <Compile Include="src\model\Ability.cs" />
     <Compile Include="src\model\ClientGameStateManager.cs" />
     <Compile Include="src\model\entities\Block.cs" />
     <Compile Include="src\model\entities\Character.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="src\model\entities\Floor.cs" />
     <Compile Include="src\model\entities\MousePicker.cs" />
     <Compile Include="src\model\entities\NPC.cs" />
+    <Compile Include="src\model\entities\Projectile.cs" />
     <Compile Include="src\model\GameCoordinate.cs" />
     <Compile Include="src\model\GameEntity.cs" />
     <Compile Include="src\model\GameEvent.cs" />

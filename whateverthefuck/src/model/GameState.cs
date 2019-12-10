@@ -177,6 +177,17 @@ namespace whateverthefuck.src.model
                 var entity = GetEntityById(uce.Id);
                 entity.Movements = uce.Movements;
             }
+            else if (e is UseAbilityEvent)
+            {
+                UseAbilityEvent uae = (UseAbilityEvent)e;
+                var caster = GetEntityById(uae.Id);
+                var castee = GetEntityById(uae.TargetId);
+                var p = EntityGenerator.GenerateEntity(EntityType.Projectile);
+                p.Identifier = EntityIdentifier.RandomReserved();
+                p.Location = caster.Location;
+                p.Movements.FollowId = castee.Identifier.Id;
+                AddEntities(p);
+            }
             else
             {
                 throw new NotImplementedException();

@@ -14,6 +14,11 @@ namespace whateverthefuck.src.model
 {
     abstract public class GameEntity : Drawable
     {
+        public int MaxHealth = 100;
+        public int CurrentHealth = 100;
+
+        protected bool ShowHealth = false;
+
 
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
         public int Height { get; protected set; } = 1;
@@ -77,12 +82,23 @@ namespace whateverthefuck.src.model
                 Rectangle r = new view.Rectangle(this, HighlightColor);
                 r.DrawMe(drawAdapter);
             }
+
+            if (ShowHealth)
+            {
+                float mid = (float)CurrentHealth / MaxHealth;
+                var full = new view.Rectangle(Left, Top + 0.01f, Left + Size.X * mid, Top, Color.Green);
+                var missing = new view.Rectangle(Left + Size.X * mid, Top + 0.01f, Right, Top, Color.Red);
+
+                full.DrawMe(drawAdapter);
+                missing.DrawMe(drawAdapter);
+            }
         }
 
         public virtual void Step(GameState gameState)
         {
             MovementCache = CalculateMovement(gameState);
             Location = (GameCoordinate)Location + MovementCache;
+            
         }
 
         public virtual GameCoordinate CalculateMovement(GameState gameState)
@@ -93,9 +109,9 @@ namespace whateverthefuck.src.model
 
                 if (followed != null)
                 {
-                    if (Coordinate.DistanceBetweenCoordinates(Location, followed.Location) < 0.01f)
+                    if (Coordinate.DistanceBetweenCoordinates(Location, followed.Location) < MoveSpeed)
                     {
-                        return new GameCoordinate(0, 0);
+                        return new GameCoordinate(followed.Location.X - Location.X, followed.Location.Y - Location.Y);
                     }
 
                     var destination = followed.Location;
@@ -111,6 +127,11 @@ namespace whateverthefuck.src.model
             {
                 return new GameCoordinate((float)Math.Sin(Movements.Direction) * MoveSpeed, (float)Math.Cos(Movements.Direction) * MoveSpeed);
             }
+        }
+
+        public float DistanceTo(GameEntity other)
+        {
+            return Coordinate.DistanceBetweenCoordinates(Location, other.Location);
         }
 
         public int GetMemeCode()
@@ -196,6 +217,19 @@ namespace whateverthefuck.src.model
         {
             Id = id;
         }
+
+        private static int randomCounter = 1;
+
+        public static EntityIdentifier RandomReserved()
+        {
+            var v = -randomCounter++;
+            if (randomCounter > 100000)
+            {
+                randomCounter = 1;
+            }
+
+            return new EntityIdentifier(v);
+        }
     }
 
 
@@ -204,6 +238,8 @@ namespace whateverthefuck.src.model
         None,
 
         GameMechanic,
+
+        Projectile,
 
         PlayerCharacter,
         Block,
