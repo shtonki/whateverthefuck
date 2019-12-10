@@ -46,14 +46,13 @@ namespace whateverthefuck
             GUI.LoadGUI();
             Logging.Log("Loaded GUI Components", Logging.LoggingLevel.Info);
 
-            ConfigFile cf = new ConfigFile("config.json");
-            Logging.Log("Loaded Config File", Logging.LoggingLevel.Info);
+            UserSettings.LoadUserSettings();
 
             ServerConnection = new WhateverClientConnection();
             Logging.Log("Connected to Server", Logging.LoggingLevel.Info);
 
-            UserLogin.Login(cf.ConfigInfo.LoginCredentials);
-            Logging.Log(String.Format("Logged on to Server as {0}", cf.ConfigInfo.LoginCredentials.Username), Logging.LoggingLevel.Info);
+            UserLogin.Login(UserSettings.Config.Username);
+            Logging.Log(String.Format("Logged on to Server as {0}", UserSettings.Config.Username), Logging.LoggingLevel.Info);
 #endif
             }
     }

@@ -14,6 +14,14 @@ namespace whateverthefuck.src.util
 {
     public class JsonIO
     {
+
+        private static JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto,
+            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            Formatting = Formatting.None,
+        };
+
         public static List<GameEntity> LoadEntitiesFromFile(string filename)
         {
             if (!File.Exists(filename + ".json")) return new List<GameEntity>();
@@ -42,11 +50,7 @@ namespace whateverthefuck.src.util
 
         public static T ConvertToString<T>(string json)
         {
-            return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
+            return JsonConvert.DeserializeObject<T>(json, Settings);
         }
 
         /// <summary>
@@ -64,14 +68,7 @@ namespace whateverthefuck.src.util
             TextWriter writer = null;
             try
             {
-                var contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite, typeof(GameEntity),
-                    new JsonSerializerSettings
-                    {
-
-                        TypeNameHandling = TypeNameHandling.Auto,
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        Formatting = Formatting.Indented
-                    });
+                var contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite, typeof(GameEntity), Settings);
                 writer = new StreamWriter(filePath, append);
                 writer.Write(contentsToWriteToFile);
             }
@@ -86,13 +83,7 @@ namespace whateverthefuck.src.util
         {
             try
             {
-                return JsonConvert.SerializeObject(objectToWrite, typeof(GameEntity),
-                    new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.None,
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        Formatting = Formatting.Indented
-                    });
+                return JsonConvert.SerializeObject(objectToWrite, typeof(GameEntity), Settings);
             }
             catch(Exception e)
             {
@@ -115,11 +106,8 @@ namespace whateverthefuck.src.util
             {
                 reader = new StreamReader(filePath);
                 var fileContents = reader.ReadToEnd();
-                return JsonConvert.DeserializeObject<T>(fileContents, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.All,
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                });
+                var v = JsonConvert.DeserializeObject<T>(fileContents, Settings);
+                return v;
             }
             finally
             {

@@ -10,8 +10,9 @@ namespace whateverthefuck.src.network
 {
     public class UserLogin
     {
-        public static void Login(LoginCredentials loginCreds)
+        public static void Login(string username)
         {
+            LoginCredentials loginCreds = new LoginCredentials(username);
             Program.ServerConnection.SendMessage(new LoginCredentialsMessage(loginCreds));
         }
     }

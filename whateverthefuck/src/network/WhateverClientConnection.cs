@@ -11,8 +11,6 @@ namespace whateverthefuck.src.network
     class WhateverClientConnection : WhateverthefuckConnection
     {
 
-        private const bool ConnectToLocalhostFirst = false;
-
         private const string ServerIp = "98.128.171.8";
         private const string BackupServerIp = "127.0.0.1";
         private const int ServerPort = 13000;
@@ -27,7 +25,7 @@ namespace whateverthefuck.src.network
             TcpClient ServerConnection;
             while (true)
             {
-                if (ConnectToLocalhostFirst)
+                if (UserSettings.Config.ConnectToLocalHost)
                 {
                     try
                     {
