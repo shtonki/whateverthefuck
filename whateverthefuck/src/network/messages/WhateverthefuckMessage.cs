@@ -69,7 +69,7 @@ namespace whateverthefuck.src.network.messages
                     return new UpdatePlayerControlMessage();
                 }
 
-                case MessageType.UpdateEntityLocationsMessage:
+                case MessageType.UpdateGameStateMessage:
                 {
                     return new UpdateGameStateMessage();
                 }
@@ -240,7 +240,7 @@ namespace whateverthefuck.src.network.messages
     public enum MessageType
     {
         LogMessage,
-        UpdateEntityLocationsMessage,
+        UpdateGameStateMessage,
         GrantControlMessage,
         UpdatePlayerControlMessage,
         LoginCredentialsMessage,

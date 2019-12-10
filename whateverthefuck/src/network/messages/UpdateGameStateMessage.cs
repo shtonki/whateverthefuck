@@ -10,14 +10,14 @@ namespace whateverthefuck.src.network.messages
 {
     public class UpdateGameStateMessage : WhateverthefuckMessage
     {
-        private List<GameEvent> Events;
+        public List<GameEvent> Events { get; private set; }
 
-        public UpdateGameStateMessage(IEnumerable<GameEvent> events) : base(MessageType.UpdateEntityLocationsMessage)
+        public UpdateGameStateMessage(IEnumerable<GameEvent> events) : base(MessageType.UpdateGameStateMessage)
         {
             Events = events.ToList();
         }
 
-        public UpdateGameStateMessage() : base(MessageType.UpdateEntityLocationsMessage)
+        public UpdateGameStateMessage() : base(MessageType.UpdateGameStateMessage)
         {
             Events = new List<GameEvent>();
         }

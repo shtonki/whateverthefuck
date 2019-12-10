@@ -19,37 +19,50 @@ namespace whateverthefuck.src.model
             IdGenerator = idGenerator;
         }
 
+
         public GameEntity GenerateEntity(EntityType type)
+        {
+            return GenerateEntity(type, IdGenerator.GenerateNextIdentifier());
+        }
+
+        public GameEntity GenerateEntity(EntityType type, EntityIdentifier identifier)
         {
             switch (type)
             {
                 case EntityType.Block:
                 {
-                    return new Block(IdGenerator.GenerateNextIdentifier(), Color.Teal);
+                    return new Block(identifier, Color.Teal);
                 }
 
                 case EntityType.NPC:
                 {
-                    return new NPC(IdGenerator.GenerateNextIdentifier());
+                    return new NPC(identifier);
                 }
 
                 case EntityType.PlayerCharacter:
                 {
-                    return new PlayerCharacter(IdGenerator.GenerateNextIdentifier());
+                    return new PlayerCharacter(identifier);
                 }
 
                 case EntityType.Door:
                 {
-                    return new Door(IdGenerator.GenerateNextIdentifier());
+                    return new Door(identifier);
                 }
 
                 case EntityType.Floor:
                 {
-                    return new Floor(IdGenerator.GenerateNextIdentifier());
+                    return new Floor(identifier);
                 }
 
                 default: throw new Exception();
             }
+        }
+
+        public GameEntity GenerateEntity(CreateEntityEvent e)
+        {
+            var rt = GenerateEntity(e.EntityType, new EntityIdentifier(e.Id));
+            rt.Location = new GameCoordinate(e.X, e.Y);
+            return rt;
         }
 
         public IEnumerable<GameEntity> GenerateHouse(int xorg, int yorg)

@@ -64,13 +64,10 @@ namespace whateverthefuck.src.network
                     Logging.Log("Message from server: " + logBody.Message, Logging.LoggingLevel.Info);
                 } break;
 
-                case MessageType.UpdateEntityLocationsMessage:
+                case MessageType.UpdateGameStateMessage:
                 {
-                        throw new NotImplementedException();
-#if false
-                      UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
-                    Program.GameStateManager.UpdateLocations(updateMessage.EntityInfos);
-#endif
+                    UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
+                    Program.GameStateManager.UpdateGameState(updateMessage.Events);
                 } break;
 
                 case MessageType.CreateGameEntityMessage:

@@ -45,10 +45,8 @@ namespace whateverthefuckserver
 
         public void AddUser(User user)
         {
-            foreach (var entity in GameState.AllEntities)
-            {
-                user.PlayerConnection.SendMessage(new CreateGameEntityMessage(entity));
-            }
+            var createEvents = GameState.AllEntities.Select(e => new CreateEntityEvent(e));
+            user.PlayerConnection.SendMessage(new UpdateGameStateMessage(createEvents));
 
             PlayingUsers.Add(user);
             SpawnUserAsPlayerCharacter(user);
@@ -97,9 +95,12 @@ namespace whateverthefuckserver
         public void Tick()
         {
             GameState.Step();
-            throw new NotImplementedException();
             var es = GameState.AllEntities.Where(e => e.Movable);
-            //SendMessageToAllPlayers(new UpdateGameStateMessage(es));
+
+            var events = es.Select(e => new MoveEntityEvent(e.Identifier.Id, e.Location.X, e.Location.Y));
+
+            var message = new UpdateGameStateMessage(events);
+            SendMessageToAllPlayers(message);
             Logging.Log("Sent updates on " + es.Count());
         }
     }

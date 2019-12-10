@@ -126,8 +126,30 @@ namespace whateverthefuck.src.model
 
         private Semaphore UpdateLocationSemaphore = new Semaphore(1, 1);
 
-        public void UpdateLocations(IEnumerable<EntityLocationInfo> infos)
+        public void UpdateGameState(IEnumerable<GameEvent> events)
         {
+            foreach (var e in events)
+            {
+                if (e is MoveEntityEvent)
+                {
+                    var mee = (MoveEntityEvent)e;
+                    var entity = GameState.GetEntityById(mee.Id);
+                    if (entity == null)
+                    {
+                        Logging.Log("badsies");
+                        continue;
+                    }
+                    entity.Location = new GameCoordinate(mee.X, mee.Y);
+                }
+                if (e is CreateEntityEvent)
+                {
+                    var cee = (CreateEntityEvent)e;
+                    var entity = GameState.EntityGenerator.GenerateEntity(cee);
+                    GameState.AddEntities(entity);
+                }
+            }
+
+#if false
             if (UpdateLocationSemaphore.WaitOne(new TimeSpan(1)))
             {
                 var newTick = DateTime.UtcNow;
@@ -159,6 +181,7 @@ namespace whateverthefuck.src.model
                 }
                 UpdateLocationSemaphore.Release();
             }
+#endif
         }
 
         public void HandleGUIClick(MouseButtonEventArgs me, GLCoordinate clicked)

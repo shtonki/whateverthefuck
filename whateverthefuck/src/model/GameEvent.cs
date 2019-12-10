@@ -13,46 +13,108 @@ namespace whateverthefuck.src.model
         {
             switch (type)
             {
-                case GameEventType.Dummy:
+                case GameEventType.Move:
                 {
-                    return new DummyEvent(body);
+                    return new MoveEntityEvent(body);
                 }
 
-            default: throw new Exception();
+                case GameEventType.Create:
+                {
+                    return new CreateEntityEvent(body);
+                }
+
+                default: throw new Exception();
             }
         }
 
         public GameEventType Type { get; protected set; }
         public abstract byte[] ToBytes();
-        public int Size => ToBytes().Length;
     }
 
-    public class DummyEvent : GameEvent
+    public class MoveEntityEvent : GameEvent
     {
-        private int DummyVal { get; set; }
+        public int Id { get; private set; }
+        public float X { get; private set; }
+        public float Y { get; private set; }
 
-
-        public DummyEvent(int dummyVal)
+        public MoveEntityEvent(int id, float x, float y)
         {
-            DummyVal = dummyVal;
-            Type = GameEventType.Dummy;
+            Id = id;
+            X = x;
+            Y = y;
+            Type = GameEventType.Move;
         }
 
-        public DummyEvent(byte[] bs)
+        public MoveEntityEvent(IEnumerable<byte> bs)
         {
-            DummyVal = WhateverEncoding.IntFromBytes(bs);
-            Type = GameEventType.Dummy;
+            Type = GameEventType.Move;
+
+            Id = BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
+            X = BitConverter.ToSingle(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
+            Y = BitConverter.ToSingle(bs.ToArray(), 0);
         }
 
         public override byte[] ToBytes()
         {
-            return WhateverEncoding.GetBytes(DummyVal);
+            return BitConverter.GetBytes(Id).Concat(
+                BitConverter.GetBytes(X).Concat(
+                BitConverter.GetBytes(Y)))
+                .ToArray();
         }
     }
 
+    public class CreateEntityEvent : GameEvent
+    {
+        public int Id { get; private set; }
+        public EntityType EntityType { get; private set; }
+        public float X { get; private set; }
+        public float Y { get; private set; }
+
+        public CreateEntityEvent(GameEntity e)
+        {
+            Type = GameEventType.Create;
+            
+            Id = e.Identifier.Id;
+            EntityType = e.EntityType;
+            X = e.Location.X;
+            Y = e.Location.Y;
+        }
+
+        public CreateEntityEvent(IEnumerable<byte> bs)
+        {
+            Type = GameEventType.Create;
+
+            Id = BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
+
+            EntityType = (EntityType)BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
+
+            X = BitConverter.ToSingle(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
+
+            Y = BitConverter.ToSingle(bs.ToArray(), 0);
+        }
+
+        public override byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(Id).Concat(
+                BitConverter.GetBytes((int)EntityType).Concat(
+                BitConverter.GetBytes(X).Concat(
+                BitConverter.GetBytes(Y))))
+                .ToArray();
+        }
+    }
+
+
     public enum GameEventType
     {
-        paddy,
-        Dummy,
+        NotSet,
+
+        Move,
+        Create,
+        Destroy,
     }
 }

@@ -70,7 +70,7 @@ namespace whateverthefuck.src.model
             return rt;
         }
 
-        private const float Spacing = 0;
+        private const float Spacing = -0.00005f;
 
         private static bool LineIntersectsRect(PointF p1, PointF p2, GameEntity ge)
         {
