@@ -41,7 +41,7 @@ namespace whateverthefuck.src.view
 
             GL.LineWidth(4);
             GL.Color4(c);
-            GL.Begin(BeginMode.Lines);
+            GL.Begin(PrimitiveType.Lines);
 
             GL.Vertex2(xorg, yorg);
             GL.Vertex2(xend, yend);

@@ -1,4 +1,12 @@
 
+	* Release Version 0.0.1.2
+	* 2019-12-07
+	* Seba
+	*
+	* Collision handling bugfix
+	* Improved network encoding
+	* Fixed crash on add or remove entity
+
 	* Release Version 0.0.1.1
 	* 2019-12-06
 	* Seba
