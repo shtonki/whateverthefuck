@@ -104,11 +104,11 @@ namespace whateverthefuck.src.model
             }
         }
 
+        private int? TakeControlId;
+
         public void TakeControl(int identifier)
         {
-            Hero = (PlayerCharacter)GameState.GetEntityById(identifier);
-            HeroControlDummy = new PlayerCharacter(new EntityIdentifier(Hero.Identifier.Id));
-            CenterCameraOn(Hero);
+            TakeControlId = identifier;
         }
 
         public void CenterCameraOn(GameEntity entity)
@@ -121,6 +121,17 @@ namespace whateverthefuck.src.model
             GameState.HandleGameEvents(events);
             GameState.Step();
             UpdateLOS();
+
+            if (TakeControlId.HasValue)
+            {
+                Hero = (PlayerCharacter)GameState.GetEntityById(TakeControlId.Value);
+                if (Hero != null)
+                {
+                    HeroControlDummy = new PlayerCharacter(new EntityIdentifier(Hero.Identifier.Id));
+                    CenterCameraOn(Hero);
+                }
+                TakeControlId = null;
+            }
 #if false
             if (UpdateLocationSemaphore.WaitOne(new TimeSpan(1)))
             {

@@ -22,6 +22,7 @@ namespace whateverthefuckserver
         object PlayersLock = new object();
 
         private List<GameEvent> PendingEvents = new List<GameEvent>();
+        object EventsLock = new object();
 
         public GameServer()
         {
@@ -53,13 +54,8 @@ namespace whateverthefuckserver
             {
                 PlayingUsers.Add(user);
             }
-            SpawnUserAsPlayerCharacter(user);
-
-        }
-
-        public void SpawnUserAsPlayerCharacter(User user)
-        {
             SpawnPlayerCharacter(user);
+
         }
 
         public void RemoveUser(User user)
@@ -70,26 +66,27 @@ namespace whateverthefuckserver
             }
             var hero = GameState.GetEntityById(user.HeroIdentifier.Id);
             GameEvent re = new DestroyEntityEvent(hero);
-            GameState.HandleGameEvents(re);
-            SendMessageToAllPlayers(new UpdateGameStateMessage(re));
+            PendEvents(re);
         }
 
         public void UpdatePlayerCharacterMovementStruct(int id, MovementStruct movementStruct)
         {
             PlayerCharacter pc = (PlayerCharacter)GameState.GetEntityById(id);
             var evnt = new UpdateControlEvent(id, movementStruct);
-            PendingEvents.Add(evnt);
+            PendEvents(evnt);
         }
 
         private void SpawnPlayerCharacter(User user)
         {
             var pc = GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter);
             pc.Location = new GameCoordinate(0, 0);
-            //GameState.AddEntities(pc);
             user.HeroIdentifier = pc.Identifier;
+            
+            // create entity on serverside game state
             var cee = new CreateEntityEvent(pc);
-            GameState.HandleGameEvents(cee);
-            SendMessageToAllPlayers(new UpdateGameStateMessage(cee));
+            PendEvents(cee);
+
+            // send message to user granting control to created character
             user.PlayerConnection.SendMessage(new GrantControlMessage((PlayerCharacter)pc));
         }
 
@@ -105,11 +102,25 @@ namespace whateverthefuckserver
             }
         }
 
+        private void PendEvents(params GameEvent[] es)
+        {
+            lock (EventsLock)
+            {
+                PendingEvents.AddRange(es);
+            }
+        }
+
         public void Tick()
         {
-            GameState.HandleGameEvents(PendingEvents);
-            var message = new UpdateGameStateMessage(PendingEvents);
-            PendingEvents.Clear();
+            UpdateGameStateMessage message;
+
+            lock (EventsLock)
+            {
+                GameState.HandleGameEvents(PendingEvents);
+                message = new UpdateGameStateMessage(PendingEvents);
+                PendingEvents.Clear();
+            }
+
             GameState.Step();
             SendMessageToAllPlayers(message);
         }
