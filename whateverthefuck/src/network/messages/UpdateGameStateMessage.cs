@@ -66,27 +66,28 @@ namespace whateverthefuck.src.network.messages
         protected override void DecodeBody(byte[] bs)
         {
             var events = new List<GameEvent>();
-            IEnumerable<byte> bytes = bs;
+
+            int bytec = 0;
+
             while (true)
             {
-                if (bytes.Count() == 0)
+                if (bytec == bs.Length)
                 {
                     break;
                 }
 
-                var gameEventType = (GameEventType)bytes.First();
-                bytes = bytes.Skip(1);
-                var bodyLength = bytes.First();
-                bytes = bytes.Skip(1);
-                var body = bytes.Take(bodyLength);
-                bytes = bytes.Skip(bodyLength);
+                var gameEventType = (GameEventType)bs[bytec];
+                bytec += 1;
+                var bodyLength = bs[bytec];
+                bytec += 1;
+                byte[] body = new byte[bodyLength];
+                Array.Copy(bs, bytec, body, 0, bodyLength);
+                bytec += bodyLength;
 
                 events.Add(GameEvent.DecodeWithEventType(gameEventType, body.ToArray()));
-
             }
 
             Events = events.ToList();
-
         }
 
     }
