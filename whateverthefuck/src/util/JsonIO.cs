@@ -19,7 +19,7 @@ namespace whateverthefuck.src.util
         {
             TypeNameHandling = TypeNameHandling.Auto,
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            Formatting = Formatting.None,
+            Formatting = Formatting.Indented,
         };
 
         public static List<GameEntity> LoadEntitiesFromFile(string filename)
@@ -68,7 +68,7 @@ namespace whateverthefuck.src.util
             TextWriter writer = null;
             try
             {
-                var contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite, typeof(GameEntity), Settings);
+                var contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite, typeof(T), Settings);
                 writer = new StreamWriter(filePath, append);
                 writer.Write(contentsToWriteToFile);
             }
@@ -83,7 +83,7 @@ namespace whateverthefuck.src.util
         {
             try
             {
-                return JsonConvert.SerializeObject(objectToWrite, typeof(GameEntity), Settings);
+                return JsonConvert.SerializeObject(objectToWrite, typeof(T), Settings);
             }
             catch(Exception e)
             {
