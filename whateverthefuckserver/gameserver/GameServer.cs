@@ -43,6 +43,16 @@ namespace whateverthefuckserver
 
             var house = GameState.EntityGenerator.GenerateHouse(5, 5);
             GameState.HandleGameEvents(house.Select(b => new CreateEntityEvent(b)));
+            
+            var mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC);
+            mob.Location = new GameCoordinate(0, 0.75f);
+            GameState.HandleGameEvents(new CreateEntityEvent(mob));
+
+            var f1 = GameState.EntityGenerator.GenerateEntity(EntityType.Floor);
+            f1.Location = new GameCoordinate(0f, 0f);
+            GameState.HandleGameEvents(new CreateEntityEvent(f1));
+
+            GameState.HandleGameEvents(new UpdateMovementEvent(mob.Identifier.Id, MovementStruct.Following(f1)));
         }
 
         internal void HandleEventRequests(List<GameEvent> events)
@@ -52,8 +62,13 @@ namespace whateverthefuckserver
 
         public void AddUser(User user)
         {
-            var createEvents = GameState.AllEntities.Select(e => new CreateEntityEvent(e));
-            user.PlayerConnection.SendMessage(new UpdateGameStateMessage(createEvents));
+            IEnumerable<GameEvent> createEvents = GameState.AllEntities.Select(e => new CreateEntityEvent(e));
+            IEnumerable<GameEvent> movementEvents = GameState.AllEntities.Where(e => e.Movements.IsMoving).Select(e => new UpdateMovementEvent(e));
+
+
+            var events = createEvents.Concat(movementEvents).ToArray();
+
+            user.PlayerConnection.SendMessage(new UpdateGameStateMessage(events));
 
             lock (PlayersLock)
             {

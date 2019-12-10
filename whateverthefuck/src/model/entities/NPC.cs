@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model.entities
 {
@@ -9,12 +10,8 @@ namespace whateverthefuck.src.model.entities
         {
             DrawColor = Color.Red;
             Movable = true;
+            MoveSpeed = 0.001f;
         }
 
-
-        public override GameCoordinate CalculateMovement()
-        {
-            return new GameCoordinate(0, 0);
-        }
     }
 }

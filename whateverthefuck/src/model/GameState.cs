@@ -174,7 +174,7 @@ namespace whateverthefuck.src.model
             else if (e is UpdateMovementEvent)
             {
                 UpdateMovementEvent uce = (UpdateMovementEvent)e;
-                var entity = (Character)GetEntityById(uce.Id);
+                var entity = GetEntityById(uce.Id);
                 entity.Movements = uce.Movements;
             }
             else
@@ -189,7 +189,7 @@ namespace whateverthefuck.src.model
 
             foreach (var entity in AllEntities)
             {
-                entity.Step();
+                entity.Step(this);
             }
 
             HandleCollisions();

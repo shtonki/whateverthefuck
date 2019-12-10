@@ -27,7 +27,12 @@ namespace whateverthefuck.src.model
 
         public bool BlocksLOS { get; protected set; } = true;
 
-        public int LOSGraceTicks = 0; 
+        public int LOSGraceTicks = 0;
+
+        public MovementStruct Movements { get; set; } = new MovementStruct();
+        public float MoveSpeed { get; protected set; } = 0.01f;
+
+
 
         public EntityIdentifier Identifier { get; set; }
 
@@ -72,15 +77,38 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public virtual void Step()
+        public virtual void Step(GameState gameState)
         {
-            MovementCache = CalculateMovement();
+            MovementCache = CalculateMovement(gameState);
             Location = (GameCoordinate)Location + MovementCache;
         }
 
-        public virtual GameCoordinate CalculateMovement()
+        public virtual GameCoordinate CalculateMovement(GameState gameState)
         {
-            return new GameCoordinate(0, 0);
+            if (Movements.FollowId.HasValue)
+            {
+                var followed = gameState.GetEntityById(Movements.FollowId.Value);
+
+                if (followed != null)
+                {
+                    if (Coordinate.DistanceBetweenCoordinates(Location, followed.Location) < 0.01f)
+                    {
+                        return new GameCoordinate(0, 0);
+                    }
+
+                    var destination = followed.Location;
+                    Movements.Direction = Coordinate.AngleBetweenCoordinates(Location, destination);
+                }
+            }
+
+            if (float.IsNaN(Movements.Direction))
+            {
+                return new GameCoordinate(0, 0);
+            }
+            else
+            {
+                return new GameCoordinate((float)Math.Sin(Movements.Direction) * MoveSpeed, (float)Math.Cos(Movements.Direction) * MoveSpeed);
+            }
         }
 
         public int GetMemeCode()
@@ -93,6 +121,65 @@ namespace whateverthefuck.src.model
             return String.Format("{0} at {1}:{2}", EntityType.ToString(), Location.X.ToString(), Location.Y.ToString());
         }
     }
+
+    public class MovementStruct
+    {
+        public float Direction { get; set; }
+        public int? FollowId { get; set; }
+
+
+        public bool IsDirectional => float.IsNaN(Direction);
+        public bool IsFollowing => FollowId.HasValue;
+
+        public bool IsMoving => IsDirectional || IsFollowing;
+
+        public static MovementStruct Following(GameEntity e)
+        {
+            var rt = new MovementStruct();
+            rt.FollowId = e.Identifier.Id;
+            return rt;
+        }
+
+        public MovementStruct()
+        {
+            Direction = float.NaN;
+            FollowId = null;
+        }
+
+        public static MovementStruct Decode(byte[] bs)
+        {
+            IEnumerable<byte> bytes = bs;
+            bool isFollow = BitConverter.ToBoolean(bytes.ToArray(), 0);
+            bytes = bytes.Skip(sizeof(bool));
+
+            var ms = new MovementStruct();
+
+            if (isFollow)
+            {
+                ms.FollowId = BitConverter.ToInt32(bytes.ToArray(), 0);
+            }
+            else
+            {
+                ms.Direction = BitConverter.ToSingle(bytes.ToArray(), 0);
+            }
+
+            return ms;
+
+        }
+        public byte[] Encode()
+        {
+
+            if (FollowId.HasValue)
+            {
+                return BitConverter.GetBytes(true).Concat(BitConverter.GetBytes(FollowId.Value)).ToArray();
+            }
+            else
+            {
+                return BitConverter.GetBytes(false).Concat(BitConverter.GetBytes(Direction)).ToArray();
+            }
+        }
+    }
+
 
     public class EntityIdentifier
     {

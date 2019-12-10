@@ -110,6 +110,11 @@ namespace whateverthefuck.src.model
         public int Id { get; private set; }
         public MovementStruct Movements { get; private set; }
 
+        public UpdateMovementEvent(GameEntity entity) : this(entity.Identifier.Id, entity.Movements)
+        {
+
+        }
+
         public UpdateMovementEvent(int id, MovementStruct movements)
         {
             Type = GameEventType.Control;

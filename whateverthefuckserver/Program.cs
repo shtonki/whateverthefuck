@@ -28,7 +28,7 @@ namespace whateverthefuckserver
             GameServer = new GameServer();
             Logging.Log("Started Game Server", Logging.LoggingLevel.Info);
 
-            if (false)
+            if (true)
             {
 #pragma warning disable CS0162 // Unreachable code detected
                 GUI.CreateGameWindow();

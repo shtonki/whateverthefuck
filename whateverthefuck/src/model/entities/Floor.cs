@@ -8,7 +8,7 @@ using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model.entities
 {
-    class Floor : GameEntity
+    public class Floor : GameEntity
     {
         public Floor(EntityIdentifier id) : base(id, EntityType.Floor)
         {
