@@ -40,21 +40,24 @@ namespace whateverthefuck.src.model
 
         private void Tick()
         {
+#if false
             if (UseSmoothing)
             {
                 SmoothMovements();
             }
-
-            if (Hero == null)
+#endif
+            if (Hero != null)
             {
-                return;
+                Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(Hero));
             }
 
-            Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(Hero));
+        }
 
+        public void StepClient(IEnumerable<GameEvent> events)
+        {
+            GameState.HandleGameEvents(events);
+            GameState.Step();
             UpdateLOS();
-
-            GameState.UpdateLists();
         }
 
 
@@ -100,19 +103,6 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public void CreateEntity(CreateEntityInfo info)
-        {
-            var entity = GameState.EntityGenerator.GenerateEntity((EntityType)info.EntityType);
-            entity.Identifier = new EntityIdentifier(info.Identifier);
-            entity.Location = new GameCoordinate(info.X, info.Y);
-            GameState.AddEntities(entity);
-        }
-
-        public void RemoveEntity(EntityIdentifier id)
-        {
-            GameState.RemoveEntity(id);
-        }
-
         public void TakeControl(int identifier)
         {
             Hero = (PlayerCharacter)GameState.GetEntityById(identifier);
@@ -128,27 +118,8 @@ namespace whateverthefuck.src.model
 
         public void UpdateGameState(IEnumerable<GameEvent> events)
         {
-            foreach (var e in events)
-            {
-                if (e is MoveEntityEvent)
-                {
-                    var mee = (MoveEntityEvent)e;
-                    var entity = GameState.GetEntityById(mee.Id);
-                    if (entity == null)
-                    {
-                        Logging.Log("badsies");
-                        continue;
-                    }
-                    entity.Location = new GameCoordinate(mee.X, mee.Y);
-                }
-                if (e is CreateEntityEvent)
-                {
-                    var cee = (CreateEntityEvent)e;
-                    var entity = GameState.EntityGenerator.GenerateEntity(cee);
-                    GameState.AddEntities(entity);
-                }
-            }
-
+            GameState.HandleGameEvents(events);
+            GameState.Step();
 #if false
             if (UpdateLocationSemaphore.WaitOne(new TimeSpan(1)))
             {

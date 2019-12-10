@@ -13,14 +13,14 @@ namespace whateverthefuck.src.model
         {
             switch (type)
             {
-                case GameEventType.Move:
-                {
-                    return new MoveEntityEvent(body);
-                }
-
                 case GameEventType.Create:
                 {
                     return new CreateEntityEvent(body);
+                }
+
+                case GameEventType.Destroy:
+                {
+                    return new DestroyEntityEvent(body);
                 }
 
                 default: throw new Exception();
@@ -29,40 +29,6 @@ namespace whateverthefuck.src.model
 
         public GameEventType Type { get; protected set; }
         public abstract byte[] ToBytes();
-    }
-
-    public class MoveEntityEvent : GameEvent
-    {
-        public int Id { get; private set; }
-        public float X { get; private set; }
-        public float Y { get; private set; }
-
-        public MoveEntityEvent(int id, float x, float y)
-        {
-            Id = id;
-            X = x;
-            Y = y;
-            Type = GameEventType.Move;
-        }
-
-        public MoveEntityEvent(IEnumerable<byte> bs)
-        {
-            Type = GameEventType.Move;
-
-            Id = BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
-            X = BitConverter.ToSingle(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
-            Y = BitConverter.ToSingle(bs.ToArray(), 0);
-        }
-
-        public override byte[] ToBytes()
-        {
-            return BitConverter.GetBytes(Id).Concat(
-                BitConverter.GetBytes(X).Concat(
-                BitConverter.GetBytes(Y)))
-                .ToArray();
-        }
     }
 
     public class CreateEntityEvent : GameEvent
@@ -108,12 +74,34 @@ namespace whateverthefuck.src.model
         }
     }
 
+    public class DestroyEntityEvent : GameEvent
+    {
+        public int Id { get; private set; }
+
+        public DestroyEntityEvent(GameEntity e)
+        {
+            Type = GameEventType.Destroy;
+
+            Id = e.Identifier.Id;
+        }
+
+        public DestroyEntityEvent(IEnumerable<byte> bs)
+        {
+            Type = GameEventType.Destroy;
+
+            Id = BitConverter.ToInt32(bs.ToArray(), 0);
+        }
+
+        public override byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(Id).ToArray();
+        }
+    }
 
     public enum GameEventType
     {
         NotSet,
 
-        Move,
         Create,
         Destroy,
     }

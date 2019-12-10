@@ -12,6 +12,11 @@ namespace whateverthefuck.src.network.messages
     {
         public List<GameEvent> Events { get; private set; }
 
+        public UpdateGameStateMessage(params GameEvent[] es) : this((IEnumerable<GameEvent>)es)
+        {
+
+        }
+
         public UpdateGameStateMessage(IEnumerable<GameEvent> events) : base(MessageType.UpdateGameStateMessage)
         {
             Events = events.ToList();
@@ -64,6 +69,11 @@ namespace whateverthefuck.src.network.messages
             IEnumerable<byte> bytes = bs;
             while (true)
             {
+                if (bytes.Count() == 0)
+                {
+                    break;
+                }
+
                 var gameEventType = (GameEventType)bytes.First();
                 bytes = bytes.Skip(1);
                 var bodyLength = bytes.First();
@@ -73,10 +83,6 @@ namespace whateverthefuck.src.network.messages
 
                 events.Add(GameEvent.DecodeWithEventType(gameEventType, body.ToArray()));
 
-                if (bytes.Count() == 0)
-                {
-                    break;
-                }
             }
 
             Events = events.ToList();

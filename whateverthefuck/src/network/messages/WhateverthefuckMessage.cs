@@ -39,19 +39,10 @@ namespace whateverthefuck.src.network.messages
         {
             switch (type)
             {
-                case MessageType.CreateGameEntityMessage:
-                {
-                    return new CreateGameEntityMessage();
-                }
 
                 case MessageType.ExampleMessage:
                 {
                     return new ExampleMessage();
-                }
-
-                case MessageType.DeleteGameEntityMessage:
-                {
-                    return new DeleteGameEntityMessage();
                 }
 
                 case MessageType.GrantControlMessage:
@@ -244,8 +235,6 @@ namespace whateverthefuck.src.network.messages
         GrantControlMessage,
         UpdatePlayerControlMessage,
         LoginCredentialsMessage,
-        CreateGameEntityMessage,
-        DeleteGameEntityMessage,
         ExampleMessage,
     }
 }

@@ -19,6 +19,10 @@ namespace whateverthefuckserver
         public IStorage Storage { get; private set; }
         private Timer TickTimer;
         private List<User> PlayingUsers = new List<User>();
+        object PlayersLock = new object();
+
+        private List<GameEvent> PendingEvents = new List<GameEvent>();
+
         public GameServer()
         {
             GameState = new GameState();
@@ -36,11 +40,8 @@ namespace whateverthefuckserver
                 }
             }).Start();
 
-            NPC mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC);
-            GameState.AddEntities(mob);
-
             var house = GameState.EntityGenerator.GenerateHouse(5, 5);
-            GameState.AddEntities(house.ToArray());
+            GameState.HandleGameEvents(house.Select(b => new CreateEntityEvent(b)));
         }
 
         public void AddUser(User user)
@@ -48,7 +49,10 @@ namespace whateverthefuckserver
             var createEvents = GameState.AllEntities.Select(e => new CreateEntityEvent(e));
             user.PlayerConnection.SendMessage(new UpdateGameStateMessage(createEvents));
 
-            PlayingUsers.Add(user);
+            lock (PlayersLock)
+            {
+                PlayingUsers.Add(user);
+            }
             SpawnUserAsPlayerCharacter(user);
 
         }
@@ -60,10 +64,14 @@ namespace whateverthefuckserver
 
         public void RemoveUser(User user)
         {
-            PlayingUsers.Remove(user);
+            lock (PlayersLock)
+            {
+                PlayingUsers.Remove(user);
+            }
             var hero = GameState.GetEntityById(user.HeroIdentifier.Id);
-            GameState.RemoveEntity(hero);
-            SendMessageToAllPlayers(new DeleteGameEntityMessage(hero));
+            GameEvent re = new DestroyEntityEvent(hero);
+            GameState.HandleGameEvents(re);
+            SendMessageToAllPlayers(new UpdateGameStateMessage(re));
         }
 
         public void UpdatePlayerCharacterMovementStruct(int id, MovementStruct movementStruct)
@@ -76,19 +84,23 @@ namespace whateverthefuckserver
         {
             var pc = GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter);
             pc.Location = new GameCoordinate(0, 0);
-            GameState.AddEntities(pc);
+            //GameState.AddEntities(pc);
             user.HeroIdentifier = pc.Identifier;
-            SendMessageToAllPlayers(new CreateGameEntityMessage(pc));
+            var cee = new CreateEntityEvent(pc);
+            GameState.HandleGameEvents(cee);
+            SendMessageToAllPlayers(new UpdateGameStateMessage(cee));
             user.PlayerConnection.SendMessage(new GrantControlMessage((PlayerCharacter)pc));
         }
 
         private void SendMessageToAllPlayers(WhateverthefuckMessage message)
         {
             // todo we encode the message seperately for each client
-
-            foreach (var user in PlayingUsers)
+            lock (PlayersLock)
             {
-                user.PlayerConnection.SendMessage(message);
+                foreach (var user in PlayingUsers)
+                {
+                    user.PlayerConnection.SendMessage(message);
+                }
             }
         }
 
@@ -97,9 +109,7 @@ namespace whateverthefuckserver
             GameState.Step();
             var es = GameState.AllEntities.Where(e => e.Movable);
 
-            var events = es.Select(e => new MoveEntityEvent(e.Identifier.Id, e.Location.X, e.Location.Y));
-
-            var message = new UpdateGameStateMessage(events);
+            var message = new UpdateGameStateMessage(PendingEvents);
             SendMessageToAllPlayers(message);
             Logging.Log("Sent updates on " + es.Count());
         }

@@ -19,7 +19,6 @@ namespace whateverthefuck.src.model
         private List<GameEntity> AddUs = new List<GameEntity>();
         private object LockSafeList = new object();
 
-
         public IEnumerable<GameEntity> AllEntities => EntityListSafe;
 
         public void UpdateLists()
@@ -49,7 +48,8 @@ namespace whateverthefuck.src.model
             EntityGenerator = new EntityGenerator(IdGenerator);
         }
 
-        public void AddEntities(params GameEntity[] entities)
+
+        private void AddEntities(params GameEntity[] entities)
         {
             lock (LockSafeList)
             {
@@ -58,7 +58,7 @@ namespace whateverthefuck.src.model
 
         }
 
-        public void RemoveEntity(GameEntity entity)
+        private void RemoveEntity(GameEntity entity)
         {
             lock (LockSafeList)
             {
@@ -66,7 +66,7 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public void RemoveEntity(EntityIdentifier id)
+        private void RemoveEntity(EntityIdentifier id)
         {
             RemoveEntity(GetEntityById(id.Id));
         }
@@ -144,16 +144,40 @@ namespace whateverthefuck.src.model
             }
         }
 
+        public void HandleGameEvents(params GameEvent[] es)
+        {
+            HandleGameEvents((IEnumerable<GameEvent>)es);
+        }
+
+        public void HandleGameEvents(IEnumerable<GameEvent> es)
+        {
+            foreach (var e in es)
+            {
+                if (e is CreateEntityEvent)
+                {
+                    CreateEntityEvent cee = (CreateEntityEvent)e;
+                    var entity = EntityGenerator.GenerateEntity(cee);
+                    AddEntities(entity);
+                }
+                else if (e is DestroyEntityEvent)
+                {
+                    DestroyEntityEvent dee = (DestroyEntityEvent)e;
+                    var entity = GetEntityById(dee.Id);
+                    RemoveEntity(entity);
+                }
+            }
+        }
+
         public void Step()
         {
+            UpdateLists();
+
             foreach (var entity in AllEntities)
             {
                 entity.Step();
             }
 
             HandleCollisions();
-
-            UpdateLists();
         }
 
         public IEnumerable<GameEntity> Intersects(GameEntity e)

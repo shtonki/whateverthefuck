@@ -70,11 +70,6 @@ namespace whateverthefuck.src.network
                     Program.GameStateManager.UpdateGameState(updateMessage.Events);
                 } break;
 
-                case MessageType.CreateGameEntityMessage:
-                {
-                    CreateEntityInfo info = (CreateEntityInfo)message.MessageBody;
-                    Program.GameStateManager.CreateEntity(info);
-                } break;
 
                 case MessageType.GrantControlMessage:
                 {
@@ -82,12 +77,6 @@ namespace whateverthefuck.src.network
                     Program.GameStateManager.TakeControl(controlBody.Id);
                 } break;
 
-                case MessageType.DeleteGameEntityMessage:
-                {
-                    DeleteGameEntityMessage deleteMessage = (DeleteGameEntityMessage)message;
-                    DeleteGameEntityBody deleteBody = (DeleteGameEntityBody)message.MessageBody;
-                    Program.GameStateManager.RemoveEntity(new EntityIdentifier(deleteBody.Id));
-                } break;
                 default: throw new NotImplementedException();
             }
         }

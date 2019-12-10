@@ -25,7 +25,6 @@ namespace whateverthefuck.src.network.messages
     public struct UpdatePlayerControlBody : MessageBody
     {
         public int EntityId { get; }
-        //public MovementStruct MovementStruct { get; }
         public bool Upwards { get; }
         public bool Downwards { get; }
         public bool Leftwards { get; }
