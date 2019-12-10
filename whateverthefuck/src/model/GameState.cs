@@ -193,6 +193,7 @@ namespace whateverthefuck.src.model
             }
 
             HandleCollisions();
+
         }
 
         private int hashme()

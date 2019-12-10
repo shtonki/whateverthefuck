@@ -87,6 +87,11 @@ namespace whateverthefuck.src.model
         {
             return (int)((Location.X * 1000) * (Location.Y * 1000) * ((int)EntityType));
         }
+
+        public override string ToString()
+        {
+            return String.Format("{0} at {1}:{2}", EntityType.ToString(), Location.X.ToString(), Location.Y.ToString());
+        }
     }
 
     public class EntityIdentifier

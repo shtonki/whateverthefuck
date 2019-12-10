@@ -80,6 +80,12 @@ namespace whateverthefuck.src.model.entities
         public float Direction { get; set; }
         public int? FollowId { get; set; }
 
+        public MovementStruct()
+        {
+            Direction = float.NaN;
+            FollowId = null;
+        }
+
         public static MovementStruct Decode(byte[] bs)
         {
             IEnumerable<byte> bytes = bs;
