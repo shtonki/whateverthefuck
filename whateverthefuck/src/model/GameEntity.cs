@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 using static whateverthefuck.src.model.EntityGenerator;
+using Rectangle = whateverthefuck.src.view.Rectangle;
 
 namespace whateverthefuck.src.model
 {
@@ -53,6 +54,8 @@ namespace whateverthefuck.src.model
 
         protected Color DrawColor = Color.Black;
 
+        public Color HighlightColor = Color.Transparent;
+
         public override void DrawMe(DrawAdapter drawAdapter)
         {
             float x1 = Location.X;
@@ -61,6 +64,12 @@ namespace whateverthefuck.src.model
             float y2 = y1 + Size.Y;
 
             drawAdapter.FillRectangle(x1, y1, x2, y2, DrawColor);
+
+            if (HighlightColor != Color.Transparent)
+            {
+                Rectangle r = new view.Rectangle(this, HighlightColor);
+                r.DrawMe(drawAdapter);
+            }
         }
 
         public virtual void Step()

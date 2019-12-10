@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace whateverthefuck.src.model.entities
 {
@@ -15,6 +16,8 @@ namespace whateverthefuck.src.model.entities
             Movable = true;
 
             Height = 10;
+
+            HighlightColor = Color.Aqua;
         }
 
         public void SetMovementUpwards(bool move)

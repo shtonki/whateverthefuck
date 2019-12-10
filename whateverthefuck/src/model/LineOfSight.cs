@@ -33,7 +33,7 @@ namespace whateverthefuck.src.model
             {
                 if (ShowOutlines)
                 {
-                    extras.Add(new view.Rectangle(target));
+                    extras.Add(new view.Rectangle(target, Color.White));
                 }
 
                 if (target == looker) { continue; }

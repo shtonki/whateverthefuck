@@ -37,20 +37,23 @@ namespace whateverthefuck.src.view
         public float X2;
         public float Y2;
 
-        public Rectangle(GameEntity o) : base(new GameCoordinate(0, 0))
+        public Color DrawColor;
+
+        public Rectangle(GameEntity o, Color drawColor) : base(new GameCoordinate(0, 0))
         {
             X1 = o.Left;
             Y1 = o.Bottom;
             X2 = o.Right;
             Y2 = o.Top;
+            DrawColor = drawColor;
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            drawAdapter.FillLine(X1, Y1, X2, Y1, Color.White);
-            drawAdapter.FillLine(X2, Y1, X2, Y2, Color.White);
-            drawAdapter.FillLine(X2, Y2, X1, Y2, Color.White);
-            drawAdapter.FillLine(X1, Y2, X1, Y1, Color.White);
+            drawAdapter.FillLine(X1, Y1, X2, Y1, DrawColor);
+            drawAdapter.FillLine(X2, Y1, X2, Y2, DrawColor);
+            drawAdapter.FillLine(X2, Y2, X1, Y2, DrawColor);
+            drawAdapter.FillLine(X1, Y2, X1, Y1, DrawColor);
         }
     }
 

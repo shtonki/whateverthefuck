@@ -192,6 +192,8 @@ namespace whateverthefuck.src.model
             return picked.First();
         }
 
+        GameEntity clicked;
+
         public void HandleWorldClick(MouseButtonEventArgs me, GameCoordinate clickLocation)
         {
             if (me.Button == MouseButton.Left && me.IsPressed)
@@ -199,7 +201,13 @@ namespace whateverthefuck.src.model
                 var ge = GetEntityAtLocation(clickLocation);
                 if (ge != null)
                 {
-                    Logging.Log(ge.ToString());
+                    if (clicked != null)
+                    {
+                        clicked.HighlightColor = Color.Transparent;
+                    }
+
+                    clicked = ge;
+                    clicked.HighlightColor = Color.DarkOrange;
                 }
             }
             else if (me.Button == MouseButton.Left && !me.IsPressed)
