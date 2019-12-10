@@ -15,8 +15,6 @@ namespace whateverthefuck.src.model.entities
         {
             Movable = true;
 
-            Height = 10;
-
             HighlightColor = Color.Aqua;
         }
 

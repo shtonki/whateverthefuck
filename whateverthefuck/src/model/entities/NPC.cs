@@ -9,7 +9,6 @@ namespace whateverthefuck.src.model.entities
         {
             DrawColor = Color.Red;
             Movable = true;
-
         }
 
         int ctr = 0;
