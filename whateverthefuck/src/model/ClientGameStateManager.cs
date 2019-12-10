@@ -20,6 +20,7 @@ namespace whateverthefuck.src.model
         private Timer TickTimer;
 
         private PlayerCharacter Hero;
+        private PlayerCharacter HeroControlDummy;
 
         public GameState GameState { get; set; }
 
@@ -38,6 +39,8 @@ namespace whateverthefuck.src.model
         const int div = 4;
         const int mul = div - 1;
 
+        int mem = 0;
+
         private void Tick()
         {
 #if false
@@ -48,16 +51,14 @@ namespace whateverthefuck.src.model
 #endif
             if (Hero != null)
             {
-                Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(Hero));
+                var val = HeroControlDummy.Movements.EncodeAsInt();
+
+                if (val != mem)
+                {
+                    Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(HeroControlDummy));
+                    mem = val;
+                }
             }
-
-        }
-
-        public void StepClient(IEnumerable<GameEvent> events)
-        {
-            GameState.HandleGameEvents(events);
-            GameState.Step();
-            UpdateLOS();
         }
 
 
@@ -106,6 +107,7 @@ namespace whateverthefuck.src.model
         public void TakeControl(int identifier)
         {
             Hero = (PlayerCharacter)GameState.GetEntityById(identifier);
+            HeroControlDummy = new PlayerCharacter(new EntityIdentifier(Hero.Identifier.Id));
             CenterCameraOn(Hero);
         }
 
@@ -114,12 +116,11 @@ namespace whateverthefuck.src.model
             GUI.Camera = new FollowCamera(Hero);
         }
 
-        private Semaphore UpdateLocationSemaphore = new Semaphore(1, 1);
-
         public void UpdateGameState(IEnumerable<GameEvent> events)
         {
             GameState.HandleGameEvents(events);
             GameState.Step();
+            UpdateLOS();
 #if false
             if (UpdateLocationSemaphore.WaitOne(new TimeSpan(1)))
             {
@@ -222,49 +223,49 @@ namespace whateverthefuck.src.model
             {
                 case GameAction.HeroWalkUpwards:
                     {
-                        Hero?.SetMovementUpwards(true);
+                        HeroControlDummy?.SetMovementUpwards(true);
                     }
                     break;
 
                 case GameAction.HeroWalkUpwardsStop:
                     {
-                        Hero?.SetMovementUpwards(false);
+                        HeroControlDummy?.SetMovementUpwards(false);
                     }
                     break;
 
                 case GameAction.HeroWalkDownwards:
                     {
-                        Hero?.SetMovementDownwards(true);
+                        HeroControlDummy?.SetMovementDownwards(true);
                     }
                     break;
 
                 case GameAction.HeroWalkDownwardsStop:
                     {
-                        Hero?.SetMovementDownwards(false);
+                        HeroControlDummy?.SetMovementDownwards(false);
                     }
                     break;
 
                 case GameAction.HeroWalkLeftwards:
                     {
-                        Hero?.SetMovementLeftwards(true);
+                        HeroControlDummy?.SetMovementLeftwards(true);
                     }
                     break;
 
                 case GameAction.HeroWalkLeftwardsStop:
                     {
-                        Hero?.SetMovementLeftwards(false);
+                        HeroControlDummy?.SetMovementLeftwards(false);
                     }
                     break;
 
                 case GameAction.HeroWalkRightwards:
                     {
-                        Hero?.SetMovementRightwards(true);
+                        HeroControlDummy?.SetMovementRightwards(true);
                     }
                     break;
 
                 case GameAction.HeroWalkRightwardsStop:
                     {
-                        Hero?.SetMovementRightwards(false);
+                        HeroControlDummy?.SetMovementRightwards(false);
                     }
                     break;
 

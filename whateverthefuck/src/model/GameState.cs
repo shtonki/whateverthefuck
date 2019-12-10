@@ -153,18 +153,33 @@ namespace whateverthefuck.src.model
         {
             foreach (var e in es)
             {
-                if (e is CreateEntityEvent)
-                {
-                    CreateEntityEvent cee = (CreateEntityEvent)e;
-                    var entity = EntityGenerator.GenerateEntity(cee);
-                    AddEntities(entity);
-                }
-                else if (e is DestroyEntityEvent)
-                {
-                    DestroyEntityEvent dee = (DestroyEntityEvent)e;
-                    var entity = GetEntityById(dee.Id);
-                    RemoveEntity(entity);
-                }
+                HandleGameEvent(e);
+            }
+        }
+
+        private void HandleGameEvent(GameEvent e)
+        {
+            if (e is CreateEntityEvent)
+            {
+                CreateEntityEvent cee = (CreateEntityEvent)e;
+                var entity = EntityGenerator.GenerateEntity(cee);
+                AddEntities(entity);
+            }
+            else if (e is DestroyEntityEvent)
+            {
+                DestroyEntityEvent dee = (DestroyEntityEvent)e;
+                var entity = GetEntityById(dee.Id);
+                RemoveEntity(entity);
+            }
+            else if (e is UpdateControlEvent)
+            {
+                UpdateControlEvent uce = (UpdateControlEvent)e;
+                var entity = (Character)GetEntityById(uce.Id);
+                entity.Movements = uce.Movements;
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -178,6 +193,12 @@ namespace whateverthefuck.src.model
             }
 
             HandleCollisions();
+        }
+
+        private int hashme()
+        {
+            int hash = AllEntities.Select(e => e.GetMemeCode()%1023).Sum();
+            return hash;
         }
 
         public IEnumerable<GameEntity> Intersects(GameEntity e)

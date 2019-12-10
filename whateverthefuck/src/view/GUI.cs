@@ -59,7 +59,7 @@ namespace whateverthefuck.src.view
 
         public static void LoadGUI()
         {
-            GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
+            //GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
         }
     }
 }

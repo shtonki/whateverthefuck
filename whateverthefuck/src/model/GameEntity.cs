@@ -73,6 +73,11 @@ namespace whateverthefuck.src.model
         {
             return new GameCoordinate(0, 0);
         }
+
+        public int GetMemeCode()
+        {
+            return (int)((Location.X * 1000) * (Location.Y * 1000) * ((int)EntityType));
+        }
     }
 
     public class EntityIdentifier

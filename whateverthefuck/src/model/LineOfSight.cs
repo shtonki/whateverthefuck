@@ -17,6 +17,12 @@ namespace whateverthefuck.src.model
             var extras = new List<Drawable>();
 
             var rt = new List<GameEntity>();
+
+            if (looker == null)
+            {
+                return rt;
+            }
+
             rt.Add(looker);
 
             var blockers = looked.Where(e => e.BlocksLOS);

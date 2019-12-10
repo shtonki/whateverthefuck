@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using whateverthefuck.src.model.entities;
 using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.model
@@ -21,6 +23,11 @@ namespace whateverthefuck.src.model
                 case GameEventType.Destroy:
                 {
                     return new DestroyEntityEvent(body);
+                }
+
+                case GameEventType.Control:
+                {
+                    return new UpdateControlEvent(body);
                 }
 
                 default: throw new Exception();
@@ -98,11 +105,43 @@ namespace whateverthefuck.src.model
         }
     }
 
+    public class UpdateControlEvent : GameEvent
+    {
+        public int Id { get; private set; }
+        public MovementStruct Movements { get; private set; }
+
+        public UpdateControlEvent(int id, MovementStruct movements)
+        {
+            Type = GameEventType.Control;
+
+            Id = id;
+            Movements = movements;
+        }
+
+        public UpdateControlEvent(IEnumerable<byte> bs)
+        {
+            Type = GameEventType.Control;
+
+            Id = BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int)).ToArray();
+            var val = BitConverter.ToInt32(bs.ToArray(), 0);
+            Movements = new MovementStruct(val);
+        }
+
+        public override byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(Id).Concat(
+                BitConverter.GetBytes(Movements.EncodeAsInt()))
+                .ToArray();
+        }
+    }
+
     public enum GameEventType
     {
         NotSet,
 
         Create,
         Destroy,
+        Control,
     }
 }

@@ -77,7 +77,8 @@ namespace whateverthefuckserver
         public void UpdatePlayerCharacterMovementStruct(int id, MovementStruct movementStruct)
         {
             PlayerCharacter pc = (PlayerCharacter)GameState.GetEntityById(id);
-            pc.Movements = movementStruct;
+            var evnt = new UpdateControlEvent(id, movementStruct);
+            PendingEvents.Add(evnt);
         }
 
         private void SpawnPlayerCharacter(User user)
@@ -106,12 +107,11 @@ namespace whateverthefuckserver
 
         public void Tick()
         {
-            GameState.Step();
-            var es = GameState.AllEntities.Where(e => e.Movable);
-
+            GameState.HandleGameEvents(PendingEvents);
             var message = new UpdateGameStateMessage(PendingEvents);
+            PendingEvents.Clear();
+            GameState.Step();
             SendMessageToAllPlayers(message);
-            Logging.Log("Sent updates on " + es.Count());
         }
     }
 }

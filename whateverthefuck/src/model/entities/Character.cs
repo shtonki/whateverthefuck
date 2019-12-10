@@ -65,12 +65,49 @@ namespace whateverthefuck.src.model.entities
         public bool Rightwards { get; set; }
         public bool Leftwards { get; set; }
 
+        private int UpwardsMask   = 0b0001;
+        private int DownwardsMask = 0b0010;
+        private int RightwardsMask = 0b0100;
+        private int LeftwardsMask  = 0b1000;
+
         public MovementStruct(bool upwards, bool downwards, bool rightwards, bool leftwards)
         {
             Upwards = upwards;
             Downwards = downwards;
             Rightwards = rightwards;
             Leftwards = leftwards;
+        }
+
+        public MovementStruct(int decodeMe)
+        {
+            Upwards = (UpwardsMask & decodeMe) != 0;
+            Downwards = (DownwardsMask & decodeMe) != 0;
+            Rightwards = (RightwardsMask & decodeMe) != 0;
+            Leftwards = (LeftwardsMask & decodeMe) != 0;
+        }
+
+        public int EncodeAsInt()
+        {
+            int val = 0;
+
+            if (Upwards)
+            {
+                val |= UpwardsMask;
+            }
+            if (Downwards)
+            {
+                val |= DownwardsMask;
+            }
+            if (Leftwards)
+            {
+                val |= LeftwardsMask;
+            }
+            if (Rightwards)
+            {
+                val |= RightwardsMask;
+            }
+
+            return val;
         }
     }
 }
