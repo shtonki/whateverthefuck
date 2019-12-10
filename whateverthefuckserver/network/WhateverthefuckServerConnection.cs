@@ -27,18 +27,19 @@ namespace whateverthefuckserver.network
         {
             switch (message.MessageType)
             {
-                case MessageType.UpdatePlayerControlMessage:
-                {
-                    UpdatePlayerControlBody updatePlayerChatacterLocationBody = (UpdatePlayerControlBody)message.MessageBody;
-                    Program.GameServer.UpdatePlayerCharacterMovementStruct(updatePlayerChatacterLocationBody.EntityId, updatePlayerChatacterLocationBody.MovementStruct);
-                } break;
-
                 case MessageType.LoginCredentialsMessage:
                 {
                     LoginCredentialBody loginBody = (LoginCredentialBody) message.MessageBody;
                     LoginServer.Login(new User(this), new LoginCredentials(loginBody.Username));         
                 } break;
-                default: throw new NotImplementedException();
+
+                case MessageType.UpdateGameStateMessage:
+                {
+                        UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
+                        Program.GameServer.HandleEventRequests(updateMessage.Events);
+                } break;
+
+                default: throw new NotImplementedException("Unhandled MessageType");
             }
         }
     }

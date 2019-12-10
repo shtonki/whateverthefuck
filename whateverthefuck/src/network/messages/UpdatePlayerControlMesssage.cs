@@ -7,6 +7,7 @@ using whateverthefuck.src.model;
 using whateverthefuck.src.model.entities;
 using whateverthefuck.src.util;
 
+#if false
 namespace whateverthefuck.src.network.messages
 {
     public class UpdatePlayerControlMessage : WhateverthefuckMessage
@@ -42,3 +43,4 @@ namespace whateverthefuck.src.network.messages
         }
     }
 }
+#endif

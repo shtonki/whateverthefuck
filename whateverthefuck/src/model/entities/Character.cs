@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.model.entities
 {
     public abstract class Character : GameEntity
     {
-        private const float OneOverSquareRootOfTwo = 0.70710678118f;
 
-        public MovementStruct Movements { get; set; } = new MovementStruct(false, false, false, false);
+        public MovementStruct Movements { get; set; } = new MovementStruct();
         public float MoveSpeed = 0.01f;
+
+
 
 
         public Character(EntityIdentifier identifier, EntityType entityType) : base(identifier, entityType)
@@ -17,7 +21,7 @@ namespace whateverthefuck.src.model.entities
 
             HighlightColor = Color.Aqua;
         }
-
+#if false
         public void SetMovementUpwards(bool move)
         {
             Movements.Upwards = move;
@@ -38,8 +42,19 @@ namespace whateverthefuck.src.model.entities
             Movements.Rightwards = move;
         }
 
+#endif
+
         public override GameCoordinate CalculateMovement()
         {
+            if (float.IsNaN(Movements.Direction))
+            {
+                return new GameCoordinate(0, 0);
+            }
+            else
+            {
+                return new GameCoordinate((float)Math.Sin(Movements.Direction) * MoveSpeed, (float)Math.Cos(Movements.Direction) * MoveSpeed);
+            }
+#if false
             var xMove = 0.0f;
             var yMove = 0.0f;
 
@@ -56,59 +71,47 @@ namespace whateverthefuck.src.model.entities
             if (Movements.Rightwards) { xMove += speed; }
 
             return new GameCoordinate(xMove, yMove);
+#endif
         }
     }
 
     public class MovementStruct
     {
-        public bool Upwards { get; set; }
-        public bool Downwards { get; set; }
-        public bool Rightwards { get; set; }
-        public bool Leftwards { get; set; }
+        public float Direction { get; set; }
+        public int? FollowId { get; set; }
 
-        private int UpwardsMask   = 0b0001;
-        private int DownwardsMask = 0b0010;
-        private int RightwardsMask = 0b0100;
-        private int LeftwardsMask  = 0b1000;
-
-        public MovementStruct(bool upwards, bool downwards, bool rightwards, bool leftwards)
+        public static MovementStruct Decode(byte[] bs)
         {
-            Upwards = upwards;
-            Downwards = downwards;
-            Rightwards = rightwards;
-            Leftwards = leftwards;
+            IEnumerable<byte> bytes = bs;
+            bool isFollow = BitConverter.ToBoolean(bytes.ToArray(), 0);
+            bytes = bytes.Skip(sizeof(bool));
+
+            var ms = new MovementStruct();
+
+            if (isFollow)
+            {
+                ms.FollowId = BitConverter.ToInt32(bytes.ToArray(), 0);
+            }
+            else
+            {
+                ms.Direction = BitConverter.ToSingle(bytes.ToArray(), 0);
+            }
+
+            return ms;
+
         }
-
-        public MovementStruct(int decodeMe)
+        public byte[] Encode()
         {
-            Upwards = (UpwardsMask & decodeMe) != 0;
-            Downwards = (DownwardsMask & decodeMe) != 0;
-            Rightwards = (RightwardsMask & decodeMe) != 0;
-            Leftwards = (LeftwardsMask & decodeMe) != 0;
-        }
-
-        public int EncodeAsInt()
-        {
-            int val = 0;
-
-            if (Upwards)
+            
+            if (FollowId.HasValue)
             {
-                val |= UpwardsMask;
+                return BitConverter.GetBytes(true).Concat(BitConverter.GetBytes(FollowId.Value)).ToArray();
             }
-            if (Downwards)
+            else
             {
-                val |= DownwardsMask;
+                return BitConverter.GetBytes(false).Concat(BitConverter.GetBytes(Direction)).ToArray();
             }
-            if (Leftwards)
-            {
-                val |= LeftwardsMask;
-            }
-            if (Rightwards)
-            {
-                val |= RightwardsMask;
-            }
-
-            return val;
         }
     }
+
 }

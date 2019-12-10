@@ -55,11 +55,6 @@ namespace whateverthefuck.src.network.messages
                     return new LogMessage();
                 }
 
-                case MessageType.UpdatePlayerControlMessage:
-                {
-                    return new UpdatePlayerControlMessage();
-                }
-
                 case MessageType.UpdateGameStateMessage:
                 {
                     return new UpdateGameStateMessage();
@@ -233,7 +228,6 @@ namespace whateverthefuck.src.network.messages
         LogMessage,
         UpdateGameStateMessage,
         GrantControlMessage,
-        UpdatePlayerControlMessage,
         LoginCredentialsMessage,
         ExampleMessage,
     }

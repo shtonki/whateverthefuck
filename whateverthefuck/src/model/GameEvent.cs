@@ -27,7 +27,7 @@ namespace whateverthefuck.src.model
 
                 case GameEventType.Control:
                 {
-                    return new UpdateControlEvent(body);
+                    return new UpdateMovementEvent(body);
                 }
 
                 default: throw new Exception();
@@ -105,12 +105,12 @@ namespace whateverthefuck.src.model
         }
     }
 
-    public class UpdateControlEvent : GameEvent
+    public class UpdateMovementEvent : GameEvent
     {
         public int Id { get; private set; }
         public MovementStruct Movements { get; private set; }
 
-        public UpdateControlEvent(int id, MovementStruct movements)
+        public UpdateMovementEvent(int id, MovementStruct movements)
         {
             Type = GameEventType.Control;
 
@@ -118,20 +118,19 @@ namespace whateverthefuck.src.model
             Movements = movements;
         }
 
-        public UpdateControlEvent(IEnumerable<byte> bs)
+        public UpdateMovementEvent(IEnumerable<byte> bs)
         {
             Type = GameEventType.Control;
 
             Id = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int)).ToArray();
-            var val = BitConverter.ToInt32(bs.ToArray(), 0);
-            Movements = new MovementStruct(val);
+            Movements = MovementStruct.Decode(bs.ToArray());
         }
 
         public override byte[] ToBytes()
         {
             return BitConverter.GetBytes(Id).Concat(
-                BitConverter.GetBytes(Movements.EncodeAsInt()))
+                Movements.Encode())
                 .ToArray();
         }
     }

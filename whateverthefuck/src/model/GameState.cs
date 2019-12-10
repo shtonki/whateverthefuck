@@ -171,9 +171,9 @@ namespace whateverthefuck.src.model
                 var entity = GetEntityById(dee.Id);
                 RemoveEntity(entity);
             }
-            else if (e is UpdateControlEvent)
+            else if (e is UpdateMovementEvent)
             {
-                UpdateControlEvent uce = (UpdateControlEvent)e;
+                UpdateMovementEvent uce = (UpdateMovementEvent)e;
                 var entity = (Character)GetEntityById(uce.Id);
                 entity.Movements = uce.Movements;
             }

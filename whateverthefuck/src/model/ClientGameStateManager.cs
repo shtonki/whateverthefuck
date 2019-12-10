@@ -20,7 +20,6 @@ namespace whateverthefuck.src.model
         private Timer TickTimer;
 
         private PlayerCharacter Hero;
-        private PlayerCharacter HeroControlDummy;
 
         public GameState GameState { get; set; }
 
@@ -28,6 +27,8 @@ namespace whateverthefuck.src.model
         private bool UseSmoothing = true;
 
         private const int TickInterval = 10;
+
+        private HeroMovementStruct HeroMovements = new HeroMovementStruct();
 
         public ClientGameStateManager()
         {
@@ -39,7 +40,10 @@ namespace whateverthefuck.src.model
         const int div = 4;
         const int mul = div - 1;
 
-        int mem = 0;
+        private float PrevDirection;
+
+        private const float OneOverSquareRootOfTwo = 0.70710678118f;
+
 
         private void Tick()
         {
@@ -51,13 +55,62 @@ namespace whateverthefuck.src.model
 #endif
             if (Hero != null)
             {
-                var val = HeroControlDummy.Movements.EncodeAsInt();
+                MovementStruct ms = new MovementStruct();
 
-                if (val != mem)
+                double direction = 0;
+
+                if (HeroMovements.Upwards && HeroMovements.Leftwards)
                 {
-                    Program.ServerConnection.SendMessage(new UpdatePlayerControlMessage(HeroControlDummy));
-                    mem = val;
+                    direction = 7 * Math.PI / 4;
                 }
+                else if (HeroMovements.Upwards && HeroMovements.Rightwards)
+                {
+                    direction = Math.PI / 4;
+                }
+                else if (HeroMovements.Downwards && HeroMovements.Leftwards)
+                {
+                    direction = 5 * Math.PI / 4;
+                }
+                else if (HeroMovements.Downwards && HeroMovements.Rightwards)
+                {
+                    direction = 3 * Math.PI / 4;
+                }
+                else if (HeroMovements.Leftwards)
+                {
+                    direction = 3*Math.PI/2;
+                }
+                else if (HeroMovements.Rightwards)
+                {
+                    direction = Math.PI/2;
+                }
+                else if (HeroMovements.Upwards)
+                {
+                    direction = 2*Math.PI;
+                }
+                else if (HeroMovements.Downwards)
+                {
+                    direction = Math.PI;
+                }
+
+
+                if (direction == 0)
+                {
+                    ms.Direction = float.NaN;
+                }
+                else
+                {
+                    ms.Direction = (float)direction;
+                }
+
+
+                if (ms.Direction != PrevDirection)
+                {
+                    var e = new UpdateMovementEvent(Hero.Identifier.Id, ms);
+                    Program.ServerConnection.SendMessage(new UpdateGameStateMessage(e));
+
+                    PrevDirection = ms.Direction;
+                }
+
             }
         }
 
@@ -127,7 +180,6 @@ namespace whateverthefuck.src.model
                 Hero = (PlayerCharacter)GameState.GetEntityById(TakeControlId.Value);
                 if (Hero != null)
                 {
-                    HeroControlDummy = new PlayerCharacter(new EntityIdentifier(Hero.Identifier.Id));
                     CenterCameraOn(Hero);
                 }
                 TakeControlId = null;
@@ -241,52 +293,44 @@ namespace whateverthefuck.src.model
             switch (gameAction)
             {
                 case GameAction.HeroWalkUpwards:
-                    {
-                        HeroControlDummy?.SetMovementUpwards(true);
-                    }
-                    break;
+                {
+                    HeroMovements.Upwards = (true);
+                } break;
 
                 case GameAction.HeroWalkUpwardsStop:
-                    {
-                        HeroControlDummy?.SetMovementUpwards(false);
-                    }
-                    break;
+                {
+                    HeroMovements.Upwards = (false);
+                } break;
 
                 case GameAction.HeroWalkDownwards:
-                    {
-                        HeroControlDummy?.SetMovementDownwards(true);
-                    }
-                    break;
+                {
+                    HeroMovements.Downwards = (true);
+                } break;
 
                 case GameAction.HeroWalkDownwardsStop:
-                    {
-                        HeroControlDummy?.SetMovementDownwards(false);
-                    }
-                    break;
+                {
+                    HeroMovements.Downwards = (false);
+                } break;
 
                 case GameAction.HeroWalkLeftwards:
-                    {
-                        HeroControlDummy?.SetMovementLeftwards(true);
-                    }
-                    break;
+                {
+                    HeroMovements.Leftwards = (true);
+                } break;
 
                 case GameAction.HeroWalkLeftwardsStop:
-                    {
-                        HeroControlDummy?.SetMovementLeftwards(false);
-                    }
-                    break;
+                {
+                    HeroMovements.Leftwards = (false);
+                } break;
 
                 case GameAction.HeroWalkRightwards:
-                    {
-                        HeroControlDummy?.SetMovementRightwards(true);
-                    }
-                    break;
+                {
+                    HeroMovements.Rightwards = (true);
+                } break;
 
                 case GameAction.HeroWalkRightwardsStop:
-                    {
-                        HeroControlDummy?.SetMovementRightwards(false);
-                    }
-                    break;
+                {
+                    HeroMovements.Rightwards = (false);
+                } break;
 
                 case GameAction.CameraZoomIn:
                     {
@@ -303,6 +347,15 @@ namespace whateverthefuck.src.model
             }
         }
 
+    }
+
+
+    public class HeroMovementStruct
+    {
+        public bool Upwards { get; set; }
+        public bool Downwards { get; set; }
+        public bool Rightwards { get; set; }
+        public bool Leftwards { get; set; }
     }
 
     class SpicyClass

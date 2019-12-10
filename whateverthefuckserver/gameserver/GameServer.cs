@@ -45,6 +45,11 @@ namespace whateverthefuckserver
             GameState.HandleGameEvents(house.Select(b => new CreateEntityEvent(b)));
         }
 
+        internal void HandleEventRequests(List<GameEvent> events)
+        {
+            PendEvents(events.ToArray());
+        }
+
         public void AddUser(User user)
         {
             var createEvents = GameState.AllEntities.Select(e => new CreateEntityEvent(e));
@@ -67,13 +72,6 @@ namespace whateverthefuckserver
             var hero = GameState.GetEntityById(user.HeroIdentifier.Id);
             GameEvent re = new DestroyEntityEvent(hero);
             PendEvents(re);
-        }
-
-        public void UpdatePlayerCharacterMovementStruct(int id, MovementStruct movementStruct)
-        {
-            PlayerCharacter pc = (PlayerCharacter)GameState.GetEntityById(id);
-            var evnt = new UpdateControlEvent(id, movementStruct);
-            PendEvents(evnt);
         }
 
         private void SpawnPlayerCharacter(User user)
