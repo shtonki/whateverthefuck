@@ -42,7 +42,7 @@ namespace whateverthefuckserver
             }).Start();
 
             var house = GameState.EntityGenerator.GenerateHouse(5, 5);
-            GameState.HandleGameEvents(house.Select(b => new CreateEntityEvent(b)));
+            //GameState.HandleGameEvents(house.Select(b => new CreateEntityEvent(b)));
             
             var mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC);
             mob.Location = new GameCoordinate(0, 0.75f);
@@ -75,7 +75,6 @@ namespace whateverthefuckserver
                 PlayingUsers.Add(user);
             }
             SpawnPlayerCharacter(user);
-
         }
 
         public void RemoveUser(User user)

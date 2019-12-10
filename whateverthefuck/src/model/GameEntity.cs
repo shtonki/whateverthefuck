@@ -25,6 +25,8 @@ namespace whateverthefuck.src.model
 
         public bool Collidable = true;
 
+        public bool Targetable = false;
+
         public bool BlocksLOS { get; protected set; } = true;
 
         public int LOSGraceTicks = 0;

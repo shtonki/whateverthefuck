@@ -14,8 +14,7 @@ namespace whateverthefuck.src.model.entities
         public Character(EntityIdentifier identifier, EntityType entityType) : base(identifier, entityType)
         {
             Movable = true;
-
-            HighlightColor = Color.Aqua;
+            Targetable = true;
         }
     }
 }

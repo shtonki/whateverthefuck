@@ -30,6 +30,9 @@ namespace whateverthefuck.src.model
 
         private HeroMovementStruct HeroMovements = new HeroMovementStruct();
 
+        private GameEntity Target { get; set; }
+
+
         public ClientGameStateManager()
         {
             GameState = new GameState();
@@ -103,14 +106,13 @@ namespace whateverthefuck.src.model
                 }
 
 
-                if (ms.Direction != PrevDirection)
+                if (!ms.Direction.Equals(PrevDirection))
                 {
                     var e = new UpdateMovementEvent(Hero.Identifier.Id, ms);
                     Program.ServerConnection.SendMessage(new UpdateGameStateMessage(e));
-
-                    PrevDirection = ms.Direction;
                 }
 
+                PrevDirection = ms.Direction;
             }
         }
 
@@ -255,22 +257,21 @@ namespace whateverthefuck.src.model
             return picked.First();
         }
 
-        GameEntity clicked;
 
         public void HandleWorldClick(MouseButtonEventArgs me, GameCoordinate clickLocation)
         {
             if (me.Button == MouseButton.Left && me.IsPressed)
             {
                 var ge = GetEntityAtLocation(clickLocation);
-                if (ge != null)
+                if (ge != null && ge.Targetable)
                 {
-                    if (clicked != null)
+                    if (Target != null)
                     {
-                        clicked.HighlightColor = Color.Transparent;
+                        Target.HighlightColor = Color.Transparent;
                     }
 
-                    clicked = ge;
-                    clicked.HighlightColor = Color.DarkOrange;
+                    Target = ge;
+                    Target.HighlightColor = Color.DarkOrange;
                 }
             }
             else if (me.Button == MouseButton.Left && !me.IsPressed)
