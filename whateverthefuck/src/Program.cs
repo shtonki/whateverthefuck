@@ -21,20 +21,6 @@ namespace whateverthefuck
         public static void Main(String[] args)
         {
 #if false
-            List<GameEvent> ges = new List<GameEvent>();
-            ges.Add(new DummyEvent(420));
-            ges.Add(new DummyEvent(69));
-            ges.Add(new Dummy2Event(4.19f, 111));
-            ges.Add(new Dummy2Event(6.9f, 222));
-            ges.Add(new DummyEvent(5));
-            ges.Add(new MoveEntityEvent(4, 1.4f, 1.6f));
-
-
-            UpdateGameStateMessage message = new UpdateGameStateMessage(ges);
-            var bs = WhateverthefuckMessage.EncodeMessage(message);
-
-            var reconstructedMessage = WhateverthefuckMessage.DecodeMessage(bs);
-            int i = 4;
 #else
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
 

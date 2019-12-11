@@ -9,7 +9,7 @@ namespace whateverthefuck.src.model.entities
 {
     public abstract class Character : GameEntity
     {
-        public Character(EntityIdentifier identifier, EntityType entityType) : base(identifier, entityType)
+        public Character(EntityIdentifier identifier, EntityType entityType, CreationArgs args) : base(identifier, entityType, args)
         {
             Movable = true;
             Targetable = true;

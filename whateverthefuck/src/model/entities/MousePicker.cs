@@ -10,7 +10,7 @@ namespace whateverthefuck.src.model.entities
 {
     class MousePicker : GameEntity
     {
-        public MousePicker() : base(EntityIdentifier.Invalid, EntityType.GameMechanic)
+        public MousePicker() : base(EntityIdentifier.Invalid, EntityType.GameMechanic, new CreationArgs(0))
         {
             Visible = true;
             DrawColor = Color.CornflowerBlue;

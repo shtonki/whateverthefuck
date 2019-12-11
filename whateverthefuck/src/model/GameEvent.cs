@@ -93,6 +93,8 @@ namespace whateverthefuck.src.model
         public int CurrentHealth { get; private set; }
         public int MaxHealth { get; private set; }
 
+        public CreationArgs CreationArgs { get; private set; }
+
         public Action<GameEntity> OnDeathCallback { get; set; }
 
 
@@ -106,6 +108,15 @@ namespace whateverthefuck.src.model
             Y = e.Location.Y;
             CurrentHealth = e.CurrentHealth;
             MaxHealth = e.MaxHealth;
+
+            if (e.CreationArgs == null)
+            {
+                CreationArgs = new CreationArgs(0);
+            }
+            else
+            { 
+                CreationArgs = e.CreationArgs;
+            }
         }
 
         public CreateEntityEvent(IEnumerable<byte> bs)
@@ -129,6 +140,9 @@ namespace whateverthefuck.src.model
 
             MaxHealth = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int));
+
+            CreationArgs = new CreationArgs(BitConverter.ToUInt64(bs.ToArray(), 0));
+            bs = bs.Skip(sizeof(long));
         }
 
         public override byte[] ToBytes()
@@ -138,8 +152,9 @@ namespace whateverthefuck.src.model
                 BitConverter.GetBytes(X).Concat(
                 BitConverter.GetBytes(Y).Concat(
                 BitConverter.GetBytes(CurrentHealth).Concat(
-                BitConverter.GetBytes(MaxHealth)
-                ))))).ToArray();
+                BitConverter.GetBytes(MaxHealth).Concat(
+                BitConverter.GetBytes(CreationArgs.Value)
+                )))))).ToArray();
         }
     }
 

@@ -197,8 +197,8 @@ namespace whateverthefuck.src.model
                     return false;
                 }
 
-                var p = EntityGenerator.GenerateEntity(EntityType.Projectile);
-                p.Identifier = EntityIdentifier.RandomReserved();
+                var ca = new CreationArgs(0);
+                var p = EntityGenerator.GenerateEntity(EntityType.Projectile, EntityIdentifier.RandomReserved(), ca);
                 p.Location = caster.Center;
                 p.Movements.FollowId = castee.Identifier.Id;
                 AddEntities(p);

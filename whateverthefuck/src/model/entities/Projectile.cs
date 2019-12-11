@@ -12,7 +12,7 @@ namespace whateverthefuck.src.model.entities
     {
         private float AsplodeCutoff => MoveSpeed * 2;
 
-        public Projectile(EntityIdentifier id) : base(id, EntityType.Projectile)
+        public Projectile(EntityIdentifier id, CreationArgs args) : base(id, EntityType.Projectile, args)
         {
             Size = new GameCoordinate(0.01f, 0.01f);
             DrawColor = Color.Black;

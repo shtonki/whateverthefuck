@@ -6,7 +6,7 @@ namespace whateverthefuck.src.model.entities
 {
     public class PlayerCharacter : Character
     {
-        public PlayerCharacter(EntityIdentifier identifier) : base(identifier, EntityType.PlayerCharacter)
+        public PlayerCharacter(EntityIdentifier identifier, CreationArgs args) : base(identifier, EntityType.PlayerCharacter, args)
         {
             DrawColor = Coloring.RandomColor();
         }

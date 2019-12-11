@@ -10,17 +10,58 @@ namespace whateverthefuck.src.model.entities
 {
     public class Floor : GameEntity
     {
-        public Floor(EntityIdentifier id) : base(id, EntityType.Floor)
+        public Floor(EntityIdentifier id, CreationArgs args) : base(id, EntityType.Floor, args)
         {
             Collidable = false;
             BlocksLOS = false;
-            DrawColor = Color.AntiqueWhite;
             Height = 0;
+
+            var fca = new FloorCreationArgs(args);
+            DrawColor = fca.Color;
+        }
+    }
+
+    class FloorCreationArgs : CreationArgs
+    {
+        public enum Types
+        {
+            Grass,
+            Stone,
         }
 
-        public override void DrawMe(DrawAdapter drawAdapter)
+        public Types Type
         {
-            base.DrawMe(drawAdapter);
+            get { return (Types)FirstInt; }
+            set { FirstInt = (int)value; }
         }
+
+        public FloorCreationArgs(CreationArgs args) : base(args.Value)
+        {
+        }
+
+        public FloorCreationArgs(Types type) : base(0)
+        {
+            Type = type;
+        }
+
+        private Color Colorx()
+        {
+            switch (Type)
+            {
+                case Types.Stone:
+                    {
+                        return Color.Gray;
+                    }
+
+                case Types.Grass:
+                    {
+                        return Color.Green;
+                    }
+            }
+
+            return Color.Black;
+        }
+
+        public Color Color => Colorx();
     }
 }

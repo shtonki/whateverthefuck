@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.model;
+using whateverthefuck.src.model.entities;
 using whateverthefuck.src.util;
 
 namespace whateverthefuckserver.gameserver
@@ -26,21 +27,21 @@ namespace whateverthefuckserver.gameserver
 
         public CreateEntityEvent SpawnHero()
         {
-            var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter));
+            var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter, new CreationArgs(0)));
             PublishArray(rt);
             return rt;
         }
 
         public void SpawnMob()
         {
-            var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter));
+            var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter, new CreationArgs(0)));
             rt.OnDeathCallback = (e) => SpawnLoot((GameCoordinate)e.Location);
             PublishArray(rt);
         }
 
         private void SpawnLoot(GameCoordinate location)
         {
-            var loot = GameState.EntityGenerator.GenerateEntity(EntityType.Loot);
+            var loot = GameState.EntityGenerator.GenerateEntity(EntityType.Loot, new CreationArgs(0));
             loot.Location = new GameCoordinate(location.X, location.Y);
             var rt = new CreateEntityEvent(loot);
             PublishArray(rt);

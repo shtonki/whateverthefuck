@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using whateverthefuck.src.model.entities;
 using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 using static whateverthefuck.src.model.EntityGenerator;
@@ -24,6 +25,7 @@ namespace whateverthefuck.src.model
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
         public EntityType EntityType { get; }
+        public CreationArgs CreationArgs { get; private set; } = null;
 
         public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
         public bool Movable { get; protected set; } = false;
@@ -43,10 +45,12 @@ namespace whateverthefuck.src.model
 
         public EntityIdentifier Identifier { get; set; }
 
-        public GameEntity(EntityIdentifier identifier, EntityType type) : base(new GameCoordinate(0, 0))
+        public GameEntity(EntityIdentifier identifier, EntityType type, CreationArgs args) : base(new GameCoordinate(0, 0))
         {
             Identifier = identifier;
             EntityType = type;
+
+            CreationArgs = args;
 
             //debug
             Visible = true;

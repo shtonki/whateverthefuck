@@ -19,50 +19,44 @@ namespace whateverthefuck.src.model
             IdGenerator = idGenerator;
         }
 
-
-        public GameEntity GenerateEntity(EntityType type)
-        {
-            return GenerateEntity(type, IdGenerator.GenerateNextIdentifier());
-        }
-
-        public GameEntity GenerateEntity(EntityType type, EntityIdentifier identifier)
+        public GameEntity GenerateEntity(EntityType type, EntityIdentifier identifier, CreationArgs args)
         {
             switch (type)
             {
                 case EntityType.Block:
-                {
-                    return new Block(identifier, Color.Teal);
-                }
+                    {
+                        return new Block(identifier, args);
+                    }
 
                 case EntityType.NPC:
-                {
-                    return new NPC(identifier);
-                }
+                    {
+                        return new NPC(identifier, args);
+                    }
 
                 case EntityType.PlayerCharacter:
-                {
-                    return new PlayerCharacter(identifier);
-                }
+                    {
+                        return new PlayerCharacter(identifier, args);
+                    }
 
                 case EntityType.Door:
-                {
-                    return new Door(identifier);
-                }
+                    {
+                        return new Door(identifier, args);
+                    }
 
                 case EntityType.Floor:
-                {
-                    return new Floor(identifier);
-                }
+                    {
+                        return new Floor(identifier, args);
+                    }
 
                 case EntityType.Projectile:
-                {
-                    return new Projectile(identifier);
-                }
+                    {
+                        return new Projectile(identifier, args);
+                    }
 
                 case EntityType.Loot:
-                {
-                    return new Loot(identifier);
-                }
+                    {
+                        return new Loot(identifier, args);
+                    }
 
                 default: throw new Exception();
             }
@@ -70,15 +64,24 @@ namespace whateverthefuck.src.model
 
         public GameEntity GenerateEntity(CreateEntityEvent e)
         {
-            var rt = GenerateEntity(e.EntityType, new EntityIdentifier(e.Id));
+            var rt = GenerateEntity(e.EntityType, new EntityIdentifier(e.Id), e.CreationArgs);
             rt.Location = new GameCoordinate(e.X, e.Y);
             rt.CurrentHealth = e.CurrentHealth;
             rt.MaxHealth = e.MaxHealth;
             return rt;
         }
 
+        public GameEntity GenerateEntity(EntityType e, CreationArgs a)
+        {
+            return GenerateEntity(e, IdGenerator.GenerateNextIdentifier(), a);
+        }
+
         public IEnumerable<GameEntity> GenerateHouse(int xorg, int yorg)
         {
+            var dca = new DoorCreationArgs(DoorCreationArgs.Types.Wood);
+            var fca = new FloorCreationArgs(FloorCreationArgs.Types.Grass);
+            var bca = new BlockCreationArgs(BlockCreationArgs.Types.Stone);
+
             List<GameEntity> rt = new List<GameEntity>();
 
             int width = 10;
@@ -91,19 +94,19 @@ namespace whateverthefuck.src.model
                     GameEntity e;
                     if (x == xorg + 1 && y == yorg)
                     {
-                        e = new Door(IdGenerator.GenerateNextIdentifier());
+                        e = GenerateEntity(EntityType.Door, dca);
                     }
                     else if (x == xorg || x == xorg + width - 1)
                     {
-                        e = new Block(IdGenerator.GenerateNextIdentifier(), Color.Red);
+                        e = GenerateEntity(EntityType.Block, bca);
                     }
-                    else if (y == yorg || y == yorg + height -1)
+                    else if (y == yorg || y == yorg + height - 1)
                     {
-                        e = new Block(IdGenerator.GenerateNextIdentifier(), Color.Red);
+                        e = GenerateEntity(EntityType.Block, bca);
                     }
                     else
                     {
-                        e = new Floor(IdGenerator.GenerateNextIdentifier());
+                        e = GenerateEntity(EntityType.Floor, fca);
                     }
 
                     e.Location = new GameCoordinate(x * GridSize.X, y * GridSize.Y);

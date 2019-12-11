@@ -49,6 +49,7 @@
     <Compile Include="src\model\ClientGameStateManager.cs" />
     <Compile Include="src\model\entities\Block.cs" />
     <Compile Include="src\model\entities\Character.cs" />
+    <Compile Include="src\model\CreationArgs.cs" />
     <Compile Include="src\model\entities\Door.cs" />
     <Compile Include="src\model\entities\Floor.cs" />
     <Compile Include="src\model\entities\Loot.cs" />
