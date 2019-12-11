@@ -157,7 +157,7 @@ namespace whateverthefuck.src.model
             }
         }
 
-        private void HandleGameEvent(GameEvent e)
+        private bool HandleGameEvent(GameEvent e)
         {
             if (e is CreateEntityEvent)
             {
@@ -182,6 +182,13 @@ namespace whateverthefuck.src.model
                 UseAbilityEvent uae = (UseAbilityEvent)e;
                 var caster = GetEntityById(uae.Id);
                 var castee = GetEntityById(uae.TargetId);
+                
+                if (caster == null || castee == null)
+                {
+                    Logging.Log("Dubious UseAbilityEvent");
+                    return false;
+                }
+
                 var p = EntityGenerator.GenerateEntity(EntityType.Projectile);
                 p.Identifier = EntityIdentifier.RandomReserved();
                 p.Location = caster.Center;
@@ -192,6 +199,8 @@ namespace whateverthefuck.src.model
             {
                 throw new NotImplementedException();
             }
+
+            return true;
         }
 
         public void Step()

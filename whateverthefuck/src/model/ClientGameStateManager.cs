@@ -277,7 +277,7 @@ namespace whateverthefuck.src.model
             {
                 case GameAction.CastAbility1:
                 {
-                    if (Target != null)
+                    if (GameState.GetEntityById(Target.Identifier.Id) != null)
                     {
                             Program.ServerConnection.SendMessage(
                                 new UpdateGameStateMessage(new UseAbilityEvent(Hero, Target, new Ability(Abilities.Fireballx))));

@@ -20,6 +20,17 @@ namespace whateverthefuck.src.model.entities
             Collidable = false;
         }
 
+        private IEnumerable<GameEvent> Boom(GameEntity followed)
+        {
+            followed.CurrentHealth -= 10;
+            return new GameEvent[] { new DestroyEntityEvent(this) };
+        }
+
+        private IEnumerable<GameEvent> Fizzle()
+        {
+            return new GameEvent[] { new DestroyEntityEvent(this) };
+        }
+
         public override void Step(GameState gameState)
         {
             base.Step(gameState);
@@ -27,10 +38,14 @@ namespace whateverthefuck.src.model.entities
             if (Movements.IsFollowing)
             {
                 var followed = gameState.GetEntityById(Movements.FollowId.Value);
-                if (DistanceTo(followed.Center) < AsplodeCutoff)
+
+                if (followed == null)
                 {
-                    gameState.HandleGameEvents(new DestroyEntityEvent(this));
-                    followed.CurrentHealth -= 10;
+                    gameState.HandleGameEvents(Fizzle());
+                }
+                else if (DistanceTo(followed.Center) < AsplodeCutoff)
+                {
+                    gameState.HandleGameEvents(Boom(followed));
                 }
             }
         }
