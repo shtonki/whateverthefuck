@@ -88,6 +88,7 @@
     <Compile Include="src\view\guicomponents\Button.cs" />
     <Compile Include="src\view\guicomponents\Panel.cs" />
     <Compile Include="src\view\guicomponents\GUIComponent.cs" />
+    <Compile Include="src\view\ScreenCoordinate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

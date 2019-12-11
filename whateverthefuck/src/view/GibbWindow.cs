@@ -106,9 +106,14 @@ namespace whateverthefuck.src.view
             }
         }
 
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            Program.GameStateManager.HandleMouseMove(e);
+        }
+
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            var gl = new GLCoordinate(e.X * 2.0f / ClientSize.Width - 1, e.Y * 2.0f / ClientSize.Height - 1);
+            var gl = GUI.TranslateScreenToGLCoordinates(new ScreenCoordinate(e.X, e.Y));
             GameCoordinate gc = GUI.Camera.GLToGameCoordinate(gl);
             Program.GameStateManager.HandleGUIClick(e, gl);
             Program.GameStateManager.HandleWorldClick(e, gc);
@@ -116,7 +121,7 @@ namespace whateverthefuck.src.view
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            var gl = new GLCoordinate(e.X * 2.0f / ClientSize.Width - 1, e.Y * 2.0f / ClientSize.Height - 1);
+            var gl = GUI.TranslateScreenToGLCoordinates(new ScreenCoordinate(e.X, e.Y));
             GameCoordinate gc = GUI.Camera.GLToGameCoordinate(gl);
             Program.GameStateManager.HandleGUIClick(e, gl);
             Program.GameStateManager.HandleWorldClick(e, gc);

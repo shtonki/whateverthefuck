@@ -51,17 +51,30 @@ namespace whateverthefuck.src.view.guicomponents
 
     class DraggablePanel : Panel
     {
-        private GLCoordinate clickedDownLocation = new GLCoordinate(0, 0);
-        private GLCoordinate internalOffset = new GLCoordinate(0, 0);
+        private GLCoordinate ClickedDownLocation = new GLCoordinate(0, 0);
+        private GLCoordinate InternalOffset = new GLCoordinate(0, 0);
+        private bool ListenToMouseMove = false;
 
         public DraggablePanel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
-            OnLeftMouseDown += coordinate => { clickedDownLocation = coordinate; };
+            OnLeftMouseDown += coordinate =>
+            {
+                ClickedDownLocation = coordinate;
+                ListenToMouseMove = true;
+            };
+
+            OnMouseMove += (xDelta, yDelta) =>
+            {
+                if (!ListenToMouseMove) return;
+                var diff = GUI.TranslateScreenToGLCoordinates(new ScreenCoordinate(xDelta, yDelta));
+                diff.X += 1;
+                diff.Y += 1;
+                InternalOffset = new GLCoordinate(diff.X + InternalOffset.X, -diff.Y + InternalOffset.Y);
+            };
+
             OnLeftMouseUp += releaseLocation =>
             {
-                var diff = new GLCoordinate(clickedDownLocation.X - releaseLocation.X, clickedDownLocation.Y - releaseLocation.Y);
-                Logging.Log("Diff: " + diff);
-                internalOffset = new GLCoordinate(diff.X + internalOffset.X, diff.Y + internalOffset.Y);
+                ListenToMouseMove = false;
             };
         }
 
@@ -72,14 +85,22 @@ namespace whateverthefuck.src.view.guicomponents
 
             base.DrawMe(drawAdapter);
 
-            drawAdapter.Translate(Location.X - internalOffset.X, Location.Y - internalOffset.Y);
+            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(Location as GLCoordinate);
+            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, Size.Y - 1));
+
+            drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, sizeScreenCoords.Y);
+
+            drawAdapter.Translate(Location.X - InternalOffset.X, Location.Y - InternalOffset.Y);
+
 
             foreach (var c in Components)
             {
                 c.DrawMe(drawAdapter);
             }
 
-            drawAdapter.Translate(-Location.X + internalOffset.X, -Location.Y + internalOffset.Y);
+            drawAdapter.Translate(-Location.X + InternalOffset.X, -Location.Y + InternalOffset.Y);
+
+            drawAdapter.DeactivateScissor();
         }
     }
 }

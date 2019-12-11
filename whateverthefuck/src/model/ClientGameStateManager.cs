@@ -161,6 +161,14 @@ namespace whateverthefuck.src.model
             }
         }
 
+        public void HandleMouseMove(MouseMoveEventArgs me)
+        {
+            foreach (var guiComponent in GUI.GUIComponents)
+            {
+                guiComponent.OnMouseMove(me.XDelta, me.YDelta);
+            }
+        }
+
         public void HandleGUIClick(MouseButtonEventArgs me, GLCoordinate clickedLocation)
         {
             foreach (var guiComponent in GUI.GUIComponents)

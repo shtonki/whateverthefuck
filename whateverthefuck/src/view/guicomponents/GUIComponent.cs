@@ -18,6 +18,7 @@ namespace whateverthefuck.src.view.guicomponents
         public Action<GLCoordinate> OnLeftMouseUp     = (clickedLocation) => { };
         public Action<GLCoordinate> OnRightMouseDown  = (clickedLocation) => { };
         public Action<GLCoordinate> OnRightMouseUp    = (clickedLocation) => { };
+        public Action<int, int> OnMouseMove           = (xDelta, yDelta)  => { };
 
         protected GUIComponent(GLCoordinate location, GLCoordinate size) : base(location)
         {

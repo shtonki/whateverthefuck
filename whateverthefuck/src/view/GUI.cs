@@ -17,7 +17,7 @@ namespace whateverthefuck.src.view
         public static GameState ForceToDrawGameState { get; set; }
         public static List<Drawable> DebugInfo { get; set; } = new List<Drawable>();
         public static List<GUIComponent> GUIComponents { get; set; } = new List<GUIComponent>();
-
+        private static GibbWindow Frame { get; set; }
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
         /// of said window to be called. Roughly speaking.
@@ -53,8 +53,8 @@ namespace whateverthefuck.src.view
         private static void LaunchGameWindow(object o)
         {
             ManualResetEventSlim loadre = (ManualResetEventSlim)o;
-            var frame = new GibbWindow(loadre);
-            frame.Run(0, 0);
+            Frame = new GibbWindow(loadre);
+            Frame.Run(0, 0);
         }
 
         public static void LoadGUI()
@@ -69,6 +69,22 @@ namespace whateverthefuck.src.view
             f.Add(b1, b2, b3, b4);
 
             GUIComponents.Add(f);
+        }
+
+
+        public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate sc)
+        {
+            return new GLCoordinate(sc.X * 2.0f / Frame.ClientSize.Width - 1, sc.Y * 2.0f / Frame.ClientSize.Height - 1);
+        }
+
+            
+
+        public static ScreenCoordinate TranslateGLToScreenCoordinates(GLCoordinate gl)
+        {
+            int x = (int) ((gl.X + 1) * Frame.ClientSize.Width / 2);
+            int y = (int) ((gl.Y + 1) * Frame.ClientSize.Height / 2); 
+
+            return new ScreenCoordinate(x, y);
         }
     }
 }
