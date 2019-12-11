@@ -253,10 +253,22 @@ namespace whateverthefuck.src.model
             }
 
 
-            if (!clickedGuiComponents.Any()) return;
+            if (clickedGuiComponents.Any()) return;
 
+            if (mouseInput.MouseButton == MouseButton.Left && mouseInput.Direction == InputUnion.Directions.Down)
+            {
+                var ge = GetEntityAtLocation(gc);
+                if (ge != null && ge.Targetable)
+                {
+                    if (Target != null)
+                    {
+                        Target.HighlightColor = Color.Transparent;
+                    }
 
-            //@Seba: Do stuff
+                    Target = ge;
+                    Target.HighlightColor = Color.DarkOrange;
+                }
+            }
         }
 
         public void ActivateAction(GameAction gameAction)

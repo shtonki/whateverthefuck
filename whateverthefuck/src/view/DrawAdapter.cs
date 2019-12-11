@@ -64,7 +64,7 @@ namespace whateverthefuck.src.view
 
         public void FillLine(float xorg, float yorg, float xend, float yend, Color c)
         {
-
+            GL.PushAttrib(AttribMask.CurrentBit);
             GL.LineWidth(4);
             GL.Color4(c);
             GL.Begin(PrimitiveType.Lines);
@@ -73,6 +73,8 @@ namespace whateverthefuck.src.view
             GL.Vertex2(xend, yend);
 
             GL.End();
+            GL.LineWidth(1);
+            GL.PopAttrib();
         }
     }
 }

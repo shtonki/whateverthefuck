@@ -77,7 +77,7 @@ namespace whateverthefuck.src.model
 
             drawAdapter.FillRectangle(x1, y1, x2, y2, DrawColor);
 
-            if (HighlightColor != Color.Transparent)
+            if (false && HighlightColor != Color.Transparent)
             {
                 Rectangle r = new view.Rectangle(this, HighlightColor);
                 r.DrawMe(drawAdapter);
