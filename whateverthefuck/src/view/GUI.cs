@@ -63,21 +63,18 @@ namespace whateverthefuck.src.view
 
             DraggablePanel f = new DraggablePanel(new GLCoordinate(-0.4f, -0.4f), new GLCoordinate(0.5f, 0.5f));
             Button b1 = new Button(new GLCoordinate(0.1f, 0.1f), new GLCoordinate(0.1f, 0.1f));
-            Button b2 = new Button(new GLCoordinate(0.2f, 0.1f), new GLCoordinate(0.1f, 0.1f));
-            Button b3 = new Button(new GLCoordinate(0.1f, 0.2f), new GLCoordinate(0.1f, 0.1f));
-            Button b4 = new Button(new GLCoordinate(0.2f, 0.2f), new GLCoordinate(0.1f, 0.1f));
+            Button b2 = new Button(new GLCoordinate(0.3f, 0.1f), new GLCoordinate(0.1f, 0.1f));
+            Button b3 = new Button(new GLCoordinate(0.1f, 0.3f), new GLCoordinate(0.1f, 0.1f));
+            Button b4 = new Button(new GLCoordinate(0.3f, 0.3f), new GLCoordinate(0.1f, 0.1f));
             f.Add(b1, b2, b3, b4);
 
             GUIComponents.Add(f);
         }
 
-
         public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate sc)
         {
             return new GLCoordinate(sc.X * 2.0f / Frame.ClientSize.Width - 1, sc.Y * 2.0f / Frame.ClientSize.Height - 1);
         }
-
-            
 
         public static ScreenCoordinate TranslateGLToScreenCoordinates(GLCoordinate gl)
         {
