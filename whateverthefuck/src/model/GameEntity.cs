@@ -21,6 +21,7 @@ namespace whateverthefuck.src.model
         protected bool ShowHealth = false;
 
         public event Action<GameEntity> OnDeath;
+        public event Action<GameEntity> OnStep;
 
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
@@ -104,6 +105,8 @@ namespace whateverthefuck.src.model
 
         public virtual void Step(GameState gameState)
         {
+            OnStep?.Invoke(this);
+
             MovementCache = CalculateMovement(gameState);
             Location = (GameCoordinate)Location + MovementCache;
 

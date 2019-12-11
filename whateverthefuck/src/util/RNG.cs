@@ -9,7 +9,7 @@ using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.util
 {
-    static class RNG
+    public static class RNG
     {
         static Random r = new Random(Guid.NewGuid().GetHashCode());
 

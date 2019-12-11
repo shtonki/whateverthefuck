@@ -10,15 +10,17 @@ namespace whateverthefuck.src.network.messages
 {
     public class UpdateGameStateMessage : WhateverthefuckMessage
     {
+        public int Tick { get; private set; }
         public List<GameEvent> Events { get; private set; }
 
-        public UpdateGameStateMessage(params GameEvent[] es) : this((IEnumerable<GameEvent>)es)
+        public UpdateGameStateMessage(int tick, params GameEvent[] es) : this(tick, (IEnumerable<GameEvent>)es)
         {
 
         }
 
-        public UpdateGameStateMessage(IEnumerable<GameEvent> events) : base(MessageType.UpdateGameStateMessage)
+        public UpdateGameStateMessage(int tick, IEnumerable<GameEvent> events) : base(MessageType.UpdateGameStateMessage)
         {
+            Tick = tick;
             Events = events.ToList();
         }
 
@@ -30,6 +32,8 @@ namespace whateverthefuck.src.network.messages
         protected override byte[] EncodeBody()
         {
             List<byte> bs = new List<byte>();
+
+            bs.AddRange(BitConverter.GetBytes(Tick));
 
             // Structure of encoding:
             // one byte type of event
@@ -45,22 +49,6 @@ namespace whateverthefuck.src.network.messages
             }
 
             return bs.ToArray();
-#if false
-            // todo sb -> string -> byte[] seems dubious
-
-            StringBuilder sb = new StringBuilder();
-
-            foreach (var entity in EntityInfos)
-            {
-                sb.Append(entity.Encode());
-                sb.Append(Separator);
-            }
-
-            if (sb.Length > 0) { sb.Length--; }
-
-            return System.Text.Encoding.ASCII.GetBytes(sb.ToString());
-
-#endif
         }
 
         protected override void DecodeBody(byte[] bs)
@@ -68,6 +56,8 @@ namespace whateverthefuck.src.network.messages
             var events = new List<GameEvent>();
 
             int bytec = 0;
+            Tick = BitConverter.ToInt32(bs, bytec);
+            bytec += sizeof(int);
 
             while (true)
             {

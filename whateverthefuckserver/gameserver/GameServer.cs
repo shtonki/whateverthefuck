@@ -24,6 +24,9 @@ namespace whateverthefuckserver.gameserver
         private List<GameEvent> PendingEvents = new List<GameEvent>();
         object EventsLock = new object();
 
+        private int TickCounter = 0;
+        private (int, long) SyncCity;
+
         private SpawnCity SpawnCity { get; }
 
         public GameServer()
@@ -45,7 +48,35 @@ namespace whateverthefuckserver.gameserver
 
             SpawnCity = new SpawnCity(GameState, es => PendEvents(es));
             SpawnCity.SpawnWorld();
-            SpawnCity.SpawnMob();
+            //SpawnCity.SpawnMob();
+        }
+
+        private void Tick()
+        {
+            UpdateGameStateMessage message;
+            int Tick = TickCounter++;
+            
+            lock (EventsLock)
+            {
+                GameState.HandleGameEvents(PendingEvents);
+                message = new UpdateGameStateMessage(Tick, PendingEvents);
+                PendingEvents.Clear();
+            }
+
+            GameState.Step();
+            SendMessageToAllPlayers(message);
+
+            if (false)
+            {
+                var hash = GameState.HashMe();
+                Logging.Log(Tick + ", " + hash);
+            }
+
+            if (Tick % 100 == 1)
+            {
+                SyncCity = (Tick, GameState.HashMe());
+            }
+
         }
 
         internal void HandleEventRequests(List<GameEvent> events)
@@ -61,7 +92,7 @@ namespace whateverthefuckserver.gameserver
 
             var events = createEvents.Concat(movementEvents).ToArray();
 
-            user.PlayerConnection.SendMessage(new UpdateGameStateMessage(events));
+            user.PlayerConnection.SendMessage(new UpdateGameStateMessage(0, events));
 
             lock (PlayersLock)
             {
@@ -82,6 +113,20 @@ namespace whateverthefuckserver.gameserver
                 GameEvent re = new DestroyEntityEvent(hero);
                 PendEvents(re);
             }
+        }
+
+        public bool InSync(int tick, long hash)
+        {
+            var rt = SyncCity == (tick, hash);
+
+            if (!rt)
+            {
+                Logging.Log("Disagreed on sync");
+                Logging.Log(string.Format("Tick; expected:'{0}', got'{1}'", SyncCity.Item1, tick));
+                Logging.Log(string.Format("Hash; expected:'{0}', got'{1}'", SyncCity.Item2, hash));
+            }
+
+            return rt;
         }
 
         private void SpawnPlayerCharacter(User user)
@@ -119,19 +164,6 @@ namespace whateverthefuckserver.gameserver
             }
         }
 
-        private void Tick()
-        {
-            UpdateGameStateMessage message;
-
-            lock (EventsLock)
-            {
-                GameState.HandleGameEvents(PendingEvents);
-                message = new UpdateGameStateMessage(PendingEvents);
-                PendingEvents.Clear();
-            }
-
-            GameState.Step();
-            SendMessageToAllPlayers(message);
-        }
+        
     }
 }

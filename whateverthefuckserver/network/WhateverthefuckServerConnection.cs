@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.network;
 using whateverthefuck.src.network.messages;
+using whateverthefuck.src.util;
 using whateverthefuckserver.users;
 
 namespace whateverthefuckserver.network
@@ -37,6 +38,12 @@ namespace whateverthefuckserver.network
                 {
                         UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
                         Program.GameServer.HandleEventRequests(updateMessage.Events);
+                } break;
+
+                case MessageType.SyncMessage:
+                {
+                    SyncMessageBody syncMessage = (SyncMessageBody)message.MessageBody;
+                    Program.GameServer.InSync(syncMessage.Tick, syncMessage.Checksum);
                 } break;
 
                 default: throw new NotImplementedException("Unhandled MessageType");

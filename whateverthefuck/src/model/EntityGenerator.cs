@@ -79,7 +79,7 @@ namespace whateverthefuck.src.model
         public IEnumerable<GameEntity> GenerateHouse(int xorg, int yorg)
         {
             var dca = new DoorCreationArgs(DoorCreationArgs.Types.Wood);
-            var fca = new FloorCreationArgs(FloorCreationArgs.Types.Grass);
+            var fca = new FloorCreationArgs(FloorCreationArgs.Types.Stone);
             var bca = new BlockCreationArgs(BlockCreationArgs.Types.Stone);
 
             List<GameEntity> rt = new List<GameEntity>();

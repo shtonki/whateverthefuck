@@ -65,7 +65,7 @@ namespace whateverthefuck.src.network
                 case MessageType.UpdateGameStateMessage:
                 {
                     UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
-                    Program.GameStateManager.UpdateGameState(updateMessage.Events);
+                    Program.GameStateManager.UpdateGameState(updateMessage.Tick, updateMessage.Events);
                 } break;
 
 

@@ -96,6 +96,7 @@ namespace whateverthefuck.src.model
         public CreationArgs CreationArgs { get; private set; }
 
         public Action<GameEntity> OnDeathCallback { get; set; }
+        public Action<GameEntity> OnStepCallback { get; set; }
 
 
         public CreateEntityEvent(GameEntity e)

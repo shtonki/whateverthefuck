@@ -12,6 +12,5 @@ namespace whateverthefuck.src.model.entities
             Movable = true;
             MoveSpeed = 0.001f;
         }
-
     }
 }

@@ -67,6 +67,7 @@
     <Compile Include="src\network\messages\GrantControlMessage.cs" />
     <Compile Include="src\network\messages\LogMessage.cs" />
     <Compile Include="src\network\messages\LoginCredentialsMessage.cs" />
+    <Compile Include="src\network\messages\SyncMessage.cs" />
     <Compile Include="src\network\messages\UpdateGameStateMessage.cs" />
     <Compile Include="src\network\messages\UpdatePlayerControlMesssage.cs" />
     <Compile Include="src\network\messages\WhateverthefuckMessage.cs" />

@@ -110,7 +110,7 @@ namespace whateverthefuck.src.model
                 if (!ms.Direction.Equals(PrevDirection))
                 {
                     var e = new UpdateMovementEvent(Hero.Identifier.Id, ms);
-                    Program.ServerConnection.SendMessage(new UpdateGameStateMessage(e));
+                    Program.ServerConnection.SendMessage(new UpdateGameStateMessage(0, e));
                 }
 
                 PrevDirection = ms.Direction;
@@ -172,12 +172,25 @@ namespace whateverthefuck.src.model
             GUI.Camera = new FollowCamera(Hero);
         }
 
-        public void UpdateGameState(IEnumerable<GameEvent> events)
+        public void UpdateGameState(int tick, IEnumerable<GameEvent> events)
         {
             GameState.HandleGameEvents(events);
             GameState.Step();
             UpdateLOS();
 
+            if (false)
+            {
+                var hash = GameState.HashMe();
+                Logging.Log(tick + ", " + hash);
+            }
+
+            if (tick % 100 == 1)
+            {
+                var hash = GameState.HashMe();
+                Program.ServerConnection.SendMessage(new SyncMessage(tick, hash));
+            }
+
+            // fix me
             if (TakeControlId.HasValue)
             {
                 Hero = (PlayerCharacter)GameState.GetEntityById(TakeControlId.Value);
@@ -187,39 +200,6 @@ namespace whateverthefuck.src.model
                 }
                 TakeControlId = null;
             }
-#if false
-            if (UpdateLocationSemaphore.WaitOne(new TimeSpan(1)))
-            {
-                var newTick = DateTime.UtcNow;
-
-                foreach (var info in infos)
-                {
-                    var updatee = GameState.GetEntityById(info.Identifier);
-
-                    if (updatee == null)
-                    {
-                        Logging.Log("Got position of Entity we don't think exists.", Logging.LoggingLevel.Warning);
-                    }
-                    else if (UseSmoothing)
-                    {
-
-                        if (!SpicyDictionary.ContainsKey(updatee.Identifier.Id))
-                        {
-                            var spicy = new SpicyClass(updatee.Identifier.Id);
-                            SpicyDictionary.Add(updatee.Identifier.Id, spicy);
-                        }
-
-                        var newLocation = new GameCoordinate(info.X, info.Y);
-                        var spicyEntry = SpicyDictionary[updatee.Identifier.Id].NewLocation = newLocation;
-                    }
-                    else
-                    {
-                        updatee.Location = new GameCoordinate(info.X, info.Y);
-                    }
-                }
-                UpdateLocationSemaphore.Release();
-            }
-#endif
         }
 
         private GameEntity GetEntityAtLocation(GameCoordinate location)
@@ -280,7 +260,7 @@ namespace whateverthefuck.src.model
                     if (GameState.GetEntityById(Target.Identifier.Id) != null)
                     {
                             Program.ServerConnection.SendMessage(
-                                new UpdateGameStateMessage(new UseAbilityEvent(Hero, Target, new Ability(Abilities.Fireballx))));
+                                new UpdateGameStateMessage(0, new UseAbilityEvent(Hero, Target, new Ability(Abilities.Fireballx))));
                     }
                 } break;
 

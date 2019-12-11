@@ -34,9 +34,21 @@ namespace whateverthefuckserver.gameserver
 
         public void SpawnMob()
         {
-            var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter, new CreationArgs(0)));
+            var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new CreationArgs(0)));
             rt.OnDeathCallback = (e) => SpawnLoot((GameCoordinate)e.Location);
+            rt.OnStepCallback = (e) => stepme(e);
             PublishArray(rt);
+        }
+
+        int c = 0;
+
+        private void stepme(GameEntity e)
+        {
+            if (c++ % 100 == 0)
+            {
+                e.Movements.Direction = (float)(RNG.BetweenZeroAndOne() * Math.PI);
+                PublishArray(new UpdateMovementEvent(e));
+            }
         }
 
         private void SpawnLoot(GameCoordinate location)

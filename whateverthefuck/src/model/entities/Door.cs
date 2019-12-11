@@ -56,7 +56,7 @@ namespace whateverthefuck.src.model.entities
 
                 case Types.Wood:
                 {
-                    return Color.Brown;
+                    return Color.Khaki;
                 }
             }
 

@@ -50,7 +50,7 @@ namespace whateverthefuck.src.model.entities
             {
                 case Types.Stone:
                     {
-                        return Color.Gray;
+                        return Color.Silver;
                     }
 
                 case Types.Grass:

@@ -65,6 +65,11 @@ namespace whateverthefuck.src.network.messages
                     return new LoginCredentialsMessage();
                 }
 
+                case MessageType.SyncMessage:
+                {
+                    return new SyncMessage();
+                }
+
                 default: throw new NotImplementedException();
             }
         }
@@ -225,10 +230,13 @@ namespace whateverthefuck.src.network.messages
 
     public enum MessageType
     {
+        ExampleMessage,
+
         LogMessage,
+
         UpdateGameStateMessage,
         GrantControlMessage,
         LoginCredentialsMessage,
-        ExampleMessage,
+        SyncMessage,
     }
 }

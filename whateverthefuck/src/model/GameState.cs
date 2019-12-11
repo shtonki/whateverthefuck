@@ -164,6 +164,7 @@ namespace whateverthefuck.src.model
                 CreateEntityEvent cee = (CreateEntityEvent)e;
                 var entity = EntityGenerator.GenerateEntity(cee);
                 entity.OnDeath += cee.OnDeathCallback;
+                entity.OnStep += cee.OnStepCallback;
                 AddEntities(entity);
             }
             else if (e is DestroyEntityEvent)
@@ -221,10 +222,9 @@ namespace whateverthefuck.src.model
             }
 
             HandleCollisions();
-
         }
 
-        private int hashme()
+        public int HashMe()
         {
             int hash = AllEntities.Select(e => e.GetMemeCode()%1023).Sum();
             return hash;
