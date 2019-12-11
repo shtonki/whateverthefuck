@@ -184,7 +184,7 @@ namespace whateverthefuck.src.model
                 var castee = GetEntityById(uae.TargetId);
                 var p = EntityGenerator.GenerateEntity(EntityType.Projectile);
                 p.Identifier = EntityIdentifier.RandomReserved();
-                p.Location = caster.Location;
+                p.Location = caster.Center;
                 p.Movements.FollowId = castee.Identifier.Id;
                 AddEntities(p);
             }

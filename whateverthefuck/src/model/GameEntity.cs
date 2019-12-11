@@ -61,8 +61,6 @@ namespace whateverthefuck.src.model
             set { Location = new GameCoordinate(value.X - Size.X / 2, value.Y - Size.Y / 2); }
         }
 
-        private GameCoordinate _location { get; set; }
-
         protected Color DrawColor = Color.Black;
 
         public Color HighlightColor = Color.Transparent;
@@ -108,13 +106,14 @@ namespace whateverthefuck.src.model
 
                 if (followed != null)
                 {
-                    if (Coordinate.DistanceBetweenCoordinates(Location, followed.Location) < MoveSpeed)
+                    var followingToLocation = followed.Center;
+
+                    if (Coordinate.DistanceBetweenCoordinates(Center, followingToLocation) < MoveSpeed)
                     {
-                        return new GameCoordinate(followed.Location.X - Location.X, followed.Location.Y - Location.Y);
+                        return followingToLocation - Center;
                     }
 
-                    var destination = followed.Location;
-                    Movements.Direction = Coordinate.AngleBetweenCoordinates(Location, destination);
+                    Movements.Direction = Coordinate.AngleBetweenCoordinates(Center, followingToLocation);
                 }
             }
 
@@ -128,9 +127,9 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public float DistanceTo(GameEntity other)
+        public float DistanceTo(GameCoordinate other)
         {
-            return Coordinate.DistanceBetweenCoordinates(Location, other.Location);
+            return Coordinate.DistanceBetweenCoordinates(Location, other);
         }
 
         public int GetMemeCode()

@@ -27,7 +27,7 @@ namespace whateverthefuck.src.model.entities
             if (Movements.IsFollowing)
             {
                 var followed = gameState.GetEntityById(Movements.FollowId.Value);
-                if (DistanceTo(followed) < AsplodeCutoff)
+                if (DistanceTo(followed.Center) < AsplodeCutoff)
                 {
                     gameState.HandleGameEvents(new DestroyEntityEvent(this));
                     followed.CurrentHealth -= 10;
