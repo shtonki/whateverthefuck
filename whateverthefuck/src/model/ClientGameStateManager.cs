@@ -12,6 +12,7 @@ using whateverthefuck.src.model.entities;
 using whateverthefuck.src.network.messages;
 using whateverthefuck.src.util;
 using whateverthefuck.src.view;
+using whateverthefuck.src.view.guicomponents;
 
 namespace whateverthefuck.src.model
 {
@@ -161,41 +162,6 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public void HandleMouseMove(MouseMoveEventArgs me)
-        {
-            foreach (var guiComponent in GUI.GUIComponents)
-            {
-                guiComponent.OnMouseMove(me.XDelta, me.YDelta);
-            }
-        }
-
-        public void HandleGUIClick(MouseButtonEventArgs me, GLCoordinate clickedLocation)
-        {
-            foreach (var guiComponent in GUI.GUIComponents)
-            {
-                if (guiComponent.Contains(clickedLocation))
-                {
-                    if (me.Button == MouseButton.Left && me.IsPressed)
-                    {
-                        guiComponent.OnLeftMouseDown(clickedLocation);
-                    }
-                    else if (me.Button == MouseButton.Left && !me.IsPressed)
-                    {
-                        guiComponent.OnLeftMouseUp(clickedLocation);
-                    }
-
-                    if (me.Button == MouseButton.Right && me.IsPressed)
-                    {
-                        guiComponent.OnRightMouseDown(clickedLocation);
-                    }
-                    else if (me.Button == MouseButton.Right && !me.IsPressed)
-                    {
-                        guiComponent.OnRightMouseUp(clickedLocation);
-                    }
-                }
-            }
-        }
-
         private GameEntity GetEntityAtLocation(GameCoordinate location)
         {
             var mp = new MousePicker();
@@ -205,29 +171,32 @@ namespace whateverthefuck.src.model
             return picked.First();
         }
 
-        public void HandleWorldClick(MouseButtonEventArgs me, GameCoordinate clickLocation)
+        public void HandleMouseMove(ScreenCoordinate screenClickLocation)
         {
-            if (me.Button == MouseButton.Left && me.IsPressed)
+            var gl = GUI.TranslateScreenToGLCoordinates(screenClickLocation);
+            foreach (var guiComponent in GUI.GUIComponents)
             {
-                var ge = GetEntityAtLocation(clickLocation);
-                if (ge != null)
-                {
-                    Logging.Log(ge.ToString());
-                }
+                guiComponent.HandleMouseMove(gl);
             }
-            else if (me.Button == MouseButton.Left && !me.IsPressed)
+        }
+
+        public void HandleClick(InputUnion mouseInput, ScreenCoordinate screenClickLocation)
+        {
+            var gl = GUI.TranslateScreenToGLCoordinates(screenClickLocation);
+            var gc = GUI.Camera.GLToGameCoordinate(gl);
+
+            var clickedGuiComponents = GUI.GUIComponents.Where(g => g.Contains(gl));
+
+            foreach (var cgc in clickedGuiComponents)
             {
-
+                cgc.HandleClick(mouseInput, gl);
             }
 
-            if (me.Button == MouseButton.Right && me.IsPressed)
-            {
 
-            }
-            else if (me.Button == MouseButton.Right && !me.IsPressed)
-            {
+            if (!clickedGuiComponents.Any()) return;
 
-            }
+
+            //@Seba: Do stuff
         }
 
         public void ActivateAction(GameAction gameAction)
@@ -291,6 +260,13 @@ namespace whateverthefuck.src.model
                 case GameAction.CameraZoomOut:
                     {
                         GUI.Camera?.Zoom.ZoomOut();
+                    } break;
+                case GameAction.TogglePanel:
+                    {
+                        foreach (var panel in GUI.GUIComponents.Where(p => p is Panel))
+                        {
+                            panel.Visible = !panel.Visible;
+                        }
                     } break;
 
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");

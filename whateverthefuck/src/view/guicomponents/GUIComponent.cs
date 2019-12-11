@@ -4,21 +4,49 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK.Graphics.OpenGL4;
+using OpenTK.Input;
+using whateverthefuck.src.control;
 using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.view.guicomponents
 {
     public abstract class GUIComponent : Drawable
     {
-        private static GLCoordinate DefaultSize = new GLCoordinate(0.1f, 0.1f);
         protected GLCoordinate Size;
         protected Color BackColor;
         private Border Border;
-        public Action<GLCoordinate> OnLeftMouseDown   = (clickedLocation) => { };
-        public Action<GLCoordinate> OnLeftMouseUp     = (clickedLocation) => { };
-        public Action<GLCoordinate> OnRightMouseDown  = (clickedLocation) => { };
-        public Action<GLCoordinate> OnRightMouseUp    = (clickedLocation) => { };
-        public Action<int, int> OnMouseMove           = (xDelta, yDelta)  => { };
+
+        public event Action<GLCoordinate> OnLeftMouseDown;
+        public event Action<GLCoordinate> OnLeftMouseUp;
+        public event Action<GLCoordinate> OnRightMouseDown;
+        public event Action<GLCoordinate> OnRightMouseUp;
+        public event Action<GLCoordinate> OnMouseMove;
+
+        protected void LeftMouseDown(GLCoordinate glClicked)
+        {
+            OnLeftMouseDown?.Invoke(glClicked);
+        }
+
+        protected void LeftMouseUp(GLCoordinate glClicked)
+        {
+            OnLeftMouseUp?.Invoke(glClicked);
+        }
+
+        protected void RightMouseDown(GLCoordinate glClicked)
+        {
+            OnRightMouseDown?.Invoke(glClicked);
+        }
+
+        protected void RightMouseUp(GLCoordinate glClicked)
+        {
+            OnRightMouseUp?.Invoke(glClicked);
+        }
+
+        protected void MouseMove(GLCoordinate delta)
+        {
+            OnMouseMove?.Invoke(delta);
+        }
 
         protected GUIComponent(GLCoordinate location, GLCoordinate size) : base(location)
         {
@@ -31,6 +59,20 @@ namespace whateverthefuck.src.view.guicomponents
         {
             drawAdapter.FillRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, BackColor);
             drawAdapter.TraceRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Border.BorderColor, Border.Width);
+        }
+
+        public void HandleClick(InputUnion mouseInput, GLCoordinate glClicked)
+        {
+            if (mouseInput.Direction == InputUnion.Directions.Up && mouseInput.MouseButton == MouseButton.Left) LeftMouseUp(glClicked);
+            else if (mouseInput.Direction == InputUnion.Directions.Down && mouseInput.MouseButton == MouseButton.Left) LeftMouseDown(glClicked);
+
+            if (mouseInput.Direction == InputUnion.Directions.Up && mouseInput.MouseButton == MouseButton.Right) RightMouseUp(glClicked);
+            else if (mouseInput.Direction == InputUnion.Directions.Down && mouseInput.MouseButton == MouseButton.Right) RightMouseDown(glClicked);
+        }
+
+        public void HandleMouseMove(GLCoordinate delta)
+        {
+            MouseMove(delta);
         }
 
         public virtual bool Contains(GLCoordinate clicked)

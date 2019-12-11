@@ -12,7 +12,7 @@ namespace whateverthefuck.src.view.guicomponents
         protected List<GUIComponent> Components = new List<GUIComponent>();
         public Panel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
-
+            Visible = false;
         }
 
         public void Add(GUIComponent toAdd)
@@ -63,13 +63,13 @@ namespace whateverthefuck.src.view.guicomponents
                 ListenToMouseMove = true;
             };
 
-            OnMouseMove += (xDelta, yDelta) =>
+            OnMouseMove += coordinate =>
             {
                 if (!ListenToMouseMove) return;
-                var diff = GUI.TranslateScreenToGLCoordinates(new ScreenCoordinate(xDelta, yDelta));
+                var diff = coordinate;
                 diff.X += 1;
                 diff.Y += 1;
-                InternalOffset = new GLCoordinate(diff.X + InternalOffset.X, -diff.Y + InternalOffset.Y);
+                InternalOffset = new GLCoordinate(-diff.X + InternalOffset.X, diff.Y + InternalOffset.Y);
             };
 
             OnLeftMouseUp += releaseLocation =>

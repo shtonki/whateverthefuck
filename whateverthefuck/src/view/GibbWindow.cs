@@ -11,6 +11,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using whateverthefuck.src.control;
 using whateverthefuck.src.model;
+using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.view
 {
@@ -108,23 +109,19 @@ namespace whateverthefuck.src.view
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
-            Program.GameStateManager.HandleMouseMove(e);
+            Program.GameStateManager.HandleMouseMove(new ScreenCoordinate(e.XDelta, e.YDelta));
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            var gl = GUI.TranslateScreenToGLCoordinates(new ScreenCoordinate(e.X, e.Y));
-            GameCoordinate gc = GUI.Camera.GLToGameCoordinate(gl);
-            Program.GameStateManager.HandleGUIClick(e, gl);
-            Program.GameStateManager.HandleWorldClick(e, gc);
+            InputUnion mouseInput = new InputUnion(InputUnion.Directions.Down, e.Button);
+            Program.GameStateManager.HandleClick(mouseInput, new ScreenCoordinate(e.X, e.Y));
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            var gl = GUI.TranslateScreenToGLCoordinates(new ScreenCoordinate(e.X, e.Y));
-            GameCoordinate gc = GUI.Camera.GLToGameCoordinate(gl);
-            Program.GameStateManager.HandleGUIClick(e, gl);
-            Program.GameStateManager.HandleWorldClick(e, gc);
+            InputUnion mouseInput = new InputUnion(InputUnion.Directions.Up, e.Button);
+            Program.GameStateManager.HandleClick(mouseInput, new ScreenCoordinate(e.X, e.Y));
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
