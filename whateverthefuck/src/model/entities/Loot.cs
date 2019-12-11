@@ -14,6 +14,7 @@ namespace whateverthefuck.src.model.entities
             DrawColor = Color.Gold;
             Size = new GameCoordinate(0.05f, 0.05f);
             Collidable = false;
+            Targetable = true;
         }
     }
 }

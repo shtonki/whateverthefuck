@@ -22,6 +22,9 @@ namespace whateverthefuck.src.view.guicomponents
         public event Action<GLCoordinate> OnRightMouseDown;
         public event Action<GLCoordinate> OnRightMouseUp;
         public event Action<GLCoordinate> OnMouseMove;
+        public event Action<GLCoordinate> OnScrollIn;
+        public event Action<GLCoordinate> OnScrollOut;
+
 
         protected void LeftMouseDown(GLCoordinate glClicked)
         {
@@ -48,6 +51,17 @@ namespace whateverthefuck.src.view.guicomponents
             OnMouseMove?.Invoke(delta);
         }
 
+        protected void ScrollIn(GLCoordinate glMouseLocation)
+        {
+            OnScrollIn?.Invoke(glMouseLocation);
+        }
+
+        protected void ScrollOut(GLCoordinate glMouseLocation)
+        {
+            OnScrollOut?.Invoke(glMouseLocation);
+        }
+
+
         protected GUIComponent(GLCoordinate location, GLCoordinate size) : base(location)
         {
             BackColor = Color.Aquamarine;
@@ -60,7 +74,7 @@ namespace whateverthefuck.src.view.guicomponents
             drawAdapter.FillRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, BackColor);
             drawAdapter.TraceRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Border.BorderColor, Border.Width);
         }
-
+        
         public void HandleClick(InputUnion mouseInput, GLCoordinate glClicked)
         {
             if (mouseInput.Direction == InputUnion.Directions.Up && mouseInput.MouseButton == MouseButton.Left) LeftMouseUp(glClicked);
@@ -68,6 +82,18 @@ namespace whateverthefuck.src.view.guicomponents
 
             if (mouseInput.Direction == InputUnion.Directions.Up && mouseInput.MouseButton == MouseButton.Right) RightMouseUp(glClicked);
             else if (mouseInput.Direction == InputUnion.Directions.Down && mouseInput.MouseButton == MouseButton.Right) RightMouseDown(glClicked);
+        }
+
+        public void HandleScroll(InputUnion mouseInput, GLCoordinate glMouseLocation)
+        {
+            if (mouseInput.Direction == InputUnion.Directions.Down)
+            {
+                ScrollIn(glMouseLocation);
+            }
+            else
+            {
+                ScrollOut(glMouseLocation);
+            }
         }
 
         public void HandleMouseMove(GLCoordinate delta)

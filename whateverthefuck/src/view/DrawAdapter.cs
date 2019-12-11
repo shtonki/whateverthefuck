@@ -22,6 +22,11 @@ namespace whateverthefuck.src.view
             GL.Rotate(angle, OpenTK.Vector3d.UnitZ);
         }
 
+        public void Scale(float x, float y)
+        {
+            GL.Scale(x, y, 0);
+        }
+
         public void ActivateScissor(int x1, int y1, int x2, int y2)
         {
             GL.Scissor(x1, y1, x2, y2);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -33,6 +34,7 @@ namespace whateverthefuck.src.model
 
         private GameEntity Target { get; set; }
 
+        private List<GUIComponent> ClickedDownGuiComponents = new List<GUIComponent>();
 
         public ClientGameStateManager()
         {
@@ -184,6 +186,21 @@ namespace whateverthefuck.src.model
             }
         }
 
+        public void HandleMouseScroll(InputUnion mouseInput, ScreenCoordinate screenMouseLocation)
+        {
+            var gl = GUI.TranslateScreenToGLCoordinates(screenMouseLocation);
+
+            var scrolledComponents = GUI.GUIComponents.Where(g => g.Visible && g.Contains(gl));
+
+            foreach (var scrolledComponent in scrolledComponents)
+            {
+                scrolledComponent.HandleScroll(mouseInput, gl);
+            }
+
+            if (scrolledComponents.Any()) return;
+
+            Input.Handle(mouseInput);
+        }
 
         public void HandleMouseMove(ScreenCoordinate screenClickLocation)
         {
@@ -199,15 +216,17 @@ namespace whateverthefuck.src.model
             var gl = GUI.TranslateScreenToGLCoordinates(screenClickLocation);
             var gc = GUI.Camera.GLToGameCoordinate(gl);
 
-            var clickedGuiComponents = GUI.GUIComponents.Where(g => g.Visible && g.Contains(gl));
-
-            foreach (var cgc in clickedGuiComponents)
+            if (mouseInput.Direction == InputUnion.Directions.Down)
             {
-                cgc.HandleClick(mouseInput, gl);
+                ClickedDownGuiComponents = GUI.GUIComponents.Where(g => g.Visible && g.Contains(gl)).ToList();
+                ClickedDownGuiComponents.ForEach(cgc => cgc.HandleClick(mouseInput, gl));
+            }
+            else if (mouseInput.Direction == InputUnion.Directions.Up)
+            {
+                ClickedDownGuiComponents.ForEach(cgc => cgc.HandleClick(mouseInput, gl));
             }
 
-
-            if (clickedGuiComponents.Any()) return;
+            if (ClickedDownGuiComponents.Any()) return;
 
             if (mouseInput.MouseButton == MouseButton.Left && mouseInput.Direction == InputUnion.Directions.Down)
             {

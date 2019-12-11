@@ -9,10 +9,12 @@ namespace whateverthefuck.src.view.guicomponents
 {
     abstract class Panel : GUIComponent
     {
+        public Zoomer Zoomer { get; set; }
         protected List<GUIComponent> Components = new List<GUIComponent>();
         public Panel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
             Visible = false;
+            Zoomer = new Zoomer();
         }
 
         public void Add(GUIComponent toAdd)
@@ -51,7 +53,6 @@ namespace whateverthefuck.src.view.guicomponents
 
     class DraggablePanel : Panel
     {
-        private GLCoordinate ClickedDownLocation = new GLCoordinate(0, 0);
         private GLCoordinate InternalOffset = new GLCoordinate(0, 0);
         private bool ListenToMouseMove = false;
 
@@ -59,7 +60,6 @@ namespace whateverthefuck.src.view.guicomponents
         {
             OnLeftMouseDown += coordinate =>
             {
-                ClickedDownLocation = coordinate;
                 ListenToMouseMove = true;
             };
 
@@ -75,6 +75,16 @@ namespace whateverthefuck.src.view.guicomponents
             OnLeftMouseUp += releaseLocation =>
             {
                 ListenToMouseMove = false;
+            };
+
+            OnScrollIn += coordinate =>
+            {
+                Zoomer.ZoomIn();
+            };
+
+            OnScrollOut += coordinate =>
+            {
+                Zoomer.ZoomOut();
             };
         }
 
@@ -92,11 +102,14 @@ namespace whateverthefuck.src.view.guicomponents
 
             drawAdapter.Translate(Location.X - InternalOffset.X, Location.Y - InternalOffset.Y);
 
+            drawAdapter.Scale(Zoomer.CurrentZoom, Zoomer.CurrentZoom);
 
             foreach (var c in Components)
             {
                 c.DrawMe(drawAdapter);
             }
+
+            drawAdapter.Scale(1/Zoomer.CurrentZoom, 1/Zoomer.CurrentZoom);
 
             drawAdapter.Translate(-Location.X + InternalOffset.X, -Location.Y + InternalOffset.Y);
 

@@ -100,11 +100,11 @@ namespace whateverthefuck.src.view
         {
             if (e.Delta < 0)
             {
-                Input.Handle(new InputUnion(InputUnion.Directions.Down, MouseButton.Middle));
+                Program.GameStateManager.HandleMouseScroll(new InputUnion(InputUnion.Directions.Down, MouseButton.Middle), new ScreenCoordinate(e.X, e.Y));
             }
             else
             {
-                Input.Handle(new InputUnion(InputUnion.Directions.Up, MouseButton.Middle));
+                Program.GameStateManager.HandleMouseScroll(new InputUnion(InputUnion.Directions.Up, MouseButton.Middle), new ScreenCoordinate(e.X, e.Y));
             }
         }
 
