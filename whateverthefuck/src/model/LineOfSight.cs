@@ -51,7 +51,7 @@ namespace whateverthefuck.src.model
                 foreach (var blocker in blockers)
                 {
                     if (blocker == target || blocker == looker
-                        || target.Height >= blocker.Height
+                        || target.Height >= blocker.Height || blocker.Height < 2
                         )
                     {
                         continue;
