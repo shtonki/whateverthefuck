@@ -16,7 +16,7 @@ namespace whateverthefuck.src.model.entities
         {
             Size = new GameCoordinate(0.01f, 0.01f);
             DrawColor = Color.Black;
-            MoveSpeed = 0.1f;
+            MoveSpeed = 0.02f;
             Collidable = false;
         }
 

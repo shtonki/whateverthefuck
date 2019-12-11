@@ -245,7 +245,7 @@ namespace whateverthefuck.src.model
             var gl = GUI.TranslateScreenToGLCoordinates(screenClickLocation);
             var gc = GUI.Camera.GLToGameCoordinate(gl);
 
-            var clickedGuiComponents = GUI.GUIComponents.Where(g => g.Contains(gl));
+            var clickedGuiComponents = GUI.GUIComponents.Where(g => g.Visible && g.Contains(gl));
 
             foreach (var cgc in clickedGuiComponents)
             {

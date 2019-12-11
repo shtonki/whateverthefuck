@@ -21,7 +21,6 @@ namespace whateverthefuck.src.model
 
 
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
-        public int Height { get; protected set; } = 1;
 
         public EntityType EntityType { get; }
 
@@ -77,7 +76,7 @@ namespace whateverthefuck.src.model
 
             drawAdapter.FillRectangle(x1, y1, x2, y2, DrawColor);
 
-            if (false && HighlightColor != Color.Transparent)
+            if (HighlightColor != Color.Transparent)
             {
                 Rectangle r = new view.Rectangle(this, HighlightColor);
                 r.DrawMe(drawAdapter);

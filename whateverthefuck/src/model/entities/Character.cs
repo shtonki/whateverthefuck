@@ -16,6 +16,7 @@ namespace whateverthefuck.src.model.entities
             Movable = true;
             Targetable = true;
             ShowHealth = true;
+            Height = 1;
         }
     }
 }

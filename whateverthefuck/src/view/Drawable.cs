@@ -59,12 +59,14 @@ namespace whateverthefuck.src.view
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            drawAdapter.TraceRectangle(X1, Y1, X2, Y2, DrawColor);
+            drawAdapter.TraceRectangle(X1, Y1, X2, Y2, DrawColor, 4);
         }
     }
 
     public abstract class Drawable
     {
+        public int Height { get; protected set; } = 1;
+        
         protected float Rotation { get; set; } = 0;
         public Coordinate Location { get; set; }
 

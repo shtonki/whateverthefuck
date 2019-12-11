@@ -83,7 +83,7 @@ namespace whateverthefuck.src.view
 
             // Draw entities with account to Camera location and zoom
             // @Reconsider: refactor GetAllDrawables to GetAllEntities 
-            foreach (var drawable in GUI.GetAllDrawables())
+            foreach (var drawable in GUI.GetAllDrawables().OrderBy(d => d.Height))
             {
                 drawable.Draw(drawAdapter);
             }
