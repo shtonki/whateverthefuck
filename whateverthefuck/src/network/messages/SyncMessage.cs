@@ -14,9 +14,9 @@ namespace whateverthefuck.src.network.messages
             MessageBody = new SyncMessageBody();
         }
 
-        public SyncMessage(int tick, long checksum) : base(MessageType.SyncMessage)
+        public SyncMessage(SyncMessageBody body) : base(MessageType.SyncMessage)
         {
-            MessageBody = new SyncMessageBody(tick, checksum);
+            MessageBody = body;
         }
     }
 
@@ -24,12 +24,12 @@ namespace whateverthefuck.src.network.messages
     public struct SyncMessageBody : MessageBody
     {
         public int Tick;
-        public long Checksum;
+        public long Hash;
 
         public SyncMessageBody(int tick, long checksum)
         {
             Tick = tick;
-            Checksum = checksum;
+            Hash = checksum;
         }
     }
 }

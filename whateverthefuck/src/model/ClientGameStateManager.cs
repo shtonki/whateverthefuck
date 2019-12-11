@@ -51,12 +51,6 @@ namespace whateverthefuck.src.model
 
         private void Tick()
         {
-#if false
-            if (UseSmoothing)
-            {
-                SmoothMovements();
-            }
-#endif
             if (Hero != null)
             {
                 MovementStruct ms = new MovementStruct();
@@ -117,6 +111,53 @@ namespace whateverthefuck.src.model
             }
         }
 
+        public void UpdateGameState(int tick, IEnumerable<GameEvent> events)
+        {
+            if (tick == 0)
+            {
+                GameState.HandleGameEvents(events);
+                //GameState.Step();
+                return;
+            }
+
+            if (GameState.StepCounter <= 1)
+            {
+                GameState.StepCounter = tick;
+            }
+
+
+            GameState.HandleGameEvents(events);
+            GameState.Step();
+            UpdateLOS();
+
+            var syncRecord = GameState.GenerateSyncRecord();
+
+            if (syncRecord.Tick % 100 == 1)
+            {
+                Program.ServerConnection.SendMessage(new SyncMessage(syncRecord));
+            }
+
+            // fix me t. ribbe
+            if (TakeControlId.HasValue)
+            {
+                Hero = (PlayerCharacter)GameState.GetEntityById(TakeControlId.Value);
+                if (Hero != null)
+                {
+                    CenterCameraOn(Hero);
+                }
+                TakeControlId = null;
+            }
+        }
+
+        public void TakeControl(int identifier)
+        {
+            TakeControlId = identifier;
+        }
+
+        public void CenterCameraOn(GameEntity entity)
+        {
+            GUI.Camera = new FollowCamera(Hero);
+        }
 
         private void SmoothMovements()
         {
@@ -142,74 +183,7 @@ namespace whateverthefuck.src.model
                 }
             }
         }
-        
 
-        private void UpdateLOS()
-        {
-            var inLOS = LineOfSight.CheckLOS(Hero, GameState.AllEntities);
-
-            foreach (var e in inLOS)
-            {
-                e.LOSGraceTicks = 5;
-            }
-
-            foreach (var e in GameState.AllEntities)
-            {
-                e.LOSGraceTicks--;
-                e.Visible = e.LOSGraceTicks > 0;
-            }
-        }
-
-        private int? TakeControlId;
-
-        public void TakeControl(int identifier)
-        {
-            TakeControlId = identifier;
-        }
-
-        public void CenterCameraOn(GameEntity entity)
-        {
-            GUI.Camera = new FollowCamera(Hero);
-        }
-
-        public void UpdateGameState(int tick, IEnumerable<GameEvent> events)
-        {
-            GameState.HandleGameEvents(events);
-            GameState.Step();
-            UpdateLOS();
-
-            if (false)
-            {
-                var hash = GameState.HashMe();
-                Logging.Log(tick + ", " + hash);
-            }
-
-            if (tick % 100 == 1)
-            {
-                var hash = GameState.HashMe();
-                Program.ServerConnection.SendMessage(new SyncMessage(tick, hash));
-            }
-
-            // fix me
-            if (TakeControlId.HasValue)
-            {
-                Hero = (PlayerCharacter)GameState.GetEntityById(TakeControlId.Value);
-                if (Hero != null)
-                {
-                    CenterCameraOn(Hero);
-                }
-                TakeControlId = null;
-            }
-        }
-
-        private GameEntity GetEntityAtLocation(GameCoordinate location)
-        {
-            var mp = new MousePicker();
-            mp.Center = location;
-            var picked = GameState.Intersects(mp);
-            if (picked.Count() == 0) { return null; }
-            return picked.First();
-        }
 
         public void HandleMouseMove(ScreenCoordinate screenClickLocation)
         {
@@ -256,53 +230,62 @@ namespace whateverthefuck.src.model
             switch (gameAction)
             {
                 case GameAction.CastAbility1:
-                {
-                    if (GameState.GetEntityById(Target.Identifier.Id) != null)
                     {
+                        if (GameState.GetEntityById(Target.Identifier.Id) != null)
+                        {
                             Program.ServerConnection.SendMessage(
                                 new UpdateGameStateMessage(0, new UseAbilityEvent(Hero, Target, new Ability(Abilities.Fireballx))));
+                        }
                     }
-                } break;
+                    break;
 
                 case GameAction.HeroWalkUpwards:
-                {
-                    HeroMovements.Upwards = (true);
-                } break;
+                    {
+                        HeroMovements.Upwards = (true);
+                    }
+                    break;
 
                 case GameAction.HeroWalkUpwardsStop:
-                {
-                    HeroMovements.Upwards = (false);
-                } break;
+                    {
+                        HeroMovements.Upwards = (false);
+                    }
+                    break;
 
                 case GameAction.HeroWalkDownwards:
-                {
-                    HeroMovements.Downwards = (true);
-                } break;
+                    {
+                        HeroMovements.Downwards = (true);
+                    }
+                    break;
 
                 case GameAction.HeroWalkDownwardsStop:
-                {
-                    HeroMovements.Downwards = (false);
-                } break;
+                    {
+                        HeroMovements.Downwards = (false);
+                    }
+                    break;
 
                 case GameAction.HeroWalkLeftwards:
-                {
-                    HeroMovements.Leftwards = (true);
-                } break;
+                    {
+                        HeroMovements.Leftwards = (true);
+                    }
+                    break;
 
                 case GameAction.HeroWalkLeftwardsStop:
-                {
-                    HeroMovements.Leftwards = (false);
-                } break;
+                    {
+                        HeroMovements.Leftwards = (false);
+                    }
+                    break;
 
                 case GameAction.HeroWalkRightwards:
-                {
-                    HeroMovements.Rightwards = (true);
-                } break;
+                    {
+                        HeroMovements.Rightwards = (true);
+                    }
+                    break;
 
                 case GameAction.HeroWalkRightwardsStop:
-                {
-                    HeroMovements.Rightwards = (false);
-                } break;
+                    {
+                        HeroMovements.Rightwards = (false);
+                    }
+                    break;
 
                 case GameAction.CameraZoomIn:
                     {
@@ -313,19 +296,47 @@ namespace whateverthefuck.src.model
                 case GameAction.CameraZoomOut:
                     {
                         GUI.Camera?.Zoom.ZoomOut();
-                    } break;
+                    }
+                    break;
                 case GameAction.TogglePanel:
                     {
                         foreach (var panel in GUI.GUIComponents.Where(p => p is Panel))
                         {
                             panel.Visible = !panel.Visible;
                         }
-                    } break;
+                    }
+                    break;
 
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
             }
         }
 
+        private void UpdateLOS()
+        {
+            var inLOS = LineOfSight.CheckLOS(Hero, GameState.AllEntities);
+
+            foreach (var e in inLOS)
+            {
+                e.LOSGraceTicks = 5;
+            }
+
+            foreach (var e in GameState.AllEntities)
+            {
+                e.LOSGraceTicks--;
+                e.Visible = e.LOSGraceTicks > 0;
+            }
+        }
+
+        private int? TakeControlId;
+
+        private GameEntity GetEntityAtLocation(GameCoordinate location)
+        {
+            var mp = new MousePicker();
+            mp.Center = location;
+            var picked = GameState.Intersects(mp);
+            if (picked.Count() == 0) { return null; }
+            return picked.First();
+        }
     }
 
 

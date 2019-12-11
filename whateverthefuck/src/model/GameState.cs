@@ -21,6 +21,8 @@ namespace whateverthefuck.src.model
 
         public IEnumerable<GameEntity> AllEntities => EntityListSafe;
 
+        public int StepCounter;
+
         public void UpdateLists()
         {
             lock (LockSafeList)
@@ -48,27 +50,18 @@ namespace whateverthefuck.src.model
             EntityGenerator = new EntityGenerator(IdGenerator);
         }
 
-
-        private void AddEntities(params GameEntity[] entities)
+        public void Step()
         {
-            lock (LockSafeList)
+            UpdateLists();
+
+            foreach (var entity in AllEntities)
             {
-                EntityList.AddRange(entities);
+                entity.Step(this);
             }
 
-        }
+            HandleCollisions();
+            StepCounter++;
 
-        private void RemoveEntity(GameEntity entity)
-        {
-            lock (LockSafeList)
-            {
-                EntityList.Remove(entity);
-            }
-        }
-
-        private void RemoveEntity(EntityIdentifier id)
-        {
-            RemoveEntity(GetEntityById(id.Id));
         }
 
         public GameEntity GetEntityById(int id)
@@ -157,6 +150,17 @@ namespace whateverthefuck.src.model
             }
         }
 
+        public SyncMessageBody GenerateSyncRecord()
+        {
+            var rt = new SyncMessageBody(StepCounter, HashMe());
+
+            if (false)
+            {
+                Logging.Log(string.Format("Tick '{0}' Hash '{1}'", rt.Tick, rt.Hash.ToString("X8")));
+            }
+            return rt;
+        }
+
         private bool HandleGameEvent(GameEvent e)
         {
             if (e is CreateEntityEvent)
@@ -177,7 +181,7 @@ namespace whateverthefuck.src.model
             {
                 UpdateMovementEvent uce = (UpdateMovementEvent)e;
                 var entity = GetEntityById(uce.Id);
-                
+
                 if (entity == null)
                 {
                     Logging.Log("Dubious UpdateMovementEvent");
@@ -212,24 +216,6 @@ namespace whateverthefuck.src.model
             return true;
         }
 
-        public void Step()
-        {
-            UpdateLists();
-
-            foreach (var entity in AllEntities)
-            {
-                entity.Step(this);
-            }
-
-            HandleCollisions();
-        }
-
-        public int HashMe()
-        {
-            int hash = AllEntities.Select(e => e.GetMemeCode()%1023).Sum();
-            return hash;
-        }
-
         public IEnumerable<GameEntity> Intersects(GameEntity e)
         {
             List<GameEntity> rt = new List<GameEntity>();
@@ -243,6 +229,43 @@ namespace whateverthefuck.src.model
             }
             return rt;
         }
+
+        private void AddEntities(params GameEntity[] entities)
+        {
+            lock (LockSafeList)
+            {
+                EntityList.AddRange(entities);
+            }
+
+        }
+
+        private void RemoveEntity(GameEntity entity)
+        {
+            lock (LockSafeList)
+            {
+                EntityList.Remove(entity);
+            }
+        }
+
+        private void RemoveEntity(EntityIdentifier id)
+        {
+            RemoveEntity(GetEntityById(id.Id));
+        }
+
+        public int HashMe()
+        {
+            int hash = 0;
+
+            foreach (var e in AllEntities)
+            {
+                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.Location.X), 0);
+                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.Location.Y), 0);
+                hash ^= (int)e.EntityType;
+            }
+
+            return hash;
+        }
+
 
         private CollisionRecord? DetectCollisions(GameEntity entityI, GameEntity entityJ)
         {

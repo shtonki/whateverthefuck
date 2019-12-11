@@ -24,8 +24,7 @@ namespace whateverthefuckserver.gameserver
         private List<GameEvent> PendingEvents = new List<GameEvent>();
         object EventsLock = new object();
 
-        private int TickCounter = 0;
-        private (int, long) SyncCity;
+        private SyncMessageBody SyncCity;
 
         private SpawnCity SpawnCity { get; }
 
@@ -48,35 +47,32 @@ namespace whateverthefuckserver.gameserver
 
             SpawnCity = new SpawnCity(GameState, es => PendEvents(es));
             SpawnCity.SpawnWorld();
-            //SpawnCity.SpawnMob();
+            SpawnCity.SpawnMob();
         }
 
         private void Tick()
         {
-            UpdateGameStateMessage message;
-            int Tick = TickCounter++;
-            
+            List<GameEvent> sendEvents;
+
             lock (EventsLock)
             {
+                // broken?
                 GameState.HandleGameEvents(PendingEvents);
-                message = new UpdateGameStateMessage(Tick, PendingEvents);
+                sendEvents = new List<GameEvent>(PendingEvents);
+                var message = new UpdateGameStateMessage(GameState.StepCounter, sendEvents);
+                SendMessageToAllPlayers(message);
                 PendingEvents.Clear();
             }
 
+
             GameState.Step();
-            SendMessageToAllPlayers(message);
 
-            if (false)
+            var syncRecord = GameState.GenerateSyncRecord();
+
+            if (syncRecord.Tick % 100 == 1)
             {
-                var hash = GameState.HashMe();
-                Logging.Log(Tick + ", " + hash);
+                SyncCity = syncRecord;
             }
-
-            if (Tick % 100 == 1)
-            {
-                SyncCity = (Tick, GameState.HashMe());
-            }
-
         }
 
         internal void HandleEventRequests(List<GameEvent> events)
@@ -86,19 +82,26 @@ namespace whateverthefuckserver.gameserver
 
         public void AddUser(User user)
         {
-            IEnumerable<GameEvent> createEvents = GameState.AllEntities.Select(e => new CreateEntityEvent(e));
-            IEnumerable<GameEvent> movementEvents = GameState.AllEntities.Where(e => e.Movements.IsMoving).Select(e => new UpdateMovementEvent(e));
+            IEnumerable<GameEvent> createEvents;
+            IEnumerable<GameEvent> movementEvents;
 
+            lock (EventsLock)
+            {
+                createEvents = GameState.AllEntities.Select(e => new CreateEntityEvent(e));
+                movementEvents = GameState.AllEntities.Where(e => e.Movements.IsMoving).Select(e => new UpdateMovementEvent(e));
+            }
 
             var events = createEvents.Concat(movementEvents).ToArray();
 
-            user.PlayerConnection.SendMessage(new UpdateGameStateMessage(0, events));
 
             lock (PlayersLock)
             {
+                user.PlayerConnection.SendMessage(new UpdateGameStateMessage(0, events));
                 PlayingUsers.Add(user);
             }
+
             SpawnPlayerCharacter(user);
+            Logging.Log("Added player");
         }
 
         public void RemoveUser(User user)
@@ -117,13 +120,17 @@ namespace whateverthefuckserver.gameserver
 
         public bool InSync(int tick, long hash)
         {
-            var rt = SyncCity == (tick, hash);
+            var rt = (SyncCity.Tick, SyncCity.Hash) == (tick, hash);
 
             if (!rt)
             {
                 Logging.Log("Disagreed on sync");
-                Logging.Log(string.Format("Tick; expected:'{0}', got'{1}'", SyncCity.Item1, tick));
-                Logging.Log(string.Format("Hash; expected:'{0}', got'{1}'", SyncCity.Item2, hash));
+                Logging.Log(string.Format("Tick; expected:'{0}', got'{1}'", SyncCity.Tick, tick));
+                Logging.Log(string.Format("Hash; expected:'{0}', got'{1}'", SyncCity.Hash, hash));
+            }
+            else
+            {
+                Logging.Log("Agreed on sync");
             }
 
             return rt;

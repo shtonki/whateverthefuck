@@ -39,9 +39,15 @@ namespace whateverthefuck.src.util
     public class FileOutput : LoggingOutput
     {
         private string filePath;
+
         public FileOutput(Logging.LoggingLevel loggingLevel, bool enabled) : base(loggingLevel, enabled)
         {
             filePath = "log.txt";
+        }
+
+        public FileOutput(string filePath) : this(Logging.LoggingLevel.All, true)
+        {
+            this.filePath = filePath;
         }
 
         public override void Write(string message, Logging.LoggingLevel loggingLevel)

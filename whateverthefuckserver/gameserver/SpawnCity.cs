@@ -34,7 +34,9 @@ namespace whateverthefuckserver.gameserver
 
         public void SpawnMob()
         {
-            var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new CreationArgs(0)));
+            var mob = GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new CreationArgs(0));
+            mob.Location = new GameCoordinate(-0.5f, -0.5f);
+            var rt = new CreateEntityEvent(mob);
             rt.OnDeathCallback = (e) => SpawnLoot((GameCoordinate)e.Location);
             rt.OnStepCallback = (e) => stepme(e);
             PublishArray(rt);
@@ -46,8 +48,9 @@ namespace whateverthefuckserver.gameserver
         {
             if (c++ % 100 == 0)
             {
-                e.Movements.Direction = (float)(RNG.BetweenZeroAndOne() * Math.PI);
-                PublishArray(new UpdateMovementEvent(e));
+                var ms = new MovementStruct();
+                ms.Direction = (float)(RNG.BetweenZeroAndOne() * Math.PI);
+                PublishArray(new UpdateMovementEvent(e.Identifier.Id, ms));
             }
         }
 

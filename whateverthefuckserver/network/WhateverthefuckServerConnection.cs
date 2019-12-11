@@ -43,7 +43,7 @@ namespace whateverthefuckserver.network
                 case MessageType.SyncMessage:
                 {
                     SyncMessageBody syncMessage = (SyncMessageBody)message.MessageBody;
-                    Program.GameServer.InSync(syncMessage.Tick, syncMessage.Checksum);
+                    Program.GameServer.InSync(syncMessage.Tick, syncMessage.Hash);
                 } break;
 
                 default: throw new NotImplementedException("Unhandled MessageType");

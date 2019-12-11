@@ -167,7 +167,7 @@ namespace whateverthefuck.src.model
         public int? FollowId { get; set; }
 
 
-        public bool IsDirectional => float.IsNaN(Direction);
+        public bool IsDirectional => !float.IsNaN(Direction);
         public bool IsFollowing => FollowId.HasValue;
 
         public bool IsMoving => IsDirectional || IsFollowing;
