@@ -93,6 +93,9 @@ namespace whateverthefuck.src.model
         public int CurrentHealth { get; private set; }
         public int MaxHealth { get; private set; }
 
+        public Action<GameEntity> OnDeathCallback { get; set; }
+
+
         public CreateEntityEvent(GameEntity e)
         {
             Type = GameEventType.Create;

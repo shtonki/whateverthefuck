@@ -16,14 +16,5 @@ namespace whateverthefuck.src.model.entities
             ShowHealth = true;
             Height = 1;
         }
-
-        public override void Step(GameState gameState)
-        {
-            base.Step(gameState);
-            if (CurrentHealth < 0)
-            {
-                gameState.HandleGameEvents(new DestroyEntityEvent(this));
-            }
-        }
     }
 }

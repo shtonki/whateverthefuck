@@ -51,6 +51,7 @@
     <Compile Include="src\model\entities\Character.cs" />
     <Compile Include="src\model\entities\Door.cs" />
     <Compile Include="src\model\entities\Floor.cs" />
+    <Compile Include="src\model\entities\Loot.cs" />
     <Compile Include="src\model\entities\MousePicker.cs" />
     <Compile Include="src\model\entities\NPC.cs" />
     <Compile Include="src\model\entities\Projectile.cs" />

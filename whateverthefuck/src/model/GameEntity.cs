@@ -19,6 +19,7 @@ namespace whateverthefuck.src.model
 
         protected bool ShowHealth = false;
 
+        public event Action<GameEntity> OnDeath;
 
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
@@ -91,11 +92,21 @@ namespace whateverthefuck.src.model
             }
         }
 
+        protected virtual void Die(GameState gameState)
+        {
+            OnDeath?.Invoke(this);
+            gameState.HandleGameEvents(new DestroyEntityEvent(this));
+        }
+
         public virtual void Step(GameState gameState)
         {
             MovementCache = CalculateMovement(gameState);
             Location = (GameCoordinate)Location + MovementCache;
-            
+
+            if (CurrentHealth < 0)
+            {
+                Die(gameState);
+            }
         }
 
         public virtual GameCoordinate CalculateMovement(GameState gameState)
@@ -244,5 +255,7 @@ namespace whateverthefuck.src.model
         NPC,
         Door,
         Floor,
+
+        Loot,
     }
 }

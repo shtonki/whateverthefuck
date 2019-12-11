@@ -163,6 +163,7 @@ namespace whateverthefuck.src.model
             {
                 CreateEntityEvent cee = (CreateEntityEvent)e;
                 var entity = EntityGenerator.GenerateEntity(cee);
+                entity.OnDeath += cee.OnDeathCallback;
                 AddEntities(entity);
             }
             else if (e is DestroyEntityEvent)
@@ -175,6 +176,13 @@ namespace whateverthefuck.src.model
             {
                 UpdateMovementEvent uce = (UpdateMovementEvent)e;
                 var entity = GetEntityById(uce.Id);
+                
+                if (entity == null)
+                {
+                    Logging.Log("Dubious UpdateMovementEvent");
+                    return false;
+                }
+
                 entity.Movements = uce.Movements;
             }
             else if (e is UseAbilityEvent)

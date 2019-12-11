@@ -11,7 +11,7 @@ using whateverthefuck.src.network;
 using whateverthefuckserver.storage;
 using whateverthefuckserver.users;
 
-namespace whateverthefuckserver
+namespace whateverthefuckserver.gameserver
 {
     class GameServer
     {
@@ -23,6 +23,8 @@ namespace whateverthefuckserver
 
         private List<GameEvent> PendingEvents = new List<GameEvent>();
         object EventsLock = new object();
+
+        private SpawnCity SpawnCity { get; }
 
         public GameServer()
         {
@@ -41,23 +43,14 @@ namespace whateverthefuckserver
                 }
             }).Start();
 
-            var house = GameState.EntityGenerator.GenerateHouse(5, 5);
-            GameState.HandleGameEvents(house.Select(b => new CreateEntityEvent(b)));
-            
-            var mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC);
-            mob.Location = new GameCoordinate(0, 0.75f);
-            GameState.HandleGameEvents(new CreateEntityEvent(mob));
-
-            var f1 = GameState.EntityGenerator.GenerateEntity(EntityType.Floor);
-            f1.Location = new GameCoordinate(0f, 0f);
-            GameState.HandleGameEvents(new CreateEntityEvent(f1));
-
-            GameState.HandleGameEvents(new UpdateMovementEvent(mob.Identifier.Id, MovementStruct.Following(f1)));
+            SpawnCity = new SpawnCity(GameState, es => PendEvents(es));
+            SpawnCity.SpawnWorld();
+            SpawnCity.SpawnMob();
         }
 
         internal void HandleEventRequests(List<GameEvent> events)
         {
-            PendEvents(events.ToArray());
+            PendEvents(events);
         }
 
         public void AddUser(User user)
@@ -84,22 +77,21 @@ namespace whateverthefuckserver
                 PlayingUsers.Remove(user);
             }
             var hero = GameState.GetEntityById(user.HeroIdentifier.Id);
-            GameEvent re = new DestroyEntityEvent(hero);
-            PendEvents(re);
+            if (hero != null)
+            {
+                GameEvent re = new DestroyEntityEvent(hero);
+                PendEvents(re);
+            }
         }
 
         private void SpawnPlayerCharacter(User user)
         {
-            var pc = GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter);
-            pc.Location = new GameCoordinate(0, 0);
-            user.HeroIdentifier = pc.Identifier;
-            
-            // create entity on serverside game state
-            var cee = new CreateEntityEvent(pc);
-            PendEvents(cee);
+            var createEvent = SpawnCity.SpawnHero();
 
+            user.HeroIdentifier = new EntityIdentifier(createEvent.Id);
+            
             // send message to user granting control to created character
-            user.PlayerConnection.SendMessage(new GrantControlMessage((PlayerCharacter)pc));
+            user.PlayerConnection.SendMessage(new GrantControlMessage(createEvent.Id));
         }
 
         private void SendMessageToAllPlayers(WhateverthefuckMessage message)
@@ -114,6 +106,11 @@ namespace whateverthefuckserver
             }
         }
 
+        private void PendEvents(IEnumerable<GameEvent> es)
+        {
+            PendEvents(es.ToArray());
+        }
+
         private void PendEvents(params GameEvent[] es)
         {
             lock (EventsLock)
@@ -122,7 +119,7 @@ namespace whateverthefuckserver
             }
         }
 
-        public void Tick()
+        private void Tick()
         {
             UpdateGameStateMessage message;
 

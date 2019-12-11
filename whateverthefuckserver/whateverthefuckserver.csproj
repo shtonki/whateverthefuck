@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gameserver\GameServer.cs" />
+    <Compile Include="gameserver\SpawnCity.cs" />
     <Compile Include="network\LoginServer.cs" />
     <Compile Include="network\NetworkEntityInfo.cs" />
     <Compile Include="network\WhateverthefuckServerConnection.cs" />

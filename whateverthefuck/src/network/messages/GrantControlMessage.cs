@@ -21,6 +21,13 @@ namespace whateverthefuck.src.network.messages
         {
             MessageBody = new GrantControlBody(entity);
         }
+
+        public GrantControlMessage(int Id) : base(MessageType.GrantControlMessage)
+        {
+            var v = new GrantControlBody();
+            v.Id = Id;
+            MessageBody = v;
+        }
     }
 
 

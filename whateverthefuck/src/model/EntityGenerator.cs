@@ -59,6 +59,11 @@ namespace whateverthefuck.src.model
                     return new Projectile(identifier);
                 }
 
+                case EntityType.Loot:
+                {
+                    return new Loot(identifier);
+                }
+
                 default: throw new Exception();
             }
         }
