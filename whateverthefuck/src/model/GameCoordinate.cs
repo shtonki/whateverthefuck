@@ -34,12 +34,7 @@ namespace whateverthefuck.src.model
         {
             return a + -b;
         }
-
-        public override string ToString()
-        {
-            return String.Format("[{0:0.00} {1:0.00}]", X, Y);
-        }
-
+        
         public float Distance(GameCoordinate other)
         {
             var xDistance = X - other.X;

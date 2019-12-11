@@ -59,10 +59,7 @@ namespace whateverthefuck.src.view
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            drawAdapter.FillLine(X1, Y1, X2, Y1, DrawColor);
-            drawAdapter.FillLine(X2, Y1, X2, Y2, DrawColor);
-            drawAdapter.FillLine(X2, Y2, X1, Y2, DrawColor);
-            drawAdapter.FillLine(X1, Y2, X1, Y1, DrawColor);
+            drawAdapter.TraceRectangle(X1, Y1, X2, Y2, DrawColor);
         }
     }
 

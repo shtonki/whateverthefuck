@@ -24,6 +24,8 @@ namespace whateverthefuck.src.control
 
             HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Down, MouseButton.Middle), GameAction.CameraZoomIn));
             HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Up, MouseButton.Middle), GameAction.CameraZoomOut));
+
+            HotkeyMappings.Add(new HotkeyMapping(new InputUnion(InputUnion.Directions.Up, Key.Tab), GameAction.TogglePanel));
         }
 
 

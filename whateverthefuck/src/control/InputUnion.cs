@@ -3,7 +3,7 @@ using System;
 
 namespace whateverthefuck.src.control
 {
-    class InputUnion : IEquatable<InputUnion>
+    public class InputUnion : IEquatable<InputUnion>
     {
         public enum Directions { Undefined, Up, Down, Repeat };
         public Directions Direction { get; }

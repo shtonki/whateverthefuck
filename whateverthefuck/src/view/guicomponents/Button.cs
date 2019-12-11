@@ -12,42 +12,25 @@ namespace whateverthefuck.src.view.guicomponents
 {
     class Button : GUIComponent
     {
-        private GLCoordinate Size;
-        private Button(Coordinate location) : base(location)
+        public Button(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
-        }
-        
-        public Button(GLCoordinate location, GLCoordinate size) : this(location)
-        {
-            Size = size;
-            Color = Color.DarkGoldenrod;
-            OnLeftMouseDown += () =>
+            BackColor = Color.DarkGoldenrod;
+            OnLeftMouseDown += (a) =>
             {
                 Logging.Log(this.GetType() + " was Left Pressed.");
             };
-            OnLeftMouseUp += () =>
+            OnLeftMouseUp += (a) =>
             {
                 Logging.Log(this.GetType() + " was Left Released.");
             };
-            OnRightMouseDown += () =>
+            OnRightMouseDown += (a) =>
             {
                 Logging.Log(this.GetType() + " was Right Pressed.");
             };
-            OnRightMouseUp += () =>
+            OnRightMouseUp += (a) =>
             {
                 Logging.Log(this.GetType() + " was Right Released.");
             };
-        }
-
-        public override void DrawMe(DrawAdapter drawAdapter)
-        {
-            drawAdapter.FillRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Color);
-        }
-
-        public override bool Contains(GLCoordinate clicked)
-        {
-            return (clicked.X >= Location.X && clicked.X <= Location.X + Size.X &&
-                    -clicked.Y >= Location.Y && -clicked.Y <= Location.Y + Size.Y);
         }
     }
 }

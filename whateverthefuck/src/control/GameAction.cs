@@ -21,5 +21,7 @@ namespace whateverthefuck.src.control
 
         CameraZoomOut,
         CameraZoomIn,
+
+        TogglePanel,
     }
 }
