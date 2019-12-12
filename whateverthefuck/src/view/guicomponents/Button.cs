@@ -15,6 +15,20 @@ namespace whateverthefuck.src.view.guicomponents
         public Button(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
             BackColor = Color.DarkGoldenrod;
+
+            OnMouseButtonPress += (c, i) =>
+            {
+                if (i.Direction == control.InputUnion.Directions.Down)
+                {
+                    Logging.Log("down");
+                }
+                else if (i.Direction == control.InputUnion.Directions.Up)
+                {
+                    Logging.Log("up");
+                }
+            };
+
+#if false
             OnLeftMouseDown += (a) =>
             {
                 Logging.Log(this.GetType() + " was Left Pressed.");
@@ -31,6 +45,7 @@ namespace whateverthefuck.src.view.guicomponents
             {
                 Logging.Log(this.GetType() + " was Right Released.");
             };
+#endif
         }
     }
 }

@@ -100,6 +100,8 @@ namespace whateverthefuck.src.view
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
+            throw new NotImplementedException();
+#if false
             if (e.Delta < 0)
             {
                 Program.GameStateManager.HandleMouseScroll(new InputUnion(InputUnion.Directions.Down, MouseButton.Middle), new ScreenCoordinate(e.X, e.Y));
@@ -108,23 +110,25 @@ namespace whateverthefuck.src.view
             {
                 Program.GameStateManager.HandleMouseScroll(new InputUnion(InputUnion.Directions.Up, MouseButton.Middle), new ScreenCoordinate(e.X, e.Y));
             }
+#endif
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
-            Program.GameStateManager.HandleMouseMove(new ScreenCoordinate(e.XDelta, e.YDelta));
+            
+            //Program.GameStateManager.HandleMouseMove(new ScreenCoordinate(e.XDelta, e.YDelta));
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            InputUnion mouseInput = new InputUnion(InputUnion.Directions.Down, e.Button);
-            Program.GameStateManager.HandleClick(mouseInput, new ScreenCoordinate(e.X, e.Y));
+            InputUnion mouseInput = new InputUnion(InputUnion.Directions.Down, e.Button, new ScreenCoordinate(e.X, e.Y));
+            Program.GameStateManager.HandleInput(mouseInput);
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            InputUnion mouseInput = new InputUnion(InputUnion.Directions.Up, e.Button);
-            Program.GameStateManager.HandleClick(mouseInput, new ScreenCoordinate(e.X, e.Y));
+            InputUnion mouseInput = new InputUnion(InputUnion.Directions.Up, e.Button, new ScreenCoordinate(e.X, e.Y));
+            Program.GameStateManager.HandleInput(mouseInput);
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)

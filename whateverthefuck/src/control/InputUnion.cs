@@ -1,5 +1,6 @@
 ﻿using OpenTK.Input;
 using System;
+using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.control
 {
@@ -14,10 +15,13 @@ namespace whateverthefuck.src.control
         public MouseButton? MouseButton { get; }
         public bool IsMouseInput => MouseButton.HasValue;
 
-        public InputUnion(Directions direction, MouseButton mouseButton)
+        public GLCoordinate Location { get; }
+
+        public InputUnion(Directions direction, MouseButton mouseButton, ScreenCoordinate location)
         {
             Direction = direction;
             MouseButton = mouseButton;
+            Location = GUI.TranslateScreenToGLCoordinates(location);
         }
 
         public InputUnion(Directions direction, Key key)

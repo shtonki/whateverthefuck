@@ -185,7 +185,7 @@ namespace whateverthefuck.src.model
                 }
             }
         }
-
+#if false
         public void HandleMouseScroll(InputUnion mouseInput, ScreenCoordinate screenMouseLocation)
         {
             var gl = GUI.TranslateScreenToGLCoordinates(screenMouseLocation);
@@ -201,7 +201,7 @@ namespace whateverthefuck.src.model
 
             Input.Handle(mouseInput);
         }
-
+#endif
         public void SpawnLoot(CreateLootMessage message)
           {
             var item = message.Item;
@@ -221,7 +221,7 @@ namespace whateverthefuck.src.model
         {
             e.Items.Add(item);
         }
-
+#if false
         public void HandleMouseMove(ScreenCoordinate screenClickLocation)
         {
             var gl = GUI.TranslateScreenToGLCoordinates(screenClickLocation);
@@ -230,7 +230,7 @@ namespace whateverthefuck.src.model
                 guiComponent.HandleMouseMove(gl);
             }
         }
-
+ 
         private bool HandleGuiClick(InputUnion input, GLCoordinate location)
         {
             var clicked = GUI.GUIComponents.Where(g => g.Visible && g.Contains(location));
@@ -283,9 +283,35 @@ namespace whateverthefuck.src.model
             }
             return true;
         }
+#endif
+        private GUIComponent Focused;
 
-        public void HandleClick(InputUnion mouseInput, ScreenCoordinate screenClickLocation)
+        private void Focus(GUIComponent focused)
         {
+            Focused = focused;
+        }
+
+        public void HandleInput(InputUnion input)
+        {
+            if (input.IsMouseInput && input.Direction == InputUnion.Directions.Down)
+            {
+                var clicked = GUIComponentAt(input.Location.ToGLCoordinate());
+
+                if (clicked != null)
+                {
+                    Focus(clicked);
+                }
+            }
+
+            if (Focused != null)
+            {
+                Focused.HandleInput(input);
+            }
+        }
+#if false
+        public void HandleClick(InputUnion mouseInput)
+        {
+            var screenClickLocation = mouseInput.Location;
             var glLocation = GUI.TranslateScreenToGLCoordinates(screenClickLocation);
             var gameLocation = GUI.Camera.GLToGameCoordinate(glLocation);
 
@@ -298,7 +324,7 @@ namespace whateverthefuck.src.model
                 HandleGameClick(mouseInput, gameLocation);
             }
         }
-
+#endif
         public void ActivateAction(GameAction gameAction)
         {
             switch (gameAction)
@@ -410,6 +436,18 @@ namespace whateverthefuck.src.model
             var picked = GameState.Intersects(mp);
             if (picked.Count() == 0) { return null; }
             return picked.First();
+        }
+
+        private GUIComponent GUIComponentAt(GLCoordinate location)
+        {
+            foreach (var c in GUI.GUIComponents)
+            {
+                if (c.Contains(location))
+                {
+                    return c;
+                }
+            }
+            return null;
         }
     }
 

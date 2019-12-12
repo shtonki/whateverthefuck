@@ -51,10 +51,12 @@ namespace whateverthefuck.src.view.guicomponents
             {
                 CloseButton = new Button(new GLCoordinate(width-ButtonSize.X, 0), ButtonSize);
                 CloseButton.BackColor = Color.Red;
+#if false
                 CloseButton.OnLeftMouseDown += coordinate =>
                 {
                     CloseButton.BackColor = Color.Black;
                 };
+#endif
                 Add(CloseButton);
 
                 this.BackColor = Color.Blue;
@@ -88,6 +90,7 @@ namespace whateverthefuck.src.view.guicomponents
             DraggedPanel = new StaticPanel(new GLCoordinate(0, 0), size);
             DraggedPanel.BackColor = Color.Pink;
             base.Add(DraggedPanel);
+#if false
 
             OnLeftMouseDown += coordinate =>
             {
@@ -118,6 +121,7 @@ namespace whateverthefuck.src.view.guicomponents
             {
                 Zoomer.ZoomOut();
             };
+#endif
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
@@ -145,11 +149,6 @@ namespace whateverthefuck.src.view.guicomponents
         }
 
         public override void Add(GUIComponent toAdd)
-        {
-            DraggedPanel.Add(toAdd);
-        }
-
-        public override void Add(params GUIComponent[] toAdd)
         {
             DraggedPanel.Add(toAdd);
         }

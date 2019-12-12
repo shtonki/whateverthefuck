@@ -60,8 +60,8 @@ namespace whateverthefuck.src.view
 
         public static void LoadGUI()
         {
-#if false
-            Panel p = new StaticPanel(new GLCoordinate(0, 0), new GLCoordinate(0.2f, 0.2f));
+#if true
+            Panel p = new StaticPanel(new GLCoordinate(0.15f, 0.15f), new GLCoordinate(0.2f, 0.2f));
             p.BackColor = Color.Pink;
             p.Add(new Button(new GLCoordinate(0.05f, 0.05f), new GLCoordinate(0.1f, 0.1f)));
 
