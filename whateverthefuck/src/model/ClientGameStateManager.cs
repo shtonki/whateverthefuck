@@ -211,36 +211,64 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public void HandleClick(InputUnion mouseInput, ScreenCoordinate screenClickLocation)
+        private bool HandleGuiClick(InputUnion input, GLCoordinate location)
         {
-            var gl = GUI.TranslateScreenToGLCoordinates(screenClickLocation);
-            var gc = GUI.Camera.GLToGameCoordinate(gl);
+            var clicked = GUI.GUIComponents.Where(g => g.Visible && g.Contains(location));
 
-            if (mouseInput.Direction == InputUnion.Directions.Down)
+            if (clicked.Count() == 0)
             {
-                ClickedDownGuiComponents = GUI.GUIComponents.Where(g => g.Visible && g.Contains(gl)).ToList();
-                ClickedDownGuiComponents.ForEach(cgc => cgc.HandleClick(mouseInput, gl));
-            }
-            else if (mouseInput.Direction == InputUnion.Directions.Up)
-            {
-                ClickedDownGuiComponents.ForEach(cgc => cgc.HandleClick(mouseInput, gl));
+                return false;
             }
 
-            if (ClickedDownGuiComponents.Any()) return;
-
-            if (mouseInput.MouseButton == MouseButton.Left && mouseInput.Direction == InputUnion.Directions.Down)
+            if (input.Direction == InputUnion.Directions.Down)
             {
-                var ge = GetEntityAtLocation(gc);
-                if (ge != null && ge.Targetable)
+                ClickedDownGuiComponents = clicked.ToList();
+                ClickedDownGuiComponents.ForEach(cgc => cgc.HandleClick(input, location));
+            }
+            else if (input.Direction == InputUnion.Directions.Up)
+            {
+                ClickedDownGuiComponents.ForEach(cgc => cgc.HandleClick(input, location));
+                ClickedDownGuiComponents.Clear();
+            }
+
+            return true;
+        }
+
+        private bool HandleGameClick(InputUnion input, GameCoordinate location)
+        {
+            var clickedEntity = GetEntityAtLocation(location);
+            if (clickedEntity == null) { return false; }
+
+            //clickedEntity.Interact(input);
+
+            if (input.MouseButton == MouseButton.Left && input.Direction == InputUnion.Directions.Down)
+            {
+                if (clickedEntity.Targetable)
                 {
                     if (Target != null)
                     {
                         Target.HighlightColor = Color.Transparent;
                     }
 
-                    Target = ge;
+                    Target = clickedEntity;
                     Target.HighlightColor = Color.DarkOrange;
                 }
+            }
+            return true;
+        }
+
+        public void HandleClick(InputUnion mouseInput, ScreenCoordinate screenClickLocation)
+        {
+            var glLocation = GUI.TranslateScreenToGLCoordinates(screenClickLocation);
+            var gameLocation = GUI.Camera.GLToGameCoordinate(glLocation);
+
+            if (HandleGuiClick(mouseInput, glLocation))
+            {
+                return;
+            }
+            else
+            {
+                HandleGameClick(mouseInput, gameLocation);
             }
         }
 

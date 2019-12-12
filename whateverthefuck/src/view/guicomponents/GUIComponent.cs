@@ -137,16 +137,15 @@ namespace whateverthefuck.src.view.guicomponents
         public List<GUIComponent> InteractedChildren(GLCoordinate interactLocation)
         {
             var translatedLoc =
-                new GLCoordinate(interactLocation.X - this.Location.X, -(interactLocation.Y + this.Location.Y));
-            Logging.Log(translatedLoc.ToString());
-            foreach(var child in Children) Logging.Log("Child loc: " + child.Location + ", child size: " + child.Size + ", contains: " + child.Contains(translatedLoc));
-            return Children.Where(c => c.Contains(translatedLoc)).ToList();
+                new GLCoordinate(interactLocation.X - this.Location.X, interactLocation.Y - this.Location.Y);
+            var v = Children.Where(c => c.Contains(translatedLoc)).ToList();
+            return v;
         }
 
         public virtual bool Contains(GLCoordinate clicked)
         {
             return (clicked.X >= Location.X && clicked.X <= Location.X + Size.X &&
-                    -clicked.Y >= Location.Y && -clicked.Y <= Location.Y + Size.Y);
+                    clicked.Y >= Location.Y && clicked.Y <= Location.Y + Size.Y);
         }
     }
 

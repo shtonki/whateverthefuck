@@ -38,6 +38,7 @@ namespace whateverthefuck.src.view.guicomponents
             drawAdapter.Translate(-Location.X, -Location.Y);
         }
 
+        // just fucking shoot me already
         internal class MenuBar : GUIComponent
         {
             private static float BarHeight = 0.03f;
@@ -78,12 +79,14 @@ namespace whateverthefuck.src.view.guicomponents
     {
         private Panel DraggedPanel;
 
-        private GLCoordinate InternalOffset = new GLCoordinate(0, 0);
+        //private GLCoordinate InternalOffset = new GLCoordinate(0, 0);
         private bool ListenToMouseMove = false;
 
         public DraggablePanel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
             DraggedPanel = new StaticPanel(location, size);
+            DraggedPanel.BackColor = Color.Pink;
+
             OnLeftMouseDown += coordinate =>
             {
                 ListenToMouseMove = true;
@@ -95,7 +98,9 @@ namespace whateverthefuck.src.view.guicomponents
                 var diff = coordinate;
                 diff.X += 1;
                 diff.Y += 1;
-                InternalOffset = new GLCoordinate(-diff.X + InternalOffset.X, diff.Y + InternalOffset.Y);
+                // todo the fact that we take +diff.X and -diff.Y suggests that we have bungled translation somewhere
+                DraggedPanel.Location = new GLCoordinate(DraggedPanel.Location.X + diff.X, DraggedPanel.Location.Y - diff.Y);
+                //InternalOffset = new GLCoordinate(-diff.X + InternalOffset.X, diff.Y + InternalOffset.Y);
             };
 
             OnLeftMouseUp += releaseLocation =>
@@ -123,7 +128,7 @@ namespace whateverthefuck.src.view.guicomponents
 
             drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, sizeScreenCoords.Y);
 
-            drawAdapter.Translate(-InternalOffset.X, -InternalOffset.Y);
+            //drawAdapter.Translate(-InternalOffset.X, -InternalOffset.Y);
 
             drawAdapter.Scale(Zoomer.CurrentZoom, Zoomer.CurrentZoom);
 
@@ -131,7 +136,7 @@ namespace whateverthefuck.src.view.guicomponents
 
             drawAdapter.Scale(1/Zoomer.CurrentZoom, 1/Zoomer.CurrentZoom);
 
-            drawAdapter.Translate(InternalOffset.X, InternalOffset.Y);
+            //drawAdapter.Translate(InternalOffset.X, InternalOffset.Y);
 
             drawAdapter.DeactivateScissor();
         }

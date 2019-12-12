@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -59,6 +60,13 @@ namespace whateverthefuck.src.view
 
         public static void LoadGUI()
         {
+#if true
+            Panel p = new StaticPanel(new GLCoordinate(0, 0), new GLCoordinate(0.2f, 0.2f));
+            p.BackColor = Color.Pink;
+            p.Add(new Button(new GLCoordinate(0.05f, 0.05f), new GLCoordinate(0.1f, 0.1f)));
+
+            GUIComponents.Add(p);
+#else
             GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
 
             DraggablePanel f = new DraggablePanel(new GLCoordinate(-0.4f, -0.4f), new GLCoordinate(0.5f, 0.5f));
@@ -70,11 +78,31 @@ namespace whateverthefuck.src.view
             f.Add(b1, b2, b3, b4);
 
             GUIComponents.Add(f);
+#endif
         }
 
+        public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate screenCoordinate)
+        {
+            var X = ((float)screenCoordinate.X / Frame.ClientSize.Width) * 2 - 1;
+            var Y = -(((float)screenCoordinate.Y / Frame.ClientSize.Height) * 2 - 1);
+
+            return new GLCoordinate(X, Y);
+        }
+
+        public static ScreenCoordinate TranslateGLToScreenCoordinates(GLCoordinate glCoordinate)
+        {
+            var X = (glCoordinate.X + 1) / 2 * Frame.ClientSize.Width;
+            var Y = Frame.ClientSize.Height - ((glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height);
+
+            return new ScreenCoordinate((int)X, (int)Y);
+        }
+
+#if false
+        // jesus fuck
         public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate sc)
         {
-            return new GLCoordinate(sc.X * 2.0f / Frame.ClientSize.Width - 1, sc.Y * 2.0f / Frame.ClientSize.Height - 1);
+            var correctish = SToGL(sc);
+            return new GLCoordinate(sc.X * 2.0f / Frame.ClientSize.Width - 1, -sc.Y * 2.0f / Frame.ClientSize.Height - 1);
         }
 
         public static ScreenCoordinate TranslateGLToScreenCoordinates(GLCoordinate gl)
@@ -84,5 +112,6 @@ namespace whateverthefuck.src.view
 
             return new ScreenCoordinate(x, y);
         }
+#endif
     }
 }
