@@ -38,10 +38,20 @@ namespace whateverthefuck.src.view
             GL.Scale(x, y, 0);
         }
 
+        public void ActivateScissor(GLCoordinate Location, GLCoordinate Size)
+        {
+            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(Location);
+            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, Size.Y - 1));
+
+            GL.Scissor(locScreenCoords.X,
+                locScreenCoords.Y,
+                sizeScreenCoords.X,
+                sizeScreenCoords.Y);
+            GL.Enable(EnableCap.ScissorTest);
+        }
+
         public void ActivateScissor(int x, int y, int width, int height)
         {
-            GL.Scissor(x, y, width, height);
-            GL.Enable(EnableCap.ScissorTest);
         }
 
         public void DeactivateScissor()

@@ -144,24 +144,10 @@ namespace whateverthefuck.src.view.guicomponents
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(Location as GLCoordinate);
-            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, Size.Y - 1));
-
-
-            drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, sizeScreenCoords.Y);
-
-            //drawAdapter.Translate(-InternalOffset.X, -InternalOffset.Y);
-
+            drawAdapter.ActivateScissor(Location as GLCoordinate, Size);
             //drawAdapter.Scale(Zoomer.CurrentZoom, Zoomer.CurrentZoom);
-            
             base.DrawMe(drawAdapter);
-
-            //DraggedPanel.DrawMe(drawAdapter);
-
             //drawAdapter.Scale(1/Zoomer.CurrentZoom, 1/Zoomer.CurrentZoom);
-
-            //drawAdapter.Translate(InternalOffset.X, InternalOffset.Y);
-
             drawAdapter.DeactivateScissor();
         }
 

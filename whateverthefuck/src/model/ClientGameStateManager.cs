@@ -306,7 +306,7 @@ namespace whateverthefuck.src.model
                     Focus(null);
                 }
             }
-            if (input.IsMouseInput && input.Direction == InputUnion.Directions.Up)
+            if (input.IsMouseInput && input.Direction == InputUnion.Directions.Up && Focused == null)
             {
                 Focus(null);
             }
