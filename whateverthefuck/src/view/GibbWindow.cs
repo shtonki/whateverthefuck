@@ -80,7 +80,7 @@ namespace whateverthefuck.src.view
             if (GUI.Camera != null)
             {
                 //GL.Scale(GUI.Camera.Zoom.CurrentZoom, GUI.Camera.Zoom.CurrentZoom, 0);
-                GL.Translate(-GUI.Camera.Location.X, -GUI.Camera.Location.Y, 0);
+                //GL.Translate(-GUI.Camera.Location.X, -GUI.Camera.Location.Y, 0);
             }
 
             // Draw entities with account to Camera location and zoom

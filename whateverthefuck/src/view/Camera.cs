@@ -36,8 +36,8 @@ namespace whateverthefuck.src.view
 
         public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
         {
-            var x = gameCoordinate.X;
-            var y = gameCoordinate.Y;
+            var x = gameCoordinate.X - Location.X;
+            var y = gameCoordinate.Y - Location.Y;
             return new GLCoordinate(x, y);
         }
 
