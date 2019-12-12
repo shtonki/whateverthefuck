@@ -95,7 +95,8 @@ namespace whateverthefuck.src.model
 
         public CreationArgs CreationArgs { get; private set; }
 
-        public Action<GameEntity> OnDeathCallback { get; set; }
+        public Action<GameEntity> OnCreationCallback { get; set; }
+        public Action<GameEntity, GameEntity> OnDeathCallback { get; set; }
         public Action<GameEntity> OnStepCallback { get; set; }
 
 
@@ -156,6 +157,53 @@ namespace whateverthefuck.src.model
                 BitConverter.GetBytes(MaxHealth).Concat(
                 BitConverter.GetBytes(CreationArgs.Value)
                 )))))).ToArray();
+        }
+    }
+
+    public class DealDamageEvent : GameEvent
+    {
+        public int AttackerId { get; private set; }
+        public int DefenderId { get; private set; }
+        public int Damage { get; private set; }
+
+        public DealDamageEvent(int attackerId, int defenderId, int damage)
+        {
+            AttackerId = attackerId;
+            DefenderId = defenderId;
+            Damage = damage;
+        }
+
+        public DealDamageEvent(GameEntity attacker, GameEntity defender, int damage)
+        {
+            Type = GameEventType.Damage;
+
+            AttackerId = attacker.Identifier.Id;
+            DefenderId = defender.Identifier.Id;
+            Damage = damage;
+        }
+
+
+        public DealDamageEvent(IEnumerable<byte> bs)
+        {
+            Type = GameEventType.Damage;
+            int bytec = 0;
+
+            AttackerId = BitConverter.ToInt32(bs.ToArray(), bytec);
+            bytec += sizeof(int);
+
+            DefenderId = BitConverter.ToInt32(bs.ToArray(), bytec);
+            bytec += sizeof(int);
+
+            Damage = BitConverter.ToInt32(bs.ToArray(), bytec);
+            bytec += sizeof(int);
+        }
+
+        public override byte[] ToBytes()
+        {
+            return BitConverter.GetBytes(AttackerId).Concat(
+                BitConverter.GetBytes(DefenderId).Concat(
+                BitConverter.GetBytes(Damage)  
+                    )).ToArray();
         }
     }
 
@@ -225,6 +273,7 @@ namespace whateverthefuck.src.model
         Create,
         Destroy,
         Control,
+        Damage,
 
         UseAbility,
     }

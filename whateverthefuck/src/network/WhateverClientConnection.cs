@@ -75,6 +75,12 @@ namespace whateverthefuck.src.network
                     Program.GameStateManager.TakeControl(controlBody.Id);
                 } break;
 
+                case MessageType.CreateLootMessage:
+                {
+                    CreateLootMessage loot = (CreateLootMessage)message;
+                    Program.GameStateManager.SpawnLoot(loot);
+                } break;
+
                 default: throw new NotImplementedException();
             }
         }

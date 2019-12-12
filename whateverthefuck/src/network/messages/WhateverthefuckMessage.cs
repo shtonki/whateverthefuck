@@ -70,6 +70,11 @@ namespace whateverthefuck.src.network.messages
                     return new SyncMessage();
                 }
 
+                case MessageType.CreateLootMessage:
+                {
+                    return new CreateLootMessage();
+                }
+
                 default: throw new NotImplementedException();
             }
         }
@@ -238,5 +243,7 @@ namespace whateverthefuck.src.network.messages
         GrantControlMessage,
         LoginCredentialsMessage,
         SyncMessage,
+
+        CreateLootMessage,
     }
 }

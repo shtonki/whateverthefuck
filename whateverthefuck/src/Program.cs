@@ -21,6 +21,28 @@ namespace whateverthefuck
         public static void Main(String[] args)
         {
 #if false
+            Loot lz = new Loot(new EntityIdentifier(13), CreationArgs.Zero);
+            Loot lnz = new Loot(new EntityIdentifier(21), CreationArgs.Zero);
+
+            Item zeros = new Item(ItemType.Test1, 0, Rarity.Common);
+            Item notzeros = new Item(ItemType.Test7, 420, Rarity.Rare,
+                new ItemBonus(ItemBonus.BonusType.Test1), new ItemBonus(ItemBonus.BonusType.Test2),
+                new ItemBonus(ItemBonus.BonusType.Test1), new ItemBonus(ItemBonus.BonusType.Test2)
+                );
+
+            CreateLootMessage m1 = new CreateLootMessage(lnz, notzeros);
+            var bs1 = WhateverthefuckMessage.EncodeMessage(m1);
+
+            CreateLootMessage m2 = new CreateLootMessage(lz, zeros);
+            var bs2 = WhateverthefuckMessage.EncodeMessage(m2);
+
+            var reconMessage1 = (CreateLootMessage)WhateverthefuckMessage.DecodeMessage(bs1);
+            var reconMessage2 = (CreateLootMessage)WhateverthefuckMessage.DecodeMessage(bs2);
+
+            Item zerosBack = reconMessage2.Item;
+            Item nonzerosBack = reconMessage1.Item;
+
+            int v = 4;
 #else
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
 

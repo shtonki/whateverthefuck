@@ -20,8 +20,14 @@ namespace whateverthefuck.src.model
 
         protected bool ShowHealth = false;
 
-        public event Action<GameEntity> OnDeath;
+
+        public event Action<GameEntity> OnCreated;
+        public event Action<GameEntity, GameEntity> OnDeath;
         public event Action<GameEntity> OnStep;
+
+        private GameEntityState State { get; set; }
+        private int CorpseCounter { get; set; }
+        public bool RemoveCorpse => CorpseCounter > 1000;
 
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
@@ -42,7 +48,7 @@ namespace whateverthefuck.src.model
         public MovementStruct Movements { get; set; } = new MovementStruct();
         public float MoveSpeed { get; protected set; } = 0.01f;
 
-
+        public DealDamageEvent LastDamageTaken { get; set; }
 
         public EntityIdentifier Identifier { get; set; }
 
@@ -53,8 +59,12 @@ namespace whateverthefuck.src.model
 
             CreationArgs = args;
 
+            State = GameEntityState.Alive;
+
             //debug
             Visible = true;
+
+            OnCreated?.Invoke(this);
         }
 
         public float Left => Location.X;
@@ -99,12 +109,20 @@ namespace whateverthefuck.src.model
 
         protected virtual void Die(GameState gameState)
         {
-            OnDeath?.Invoke(this);
-            gameState.HandleGameEvents(new DestroyEntityEvent(this));
+            OnDeath?.Invoke(this, gameState.GetEntityById(LastDamageTaken.AttackerId));
+            State = GameEntityState.Dead;
+
+            ShowHealth = false;
         }
 
         public virtual void Step(GameState gameState)
         {
+            if (State == GameEntityState.Dead)
+            {
+                CorpseCounter++;
+                return;
+            }
+
             OnStep?.Invoke(this);
 
             MovementCache = CalculateMovement(gameState);
@@ -159,6 +177,12 @@ namespace whateverthefuck.src.model
         {
             return String.Format("{0} at {1}:{2}", EntityType.ToString(), Location.X.ToString(), Location.Y.ToString());
         }
+    }
+
+    public enum GameEntityState
+    {
+        Alive,
+        Dead,
     }
 
     public class MovementStruct

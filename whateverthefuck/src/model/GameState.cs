@@ -169,6 +169,11 @@ namespace whateverthefuck.src.model
                 var entity = EntityGenerator.GenerateEntity(cee);
                 entity.OnDeath += cee.OnDeathCallback;
                 entity.OnStep += cee.OnStepCallback;
+                entity.OnCreated += cee.OnCreationCallback;
+
+                // it has to be like this
+                cee.OnCreationCallback?.Invoke(entity);
+
                 AddEntities(entity);
             }
             else if (e is DestroyEntityEvent)
@@ -202,11 +207,21 @@ namespace whateverthefuck.src.model
                     return false;
                 }
 
-                var ca = new CreationArgs(0);
+                var ca = new ProjectileArgs(caster);
                 var p = EntityGenerator.GenerateEntity(EntityType.Projectile, EntityIdentifier.RandomReserved(), ca);
                 p.Location = caster.Center;
                 p.Movements.FollowId = castee.Identifier.Id;
                 AddEntities(p);
+            }
+            else if (e is DealDamageEvent)
+            {
+                DealDamageEvent damage = (DealDamageEvent)e;
+
+                var attacker = GetEntityById(damage.AttackerId);
+                var defender = GetEntityById(damage.DefenderId);
+
+                defender.CurrentHealth -= damage.Damage;
+                defender.LastDamageTaken = damage;
             }
             else
             {
@@ -258,6 +273,11 @@ namespace whateverthefuck.src.model
 
             foreach (var e in AllEntities)
             {
+                if (e.Identifier.Id < 0)
+                {
+                    continue;
+                }
+
                 hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.Location.X), 0);
                 hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.Location.Y), 0);
                 hash ^= (int)e.EntityType;

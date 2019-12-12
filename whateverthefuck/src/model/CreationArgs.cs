@@ -11,6 +11,8 @@ namespace whateverthefuck.src.model
     {
         public UInt64 Value { get; set; }
 
+        public static CreationArgs Zero => new CreationArgs(0);
+
         public CreationArgs(ulong value)
         {
             Value = value;

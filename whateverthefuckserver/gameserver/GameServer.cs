@@ -118,6 +118,37 @@ namespace whateverthefuckserver.gameserver
             }
         }
 
+        public void SpawnLootForPlayer(GameEntity dead, GameEntity killer)
+        {
+            if (killer is PlayerCharacter)
+            {
+                User killerx = null;
+
+                lock (PlayersLock)
+                {
+                    foreach (var player in PlayingUsers)
+                    {
+                        if (player.HeroIdentifier.Id == killer.Identifier.Id)
+                        {
+                            killerx = player;
+                            break;
+                        }
+                    }
+                }
+
+                if (killerx == null)
+                {
+                    Logging.Log("this will never happen so you will never see this.", Logging.LoggingLevel.Error);
+                }
+
+                Item item = new Item(ItemType.Test4, 20, Rarity.Epic);
+
+                CreateLootMessage message = new CreateLootMessage(dead, item);
+
+                killerx.PlayerConnection.SendMessage(message);
+            }
+        }
+
         public bool InSync(int tick, long hash)
         {
             var rt = (SyncCity.Tick, SyncCity.Hash) == (tick, hash);

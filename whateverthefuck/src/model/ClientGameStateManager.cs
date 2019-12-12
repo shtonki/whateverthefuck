@@ -184,6 +184,25 @@ namespace whateverthefuck.src.model
             }
         }
 
+        public void SpawnLoot(CreateLootMessage message)
+          {
+            var item = message.Item;
+            var lootee = GameState.GetEntityById(message.LooteeId);
+
+            Loot lootbox = new Loot(EntityIdentifier.RandomReserved(), CreationArgs.Zero);
+            lootbox.Location = lootee.Location;
+            lootbox.Items.Add(item);
+            var cevent = new CreateEntityEvent(lootbox);
+            cevent.OnCreationCallback = e => xd(e as Loot, item);
+            GameState.HandleGameEvents(cevent);
+
+            int i = 4;
+        }
+
+        private void xd(Loot e, Item item)
+        {
+            e.Items.Add(item);
+        }
 
         public void HandleMouseMove(ScreenCoordinate screenClickLocation)
         {
