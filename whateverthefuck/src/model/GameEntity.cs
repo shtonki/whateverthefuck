@@ -82,7 +82,7 @@ namespace whateverthefuck.src.model
 
             if (HighlightColor != Color.Transparent)
             {
-                Rectangle r = new view.Rectangle(this, HighlightColor);
+                Rectangle r = new view.Rectangle(x1, y1, x2, y2, HighlightColor);
                 r.DrawMe(drawAdapter);
             }
 

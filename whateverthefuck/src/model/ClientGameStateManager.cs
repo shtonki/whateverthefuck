@@ -242,6 +242,7 @@ namespace whateverthefuck.src.model
 
         private bool HandleGameClick(InputUnion input, GameCoordinate location)
         {
+            Logging.Log(location.ToString());
             var clickedEntity = GetEntityAtLocation(location);
             if (clickedEntity == null) { return false; }
 
