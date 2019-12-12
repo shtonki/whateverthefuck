@@ -301,11 +301,24 @@ namespace whateverthefuck.src.model
                 {
                     Focus(clicked);
                 }
+                else
+                {
+                    Focus(null);
+                }
             }
 
             if (Focused != null)
             {
                 Focused.HandleInput(input);
+            }
+            else
+            {
+                var action = Input.LookupHotkey(input);
+
+                if (action != GameAction.Undefined)
+                {
+                    ActivateAction(action);
+                }
             }
         }
 #if false
@@ -325,7 +338,7 @@ namespace whateverthefuck.src.model
             }
         }
 #endif
-        public void ActivateAction(GameAction gameAction)
+        private void ActivateAction(GameAction gameAction)
         {
             switch (gameAction)
             {

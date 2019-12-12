@@ -61,11 +61,15 @@ namespace whateverthefuck.src.view
         public static void LoadGUI()
         {
 #if true
-            Panel p = new StaticPanel(new GLCoordinate(0.15f, 0.15f), new GLCoordinate(0.2f, 0.2f));
+            Panel p = new Panel();
+            p.Location = new GLCoordinate(0.45f, 0.45f);
+            p.Size = new GLCoordinate(0.2f, 0.2f);
             p.BackColor = Color.Pink;
             p.Add(new Button(new GLCoordinate(0.05f, 0.05f), new GLCoordinate(0.1f, 0.1f)));
-
             GUIComponents.Add(p);
+
+            DraggablePanel dp = new DraggablePanel(new GLCoordinate(-0.2f, -0.2f), new GLCoordinate(0.5f, 0.5f));
+            GUIComponents.Add(dp);
 #else
             //GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
 

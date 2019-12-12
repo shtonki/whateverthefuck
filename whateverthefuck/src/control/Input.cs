@@ -29,15 +29,17 @@ namespace whateverthefuck.src.control
         }
 
 
-        public static void Handle(InputUnion input)
+        public static GameAction LookupHotkey(InputUnion input)
         {
             foreach (var hotkey in HotkeyMappings)
             {
                 if (input.Equals(hotkey.Hotkey))
                 {
-                    Program.GameStateManager.ActivateAction(hotkey.GameAction);
+                    return hotkey.GameAction;
                 }
             }
+
+            return GameAction.Undefined;
         }
     }
 }

@@ -9,13 +9,18 @@ using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.view.guicomponents
 {
-    abstract class Panel : GUIComponent
+    class Panel : GUIComponent
     {
         protected Zoomer Zoomer { get; set; }
 
         protected MenuBar MBar { get; set; }
 
-        protected Panel(GLCoordinate location, GLCoordinate size) : base(location, size)
+        public Panel() : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
+        {
+
+        }
+
+        public Panel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
             Visible = false;
             Zoomer = new Zoomer();
@@ -69,15 +74,6 @@ namespace whateverthefuck.src.view.guicomponents
             }
         }
     }
-
-    class StaticPanel : Panel
-    {
-        public StaticPanel(GLCoordinate location, GLCoordinate size) : base(location, size)
-        {
-
-        }
-    }
-
     class DraggablePanel : Panel
     {
         private Panel DraggedPanel;
@@ -87,8 +83,9 @@ namespace whateverthefuck.src.view.guicomponents
 
         public DraggablePanel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
-            DraggedPanel = new StaticPanel(new GLCoordinate(0, 0), size);
+            DraggedPanel = new Panel(new GLCoordinate(0, 0), size);
             DraggedPanel.BackColor = Color.Pink;
+            BackColor = Color.White;
             base.Add(DraggedPanel);
 #if false
 
@@ -126,11 +123,12 @@ namespace whateverthefuck.src.view.guicomponents
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(Location as GLCoordinate);
+            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(0, 0));
             var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, -Size.Y + 1));
 
 
             //drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, -sizeScreenCoords.Y);
+            //drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, sizeScreenCoords.Y);
             drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, sizeScreenCoords.Y);
 
             //drawAdapter.Translate(-InternalOffset.X, -InternalOffset.Y);

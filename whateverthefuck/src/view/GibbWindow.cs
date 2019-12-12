@@ -115,8 +115,8 @@ namespace whateverthefuck.src.view
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
-            
-            //Program.GameStateManager.HandleMouseMove(new ScreenCoordinate(e.XDelta, e.YDelta));
+            var mouseMovedInput = new InputUnion(new ScreenCoordinate(e.X, e.Y), new ScreenCoordinate(e.X - e.XDelta, e.Y - e.YDelta));
+            Program.GameStateManager.HandleInput(mouseMovedInput);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
@@ -133,12 +133,14 @@ namespace whateverthefuck.src.view
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            Input.Handle(new InputUnion(e.IsRepeat ? InputUnion.Directions.Repeat : InputUnion.Directions.Down, e.Key));
+            InputUnion keyboardInput = new InputUnion(InputUnion.Directions.Down, e.Key);
+            Program.GameStateManager.HandleInput(keyboardInput);
         }
 
         protected override void OnKeyUp(KeyboardKeyEventArgs e)
         {
-            Input.Handle(new InputUnion(e.IsRepeat ? InputUnion.Directions.Repeat : InputUnion.Directions.Up, e.Key));
+            InputUnion keyboardInput = new InputUnion(InputUnion.Directions.Up, e.Key);
+            Program.GameStateManager.HandleInput(keyboardInput);
         }
 
     }

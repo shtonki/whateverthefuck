@@ -8,6 +8,8 @@ namespace whateverthefuck.src.control
 {
     public enum GameAction
     {
+        Undefined,
+
         HeroWalkUpwards,
         HeroWalkUpwardsStop,
         HeroWalkDownwards,

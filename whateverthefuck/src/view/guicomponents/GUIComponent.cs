@@ -14,13 +14,13 @@ namespace whateverthefuck.src.view.guicomponents
 {
     public abstract class GUIComponent : Drawable
     {
-        protected GLCoordinate Size;
+        public GLCoordinate Size { get; set; }
         protected internal Color BackColor;
         private Border Border;
         private List<GUIComponent> Children = new List<GUIComponent>();
 
         public event Action<GUIComponent, InputUnion> OnMouseButtonPress;
-        public event Action<GUIComponent> OnButtonPress;
+        public event Action<GUIComponent, InputUnion> OnKeyboardButtonPress;
 
 #if false
         protected void LeftMouseDown(GLCoordinate glClicked)
@@ -96,10 +96,19 @@ namespace whateverthefuck.src.view.guicomponents
         
         public void HandleInput(InputUnion input)
         {
-            var glClicked = input.Location;
-            var offset = new GLCoordinate(glClicked.X - Location.X, glClicked.Y - Location.Y);
+            List<GUIComponent> kiddos;
 
-            var kiddos = InteractedChildren(offset);
+            if (input.IsMouseInput)
+            {
+                var glClicked = input.Location;
+                var offset = new GLCoordinate(glClicked.X - Location.X, glClicked.Y - Location.Y);
+
+                kiddos = InteractedChildren(offset);
+            }
+            else
+            {
+                kiddos = Children;
+            }
             
             if (kiddos.Count() > 0)
             {
@@ -109,6 +118,10 @@ namespace whateverthefuck.src.view.guicomponents
             if (input.IsMouseInput)
             {
                 OnMouseButtonPress?.Invoke(this, input);
+            }
+            else if (input.IsKeyboardInput)
+            {
+                OnKeyboardButtonPress?.Invoke(this, input);
             }
         }
 #if false

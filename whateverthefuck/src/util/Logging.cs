@@ -85,6 +85,11 @@ namespace whateverthefuck.src.util
             outputs.Add(loutput);
         }
 
+        public static void Log(object o)
+        {
+            Log(o.ToString());
+        }
+
         public static void Log(string message)
         {
             Log(message, defaultLevel);
