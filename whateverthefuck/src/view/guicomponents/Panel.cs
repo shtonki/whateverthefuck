@@ -1,63 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK.Graphics.OpenGL4;
 using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.view.guicomponents
 {
     abstract class Panel : GUIComponent
     {
-        public Zoomer Zoomer { get; set; }
-        protected List<GUIComponent> Components = new List<GUIComponent>();
-        public Panel(GLCoordinate location, GLCoordinate size) : base(location, size)
+        protected Zoomer Zoomer { get; set; }
+
+        protected MenuBar MBar { get; set; }
+
+        protected Panel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
             Visible = false;
             Zoomer = new Zoomer();
         }
 
-        public void Add(GUIComponent toAdd)
+        public void AddMenuBar()
         {
-            Components.Add(toAdd);
+            MBar = new MenuBar(this.Size.X);
+            base.Add(MBar);
         }
 
-        public void Add(params GUIComponent[] toAdd)
+        public override void DrawMe(DrawAdapter drawAdapter)
         {
-            foreach (var add in toAdd) Components.Add(add);
+            base.DrawMe(drawAdapter);
+
+            drawAdapter.Translate(Location.X, Location.Y);
+            
+            MBar?.DrawMe(drawAdapter);
+
+            drawAdapter.Translate(-Location.X, -Location.Y);
+        }
+
+        internal class MenuBar : GUIComponent
+        {
+            private static float BarHeight = 0.03f;
+            
+            private Button CloseButton;
+            private GLCoordinate ButtonSize = new GLCoordinate(BarHeight, BarHeight);
+
+            internal MenuBar(float width) : base(new GLCoordinate(0, 0), new GLCoordinate(width, BarHeight))
+            {
+                CloseButton = new Button(new GLCoordinate(width-ButtonSize.X, 0), ButtonSize);
+                CloseButton.BackColor = Color.Red;
+                CloseButton.OnLeftMouseDown += coordinate =>
+                {
+                    CloseButton.BackColor = Color.Black;
+                };
+                Add(CloseButton);
+
+                this.BackColor = Color.Blue;
+            }
+
+            public override void DrawMe(DrawAdapter drawAdapter)
+            {
+                base.DrawMe(drawAdapter);
+                CloseButton.DrawMe(drawAdapter);
+            }
         }
     }
+
     class StaticPanel : Panel
     {
         public StaticPanel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
 
         }
-
-        public override void DrawMe(DrawAdapter drawAdapter)
-        {
-            if (!Visible) return;
-
-            base.DrawMe(drawAdapter);
-
-            drawAdapter.Translate(Location.X, Location.Y);
-
-            foreach (var c in Components)
-            {
-                c.DrawMe(drawAdapter);
-            }
-
-            drawAdapter.Translate(-Location.X, -Location.Y);
-        }
     }
 
     class DraggablePanel : Panel
     {
+        private Panel DraggedPanel;
+
         private GLCoordinate InternalOffset = new GLCoordinate(0, 0);
         private bool ListenToMouseMove = false;
 
         public DraggablePanel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
+            DraggedPanel = new StaticPanel(location, size);
             OnLeftMouseDown += coordinate =>
             {
                 ListenToMouseMove = true;
@@ -88,32 +114,36 @@ namespace whateverthefuck.src.view.guicomponents
             };
         }
 
-
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            if (!Visible) return;
-
-            base.DrawMe(drawAdapter);
-
             var locScreenCoords = GUI.TranslateGLToScreenCoordinates(Location as GLCoordinate);
             var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, Size.Y - 1));
 
+            base.DrawMe(drawAdapter);
+
             drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, sizeScreenCoords.Y);
 
-            drawAdapter.Translate(Location.X - InternalOffset.X, Location.Y - InternalOffset.Y);
+            drawAdapter.Translate(-InternalOffset.X, -InternalOffset.Y);
 
             drawAdapter.Scale(Zoomer.CurrentZoom, Zoomer.CurrentZoom);
 
-            foreach (var c in Components)
-            {
-                c.DrawMe(drawAdapter);
-            }
+            DraggedPanel.DrawMe(drawAdapter);
 
             drawAdapter.Scale(1/Zoomer.CurrentZoom, 1/Zoomer.CurrentZoom);
 
-            drawAdapter.Translate(-Location.X + InternalOffset.X, -Location.Y + InternalOffset.Y);
+            drawAdapter.Translate(InternalOffset.X, InternalOffset.Y);
 
             drawAdapter.DeactivateScissor();
+        }
+
+        public override void Add(GUIComponent toAdd)
+        {
+            DraggedPanel.Add(toAdd);
+        }
+
+        public override void Add(params GUIComponent[] toAdd)
+        {
+            DraggedPanel.Add(toAdd);
         }
     }
 }

@@ -8,14 +8,16 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using whateverthefuck.src.control;
 using whateverthefuck.src.model;
+using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.view.guicomponents
 {
     public abstract class GUIComponent : Drawable
     {
         protected GLCoordinate Size;
-        protected Color BackColor;
+        protected internal Color BackColor;
         private Border Border;
+        private List<GUIComponent> Children = new List<GUIComponent>();
 
         public event Action<GLCoordinate> OnLeftMouseDown;
         public event Action<GLCoordinate> OnLeftMouseUp;
@@ -28,21 +30,25 @@ namespace whateverthefuck.src.view.guicomponents
 
         protected void LeftMouseDown(GLCoordinate glClicked)
         {
+            InteractedChildren(glClicked).ForEach(child => child.LeftMouseDown(glClicked));
             OnLeftMouseDown?.Invoke(glClicked);
         }
 
         protected void LeftMouseUp(GLCoordinate glClicked)
         {
+            InteractedChildren(glClicked).ForEach(child => child.LeftMouseUp(glClicked));
             OnLeftMouseUp?.Invoke(glClicked);
         }
 
         protected void RightMouseDown(GLCoordinate glClicked)
         {
+            InteractedChildren(glClicked).ForEach(child => child.RightMouseDown(glClicked));
             OnRightMouseDown?.Invoke(glClicked);
         }
 
         protected void RightMouseUp(GLCoordinate glClicked)
         {
+            InteractedChildren(glClicked).ForEach(child => child.RightMouseUp(glClicked));
             OnRightMouseUp?.Invoke(glClicked);
         }
 
@@ -66,13 +72,27 @@ namespace whateverthefuck.src.view.guicomponents
         {
             BackColor = Color.Aquamarine;
             this.Size = size;
+            
+        }
+
+        public void AddBorder()
+        {
             Border = new Border(Color.Black);
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
+            if(Border != null) drawAdapter.TraceRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Border.BorderColor, Border.Width);
             drawAdapter.FillRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, BackColor);
-            drawAdapter.TraceRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Border.BorderColor, Border.Width);
+
+            drawAdapter.Translate(this.Location.X, this.Location.Y);
+
+            foreach (var kiddo in Children)
+            {
+                kiddo.DrawMe(drawAdapter);
+            }
+
+            drawAdapter.Translate(-this.Location.X, -this.Location.Y);
         }
         
         public void HandleClick(InputUnion mouseInput, GLCoordinate glClicked)
@@ -99,6 +119,28 @@ namespace whateverthefuck.src.view.guicomponents
         public void HandleMouseMove(GLCoordinate delta)
         {
             MouseMove(delta);
+        }
+
+        public virtual void Add(GUIComponent toAdd)
+        {
+            Children.Add(toAdd);
+        }
+
+        public virtual void Add(params GUIComponent[] toAdd)
+        {
+            foreach (var add in toAdd)
+            {
+                Add(add);
+            }
+        }
+
+        public List<GUIComponent> InteractedChildren(GLCoordinate interactLocation)
+        {
+            var translatedLoc =
+                new GLCoordinate(interactLocation.X - this.Location.X, -(interactLocation.Y + this.Location.Y));
+            Logging.Log(translatedLoc.ToString());
+            foreach(var child in Children) Logging.Log("Child loc: " + child.Location + ", child size: " + child.Size + ", contains: " + child.Contains(translatedLoc));
+            return Children.Where(c => c.Contains(translatedLoc)).ToList();
         }
 
         public virtual bool Contains(GLCoordinate clicked)
