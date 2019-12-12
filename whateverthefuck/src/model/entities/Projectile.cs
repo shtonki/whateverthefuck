@@ -12,8 +12,15 @@ namespace whateverthefuck.src.model.entities
     {
         private float AsplodeCutoff => MoveSpeed * 2;
 
+        private int controller;
+
         public Projectile(EntityIdentifier id, CreationArgs args) : base(id, EntityType.Projectile, args)
         {
+            if (args.Value != 0)
+            {
+                controller = new ProjectileArgs(args).ControllerId;
+            }
+
             Size = new GameCoordinate(0.01f, 0.01f);
             DrawColor = Color.Black;
             MoveSpeed = 0.02f;
@@ -22,8 +29,7 @@ namespace whateverthefuck.src.model.entities
 
         private IEnumerable<GameEvent> Boom(GameEntity followed)
         {
-            followed.CurrentHealth -= 10;
-            return new GameEvent[] { new DestroyEntityEvent(this) };
+            return new GameEvent[] { new DealDamageEvent(controller, followed.Identifier.Id, 10), new DestroyEntityEvent(this) };
         }
 
         private IEnumerable<GameEvent> Fizzle()
@@ -48,6 +54,25 @@ namespace whateverthefuck.src.model.entities
                     gameState.HandleGameEvents(Boom(followed));
                 }
             }
+        }
+    }
+
+    public class ProjectileArgs : CreationArgs
+    {
+        public int ControllerId
+        {
+            get { return SecondInt; }
+            set { SecondInt = value; }
+        }
+
+
+        public ProjectileArgs(GameEntity c) : base(0)
+        {
+            ControllerId = c.Identifier.Id;
+        }
+        public ProjectileArgs(CreationArgs a) : base(a.Value)
+        {
+
         }
     }
 }

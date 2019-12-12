@@ -37,7 +37,7 @@ namespace whateverthefuckserver.gameserver
             var mob = GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new CreationArgs(0));
             mob.Location = new GameCoordinate(-0.5f, -0.5f);
             var rt = new CreateEntityEvent(mob);
-            rt.OnDeathCallback = (e) => SpawnLoot((GameCoordinate)e.Location);
+            rt.OnDeathCallback = (idiot, killer) => Program.GameServer.SpawnLootForPlayer(idiot, killer);
             rt.OnStepCallback = (e) => stepme(e);
             PublishArray(rt);
         }
@@ -52,14 +52,6 @@ namespace whateverthefuckserver.gameserver
                 ms.Direction = (float)(RNG.BetweenZeroAndOne() * Math.PI);
                 PublishArray(new UpdateMovementEvent(e.Identifier.Id, ms));
             }
-        }
-
-        private void SpawnLoot(GameCoordinate location)
-        {
-            var loot = GameState.EntityGenerator.GenerateEntity(EntityType.Loot, new CreationArgs(0));
-            loot.Location = new GameCoordinate(location.X, location.Y);
-            var rt = new CreateEntityEvent(loot);
-            PublishArray(rt);
         }
 
         public void SpawnWorld()

@@ -202,6 +202,26 @@ namespace whateverthefuck.src.model
             Input.Handle(mouseInput);
         }
 
+        public void SpawnLoot(CreateLootMessage message)
+          {
+            var item = message.Item;
+            var lootee = GameState.GetEntityById(message.LooteeId);
+
+            Loot lootbox = new Loot(EntityIdentifier.RandomReserved(), CreationArgs.Zero);
+            lootbox.Location = lootee.Location;
+            lootbox.Items.Add(item);
+            var cevent = new CreateEntityEvent(lootbox);
+            cevent.OnCreationCallback = e => AddLoot(e as Loot, item);
+            GameState.HandleGameEvents(cevent);
+
+            int i = 4;
+        }
+
+        private void AddLoot(Loot e, Item item)
+        {
+            e.Items.Add(item);
+        }
+
         public void HandleMouseMove(ScreenCoordinate screenClickLocation)
         {
             var gl = GUI.TranslateScreenToGLCoordinates(screenClickLocation);
