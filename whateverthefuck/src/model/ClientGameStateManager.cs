@@ -217,6 +217,12 @@ namespace whateverthefuck.src.model
 
             if (clicked.Count() == 0)
             {
+                if (input.Direction == InputUnion.Directions.Up && ClickedDownGuiComponents.Count() > 0)
+                {
+                    ClickedDownGuiComponents.ForEach(cgc => cgc.HandleClick(input, location));
+                    ClickedDownGuiComponents.Clear();
+                }
+
                 return false;
             }
 

@@ -20,8 +20,10 @@ namespace whateverthefuck.src.view
 
         private ManualResetEventSlim LoadResetEvent;
 
-        public GibbWindow(ManualResetEventSlim loadResetEvent) : base(600, 600, new GraphicsMode(32, 24, 0, 32), "GibbWindow")
+        public GibbWindow(ManualResetEventSlim loadResetEvent) : base(1, 1, new GraphicsMode(32, 24, 0, 32), "GibbWindow")
         {
+            ClientSize = new Size(600, 600);
+
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 

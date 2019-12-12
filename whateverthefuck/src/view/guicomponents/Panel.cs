@@ -30,12 +30,13 @@ namespace whateverthefuck.src.view.guicomponents
         public override void DrawMe(DrawAdapter drawAdapter)
         {
             base.DrawMe(drawAdapter);
-
+#if false
             drawAdapter.Translate(Location.X, Location.Y);
             
             MBar?.DrawMe(drawAdapter);
 
             drawAdapter.Translate(-Location.X, -Location.Y);
+#endif
         }
 
         // just fucking shoot me already
@@ -84,8 +85,9 @@ namespace whateverthefuck.src.view.guicomponents
 
         public DraggablePanel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
-            DraggedPanel = new StaticPanel(location, size);
+            DraggedPanel = new StaticPanel(new GLCoordinate(0, 0), size);
             DraggedPanel.BackColor = Color.Pink;
+            base.Add(DraggedPanel);
 
             OnLeftMouseDown += coordinate =>
             {
@@ -97,9 +99,8 @@ namespace whateverthefuck.src.view.guicomponents
                 if (!ListenToMouseMove) return;
                 var diff = coordinate;
                 diff.X += 1;
-                diff.Y += 1;
-                // todo the fact that we take +diff.X and -diff.Y suggests that we have bungled translation somewhere
-                DraggedPanel.Location = new GLCoordinate(DraggedPanel.Location.X + diff.X, DraggedPanel.Location.Y - diff.Y);
+                diff.Y -= 1;
+                DraggedPanel.Location = new GLCoordinate(DraggedPanel.Location.X + diff.X, DraggedPanel.Location.Y + diff.Y);
                 //InternalOffset = new GLCoordinate(-diff.X + InternalOffset.X, diff.Y + InternalOffset.Y);
             };
 
@@ -122,19 +123,21 @@ namespace whateverthefuck.src.view.guicomponents
         public override void DrawMe(DrawAdapter drawAdapter)
         {
             var locScreenCoords = GUI.TranslateGLToScreenCoordinates(Location as GLCoordinate);
-            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, Size.Y - 1));
+            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, -Size.Y + 1));
 
-            base.DrawMe(drawAdapter);
 
+            //drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, -sizeScreenCoords.Y);
             drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, sizeScreenCoords.Y);
 
             //drawAdapter.Translate(-InternalOffset.X, -InternalOffset.Y);
 
-            drawAdapter.Scale(Zoomer.CurrentZoom, Zoomer.CurrentZoom);
+            //drawAdapter.Scale(Zoomer.CurrentZoom, Zoomer.CurrentZoom);
+            
+            base.DrawMe(drawAdapter);
 
-            DraggedPanel.DrawMe(drawAdapter);
+            //DraggedPanel.DrawMe(drawAdapter);
 
-            drawAdapter.Scale(1/Zoomer.CurrentZoom, 1/Zoomer.CurrentZoom);
+            //drawAdapter.Scale(1/Zoomer.CurrentZoom, 1/Zoomer.CurrentZoom);
 
             //drawAdapter.Translate(InternalOffset.X, InternalOffset.Y);
 

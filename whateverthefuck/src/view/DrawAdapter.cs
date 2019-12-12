@@ -27,9 +27,9 @@ namespace whateverthefuck.src.view
             GL.Scale(x, y, 0);
         }
 
-        public void ActivateScissor(int x1, int y1, int x2, int y2)
+        public void ActivateScissor(int x, int y, int width, int height)
         {
-            GL.Scissor(x1, y1, x2, y2);
+            GL.Scissor(x, y, width, height);
             GL.Enable(EnableCap.ScissorTest);
         }
 

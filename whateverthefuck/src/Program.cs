@@ -39,7 +39,9 @@ namespace whateverthefuck
 
             UserLogin.Login(UserSettings.Config.Username);
             Logging.Log(String.Format("Logged on to Server as {0}", UserSettings.Config.Username), Logging.LoggingLevel.Info);
+
+            
 #endif
-            }
+        }
     }
 }
