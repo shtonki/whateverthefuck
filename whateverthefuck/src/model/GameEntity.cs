@@ -73,8 +73,8 @@ namespace whateverthefuck.src.model
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            float x1 = Location.X;
-            float y1 = Location.Y;
+            float x1 = 0;
+            float y1 = 0;
             float x2 = x1 + Size.X;
             float y2 = y1 + Size.Y;
 
@@ -89,11 +89,15 @@ namespace whateverthefuck.src.model
             if (ShowHealth)
             {
                 float mid = (float)CurrentHealth / MaxHealth;
-                var full = new view.Rectangle(Left, Top + 0.01f, Left + Size.X * mid, Top, Color.Green);
-                var missing = new view.Rectangle(Left + Size.X * mid, Top + 0.01f, Right, Top, Color.Red);
+                drawAdapter.FillRectangle(0, 0, Size.X * mid, 0.01f, Color.Green);
+                drawAdapter.FillRectangle(Size.X * mid, 0, Size.X, 0.01f, Color.Red);
+#if false
+                var full = new view.Rectangle(0, 0 + 0.01f, 0 + Size.X * mid, Top, Color.Green);
+                var missing = new view.Rectangle(0 + Size.X * mid, 0 + 0.01f, Right, Top, Color.Red);
 
                 full.DrawMe(drawAdapter);
                 missing.DrawMe(drawAdapter);
+#endif
             }
         }
 

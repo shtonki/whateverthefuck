@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.view
 {
@@ -14,6 +15,14 @@ namespace whateverthefuck.src.view
         protected Coordinate(float x, float y)
         {
             (X, Y) = (x, y);
+        }
+
+        public GLCoordinate ToGLCoordinate()
+        {
+            if (this is GLCoordinate) { return this as GLCoordinate; }
+            if (this is GameCoordinate) { return GUI.Camera.GameToGLCoordinate(this as GameCoordinate) as GLCoordinate; }
+
+            throw new NotImplementedException();
         }
 
         public static float AngleBetweenCoordinates(Coordinate c1, Coordinate c2)

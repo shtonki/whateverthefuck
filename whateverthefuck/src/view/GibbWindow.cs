@@ -20,7 +20,7 @@ namespace whateverthefuck.src.view
 
         private ManualResetEventSlim LoadResetEvent;
 
-        public GibbWindow(ManualResetEventSlim loadResetEvent) : base(1, 1, new GraphicsMode(32, 24, 0, 32), "GibbWindow")
+        public GibbWindow(ManualResetEventSlim loadResetEvent) : base(600, 600, new GraphicsMode(32, 24, 0, 32), "GibbWindow")
         {
             ClientSize = new Size(600, 600);
 
@@ -79,7 +79,7 @@ namespace whateverthefuck.src.view
             // Take account of Camera location and zoom
             if (GUI.Camera != null)
             {
-                GL.Scale(GUI.Camera.Zoom.CurrentZoom, GUI.Camera.Zoom.CurrentZoom, 0);
+                //GL.Scale(GUI.Camera.Zoom.CurrentZoom, GUI.Camera.Zoom.CurrentZoom, 0);
                 GL.Translate(-GUI.Camera.Location.X, -GUI.Camera.Location.Y, 0);
             }
 

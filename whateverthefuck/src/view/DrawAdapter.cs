@@ -12,6 +12,17 @@ namespace whateverthefuck.src.view
         {
         }
 
+
+        public void PushMatrix()
+        {
+            GL.PushMatrix();
+        }
+
+        public void PopMatrix()
+        {
+            GL.PopMatrix();
+        }
+
         public void Translate(float x, float y)
         {
             GL.Translate(x, y, 0);

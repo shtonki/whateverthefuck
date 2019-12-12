@@ -75,10 +75,19 @@ namespace whateverthefuck.src.view
         public abstract void DrawMe(DrawAdapter drawAdapter);
         public void Draw(DrawAdapter drawAdapter)
         {
+
             if (Visible)
             {
+                drawAdapter.PushMatrix();
+
+                var l = Location.ToGLCoordinate();
+                drawAdapter.Translate(l.X, l.Y);
+
                 DrawMe(drawAdapter);
+
+                drawAdapter.PopMatrix();
             }
+
         }
 
 
