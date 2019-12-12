@@ -44,6 +44,8 @@ namespace whateverthefuck.src.model
         Test5,
         Test6,
         Test7,
+
+        BronzeDagger,
     }
 
     public class ItemBonus
@@ -59,21 +61,37 @@ namespace whateverthefuck.src.model
 
         }
 
-        public BonusType Type { get; }
+        private int Value;
 
-        public ItemBonus(BonusType type)
+        private const uint HighMask = 0xFFFF0000;
+        private const uint LowMask = 0x0000FFFF;
+
+        public BonusType Type
         {
-            Type = type;
+            get { return (BonusType)(Value & LowMask);  }
+            set { Value = (int)((Value & HighMask) | ((int)value & LowMask)); }
+        }
+        public short Modifier
+        {
+            get { return (short)((Value & HighMask) >> 16); }
+            set { Value = (int)((Value & LowMask) | (((int)value & LowMask) << 16)); }
         }
 
-        public ItemBonus(int intValue) : this((BonusType)intValue)
-        {
 
+        public ItemBonus(BonusType type, short value)
+        {
+            Type = type;
+            Modifier = value;
+        }
+
+        public ItemBonus(int intValue)
+        {
+            Value = intValue;
         }
 
         public int ToInt()
         {
-            return (int)Type;
+            return Value;
         }
     }
 }

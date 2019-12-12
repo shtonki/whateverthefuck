@@ -193,13 +193,13 @@ namespace whateverthefuck.src.model
             lootbox.Location = lootee.Location;
             lootbox.Items.Add(item);
             var cevent = new CreateEntityEvent(lootbox);
-            cevent.OnCreationCallback = e => xd(e as Loot, item);
+            cevent.OnCreationCallback = e => AddLoot(e as Loot, item);
             GameState.HandleGameEvents(cevent);
 
             int i = 4;
         }
 
-        private void xd(Loot e, Item item)
+        private void AddLoot(Loot e, Item item)
         {
             e.Items.Add(item);
         }
