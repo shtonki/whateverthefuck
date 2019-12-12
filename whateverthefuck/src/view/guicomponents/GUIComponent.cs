@@ -63,12 +63,15 @@ namespace whateverthefuck.src.view.guicomponents
             OnScrollOut?.Invoke(glMouseLocation);
         }
 #endif
+        protected GUIComponent() : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
+        {
+
+        }
 
         protected GUIComponent(GLCoordinate location, GLCoordinate size) : base(location)
         {
             BackColor = Color.Aquamarine;
             this.Size = size;
-            
         }
 
         public void AddBorder()

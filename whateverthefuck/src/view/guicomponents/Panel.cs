@@ -83,12 +83,12 @@ namespace whateverthefuck.src.view.guicomponents
 
         private bool Dragging;
 
-        public DraggablePanel(GLCoordinate location, GLCoordinate size) : base(location, size)
+        public DraggablePanel(Panel innerPanel) : base()
         {
-            DraggedPanel = new Panel(new GLCoordinate(0, 0), size);
-            DraggedPanel.BackColor = Color.Pink;
-            BackColor = Color.White;
-            base.Add(DraggedPanel);
+            DraggedPanel = innerPanel;
+            base.Add(innerPanel);
+
+            BackColor = Color.Black;
 
             OnMouseButtonPress += (c, i) =>
             {
@@ -107,39 +107,6 @@ namespace whateverthefuck.src.view.guicomponents
                     DraggedPanel.Location = new GLCoordinate(DraggedPanel.Location.X - dx, DraggedPanel.Location.Y - dy);
                 }
             };
-
-#if false
-
-            OnLeftMouseDown += coordinate =>
-            {
-                ListenToMouseMove = true;
-            };
-
-            OnMouseMove += coordinate =>
-            {
-                if (!ListenToMouseMove) return;
-                var diff = coordinate;
-                diff.X += 1;
-                diff.Y -= 1;
-                DraggedPanel.Location = new GLCoordinate(DraggedPanel.Location.X + diff.X, DraggedPanel.Location.Y + diff.Y);
-                //InternalOffset = new GLCoordinate(-diff.X + InternalOffset.X, diff.Y + InternalOffset.Y);
-            };
-
-            OnLeftMouseUp += releaseLocation =>
-            {
-                ListenToMouseMove = false;
-            };
-
-            OnScrollIn += coordinate =>
-            {
-                Zoomer.ZoomIn();
-            };
-
-            OnScrollOut += coordinate =>
-            {
-                Zoomer.ZoomOut();
-            };
-#endif
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)

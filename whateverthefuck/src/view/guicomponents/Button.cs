@@ -12,6 +12,11 @@ namespace whateverthefuck.src.view.guicomponents
 {
     class Button : GUIComponent
     {
+        public Button() : base()
+        {
+
+        }
+
         public Button(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
             BackColor = Color.DarkGoldenrod;

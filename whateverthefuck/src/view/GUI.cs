@@ -68,8 +68,16 @@ namespace whateverthefuck.src.view
             p.Add(new Button(new GLCoordinate(0.05f, 0.05f), new GLCoordinate(0.1f, 0.1f)));
             GUIComponents.Add(p);
 
-            DraggablePanel dp = new DraggablePanel(new GLCoordinate(-0.05f, -0.95f), new GLCoordinate(1, 1));
-            dp.BackColor = Color.Yellow;
+            Panel inner = new Panel();
+            inner.Size = new GLCoordinate(1, 1);
+
+            Button b = new Button();
+            b.BackColor = Color.HotPink;
+            b.Size = new GLCoordinate(0.1f, 0.1f);
+            inner.Add(b);
+
+            DraggablePanel dp = new DraggablePanel(inner);
+            dp.Size = new GLCoordinate(0.5f, 0.5f);
             GUIComponents.Add(dp);
 
             //GUIComponents.Add(dp);
