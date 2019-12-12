@@ -21,6 +21,7 @@ namespace whateverthefuck.src.view.guicomponents
 
         public event Action<GUIComponent, InputUnion> OnMouseButtonPress;
         public event Action<GUIComponent, InputUnion> OnKeyboardButtonPress;
+        public event Action<GUIComponent, InputUnion> OnMouseMove;
 
 #if false
         protected void LeftMouseDown(GLCoordinate glClicked)
@@ -122,6 +123,10 @@ namespace whateverthefuck.src.view.guicomponents
             else if (input.IsKeyboardInput)
             {
                 OnKeyboardButtonPress?.Invoke(this, input);
+            }
+            else if (input.IsMouseMove)
+            {
+                OnMouseMove?.Invoke(this, input);
             }
         }
 #if false

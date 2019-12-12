@@ -306,6 +306,10 @@ namespace whateverthefuck.src.model
                     Focus(null);
                 }
             }
+            if (input.IsMouseInput && input.Direction == InputUnion.Directions.Up)
+            {
+                Focus(null);
+            }
 
             if (Focused != null)
             {

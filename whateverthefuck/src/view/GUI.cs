@@ -68,8 +68,11 @@ namespace whateverthefuck.src.view
             p.Add(new Button(new GLCoordinate(0.05f, 0.05f), new GLCoordinate(0.1f, 0.1f)));
             GUIComponents.Add(p);
 
-            DraggablePanel dp = new DraggablePanel(new GLCoordinate(-0.2f, -0.2f), new GLCoordinate(0.5f, 0.5f));
+            DraggablePanel dp = new DraggablePanel(new GLCoordinate(-0.05f, -0.95f), new GLCoordinate(1, 1));
+            dp.BackColor = Color.Yellow;
             GUIComponents.Add(dp);
+
+            //GUIComponents.Add(dp);
 #else
             //GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
 
@@ -96,7 +99,7 @@ namespace whateverthefuck.src.view
         public static ScreenCoordinate TranslateGLToScreenCoordinates(GLCoordinate glCoordinate)
         {
             var X = (glCoordinate.X + 1) / 2 * Frame.ClientSize.Width;
-            var Y = Frame.ClientSize.Height - ((glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height);
+            var Y = ((glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height);
 
             return new ScreenCoordinate((int)X, (int)Y);
         }

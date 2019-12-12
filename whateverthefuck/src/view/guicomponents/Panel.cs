@@ -81,12 +81,33 @@ namespace whateverthefuck.src.view.guicomponents
         //private GLCoordinate InternalOffset = new GLCoordinate(0, 0);
         private bool ListenToMouseMove = false;
 
+        private bool Dragging;
+
         public DraggablePanel(GLCoordinate location, GLCoordinate size) : base(location, size)
         {
             DraggedPanel = new Panel(new GLCoordinate(0, 0), size);
             DraggedPanel.BackColor = Color.Pink;
             BackColor = Color.White;
             base.Add(DraggedPanel);
+
+            OnMouseButtonPress += (c, i) =>
+            {
+                if (i.MouseButton == OpenTK.Input.MouseButton.Left)
+                {
+                    Dragging = i.Direction == control.InputUnion.Directions.Down;
+                }
+            };
+
+            OnMouseMove += (c, i) =>
+            {
+                if (Dragging)
+                {
+                    var dx = i.Location.X - i.PreviousLocation.X;
+                    var dy = i.Location.Y - i.PreviousLocation.Y;
+                    DraggedPanel.Location = new GLCoordinate(DraggedPanel.Location.X - dx, DraggedPanel.Location.Y - dy);
+                }
+            };
+
 #if false
 
             OnLeftMouseDown += coordinate =>
@@ -123,12 +144,10 @@ namespace whateverthefuck.src.view.guicomponents
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(0, 0));
-            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, -Size.Y + 1));
+            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(Location as GLCoordinate);
+            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, Size.Y - 1));
 
 
-            //drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, -sizeScreenCoords.Y);
-            //drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, sizeScreenCoords.Y);
             drawAdapter.ActivateScissor(locScreenCoords.X, locScreenCoords.Y, sizeScreenCoords.X, sizeScreenCoords.Y);
 
             //drawAdapter.Translate(-InternalOffset.X, -InternalOffset.Y);
