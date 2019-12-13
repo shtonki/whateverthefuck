@@ -91,8 +91,6 @@
 
                 drawAdapter.PopMatrix();
             }
-
-            //drawAdapter.Translate(-this.Location.X, -this.Location.Y);
         }
 
         public void HandleInput(InputUnion input)

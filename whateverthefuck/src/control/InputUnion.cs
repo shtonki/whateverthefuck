@@ -35,7 +35,12 @@
         /// <summary>
         /// Defines the direction of the button or key being pressed.
         /// </summary>
-        public enum Directions { Undefined, Up, Down }
+        public enum Directions
+        {
+            Undefined,
+            Up,
+            Down,
+        }
 
         /// <summary>
         /// Gets the direction of the button or key being pressed.

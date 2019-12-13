@@ -159,8 +159,7 @@
                 BitConverter.GetBytes(this.Y).Concat(
                 BitConverter.GetBytes(this.CurrentHealth).Concat(
                 BitConverter.GetBytes(this.MaxHealth).Concat(
-                BitConverter.GetBytes(this.CreationArgs.Value)
-                )))))).ToArray();
+                BitConverter.GetBytes(this.CreationArgs.Value))))))).ToArray();
         }
     }
 
@@ -207,8 +206,7 @@
         {
             return BitConverter.GetBytes(this.AttackerId).Concat(
                 BitConverter.GetBytes(this.DefenderId).Concat(
-                BitConverter.GetBytes(this.Damage)
-                    )).ToArray();
+                BitConverter.GetBytes(this.Damage))).ToArray();
         }
     }
 

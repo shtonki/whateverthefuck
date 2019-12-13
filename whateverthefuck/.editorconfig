@@ -13,4 +13,13 @@ dotnet_diagnostic.SA1633.severity = none
 dotnet_diagnostic.SA1602.severity = none
 
 # SA1501: Statement should not be on a single line
-dotnet_diagnostic.SA1501.severity = none
+dotnet_diagnostic.SA1501.severity = suggestion
+
+# SA1129: Do not use default value type constructor
+dotnet_diagnostic.SA1129.severity = suggestion
+
+# SA1500: Braces for multi-line statements should not share line
+dotnet_diagnostic.SA1500.severity = suggestion
+
+# SA1513: Closing brace should be followed by blank line
+dotnet_diagnostic.SA1513.severity = suggestion

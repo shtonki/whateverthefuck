@@ -34,7 +34,7 @@
         }
 
         /// <summary>
-        /// Calculates distance to another GameCoordinate
+        /// Calculates distance to another GameCoordinate.
         /// </summary>
         /// <param name="other">Coordinate to which the distance is to be calculated.</param>
         /// <returns>The distance between this GameCoordinate and the given GameCoordinate.</returns>
