@@ -9,12 +9,10 @@ using Newtonsoft.Json.Linq;
 using whateverthefuck.src.model;
 using whateverthefuck.src.model.entities;
 
-
 namespace whateverthefuck.src.util
 {
     public class JsonIO
     {
-
         private static JsonSerializerSettings Settings = new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Auto,
@@ -24,7 +22,10 @@ namespace whateverthefuck.src.util
 
         public static List<GameEntity> LoadEntitiesFromFile(string filename)
         {
-            if (!File.Exists(filename + ".json")) return new List<GameEntity>();
+            if (!File.Exists(filename + ".json"))
+            {
+                return new List<GameEntity>();
+            }
 
             List<GameEntity> vars = new List<GameEntity>();
             JObject entitiesList = ReadFromJsonFile<JObject>(filename + ".json");
@@ -46,7 +47,6 @@ namespace whateverthefuck.src.util
 
             return vars;
         }
-
 
         public static T ConvertToString<T>(string json)
         {
@@ -75,7 +75,9 @@ namespace whateverthefuck.src.util
             finally
             {
                 if (writer != null)
+                {
                     writer.Close();
+                }
             }
         }
 
@@ -112,7 +114,9 @@ namespace whateverthefuck.src.util
             finally
             {
                 if (reader != null)
+                {
                     reader.Close();
+                }
             }
         }
     }

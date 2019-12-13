@@ -9,8 +9,11 @@ namespace whateverthefuck.src.util
     public class WhateverthefuckVersion
     {
         public short Major { get; }
+
         public short Minor { get; }
+
         public short Build { get; }
+
         public short Revision { get; }
 
         private const short Pre = short.MaxValue;

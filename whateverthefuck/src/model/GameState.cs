@@ -13,6 +13,7 @@ namespace whateverthefuck.src.model
     public class GameState
     {
         private List<GameEntity> EntityList { get; } = new List<GameEntity>();
+
         private List<GameEntity> EntityListSafe { get; set; } = new List<GameEntity>();
 
         private List<GameEntity> RemoveUs = new List<GameEntity>();
@@ -61,7 +62,6 @@ namespace whateverthefuck.src.model
 
             HandleCollisions();
             StepCounter++;
-
         }
 
         public GameEntity GetEntityById(int id)
@@ -76,7 +76,6 @@ namespace whateverthefuck.src.model
 
             foreach (var collision in collisions)
             {
-
                 if (collision.EntityI?.MovementCache?.X == 0 &&
                     collision.EntityI?.MovementCache?.Y == 0 &&
                     collision.EntityJ?.MovementCache?.X == 0 &&
@@ -97,7 +96,6 @@ namespace whateverthefuck.src.model
                         collision.EntityJ.Location.X += jshare * collision.Overlap;
                     }
                 }
-
                 else if (collision.Direction == CollisionDirection.Right)
                 {
                     var ishare = collision.EntityI.MovementCache.X / (collision.EntityI.MovementCache.X + collision.EntityJ.MovementCache.X);
@@ -109,7 +107,6 @@ namespace whateverthefuck.src.model
                         collision.EntityJ.Location.X -= jshare * collision.Overlap;
                     }
                 }
-
                 else if (collision.Direction == CollisionDirection.Top)
                 {
                     var ishare = collision.EntityI.MovementCache.Y / (collision.EntityI.MovementCache.Y + collision.EntityJ.MovementCache.Y);
@@ -121,7 +118,6 @@ namespace whateverthefuck.src.model
                         collision.EntityJ.Location.Y -= jshare * collision.Overlap;
                     }
                 }
-
                 else if (collision.Direction == CollisionDirection.Bottom)
                 {
                     var ishare = collision.EntityI.MovementCache.Y / (collision.EntityI.MovementCache.Y + collision.EntityJ.MovementCache.Y);
@@ -133,7 +129,6 @@ namespace whateverthefuck.src.model
                         collision.EntityJ.Location.Y += jshare * collision.Overlap;
                     }
                 }
-
             }
         }
 
@@ -158,6 +153,7 @@ namespace whateverthefuck.src.model
             {
                 Logging.Log(string.Format("Tick '{0}' Hash '{1}'", rt.Tick, rt.Hash.ToString("X8")));
             }
+
             return rt;
         }
 
@@ -241,6 +237,7 @@ namespace whateverthefuck.src.model
                     rt.Add(entity);
                 }
             }
+
             return rt;
         }
 
@@ -250,7 +247,6 @@ namespace whateverthefuck.src.model
             {
                 EntityList.AddRange(entities);
             }
-
         }
 
         private void RemoveEntity(GameEntity entity)
@@ -284,7 +280,6 @@ namespace whateverthefuck.src.model
 
             return hash;
         }
-
 
         private CollisionRecord? DetectCollisions(GameEntity entityI, GameEntity entityJ)
         {
@@ -345,15 +340,17 @@ namespace whateverthefuck.src.model
             return collisions;
         }
 
-        enum CollisionDirection
+        private enum CollisionDirection
         {
             None, Left, Right, Top, Bottom,
         }
 
-        struct CollisionRecord
+        private struct CollisionRecord
         {
             public GameEntity EntityI { get; }
+
             public GameEntity EntityJ { get; }
+
             public CollisionDirection Direction { get; }
 
             public float Overlap { get; }

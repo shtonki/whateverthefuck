@@ -13,25 +13,40 @@ namespace whateverthefuck.src.view
         public float CurrentZoom { get; set; } = 1.0f;
 
         private float MinZoom { get; } = 0.4f;
+
         private float MaxZoom { get; } = 1.8f;
+
         private float ZoomStepSize { get; } = 0.2f;
 
         public void ZoomIn()
         {
-            if (CurrentZoom - ZoomStepSize < MinZoom) CurrentZoom = MinZoom;
-            else CurrentZoom -= ZoomStepSize;
+            if (CurrentZoom - ZoomStepSize < MinZoom)
+            {
+                CurrentZoom = MinZoom;
+            }
+            else
+            {
+                CurrentZoom -= ZoomStepSize;
+            }
         }
 
         public void ZoomOut()
         {
-            if (CurrentZoom + ZoomStepSize > MaxZoom) CurrentZoom = MaxZoom;
-            else CurrentZoom += ZoomStepSize;
+            if (CurrentZoom + ZoomStepSize > MaxZoom)
+            {
+                CurrentZoom = MaxZoom;
+            }
+            else
+            {
+                CurrentZoom += ZoomStepSize;
+            }
         }
     }
 
     public abstract class Camera
     {
         public virtual Coordinate Location { get; protected set; }
+
         public Zoomer Zoom { get; } = new Zoomer();
 
         public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
@@ -43,11 +58,11 @@ namespace whateverthefuck.src.view
 
         public GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
         {
-            return new GameCoordinate((glCoordinate.X / Zoom.CurrentZoom + Location.X), glCoordinate.Y / Zoom.CurrentZoom + Location.Y);
+            return new GameCoordinate((glCoordinate.X / Zoom.CurrentZoom) + Location.X, (glCoordinate.Y / Zoom.CurrentZoom) + Location.Y);
         }
     }
 
-    class FollowCamera : Camera
+    internal class FollowCamera : Camera
     {
         private GameEntity Following;
 
@@ -60,13 +75,17 @@ namespace whateverthefuck.src.view
         {
             get
             {
-                if (Following?.Location == null) return new GameCoordinate(0, 0);
+                if (Following?.Location == null)
+                {
+                    return new GameCoordinate(0, 0);
+                }
+
                 return Following.Center;
             }
         }
     }
 
-    class StaticCamera : Camera
+    internal class StaticCamera : Camera
     {
         public StaticCamera(GameCoordinate origin)
         {

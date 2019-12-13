@@ -10,7 +10,6 @@ namespace whateverthefuck.src.network
 
         public LoginCredentials()
         {
-
         }
 
         public LoginCredentials(string username)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace whateverthefuck.src.network.messages
 {
-    class ExampleMessage : WhateverthefuckMessage
+    internal class ExampleMessage : WhateverthefuckMessage
     {
         public ExampleMessage() : base(MessageType.ExampleMessage)
         {
@@ -21,7 +21,7 @@ namespace whateverthefuck.src.network.messages
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    struct ExampleBody : MessageBody
+    internal struct ExampleBody : MessageBody
     {
         public int a;
         public float b;

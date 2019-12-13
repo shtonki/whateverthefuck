@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace whateverthefuck.src.util
 {
-    static class Coloring
+    internal static class Coloring
     {
-        //https://xkcd.com/221/
-        static Random r = new Random(3434);
+        // https://xkcd.com/221/
+        private static Random r = new Random(3434);
 
         public static Color RandomColor()
         {
@@ -21,7 +21,6 @@ namespace whateverthefuck.src.util
         {
             return Color.FromArgb(c.ToArgb() ^ 0xffffff);
         }
-
 
         /*public static Color FromRarity(Rarity Rarity)
         {

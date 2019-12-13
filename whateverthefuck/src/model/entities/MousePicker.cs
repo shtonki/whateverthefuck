@@ -8,7 +8,7 @@ using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model.entities
 {
-    class MousePicker : GameEntity
+    internal class MousePicker : GameEntity
     {
         public MousePicker() : base(EntityIdentifier.Invalid, EntityType.GameMechanic, new CreationArgs(0))
         {
@@ -19,7 +19,6 @@ namespace whateverthefuck.src.model.entities
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-
         }
     }
 }

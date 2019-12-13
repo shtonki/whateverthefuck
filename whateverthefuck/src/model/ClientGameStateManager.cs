@@ -57,7 +57,6 @@
             if (tick == 0)
             {
                 this.GameState.HandleGameEvents(events);
-                //GameState.Step();
                 return;
             }
 
@@ -65,7 +64,6 @@
             {
                 this.GameState.StepCounter = tick;
             }
-
 
             this.GameState.HandleGameEvents(events);
             this.GameState.Step();
@@ -86,6 +84,7 @@
                 {
                     this.CenterCameraOn(this.Hero);
                 }
+
                 this.TakeControlId = null;
             }
         }
@@ -217,7 +216,6 @@
                     direction = Math.PI;
                 }
 
-
                 if (direction == 0)
                 {
                     ms.Direction = float.NaN;
@@ -226,7 +224,6 @@
                 {
                     ms.Direction = (float)direction;
                 }
-
 
                 if (!ms.Direction.Equals(this.PrevDirection))
                 {
@@ -255,81 +252,71 @@
             switch (gameAction)
             {
                 case GameAction.CastAbility1:
+                {
+                    if (this.GameState.GetEntityById(this.Target.Identifier.Id) != null)
                     {
-                        if (this.GameState.GetEntityById(this.Target.Identifier.Id) != null)
-                        {
-                            Program.ServerConnection.SendMessage(
-                                new UpdateGameStateMessage(0, new UseAbilityEvent(this.Hero, this.Target, new Ability(Abilities.Fireballx))));
-                        }
+                        Program.ServerConnection.SendMessage(
+                            new UpdateGameStateMessage(0, new UseAbilityEvent(this.Hero, this.Target, new Ability(Abilities.Fireballx))));
                     }
-                    break;
+                } break;
 
                 case GameAction.HeroWalkUpwards:
-                    {
-                        this.HeroMovements.Upwards = (true);
-                    }
-                    break;
+                {
+                    this.HeroMovements.Upwards = true;
+                } break;
 
                 case GameAction.HeroWalkUpwardsStop:
-                    {
-                        this.HeroMovements.Upwards = (false);
-                    }
-                    break;
+                {
+                    this.HeroMovements.Upwards = false;
+                } break;
 
                 case GameAction.HeroWalkDownwards:
-                    {
-                        this.HeroMovements.Downwards = (true);
-                    }
-                    break;
+                {
+                    this.HeroMovements.Downwards = true;
+                } break;
 
                 case GameAction.HeroWalkDownwardsStop:
-                    {
-                        this.HeroMovements.Downwards = (false);
-                    }
-                    break;
+                {
+                    this.HeroMovements.Downwards = false;
+                } break;
 
                 case GameAction.HeroWalkLeftwards:
-                    {
-                        this.HeroMovements.Leftwards = (true);
-                    }
-                    break;
+                {
+                    this.HeroMovements.Leftwards = true;
+                } break;
 
                 case GameAction.HeroWalkLeftwardsStop:
                 {
-                    this.HeroMovements.Leftwards = (false);
+                    this.HeroMovements.Leftwards = false;
                 } break;
 
                 case GameAction.HeroWalkRightwards:
-                    {
-                        this.HeroMovements.Rightwards = (true);
-                    }
-                    break;
+                {
+                    this.HeroMovements.Rightwards = true;
+                } break;
 
                 case GameAction.HeroWalkRightwardsStop:
-                    {
-                        this.HeroMovements.Rightwards = (false);
-                    }
-                    break;
+                {
+                    this.HeroMovements.Rightwards = false;
+                } break;
 
                 case GameAction.CameraZoomIn:
-                    {
-                        GUI.Camera?.Zoom.ZoomIn();
-                    }
-                    break;
+                {
+                    GUI.Camera?.Zoom.ZoomIn();
+                } break;
 
                 case GameAction.CameraZoomOut:
-                    {
-                        GUI.Camera?.Zoom.ZoomOut();
-                    }
-                    break;
+                {
+                    GUI.Camera?.Zoom.ZoomOut();
+                } break;
+
                 case GameAction.TogglePanel:
+                {
+                    foreach (var panel in GUI.GUIComponents.Where(p => p is Panel))
                     {
-                        foreach (var panel in GUI.GUIComponents.Where(p => p is Panel))
-                        {
-                            panel.Visible = !panel.Visible;
-                        }
+                        panel.Visible = !panel.Visible;
                     }
-                    break;
+                } break;
 
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
             }
@@ -369,6 +356,7 @@
                     return c;
                 }
             }
+
             return null;
         }
     }

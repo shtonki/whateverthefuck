@@ -12,6 +12,7 @@ namespace whateverthefuck.src.network.messages
     public class CreateLootMessage : WhateverthefuckMessage
     {
         public Item Item => GenerateItem();
+
         public int LooteeId => ((ItemMessageBody)MessageBody).LooteeEntityId;
 
         private Item GenerateItem()
@@ -34,7 +35,7 @@ namespace whateverthefuck.src.network.messages
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class ItemMessageBody : MessageBody
+    internal class ItemMessageBody : MessageBody
     {
         public int LooteeEntityId;
 
@@ -45,7 +46,6 @@ namespace whateverthefuck.src.network.messages
         private int[] _bonuses = new int[4];
 
         public IEnumerable<ItemBonus> Bonuses => _bonuses.Select(b => new ItemBonus(b));
-
 
         public ItemMessageBody()
         {

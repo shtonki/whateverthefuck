@@ -11,16 +11,16 @@ namespace whateverthefuck.src.util
 {
     public static class RNG
     {
-        static Random r = new Random(Guid.NewGuid().GetHashCode());
+        private static Random r = new Random(Guid.NewGuid().GetHashCode());
 
         /// <summary>
         /// Return a random point within radius.
         /// </summary>
-        /// <param name="Radius"></param>
+        /// <param name="radius"></param>
         /// <returns></returns>
-        public static GameCoordinate RandomPointWithinCircle(GLCoordinate Radius)
+        public static GameCoordinate RandomPointWithinCircle(GLCoordinate radius)
         {
-            var re = Radius.X * Math.Sqrt(r.NextDouble());
+            var re = radius.X * Math.Sqrt(r.NextDouble());
             var theta = r.NextDouble() * 2 * (float)Math.PI;
 
             return new GameCoordinate((float)(re * (float)Math.Cos(theta)), (float)(re * (float)Math.Sin(theta)));
@@ -88,7 +88,7 @@ namespace whateverthefuck.src.util
         /// <returns></returns>
         public static GameCoordinate RandomLocationWithinSquare(GameCoordinate origin, GameCoordinate terminus)
         {
-            var rngLoc = new GameCoordinate((float)r.NextDouble() % (terminus.X - origin.X) + origin.X, (float)r.NextDouble() % (terminus.Y - origin.Y) + origin.Y);
+            var rngLoc = new GameCoordinate(((float)r.NextDouble() % (terminus.X - origin.X)) + origin.X, ((float)r.NextDouble() % (terminus.Y - origin.Y)) + origin.Y);
             return rngLoc;
         }
 

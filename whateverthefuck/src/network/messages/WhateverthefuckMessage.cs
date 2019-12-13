@@ -20,14 +20,15 @@ namespace whateverthefuck.src.network.messages
 #endif
         public const int HeaderSize = 4;
 
-
         public struct WhateverMessageHeader
         {
             public byte Type { get; set; }
+
             public ushort Size { get; set; }
         }
 
         public MessageType MessageType { get; private set; }
+
         public MessageBody MessageBody { get; set; }
 
         protected WhateverthefuckMessage(MessageType messageType)
@@ -39,7 +40,6 @@ namespace whateverthefuck.src.network.messages
         {
             switch (type)
             {
-
                 case MessageType.ExampleMessage:
                 {
                     return new ExampleMessage();
@@ -94,7 +94,6 @@ namespace whateverthefuck.src.network.messages
         {
             return GetBytes(MessageBody);
         }
-
 
         public static WhateverthefuckMessage DecodeMessage(byte[] bs)
         {
@@ -151,6 +150,7 @@ namespace whateverthefuck.src.network.messages
             Marshal.FreeHGlobal(ptr);
             return arr;
         }
+
         protected static object FromBytes(IEnumerable<byte> bs, object str)
         {
             byte[] arr = bs.ToArray();
@@ -159,7 +159,6 @@ namespace whateverthefuck.src.network.messages
             IntPtr ptr = Marshal.AllocHGlobal(size);
 
             Marshal.Copy(arr, 0, ptr, size);
-
 
             var typ = str.GetType();
             str = Marshal.PtrToStructure(ptr, typ);
@@ -173,7 +172,6 @@ namespace whateverthefuck.src.network.messages
             StringBuilder bodybuild = new StringBuilder();
             var bb = EncodeBody();
 
-
             bodybuild.Append(Enum.GetName(typeof(MessageType), MessageType));
 
             bodybuild.Append("<");
@@ -182,6 +180,7 @@ namespace whateverthefuck.src.network.messages
                 bodybuild.Append(b.ToString());
                 bodybuild.Append(",");
             }
+
             bodybuild.Append(">");
 
             return bodybuild.ToString();
@@ -192,19 +191,18 @@ namespace whateverthefuck.src.network.messages
     {
     }
 
-
-
     public struct EntityLocationInfo
     {
         private const char InfoSeperator = '&';
 
         public int Identifier { get; }
+
         public float X { get; }
+
         public float Y { get; }
 
         public EntityLocationInfo(GameEntity entity) : this(entity.Identifier.Id, entity.Location.X, entity.Location.Y)
         {
-
         }
 
         public EntityLocationInfo(int id, float x, float y)
@@ -230,7 +228,6 @@ namespace whateverthefuck.src.network.messages
             float Y = float.Parse(dataStrings[2], CultureInfo.InvariantCulture);
             return new EntityLocationInfo(id, X, Y);
         }
-
     }
 
     public enum MessageType

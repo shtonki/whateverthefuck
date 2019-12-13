@@ -9,8 +9,11 @@ namespace whateverthefuck.src.model
     public class Item
     {
         public ItemType Type { get; private set; }
+
         public int StackSize { get; private set; }
+
         public Rarity Rarity { get; private set; }
+
         public ItemBonus[] Bonuses { get; private set; }
 
         public Item(ItemType type, int stackSize, Rarity rarity, params ItemBonus[] bonuses)
@@ -58,7 +61,6 @@ namespace whateverthefuck.src.model
             Test2,
             Test3,
             Test4,
-
         }
 
         private int Value;
@@ -71,12 +73,12 @@ namespace whateverthefuck.src.model
             get { return (BonusType)(Value & LowMask);  }
             set { Value = (int)((Value & HighMask) | ((int)value & LowMask)); }
         }
+
         public short Modifier
         {
             get { return (short)((Value & HighMask) >> 16); }
             set { Value = (int)((Value & LowMask) | (((int)value & LowMask) << 16)); }
         }
-
 
         public ItemBonus(BonusType type, short value)
         {

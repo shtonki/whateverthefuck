@@ -27,5 +27,4 @@
         /// </summary>
         public Abilities AbilityType { get; private set; }
     }
-
 }

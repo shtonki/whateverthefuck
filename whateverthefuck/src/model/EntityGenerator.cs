@@ -144,13 +144,11 @@ namespace whateverthefuck.src.model
 
                     rt.Add(e);
                 }
-
             }
+
             return rt;
         }
-
     }
-
 
     public class IdentifierGenerator
     {

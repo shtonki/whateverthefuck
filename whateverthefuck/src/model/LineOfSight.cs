@@ -8,7 +8,7 @@ using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
 {
-    class LineOfSight
+    internal class LineOfSight
     {
         private const bool ShowOutlines = false;
 
@@ -63,7 +63,6 @@ namespace whateverthefuck.src.model
                     visionBlockedP4 |= LineIntersectsRect(lookerPOV, p4, blocker);
                 }
 
-
                 if (!visionBlockedP1 ||
                     !visionBlockedP2   ||
                     !visionBlockedP3   ||
@@ -72,6 +71,7 @@ namespace whateverthefuck.src.model
                     rt.Add(target);
                 }
             }
+
             GUI.DebugInfo = extras;
             return rt;
         }
@@ -90,8 +90,8 @@ namespace whateverthefuck.src.model
 
         private static bool LineIntersectsLine(PointF l1p1, PointF l1p2, PointF l2p1, PointF l2p2)
         {
-            float q = (l1p1.Y - l2p1.Y) * (l2p2.X - l2p1.X) - (l1p1.X - l2p1.X) * (l2p2.Y - l2p1.Y);
-            float d = (l1p2.X - l1p1.X) * (l2p2.Y - l2p1.Y) - (l1p2.Y - l1p1.Y) * (l2p2.X - l2p1.X);
+            float q = ((l1p1.Y - l2p1.Y) * (l2p2.X - l2p1.X)) - ((l1p1.X - l2p1.X) * (l2p2.Y - l2p1.Y));
+            float d = ((l1p2.X - l1p1.X) * (l2p2.Y - l2p1.Y)) - ((l1p2.Y - l1p1.Y) * (l2p2.X - l2p1.X));
 
             if( d == 0 )
             {
@@ -100,7 +100,7 @@ namespace whateverthefuck.src.model
 
             float r = q / d;
 
-            q = (l1p1.Y - l2p1.Y) * (l1p2.X - l1p1.X) - (l1p1.X - l2p1.X) * (l1p2.Y - l1p1.Y);
+            q = ((l1p1.Y - l2p1.Y) * (l1p2.X - l1p1.X)) - ((l1p1.X - l2p1.X) * (l1p2.Y - l1p1.Y));
             float s = q / d;
 
             if( r <= 0 || r >= 1 || s <= 0 || s >= 1 )

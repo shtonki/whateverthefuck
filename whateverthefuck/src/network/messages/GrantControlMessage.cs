@@ -22,14 +22,13 @@ namespace whateverthefuck.src.network.messages
             MessageBody = new GrantControlBody(entity);
         }
 
-        public GrantControlMessage(int Id) : base(MessageType.GrantControlMessage)
+        public GrantControlMessage(int id) : base(MessageType.GrantControlMessage)
         {
             var v = new GrantControlBody();
-            v.Id = Id;
+            v.Id = id;
             MessageBody = v;
         }
     }
-
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct GrantControlBody : MessageBody

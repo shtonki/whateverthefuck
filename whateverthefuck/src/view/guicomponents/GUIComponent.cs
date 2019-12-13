@@ -15,12 +15,15 @@ namespace whateverthefuck.src.view.guicomponents
     public abstract class GUIComponent : Drawable
     {
         public GLCoordinate Size { get; set; }
+
         protected internal Color BackColor;
         private Border Border;
         private List<GUIComponent> Children = new List<GUIComponent>();
 
         public event Action<GUIComponent, InputUnion> OnMouseButtonPress;
+
         public event Action<GUIComponent, InputUnion> OnKeyboardButtonPress;
+
         public event Action<GUIComponent, InputUnion> OnMouseMove;
 
 #if false
@@ -65,7 +68,6 @@ namespace whateverthefuck.src.view.guicomponents
 #endif
         protected GUIComponent() : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
         {
-
         }
 
         protected GUIComponent(GLCoordinate location, GLCoordinate size) : base(location)
@@ -83,7 +85,6 @@ namespace whateverthefuck.src.view.guicomponents
         {
             //if(Border != null) drawAdapter.TraceRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Border.BorderColor, Border.Width);
             drawAdapter.FillRectangle(0, 0, Size.X, Size.Y, BackColor);
-
 
             foreach (var kiddo in Children)
             {
@@ -132,6 +133,7 @@ namespace whateverthefuck.src.view.guicomponents
                 OnMouseMove?.Invoke(this, input);
             }
         }
+
 #if false
         public void HandleClick(InputUnion mouseInput, GLCoordinate glClicked)
         {
@@ -176,21 +178,21 @@ namespace whateverthefuck.src.view.guicomponents
         public List<GUIComponent> InteractedChildren(GLCoordinate interactLocation)
         {
             var translatedLoc = interactLocation;
-                //new GLCoordinate(interactLocation.X - this.Location.X, interactLocation.Y - this.Location.Y);
             var v = Children.Where(c => c.Contains(translatedLoc)).ToList();
             return v;
         }
 
         public virtual bool Contains(GLCoordinate clicked)
         {
-            return (clicked.X >= Location.X && clicked.X <= Location.X + Size.X &&
-                    clicked.Y >= Location.Y && clicked.Y <= Location.Y + Size.Y);
+            return clicked.X >= Location.X && clicked.X <= Location.X + Size.X &&
+                    clicked.Y >= Location.Y && clicked.Y <= Location.Y + Size.Y;
         }
     }
 
-    class Border
+    internal class Border
     {
         internal Color BorderColor { get; set; } = Color.Black;
+
         internal float Width { get; set; }
 
         internal Border(Color borderColor, float width = 4f)

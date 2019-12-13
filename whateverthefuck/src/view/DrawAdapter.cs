@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using OpenTK.Graphics.OpenGL;
 
-
 namespace whateverthefuck.src.view
 {
     public class DrawAdapter
@@ -11,7 +10,6 @@ namespace whateverthefuck.src.view
         public DrawAdapter()
         {
         }
-
 
         public void PushMatrix()
         {
@@ -38,10 +36,10 @@ namespace whateverthefuck.src.view
             GL.Scale(x, y, 0);
         }
 
-        public void ActivateScissor(GLCoordinate Location, GLCoordinate Size)
+        public void ActivateScissor(GLCoordinate location, GLCoordinate size)
         {
-            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(Location);
-            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(Size.X - 1, Size.Y - 1));
+            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(location);
+            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(size.X - 1, size.Y - 1));
 
             GL.Scissor(locScreenCoords.X,
                 locScreenCoords.Y,

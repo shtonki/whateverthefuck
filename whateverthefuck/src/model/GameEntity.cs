@@ -311,9 +311,7 @@
                 return new GameCoordinate((float)Math.Sin(this.Movements.Direction) * this.MoveSpeed, (float)Math.Cos(this.Movements.Direction) * this.MoveSpeed);
             }
         }
-
     }
-
 
     /// <summary>
     /// Contains the movement info of a GameEntity.
@@ -377,7 +375,6 @@
             }
 
             return ms;
-
         }
 
         /// <summary>
@@ -386,7 +383,6 @@
         /// <returns>The bytes representing the MovementStruct</returns>
         public byte[] Encode()
         {
-
             if (this.FollowId.HasValue)
             {
                 return BitConverter.GetBytes(true).Concat(BitConverter.GetBytes(this.FollowId.Value)).ToArray();
@@ -422,7 +418,6 @@
         /// </summary>
         public bool IsValid => this.Id != InvalidId;
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityIdentifier"/> class.
         /// </summary>
@@ -431,7 +426,6 @@
         {
             this.Id = id;
         }
-
 
         /// <summary>
         /// Creates the next reserved EntityIdentifier.
@@ -449,5 +443,4 @@
             return new EntityIdentifier(v);
         }
     }
-
 }

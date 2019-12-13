@@ -123,5 +123,4 @@
                  (this.IsMouseInput && other.IsMouseInput && this.MouseButton.Value == other.MouseButton.Value));
         }
     }
-
 }

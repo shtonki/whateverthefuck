@@ -8,16 +8,14 @@ using whateverthefuck.src.model;
 
 namespace whateverthefuck.src.network
 {
-    class WhateverClientConnection : WhateverthefuckConnection
+    internal class WhateverClientConnection : WhateverthefuckConnection
     {
-
         private const string ServerIp = "98.128.171.8";
         private const string BackupServerIp = "127.0.0.1";
         private const int ServerPort = 13000;
 
         public WhateverClientConnection() : base(ConnectToServer())
         {
-            
         }
 
         private static NetworkStream ConnectToServer()
@@ -37,6 +35,7 @@ namespace whateverthefuck.src.network
                         Logging.Log("Failed to connect to Localhost");
                     }
                 }
+
                 try
                 {
                     ServerConnection = new TcpClient(ServerIp, ServerPort);
@@ -46,8 +45,8 @@ namespace whateverthefuck.src.network
                 {
                     Logging.Log("Failed to connect to main server.");
                 }
-
             }
+
             return ServerConnection.GetStream();
         }
 
@@ -67,7 +66,6 @@ namespace whateverthefuck.src.network
                     UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
                     Program.GameStateManager.UpdateGameState(updateMessage.Tick, updateMessage.Events);
                 } break;
-
 
                 case MessageType.GrantControlMessage:
                 {

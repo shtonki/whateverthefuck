@@ -9,7 +9,6 @@ using whateverthefuck.src.network;
 namespace whateverthefuck.src.util
 {
     public static class UserSettings
-
     {
         public static ConfigInfo Config { get; set; }
 
@@ -38,6 +37,5 @@ namespace whateverthefuck.src.util
         public string Username;
 
         public bool ConnectToLocalHost;
-
     }
 }

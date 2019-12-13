@@ -70,7 +70,6 @@
             set { this.FirstInt = (int)value; }
         }
 
-
         private Color Colorx()
         {
             switch (this.Type)

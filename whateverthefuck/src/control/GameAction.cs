@@ -1,5 +1,4 @@
-﻿
-namespace whateverthefuck.src.control
+﻿namespace whateverthefuck.src.control
 {
     public enum GameAction
     {

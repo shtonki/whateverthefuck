@@ -18,7 +18,9 @@ namespace whateverthefuck.src.util
         protected bool DoWrite(Logging.LoggingLevel l) => Enabled && l >= LoggingLevel;
 
         protected Logging.LoggingLevel LoggingLevel { get; set; }
+
         protected bool Enabled { get; set; }
+
         public abstract void Write(string message, Logging.LoggingLevel loggingLevel);
     }
 
@@ -30,7 +32,10 @@ namespace whateverthefuck.src.util
 
         public override void Write(string message, Logging.LoggingLevel loggingLevel)
         {
-            if (!DoWrite(loggingLevel)) return;
+            if (!DoWrite(loggingLevel))
+            {
+                return;
+            }
 
             Console.WriteLine(loggingLevel + ": " + message);
         }
@@ -52,7 +57,11 @@ namespace whateverthefuck.src.util
 
         public override void Write(string message, Logging.LoggingLevel loggingLevel)
         {
-            if (!DoWrite(loggingLevel)) return;
+            if (!DoWrite(loggingLevel))
+            {
+                return;
+            }
+
             using (StreamWriter sw = File.AppendText(filePath))
             {
                 sw.WriteLine(DateTime.Now.ToString("h:mm:ss tt") + "*" + loggingLevel + "*: " + message);

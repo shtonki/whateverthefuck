@@ -11,12 +11,11 @@ using whateverthefuck.src.view;
 
 namespace whateverthefuck
 {
-    class Program
+    internal class Program
     {
         public static ClientGameStateManager GameStateManager = new ClientGameStateManager();
 
         public static WhateverClientConnection ServerConnection { get; private set; }
-
 
         public static void Main(String[] args)
         {
@@ -65,7 +64,6 @@ namespace whateverthefuck
             UserLogin.Login(UserSettings.Config.Username);
             Logging.Log(String.Format("Logged on to Server as {0}", UserSettings.Config.Username), Logging.LoggingLevel.Info);
 
-            
 #endif
         }
     }

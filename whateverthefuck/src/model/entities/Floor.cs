@@ -62,7 +62,6 @@
         /// </summary>
         public Color Color => this.Colorx();
 
-
         /// <summary>
         /// Gets or sets the Type of Floor to be created.
         /// </summary>

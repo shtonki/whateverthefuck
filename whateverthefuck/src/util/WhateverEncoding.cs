@@ -23,9 +23,9 @@ namespace whateverthefuck.src.util
         public static int IntFromBytes(byte[] bs)
         {
             return bs[0] |
-                   bs[1] << 8 |
-                   bs[2] << 16 |
-                   bs[3] << 24;
+                   (bs[1] << 8) |
+                   (bs[2] << 16) |
+                   (bs[3] << 24);
         }
     }
 }

@@ -18,6 +18,5 @@ namespace whateverthefuck.src.model.entities
             Collidable = false;
             Targetable = true;
         }
-
     }
 }

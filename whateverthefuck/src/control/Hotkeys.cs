@@ -45,7 +45,6 @@
         }
     }
 
-
     /// <summary>
     /// A class which maps an InputUnion to a GameAction.
     /// </summary>
@@ -71,6 +70,5 @@
         /// Gets the GameAction mapped to.
         /// </summary>
         public GameAction GameAction { get; }
-
     }
 }

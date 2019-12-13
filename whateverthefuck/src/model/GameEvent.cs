@@ -9,6 +9,9 @@ using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.model
 {
+    /// <summary>
+    /// Represents an event which alters a GameState.
+    /// </summary>
     public abstract class GameEvent
     {
         public static GameEvent DecodeWithEventType(GameEventType type, byte[] body)
@@ -40,29 +43,30 @@ namespace whateverthefuck.src.model
         }
 
         public GameEventType Type { get; protected set; }
+
         public abstract byte[] ToBytes();
     }
 
     public class UseAbilityEvent : GameEvent
     {
         public int Id { get; private set; }
+
         public Abilities AbilityType { get; private set; } 
+
         public int TargetId { get; private set; }
 
-        public UseAbilityEvent(GameEntity caster, GameEntity Target, Ability ability)
+        public UseAbilityEvent(GameEntity caster, GameEntity target, Ability ability)
         {
             Type = GameEventType.UseAbility;
             
             Id = caster.Identifier.Id;
             AbilityType = ability.AbilityType;
-            TargetId = Target.Identifier.Id;
+            TargetId = target.Identifier.Id;
         }
-
 
         public UseAbilityEvent(IEnumerable<byte> bs)
         {
             Type = GameEventType.UseAbility;
-
 
             Id = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int)); 
@@ -83,22 +87,27 @@ namespace whateverthefuck.src.model
         }
     }
 
-
     public class CreateEntityEvent : GameEvent
     {
         public int Id { get; private set; }
+
         public EntityType EntityType { get; private set; }
+
         public float X { get; private set; }
+
         public float Y { get; private set; }
+
         public int CurrentHealth { get; private set; }
+
         public int MaxHealth { get; private set; }
 
         public CreationArgs CreationArgs { get; private set; }
 
         public Action<GameEntity> OnCreationCallback { get; set; }
-        public Action<GameEntity, GameEntity> OnDeathCallback { get; set; }
-        public Action<GameEntity> OnStepCallback { get; set; }
 
+        public Action<GameEntity, GameEntity> OnDeathCallback { get; set; }
+
+        public Action<GameEntity> OnStepCallback { get; set; }
 
         public CreateEntityEvent(GameEntity e)
         {
@@ -163,7 +172,9 @@ namespace whateverthefuck.src.model
     public class DealDamageEvent : GameEvent
     {
         public int AttackerId { get; private set; }
+
         public int DefenderId { get; private set; }
+
         public int Damage { get; private set; }
 
         public DealDamageEvent(int attackerId, int defenderId, int damage)
@@ -181,7 +192,6 @@ namespace whateverthefuck.src.model
             DefenderId = defender.Identifier.Id;
             Damage = damage;
         }
-
 
         public DealDamageEvent(IEnumerable<byte> bs)
         {
@@ -234,11 +244,11 @@ namespace whateverthefuck.src.model
     public class UpdateMovementEvent : GameEvent
     {
         public int Id { get; private set; }
+
         public MovementStruct Movements { get; private set; }
 
         public UpdateMovementEvent(GameEntity entity) : this(entity.Identifier.Id, entity.Movements)
         {
-
         }
 
         public UpdateMovementEvent(int id, MovementStruct movements)

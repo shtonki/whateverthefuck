@@ -11,11 +11,11 @@ namespace whateverthefuck.src.network.messages
     public class UpdateGameStateMessage : WhateverthefuckMessage
     {
         public int Tick { get; private set; }
+
         public List<GameEvent> Events { get; private set; }
 
         public UpdateGameStateMessage(int tick, params GameEvent[] es) : this(tick, (IEnumerable<GameEvent>)es)
         {
-
         }
 
         public UpdateGameStateMessage(int tick, IEnumerable<GameEvent> events) : base(MessageType.UpdateGameStateMessage)
@@ -35,13 +35,12 @@ namespace whateverthefuck.src.network.messages
 
             bs.AddRange(BitConverter.GetBytes(Tick));
 
-            // Structure of encoding:
-            // one byte type of event
-            // one byte Length
-            // arbitrary length of body
-
             foreach (var ge in Events)
             {
+                // Structure of encoding:
+                // one byte type of event
+                // one byte Length
+                // arbitrary length of body
                 var v = ge.ToBytes();
                 bs.Add((byte)ge.Type);
                 bs.Add((byte)v.Length);
@@ -79,6 +78,5 @@ namespace whateverthefuck.src.network.messages
 
             Events = events.ToList();
         }
-
     }
 }

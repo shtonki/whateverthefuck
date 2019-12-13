@@ -16,7 +16,6 @@
         public GameCoordinate(float x, float y)
             : base(x, y)
         {
-
         }
 
         public static GameCoordinate operator +(GameCoordinate a, GameCoordinate b)

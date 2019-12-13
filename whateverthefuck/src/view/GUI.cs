@@ -16,9 +16,13 @@ namespace whateverthefuck.src.view
         public static Camera Camera { get; set; }
 
         public static GameState ForceToDrawGameState { get; set; }
+
         public static List<Drawable> DebugInfo { get; set; } = new List<Drawable>();
+
         public static List<GUIComponent> GUIComponents { get; set; } = new List<GUIComponent>();
+
         private static GibbWindow Frame { get; set; }
+
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
         /// of said window to be called. Roughly speaking.
@@ -44,7 +48,6 @@ namespace whateverthefuck.src.view
             {
                 entities = Program.GameStateManager.GameState.AllEntities;
             }
-
 
             return entities
                 .Concat(DebugInfo)
@@ -95,8 +98,8 @@ namespace whateverthefuck.src.view
 
         public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate screenCoordinate)
         {
-            var X = ((float)screenCoordinate.X / Frame.ClientSize.Width) * 2 - 1;
-            var Y = -(((float)screenCoordinate.Y / Frame.ClientSize.Height) * 2 - 1);
+            var X = ((float)screenCoordinate.X / Frame.ClientSize.Width * 2) - 1;
+            var Y = -(((float)screenCoordinate.Y / Frame.ClientSize.Height * 2) - 1);
 
             return new GLCoordinate(X, Y);
         }
@@ -104,7 +107,7 @@ namespace whateverthefuck.src.view
         public static ScreenCoordinate TranslateGLToScreenCoordinates(GLCoordinate glCoordinate)
         {
             var X = (glCoordinate.X + 1) / 2 * Frame.ClientSize.Width;
-            var Y = ((glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height);
+            var Y = (glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height;
 
             return new ScreenCoordinate((int)X, (int)Y);
         }

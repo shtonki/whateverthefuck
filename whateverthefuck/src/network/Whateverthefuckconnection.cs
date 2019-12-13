@@ -32,7 +32,6 @@ namespace whateverthefuck.src.network
             }
             catch(System.IO.IOException)
             {
-
             }
 
             if (LogOutgoingMessages)
@@ -62,6 +61,7 @@ namespace whateverthefuck.src.network
                     HandleConnectionDeath();
                     return;
                 }
+
                 if (bytesRead != WhateverthefuckMessage.HeaderSize) 
                 {
                     Logging.Log("Broken message header.", Logging.LoggingLevel.Error);

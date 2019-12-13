@@ -29,7 +29,6 @@ namespace whateverthefuck.src.view
         }
     }
 
-
     public class Rectangle : Drawable
     {
         public float X1;
@@ -68,14 +67,15 @@ namespace whateverthefuck.src.view
         public int Height { get; protected set; } = 1;
         
         protected float Rotation { get; set; } = 0;
+
         public Coordinate Location { get; set; }
 
         public bool Visible { get; set; } = true;
 
         public abstract void DrawMe(DrawAdapter drawAdapter);
+
         public void Draw(DrawAdapter drawAdapter)
         {
-
             if (Visible)
             {
                 drawAdapter.PushMatrix();
@@ -87,14 +87,11 @@ namespace whateverthefuck.src.view
 
                 drawAdapter.PopMatrix();
             }
-
         }
-
 
         protected Drawable(Coordinate location)
         {
             Location = location;
         }
     }
-
 }

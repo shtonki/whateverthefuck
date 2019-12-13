@@ -9,7 +9,7 @@ using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.view.guicomponents
 {
-    class Panel : GUIComponent
+    internal class Panel : GUIComponent
     {
         protected Zoomer Zoomer { get; set; }
 
@@ -17,7 +17,6 @@ namespace whateverthefuck.src.view.guicomponents
 
         public Panel() : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
         {
-
         }
 
         public Panel(GLCoordinate location, GLCoordinate size) : base(location, size)
@@ -74,7 +73,8 @@ namespace whateverthefuck.src.view.guicomponents
             }
         }
     }
-    class DraggablePanel : Panel
+
+    internal class DraggablePanel : Panel
     {
         private Panel DraggedPanel;
 

@@ -15,9 +15,8 @@ using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.view
 {
-    class GibbWindow : GameWindow
+    internal class GibbWindow : GameWindow
     {
-
         private ManualResetEventSlim LoadResetEvent;
 
         public GibbWindow(ManualResetEventSlim loadResetEvent) : base(600, 600, new GraphicsMode(32, 24, 0, 32), "GibbWindow")
@@ -39,7 +38,10 @@ namespace whateverthefuck.src.view
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            if (LoadResetEvent != null) LoadResetEvent.Set();
+            if (LoadResetEvent != null)
+            {
+                LoadResetEvent.Set();
+            }
         }
 
         private int LastSecond;
@@ -67,7 +69,6 @@ namespace whateverthefuck.src.view
             GL.ClearColor(Color.Fuchsia);
             GL.PushMatrix();
 
-
             var drawAdapter = new DrawAdapter();
 
             // Draw GUI components
@@ -91,12 +92,9 @@ namespace whateverthefuck.src.view
                 drawable.Draw(drawAdapter);
             }
 
-
             this.SwapBuffers();
             GL.PopMatrix();
         }
-
-
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
@@ -142,6 +140,5 @@ namespace whateverthefuck.src.view
             InputUnion keyboardInput = InputUnion.MakeKeyboardInput(InputUnion.Directions.Up, e.Key);
             Program.GameStateManager.HandleInput(keyboardInput);
         }
-
     }
 }

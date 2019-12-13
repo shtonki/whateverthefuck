@@ -11,7 +11,6 @@ namespace whateverthefuck.src.view
     {
         public GLCoordinate(float x, float y) : base(x, y) 
         {
-
         }
     }
 }

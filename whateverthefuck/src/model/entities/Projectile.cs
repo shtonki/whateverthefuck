@@ -8,7 +8,7 @@ using whateverthefuck.src.util;
 
 namespace whateverthefuck.src.model.entities
 {
-    class Projectile : GameEntity
+    internal class Projectile : GameEntity
     {
         private float AsplodeCutoff => MoveSpeed * 2;
 
@@ -65,14 +65,13 @@ namespace whateverthefuck.src.model.entities
             set { SecondInt = value; }
         }
 
-
         public ProjectileArgs(GameEntity c) : base(0)
         {
             ControllerId = c.Identifier.Id;
         }
+
         public ProjectileArgs(CreationArgs a) : base(a.Value)
         {
-
         }
     }
 }
