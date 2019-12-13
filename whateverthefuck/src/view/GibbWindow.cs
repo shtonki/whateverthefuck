@@ -115,31 +115,31 @@ namespace whateverthefuck.src.view
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
-            var mouseMovedInput = new InputUnion(new ScreenCoordinate(e.X, e.Y), new ScreenCoordinate(e.X - e.XDelta, e.Y - e.YDelta));
+            var mouseMovedInput = InputUnion.MakeMouseMoveInput(new ScreenCoordinate(e.X, e.Y), new ScreenCoordinate(e.X - e.XDelta, e.Y - e.YDelta));
             Program.GameStateManager.HandleInput(mouseMovedInput);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            InputUnion mouseInput = new InputUnion(InputUnion.Directions.Down, e.Button, new ScreenCoordinate(e.X, e.Y));
+            InputUnion mouseInput = InputUnion.MakeMouseButtonInput(InputUnion.Directions.Down, e.Button, new ScreenCoordinate(e.X, e.Y));
             Program.GameStateManager.HandleInput(mouseInput);
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            InputUnion mouseInput = new InputUnion(InputUnion.Directions.Up, e.Button, new ScreenCoordinate(e.X, e.Y));
+            InputUnion mouseInput = InputUnion.MakeMouseButtonInput(InputUnion.Directions.Up, e.Button, new ScreenCoordinate(e.X, e.Y));
             Program.GameStateManager.HandleInput(mouseInput);
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            InputUnion keyboardInput = new InputUnion(InputUnion.Directions.Down, e.Key);
+            InputUnion keyboardInput = InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, e.Key);
             Program.GameStateManager.HandleInput(keyboardInput);
         }
 
         protected override void OnKeyUp(KeyboardKeyEventArgs e)
         {
-            InputUnion keyboardInput = new InputUnion(InputUnion.Directions.Up, e.Key);
+            InputUnion keyboardInput = InputUnion.MakeKeyboardInput(InputUnion.Directions.Up, e.Key);
             Program.GameStateManager.HandleInput(keyboardInput);
         }
 

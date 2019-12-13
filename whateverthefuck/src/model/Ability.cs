@@ -1,23 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model
 {
-    public class Ability
-    {
-        public Abilities AbilityType { get; private set; }
-
-        public Ability(Abilities abilityType)
-        {
-            AbilityType = abilityType;
-        }
-    }
-
+    /// <summary>
+    /// The enum of all Abilities in the game.
+    /// </summary>
     public enum Abilities
     {
         Fireballx,
     }
+
+    /// <summary>
+    /// Represents an Ability in the game.
+    /// </summary>
+    public class Ability
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ability"/> class.
+        /// </summary>
+        /// <param name="abilityType">The type of Ability being created.</param>
+        public Ability(Abilities abilityType)
+        {
+            this.AbilityType = abilityType;
+        }
+
+        /// <summary>
+        /// Gets the type of Ability.
+        /// </summary>
+        public Abilities AbilityType { get; private set; }
+    }
+
 }

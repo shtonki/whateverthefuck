@@ -1,40 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model
 {
+    /// <summary>
+    /// A container for the arguments used when creating a GameEntity.
+    /// </summary>
     public class CreationArgs
     {
-        public UInt64 Value { get; set; }
-
-        public static CreationArgs Zero => new CreationArgs(0);
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreationArgs"/> class.
+        /// </summary>
+        /// <param name="value">The unencoded value of the CreationArgs.</param>
         public CreationArgs(ulong value)
         {
-            Value = value;
+            this.Value = value;
         }
 
-        public int FirstInt
+        /// <summary>
+        /// Gets or sets the unencoded value of the CreationArgs.
+        /// </summary>
+        public ulong Value { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the most significant int.
+        /// </summary>
+        protected int FirstInt
         {
-            get { return (int)((Value & 0xFFFFFFFF00000000) >> 32); }
+            get
+            {
+                return (int)((this.Value & 0xFFFFFFFF00000000) >> 32);
+            }
+
             set
             {
-                Value &= 0x00000000FFFFFFFF;
-                Value |= (((ulong)value << 32));
+                this.Value &= 0x00000000FFFFFFFF;
+                this.Value |= (ulong)value << 32;
             }
         }
 
-        public int SecondInt
+        /// <summary>
+        /// Gets or sets the least significant int.
+        /// </summary>
+        protected int SecondInt
         {
-            get { return (int)((Value & 0xFFFFFFFF)); }
+            get
+            {
+                return (int)(this.Value & 0xFFFFFFFF);
+            }
+
             set
             {
-                Value &= 0xFFFFFFFF00000000;
-                Value |= (ulong)value;
+                this.Value &= 0xFFFFFFFF00000000;
+                this.Value |= (ulong)value << 0;
             }
         }
     }

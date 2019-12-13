@@ -169,7 +169,6 @@ namespace whateverthefuck.src.model
                 var entity = EntityGenerator.GenerateEntity(cee);
                 entity.OnDeath += cee.OnDeathCallback;
                 entity.OnStep += cee.OnStepCallback;
-                entity.OnCreated += cee.OnCreationCallback;
 
                 // it has to be like this
                 cee.OnCreationCallback?.Invoke(entity);

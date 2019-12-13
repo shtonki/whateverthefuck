@@ -1,52 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.view;
-
-namespace whateverthefuck.src.model.entities
+﻿namespace whateverthefuck.src.model.entities
 {
+    using System.Drawing;
+
+    /// <summary>
+    /// Represents a floor tile.
+    /// </summary>
     public class Floor : GameEntity
     {
-        public Floor(EntityIdentifier id, CreationArgs args) : base(id, EntityType.Floor, args)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Floor"/> class.
+        /// </summary>
+        /// <param name="id">The EntityIdentifier of the Floor.</param>
+        /// <param name="args">The CreationArgs used to create the Floor.</param>
+        public Floor(EntityIdentifier id, CreationArgs args)
+            : base(id, EntityType.Floor, args)
         {
-            Collidable = false;
-            BlocksLOS = false;
-            Height = 0;
+            this.Collidable = false;
+            this.BlocksLOS = false;
+            this.Height = 0;
 
             var fca = new FloorCreationArgs(args);
-            DrawColor = fca.Color;
+            this.DrawColor = fca.Color;
         }
     }
 
-    class FloorCreationArgs : CreationArgs
+    /// <summary>
+    /// The CreationArgs used to create a Floor.
+    /// </summary>
+    public class FloorCreationArgs : CreationArgs
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FloorCreationArgs"/> class.
+        /// </summary>
+        /// <param name="args">The CreationArgs to be cloned.</param>
+        public FloorCreationArgs(CreationArgs args)
+            : base(args.Value)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FloorCreationArgs"/> class.
+        /// </summary>
+        /// <param name="type">The Type of Floor to be created.</param>
+        public FloorCreationArgs(Types type)
+            : base(0)
+        {
+            this.Type = type;
+        }
+
+        /// <summary>
+        /// The different types of Floor.
+        /// </summary>
         public enum Types
         {
             Grass,
             Stone,
         }
 
+        /// <summary>
+        /// Gets the Color of the Floor to be created.
+        /// </summary>
+        public Color Color => this.Colorx();
+
+
+        /// <summary>
+        /// Gets or sets the Type of Floor to be created.
+        /// </summary>
         public Types Type
         {
-            get { return (Types)FirstInt; }
-            set { FirstInt = (int)value; }
-        }
-
-        public FloorCreationArgs(CreationArgs args) : base(args.Value)
-        {
-        }
-
-        public FloorCreationArgs(Types type) : base(0)
-        {
-            Type = type;
+            get { return (Types)this.FirstInt; }
+            set { this.FirstInt = (int)value; }
         }
 
         private Color Colorx()
         {
-            switch (Type)
+            switch (this.Type)
             {
                 case Types.Stone:
                     {
@@ -61,7 +89,5 @@ namespace whateverthefuck.src.model.entities
 
             return Color.Black;
         }
-
-        public Color Color => Colorx();
     }
 }

@@ -8,17 +8,31 @@ using whateverthefuck.src.model.entities;
 
 namespace whateverthefuck.src.model
 {
+    /// <summary>
+    /// Responsible for generating GameEntities from a given EntityType and CreationArgs.
+    /// </summary>
     public class EntityGenerator
     {
-        private static GameCoordinate GridSize = new GameCoordinate(0.1f, 0.1f);
-
-        private IdentifierGenerator IdGenerator;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityGenerator"/> class.
+        /// </summary>
+        /// <param name="idGenerator">The IdentifierGenerator used to assign EntityIdentifiers to generated GameEntities.</param>
         public EntityGenerator(IdentifierGenerator idGenerator)
         {
-            IdGenerator = idGenerator;
+            this.IdGenerator = idGenerator;
         }
 
+        private static GameCoordinate GridSize { get; } = new GameCoordinate(0.1f, 0.1f);
+
+        private IdentifierGenerator IdGenerator { get; }
+
+        /// <summary>
+        /// Generates a GameEntity.
+        /// </summary>
+        /// <param name="type">EntityType of the GameEntity.</param>
+        /// <param name="identifier">EntityIdentifier of the GameEntity.</param>
+        /// <param name="args">CreationArgs used to create the GameEntity.</param>
+        /// <returns>The created GameEntity.</returns>
         public GameEntity GenerateEntity(EntityType type, EntityIdentifier identifier, CreationArgs args)
         {
             switch (type)
@@ -62,20 +76,37 @@ namespace whateverthefuck.src.model
             }
         }
 
+        /// <summary>
+        /// Generates a GameEntity from a CreateEntityEvent.
+        /// </summary>
+        /// <param name="e">The CreateEntityEvent containing the creation inforomation.</param>
+        /// <returns>The created GameEntity.</returns>
         public GameEntity GenerateEntity(CreateEntityEvent e)
         {
-            var rt = GenerateEntity(e.EntityType, new EntityIdentifier(e.Id), e.CreationArgs);
+            var rt = this.GenerateEntity(e.EntityType, new EntityIdentifier(e.Id), e.CreationArgs);
             rt.Location = new GameCoordinate(e.X, e.Y);
             rt.CurrentHealth = e.CurrentHealth;
             rt.MaxHealth = e.MaxHealth;
             return rt;
         }
 
+        /// <summary>
+        /// Generates a GameEntity.
+        /// </summary>
+        /// <param name="e">The EntityType of the GameEntity.</param>
+        /// <param name="a">The CreationArgs used to create the GameEntity.</param>
+        /// <returns>The created GameEntity.</returns>
         public GameEntity GenerateEntity(EntityType e, CreationArgs a)
         {
-            return GenerateEntity(e, IdGenerator.GenerateNextIdentifier(), a);
+            return this.GenerateEntity(e, this.IdGenerator.GenerateNextIdentifier(), a);
         }
 
+        /// <summary>
+        /// Generates a house consisting of Blocks, Floors, and Doors.
+        /// </summary>
+        /// <param name="xorg">Grid index of houses X starting location.</param>
+        /// <param name="yorg">Grid index of houses Y starting location.</param>
+        /// <returns>The GameEntities making up the created house.</returns>
         public IEnumerable<GameEntity> GenerateHouse(int xorg, int yorg)
         {
             var dca = new DoorCreationArgs(DoorCreationArgs.Types.Wood);
@@ -94,19 +125,19 @@ namespace whateverthefuck.src.model
                     GameEntity e;
                     if (x == xorg + 1 && y == yorg)
                     {
-                        e = GenerateEntity(EntityType.Door, dca);
+                        e = this.GenerateEntity(EntityType.Door, dca);
                     }
                     else if (x == xorg || x == xorg + width - 1)
                     {
-                        e = GenerateEntity(EntityType.Block, bca);
+                        e = this.GenerateEntity(EntityType.Block, bca);
                     }
                     else if (y == yorg || y == yorg + height - 1)
                     {
-                        e = GenerateEntity(EntityType.Block, bca);
+                        e = this.GenerateEntity(EntityType.Block, bca);
                     }
                     else
                     {
-                        e = GenerateEntity(EntityType.Floor, fca);
+                        e = this.GenerateEntity(EntityType.Floor, fca);
                     }
 
                     e.Location = new GameCoordinate(x * GridSize.X, y * GridSize.Y);
@@ -127,7 +158,7 @@ namespace whateverthefuck.src.model
 
         public EntityIdentifier GenerateNextIdentifier()
         {
-            return new EntityIdentifier(IdCounter++);
+            return new EntityIdentifier(this.IdCounter++);
         }
     }
 }

@@ -36,14 +36,15 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="App.config" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+    <None Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\control\GameAction.cs" />
-    <Compile Include="src\control\HotkeyMapping.cs" />
-    <Compile Include="src\control\Input.cs" />
+    <Compile Include="src\control\Hotkeys.cs" />
     <Compile Include="src\control\InputUnion.cs" />
     <Compile Include="src\model\Ability.cs" />
     <Compile Include="src\model\ClientGameStateManager.cs" />
@@ -107,6 +108,9 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

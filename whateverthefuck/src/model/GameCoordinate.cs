@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.view;
-
-namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model
 {
+    using System;
+    using whateverthefuck.src.view;
+
+    /// <summary>
+    /// A class representing carthesian coordinate in game.
+    /// </summary>
     public class GameCoordinate : Coordinate
     {
-        public GameCoordinate(float x, float y) : base(x, y)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameCoordinate"/> class.
+        /// </summary>
+        /// <param name="x">X value of coordinate.</param>
+        /// <param name="y">Y value of coordinate.</param>
+        public GameCoordinate(float x, float y)
+            : base(x, y)
         {
 
         }
-
-        public GameCoordinate Add(float x, float y)
-        {
-            return new GameCoordinate(X + x, Y + y);
-        }
-
 
         public static GameCoordinate operator +(GameCoordinate a, GameCoordinate b)
         {
@@ -34,12 +33,17 @@ namespace whateverthefuck.src.model
         {
             return a + -b;
         }
-        
+
+        /// <summary>
+        /// Calculates distance to another GameCoordinate
+        /// </summary>
+        /// <param name="other">Coordinate to which the distance is to be calculated.</param>
+        /// <returns>The distance between this GameCoordinate and the given GameCoordinate.</returns>
         public float Distance(GameCoordinate other)
         {
-            var xDistance = X - other.X;
-            var yDistance = Y - other.Y;
-            return (float)Math.Sqrt(xDistance * xDistance + yDistance * yDistance);
+            var xDistance = this.X - other.X;
+            var yDistance = this.Y - other.Y;
+            return (float)Math.Sqrt((xDistance * xDistance) + (yDistance * yDistance));
         }
     }
 }
