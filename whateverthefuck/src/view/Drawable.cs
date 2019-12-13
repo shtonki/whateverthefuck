@@ -38,58 +38,58 @@
 
     public class Line : Drawable
     {
-        public float X1;
-        public float Y1;
-        public float X2;
-        public float Y2;
+        private float x1;
+        private float y1;
+        private float x2;
+        private float y2;
 
         public Line(GameEntity o, GameEntity e)
             : base(new GameCoordinate(0, 0))
         {
-            this.X1 = o.Center.X;
-            this.Y1 = o.Center.Y;
-            this.X2 = e.Center.X;
-            this.Y2 = e.Center.Y;
+            this.x1 = o.Center.X;
+            this.y1 = o.Center.Y;
+            this.x2 = e.Center.X;
+            this.y2 = e.Center.Y;
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            drawAdapter.FillLine(this.X1, this.Y1, this.X2, this.Y2, Color.White);
+            drawAdapter.FillLine(this.x1, this.y1, this.x2, this.y2, Color.White);
         }
     }
 
     public class Rectangle : Drawable
     {
-        public float X1;
-        public float Y1;
-        public float X2;
-        public float Y2;
+        private float x1;
+        private float y1;
+        private float x2;
+        private float y2;
 
-        public Color DrawColor;
+        private Color drawColor;
 
         public Rectangle(GameEntity o, Color drawColor)
             : base(new GameCoordinate(0, 0))
         {
-            this.X1 = o.Left;
-            this.Y1 = o.Bottom;
-            this.X2 = o.Right;
-            this.Y2 = o.Top;
-            this.DrawColor = drawColor;
+            this.x1 = o.Left;
+            this.y1 = o.Bottom;
+            this.x2 = o.Right;
+            this.y2 = o.Top;
+            this.drawColor = drawColor;
         }
 
         public Rectangle(float x1, float y1, float x2, float y2, Color drawColor)
             : base(new GameCoordinate(0, 0))
         {
-            this.X1 = x1;
-            this.Y1 = y1;
-            this.X2 = x2;
-            this.Y2 = y2;
-            this.DrawColor = drawColor;
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+            this.drawColor = drawColor;
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            drawAdapter.TraceRectangle(this.X1, this.Y1, this.X2, this.Y2, this.DrawColor, 4);
+            drawAdapter.TraceRectangle(this.x1, this.y1, this.x2, this.y2, this.drawColor, 4);
         }
     }
 }

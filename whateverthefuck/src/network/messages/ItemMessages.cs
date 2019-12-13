@@ -36,11 +36,6 @@
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     internal class ItemMessageBody : IMessageBody
     {
-        public int LooteeEntityId;
-
-        public ItemType Type;
-        public int StackSize;
-        public Rarity Rarity;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         private int[] bonuses = new int[4];
 
@@ -56,6 +51,14 @@
             var bc = item.Bonuses.Select(b => b.ToInt()).ToArray();
             Array.Copy(bc, 0, this.bonuses, 0, bc.Length);
         }
+
+        public int LooteeEntityId { get; set; }
+
+        public ItemType Type { get; set; }
+
+        public int StackSize { get; set; }
+
+        public Rarity Rarity { get; set; }
 
         public IEnumerable<ItemBonus> Bonuses => this.bonuses.Select(b => new ItemBonus(b));
     }

@@ -189,9 +189,8 @@
 
         private bool HandleGameEvent(GameEvent e)
         {
-            if (e is CreateEntityEvent)
+            if (e is CreateEntityEvent cee)
             {
-                CreateEntityEvent cee = (CreateEntityEvent)e;
                 var entity = this.EntityGenerator.GenerateEntity(cee);
                 entity.OnDeath += cee.OnDeathCallback;
                 entity.OnStep += cee.OnStepCallback;
@@ -201,15 +200,13 @@
 
                 this.AddEntities(entity);
             }
-            else if (e is DestroyEntityEvent)
+            else if (e is DestroyEntityEvent dee)
             {
-                DestroyEntityEvent dee = (DestroyEntityEvent)e;
                 var entity = this.GetEntityById(dee.Id);
                 this.RemoveEntity(entity);
             }
-            else if (e is UpdateMovementEvent)
+            else if (e is UpdateMovementEvent uce)
             {
-                UpdateMovementEvent uce = (UpdateMovementEvent)e;
                 var entity = this.GetEntityById(uce.Id);
 
                 if (entity == null)
@@ -220,9 +217,8 @@
 
                 entity.Movements = uce.Movements;
             }
-            else if (e is UseAbilityEvent)
+            else if (e is UseAbilityEvent uae)
             {
-                UseAbilityEvent uae = (UseAbilityEvent)e;
                 var caster = this.GetEntityById(uae.Id);
                 var castee = this.GetEntityById(uae.TargetId);
 
@@ -238,11 +234,8 @@
                 p.Movements.FollowId = castee.Identifier.Id;
                 this.AddEntities(p);
             }
-            else if (e is DealDamageEvent)
+            else if (e is DealDamageEvent damage)
             {
-                DealDamageEvent damage = (DealDamageEvent)e;
-
-                var attacker = this.GetEntityById(damage.AttackerId);
                 var defender = this.GetEntityById(damage.DefenderId);
 
                 defender.CurrentHealth -= damage.Damage;

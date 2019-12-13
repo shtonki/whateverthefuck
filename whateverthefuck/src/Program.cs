@@ -8,7 +8,7 @@
 
     internal class Program
     {
-        public static ClientGameStateManager GameStateManager = new ClientGameStateManager();
+        public static ClientGameStateManager GameStateManager { get; } = new ClientGameStateManager();
 
         public static WhateverClientConnection ServerConnection { get; private set; }
 

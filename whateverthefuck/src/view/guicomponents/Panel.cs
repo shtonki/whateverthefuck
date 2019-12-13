@@ -23,7 +23,7 @@
         public void AddMenuBar()
         {
             this.MBar = new MenuBar(this.Size.X);
-            base.Add(this.MBar);
+            this.Add(this.MBar);
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
@@ -98,9 +98,7 @@
         public override void DrawMe(DrawAdapter drawAdapter)
         {
             drawAdapter.ActivateScissor(this.Location as GLCoordinate, this.Size);
-            //drawAdapter.Scale(Zoomer.CurrentZoom, Zoomer.CurrentZoom);
             base.DrawMe(drawAdapter);
-            //drawAdapter.Scale(1/Zoomer.CurrentZoom, 1/Zoomer.CurrentZoom);
             drawAdapter.DeactivateScissor();
         }
 
