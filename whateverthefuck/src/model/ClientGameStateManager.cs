@@ -318,11 +318,22 @@ namespace whateverthefuck.src.model
             }
             else
             {
-                var action = Input.LookupHotkey(input);
-
-                if (action != GameAction.Undefined)
+                if (input.IsMouseInput)
                 {
-                    ActivateAction(action);
+                    var v = GetEntityAtLocation(GUI.Camera.GLToGameCoordinate(input.Location));
+                    if (v != null)
+                    {
+                        Logging.Log(v);
+                    }
+                }
+                else if (input.IsKeyboardInput)
+                {
+                    var action = Input.LookupHotkey(input);
+
+                    if (action != GameAction.Undefined)
+                    {
+                        ActivateAction(action);
+                    }
                 }
             }
         }
