@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.model;
-
-namespace whateverthefuck.src.view
+﻿namespace whateverthefuck.src.view
 {
+    using System;
+    using whateverthefuck.src.model;
+
     public abstract class Coordinate
     {
         public float X { get; set; }
@@ -15,7 +11,7 @@ namespace whateverthefuck.src.view
 
         protected Coordinate(float x, float y)
         {
-            (X, Y) = (x, y);
+            (this.X, this.Y) = (x, y);
         }
 
         public GLCoordinate ToGLCoordinate()
@@ -36,7 +32,7 @@ namespace whateverthefuck.src.view
 
             var deltaX = c1.X - c2.X;
             var deltaY = c1.Y - c2.Y;
-            var alpha = Math.Atan2(deltaY, -deltaX) + (Math.PI/2);
+            var alpha = Math.Atan2(deltaY, -deltaX) + (Math.PI / 2);
             return (float)alpha;
         }
 
@@ -54,7 +50,7 @@ namespace whateverthefuck.src.view
 
         public override string ToString()
         {
-            return String.Format("[{0:0.00} {1:0.00}]", X, Y);
+            return string.Format("[{0:0.00} {1:0.00}]", this.X, this.Y);
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.src.util
+﻿namespace whateverthefuck.src.util
 {
     public static class WhateverEncoding
     {

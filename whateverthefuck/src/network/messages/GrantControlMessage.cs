@@ -1,43 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.model;
-using whateverthefuck.src.model.entities;
-using whateverthefuck.src.util;
-
-namespace whateverthefuck.src.network.messages
+﻿namespace whateverthefuck.src.network.messages
 {
+    using System.Runtime.InteropServices;
+    using whateverthefuck.src.model;
+
     public class GrantControlMessage : WhateverthefuckMessage
     {
-        public GrantControlMessage() : base(MessageType.GrantControlMessage)
+        public GrantControlMessage()
+            : base(MessageType.GrantControlMessage)
         {
-            MessageBody = new GrantControlBody();
+            this.MessageBody = new GrantControlBody();
         }
 
-        public GrantControlMessage(GameEntity entity) : base(MessageType.GrantControlMessage)
+        public GrantControlMessage(GameEntity entity)
+            : base(MessageType.GrantControlMessage)
         {
-            MessageBody = new GrantControlBody(entity);
+            this.MessageBody = new GrantControlBody(entity);
         }
 
-        public GrantControlMessage(int id) : base(MessageType.GrantControlMessage)
+        public GrantControlMessage(int id)
+            : base(MessageType.GrantControlMessage)
         {
             var v = new GrantControlBody();
             v.Id = id;
-            MessageBody = v;
+            this.MessageBody = v;
         }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct GrantControlBody : MessageBody
+    public struct GrantControlBody : IMessageBody
     {
         public int Id;
 
         public GrantControlBody(GameEntity entity)
         {
-            Id = entity.Identifier.Id;
+            this.Id = entity.Identifier.Id;
         }
     }
 }

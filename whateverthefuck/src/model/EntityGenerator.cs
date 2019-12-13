@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.model.entities;
-
-namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model
 {
+    using System;
+    using System.Collections.Generic;
+    using whateverthefuck.src.model.entities;
+
     /// <summary>
     /// Responsible for generating GameEntities from a given EntityType and CreationArgs.
     /// </summary>

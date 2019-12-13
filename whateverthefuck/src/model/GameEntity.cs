@@ -175,6 +175,11 @@
         }
 
         /// <summary>
+        /// Gets or sets the GameEntityState of the GameEntity.
+        /// </summary>
+        public GameEntityState State { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the Color used to draw the background of the GameEntity.
         /// </summary>
         protected Color DrawColor { get; set; } = Color.Black;
@@ -188,8 +193,6 @@
         /// Gets or sets something that's probably pretty cool if I knew what this did.
         /// </summary>
         private Color HighlightColor { get; set; } = Color.Transparent;
-
-        private GameEntityState State { get; set; }
 
         /// <summary>
         /// The function used to draw the GameEntity.
@@ -263,7 +266,7 @@
         /// <returns>A nice string you can print the fuck out of.</returns>
         public override string ToString()
         {
-            return String.Format("{0} at {1}:{2}", this.EntityType.ToString(), this.Location.X.ToString(), this.Location.Y.ToString());
+            return string.Format("{0} at {1}:{2}", this.EntityType.ToString(), this.Location.X.ToString(), this.Location.Y.ToString());
         }
 
         /// <summary>
@@ -380,7 +383,7 @@
         /// <summary>
         /// Encodes a MovementStruct into a byte[].
         /// </summary>
-        /// <returns>The bytes representing the MovementStruct</returns>
+        /// <returns>The bytes representing the MovementStruct.</returns>
         public byte[] Encode()
         {
             if (this.FollowId.HasValue)

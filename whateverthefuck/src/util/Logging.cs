@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.src.util
+﻿namespace whateverthefuck.src.util
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     public abstract class LoggingOutput
     {
         protected LoggingOutput(Logging.LoggingLevel loggingLevel, bool enabled)
         {
-            LoggingLevel = loggingLevel;
-            Enabled = enabled;
+            this.LoggingLevel = loggingLevel;
+            this.Enabled = enabled;
         }
 
-        protected bool DoWrite(Logging.LoggingLevel l) => Enabled && l >= LoggingLevel;
+        protected bool DoWrite(Logging.LoggingLevel l) => this.Enabled && l >= this.LoggingLevel;
 
         protected Logging.LoggingLevel LoggingLevel { get; set; }
 
@@ -26,13 +23,14 @@ namespace whateverthefuck.src.util
 
     public class ConsoleOutput : LoggingOutput
     {
-        public ConsoleOutput(Logging.LoggingLevel loggingLevel, bool enabled) : base(loggingLevel, enabled)
+        public ConsoleOutput(Logging.LoggingLevel loggingLevel, bool enabled)
+            : base(loggingLevel, enabled)
         {
         }
 
         public override void Write(string message, Logging.LoggingLevel loggingLevel)
         {
-            if (!DoWrite(loggingLevel))
+            if (!this.DoWrite(loggingLevel))
             {
                 return;
             }
@@ -45,24 +43,26 @@ namespace whateverthefuck.src.util
     {
         private string filePath;
 
-        public FileOutput(Logging.LoggingLevel loggingLevel, bool enabled) : base(loggingLevel, enabled)
+        public FileOutput(Logging.LoggingLevel loggingLevel, bool enabled)
+            : base(loggingLevel, enabled)
         {
-            filePath = "log.txt";
+            this.filePath = "log.txt";
         }
 
-        public FileOutput(string filePath) : this(Logging.LoggingLevel.All, true)
+        public FileOutput(string filePath)
+            : this(Logging.LoggingLevel.All, true)
         {
             this.filePath = filePath;
         }
 
         public override void Write(string message, Logging.LoggingLevel loggingLevel)
         {
-            if (!DoWrite(loggingLevel))
+            if (!this.DoWrite(loggingLevel))
             {
                 return;
             }
 
-            using (StreamWriter sw = File.AppendText(filePath))
+            using (StreamWriter sw = File.AppendText(this.filePath))
             {
                 sw.WriteLine(DateTime.Now.ToString("h:mm:ss tt") + "*" + loggingLevel + "*: " + message);
             }

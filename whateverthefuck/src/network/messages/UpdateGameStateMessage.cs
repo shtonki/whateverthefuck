@@ -1,41 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.model;
-using whateverthefuck.src.util;
-
-namespace whateverthefuck.src.network.messages
+﻿namespace whateverthefuck.src.network.messages
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using whateverthefuck.src.model;
+
     public class UpdateGameStateMessage : WhateverthefuckMessage
     {
         public int Tick { get; private set; }
 
         public List<GameEvent> Events { get; private set; }
 
-        public UpdateGameStateMessage(int tick, params GameEvent[] es) : this(tick, (IEnumerable<GameEvent>)es)
+        public UpdateGameStateMessage(int tick, params GameEvent[] es)
+            : this(tick, (IEnumerable<GameEvent>)es)
         {
         }
 
-        public UpdateGameStateMessage(int tick, IEnumerable<GameEvent> events) : base(MessageType.UpdateGameStateMessage)
+        public UpdateGameStateMessage(int tick, IEnumerable<GameEvent> events)
+            : base(MessageType.UpdateGameStateMessage)
         {
-            Tick = tick;
-            Events = events.ToList();
+            this.Tick = tick;
+            this.Events = events.ToList();
         }
 
-        public UpdateGameStateMessage() : base(MessageType.UpdateGameStateMessage)
+        public UpdateGameStateMessage()
+            : base(MessageType.UpdateGameStateMessage)
         {
-            Events = new List<GameEvent>();
+            this.Events = new List<GameEvent>();
         }
 
         protected override byte[] EncodeBody()
         {
             List<byte> bs = new List<byte>();
 
-            bs.AddRange(BitConverter.GetBytes(Tick));
+            bs.AddRange(BitConverter.GetBytes(this.Tick));
 
-            foreach (var ge in Events)
+            foreach (var ge in this.Events)
             {
                 // Structure of encoding:
                 // one byte type of event
@@ -55,7 +55,7 @@ namespace whateverthefuck.src.network.messages
             var events = new List<GameEvent>();
 
             int bytec = 0;
-            Tick = BitConverter.ToInt32(bs, bytec);
+            this.Tick = BitConverter.ToInt32(bs, bytec);
             bytec += sizeof(int);
 
             while (true)
@@ -76,7 +76,7 @@ namespace whateverthefuck.src.network.messages
                 events.Add(GameEvent.DecodeWithEventType(gameEventType, body.ToArray()));
             }
 
-            Events = events.ToList();
+            this.Events = events.ToList();
         }
     }
 }

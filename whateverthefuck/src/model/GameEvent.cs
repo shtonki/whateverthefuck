@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.model.entities;
-using whateverthefuck.src.util;
-
-namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     /// <summary>
     /// Represents an event which alters a GameState.
     /// </summary>
@@ -51,38 +46,38 @@ namespace whateverthefuck.src.model
     {
         public int Id { get; private set; }
 
-        public Abilities AbilityType { get; private set; } 
+        public Abilities AbilityType { get; private set; }
 
         public int TargetId { get; private set; }
 
         public UseAbilityEvent(GameEntity caster, GameEntity target, Ability ability)
         {
-            Type = GameEventType.UseAbility;
-            
-            Id = caster.Identifier.Id;
-            AbilityType = ability.AbilityType;
-            TargetId = target.Identifier.Id;
+            this.Type = GameEventType.UseAbility;
+
+            this.Id = caster.Identifier.Id;
+            this.AbilityType = ability.AbilityType;
+            this.TargetId = target.Identifier.Id;
         }
 
         public UseAbilityEvent(IEnumerable<byte> bs)
         {
-            Type = GameEventType.UseAbility;
+            this.Type = GameEventType.UseAbility;
 
-            Id = BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int)); 
+            this.Id = BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
 
-            AbilityType = (Abilities)BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int)); 
+            this.AbilityType = (Abilities)BitConverter.ToInt32(bs.ToArray(), 0);
+            bs = bs.Skip(sizeof(int));
 
-            TargetId = BitConverter.ToInt32(bs.ToArray(), 0);
+            this.TargetId = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int));
         }
 
         public override byte[] ToBytes()
         {
-            return BitConverter.GetBytes(Id).Concat(
-                BitConverter.GetBytes((int)AbilityType).Concat(
-                BitConverter.GetBytes(TargetId)))
+            return BitConverter.GetBytes(this.Id).Concat(
+                BitConverter.GetBytes((int)this.AbilityType).Concat(
+                BitConverter.GetBytes(this.TargetId)))
                 .ToArray();
         }
     }
@@ -111,60 +106,60 @@ namespace whateverthefuck.src.model
 
         public CreateEntityEvent(GameEntity e)
         {
-            Type = GameEventType.Create;
-            
-            Id = e.Identifier.Id;
-            EntityType = e.EntityType;
-            X = e.Location.X;
-            Y = e.Location.Y;
-            CurrentHealth = e.CurrentHealth;
-            MaxHealth = e.MaxHealth;
+            this.Type = GameEventType.Create;
+
+            this.Id = e.Identifier.Id;
+            this.EntityType = e.EntityType;
+            this.X = e.Location.X;
+            this.Y = e.Location.Y;
+            this.CurrentHealth = e.CurrentHealth;
+            this.MaxHealth = e.MaxHealth;
 
             if (e.CreationArgs == null)
             {
-                CreationArgs = new CreationArgs(0);
+                this.CreationArgs = new CreationArgs(0);
             }
             else
-            { 
-                CreationArgs = e.CreationArgs;
+            {
+                this.CreationArgs = e.CreationArgs;
             }
         }
 
         public CreateEntityEvent(IEnumerable<byte> bs)
         {
-            Type = GameEventType.Create;
+            this.Type = GameEventType.Create;
 
-            Id = BitConverter.ToInt32(bs.ToArray(), 0);
+            this.Id = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int));
 
-            EntityType = (EntityType)BitConverter.ToInt32(bs.ToArray(), 0);
+            this.EntityType = (EntityType)BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int));
 
-            X = BitConverter.ToSingle(bs.ToArray(), 0);
+            this.X = BitConverter.ToSingle(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(float));
 
-            Y = BitConverter.ToSingle(bs.ToArray(), 0);
+            this.Y = BitConverter.ToSingle(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(float));
 
-            CurrentHealth = BitConverter.ToInt32(bs.ToArray(), 0);
+            this.CurrentHealth = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int));
 
-            MaxHealth = BitConverter.ToInt32(bs.ToArray(), 0);
+            this.MaxHealth = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int));
 
-            CreationArgs = new CreationArgs(BitConverter.ToUInt64(bs.ToArray(), 0));
+            this.CreationArgs = new CreationArgs(BitConverter.ToUInt64(bs.ToArray(), 0));
             bs = bs.Skip(sizeof(long));
         }
 
         public override byte[] ToBytes()
         {
-            return BitConverter.GetBytes(Id).Concat(
-                BitConverter.GetBytes((int)EntityType).Concat(
-                BitConverter.GetBytes(X).Concat(
-                BitConverter.GetBytes(Y).Concat(
-                BitConverter.GetBytes(CurrentHealth).Concat(
-                BitConverter.GetBytes(MaxHealth).Concat(
-                BitConverter.GetBytes(CreationArgs.Value)
+            return BitConverter.GetBytes(this.Id).Concat(
+                BitConverter.GetBytes((int)this.EntityType).Concat(
+                BitConverter.GetBytes(this.X).Concat(
+                BitConverter.GetBytes(this.Y).Concat(
+                BitConverter.GetBytes(this.CurrentHealth).Concat(
+                BitConverter.GetBytes(this.MaxHealth).Concat(
+                BitConverter.GetBytes(this.CreationArgs.Value)
                 )))))).ToArray();
         }
     }
@@ -179,40 +174,40 @@ namespace whateverthefuck.src.model
 
         public DealDamageEvent(int attackerId, int defenderId, int damage)
         {
-            AttackerId = attackerId;
-            DefenderId = defenderId;
-            Damage = damage;
+            this.AttackerId = attackerId;
+            this.DefenderId = defenderId;
+            this.Damage = damage;
         }
 
         public DealDamageEvent(GameEntity attacker, GameEntity defender, int damage)
         {
-            Type = GameEventType.Damage;
+            this.Type = GameEventType.Damage;
 
-            AttackerId = attacker.Identifier.Id;
-            DefenderId = defender.Identifier.Id;
-            Damage = damage;
+            this.AttackerId = attacker.Identifier.Id;
+            this.DefenderId = defender.Identifier.Id;
+            this.Damage = damage;
         }
 
         public DealDamageEvent(IEnumerable<byte> bs)
         {
-            Type = GameEventType.Damage;
+            this.Type = GameEventType.Damage;
             int bytec = 0;
 
-            AttackerId = BitConverter.ToInt32(bs.ToArray(), bytec);
+            this.AttackerId = BitConverter.ToInt32(bs.ToArray(), bytec);
             bytec += sizeof(int);
 
-            DefenderId = BitConverter.ToInt32(bs.ToArray(), bytec);
+            this.DefenderId = BitConverter.ToInt32(bs.ToArray(), bytec);
             bytec += sizeof(int);
 
-            Damage = BitConverter.ToInt32(bs.ToArray(), bytec);
+            this.Damage = BitConverter.ToInt32(bs.ToArray(), bytec);
             bytec += sizeof(int);
         }
 
         public override byte[] ToBytes()
         {
-            return BitConverter.GetBytes(AttackerId).Concat(
-                BitConverter.GetBytes(DefenderId).Concat(
-                BitConverter.GetBytes(Damage)  
+            return BitConverter.GetBytes(this.AttackerId).Concat(
+                BitConverter.GetBytes(this.DefenderId).Concat(
+                BitConverter.GetBytes(this.Damage)
                     )).ToArray();
         }
     }
@@ -223,21 +218,21 @@ namespace whateverthefuck.src.model
 
         public DestroyEntityEvent(GameEntity e)
         {
-            Type = GameEventType.Destroy;
+            this.Type = GameEventType.Destroy;
 
-            Id = e.Identifier.Id;
+            this.Id = e.Identifier.Id;
         }
 
         public DestroyEntityEvent(IEnumerable<byte> bs)
         {
-            Type = GameEventType.Destroy;
+            this.Type = GameEventType.Destroy;
 
-            Id = BitConverter.ToInt32(bs.ToArray(), 0);
+            this.Id = BitConverter.ToInt32(bs.ToArray(), 0);
         }
 
         public override byte[] ToBytes()
         {
-            return BitConverter.GetBytes(Id).ToArray();
+            return BitConverter.GetBytes(this.Id).ToArray();
         }
     }
 
@@ -247,31 +242,32 @@ namespace whateverthefuck.src.model
 
         public MovementStruct Movements { get; private set; }
 
-        public UpdateMovementEvent(GameEntity entity) : this(entity.Identifier.Id, entity.Movements)
+        public UpdateMovementEvent(GameEntity entity)
+            : this(entity.Identifier.Id, entity.Movements)
         {
         }
 
         public UpdateMovementEvent(int id, MovementStruct movements)
         {
-            Type = GameEventType.Control;
+            this.Type = GameEventType.Control;
 
-            Id = id;
-            Movements = movements;
+            this.Id = id;
+            this.Movements = movements;
         }
 
         public UpdateMovementEvent(IEnumerable<byte> bs)
         {
-            Type = GameEventType.Control;
+            this.Type = GameEventType.Control;
 
-            Id = BitConverter.ToInt32(bs.ToArray(), 0);
+            this.Id = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int)).ToArray();
-            Movements = MovementStruct.Decode(bs.ToArray());
+            this.Movements = MovementStruct.Decode(bs.ToArray());
         }
 
         public override byte[] ToBytes()
         {
-            return BitConverter.GetBytes(Id).Concat(
-                Movements.Encode())
+            return BitConverter.GetBytes(this.Id).Concat(
+                this.Movements.Encode())
                 .ToArray();
         }
     }

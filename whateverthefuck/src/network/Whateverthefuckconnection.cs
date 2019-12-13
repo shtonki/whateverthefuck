@@ -1,13 +1,12 @@
-﻿using System;
-using System.Net.Sockets;
-using System.Runtime.Remoting.Messaging;
-using System.Threading;
-using whateverthefuck.src.network.messages;
-using whateverthefuck.src.util;
-using static whateverthefuck.src.network.messages.WhateverthefuckMessage;
-
-namespace whateverthefuck.src.network
+﻿namespace whateverthefuck.src.network
 {
+    using System;
+    using System.Net.Sockets;
+    using System.Threading;
+    using whateverthefuck.src.network.messages;
+    using whateverthefuck.src.util;
+    using static whateverthefuck.src.network.messages.WhateverthefuckMessage;
+
     public abstract class WhateverthefuckConnection
     {
         private const bool LogOutgoingMessages = false;
@@ -19,8 +18,8 @@ namespace whateverthefuck.src.network
 
         protected WhateverthefuckConnection(NetworkStream networkStream)
         {
-            NetworkStream = networkStream;
-            new Thread(ReceiveLoop).Start();
+            this.NetworkStream = networkStream;
+            new Thread(this.ReceiveLoop).Start();
         }
 
         public void SendMessage(WhateverthefuckMessage message)
@@ -28,9 +27,9 @@ namespace whateverthefuck.src.network
             byte[] bytes = WhateverthefuckMessage.EncodeMessage(message);
             try
             {
-                NetworkStream.Write(bytes, 0, bytes.Length);
+                this.NetworkStream.Write(bytes, 0, bytes.Length);
             }
-            catch(System.IO.IOException)
+            catch (System.IO.IOException)
             {
             }
 
@@ -54,31 +53,30 @@ namespace whateverthefuck.src.network
 
                 try
                 {
-                    bytesRead = NetworkStream.Read(HeaderBuffer, 0, WhateverthefuckMessage.HeaderSize);
+                    bytesRead = this.NetworkStream.Read(this.HeaderBuffer, 0, WhateverthefuckMessage.HeaderSize);
                 }
                 catch (System.IO.IOException)
                 {
-                    HandleConnectionDeath();
+                    this.HandleConnectionDeath();
                     return;
                 }
 
-                if (bytesRead != WhateverthefuckMessage.HeaderSize) 
+                if (bytesRead != WhateverthefuckMessage.HeaderSize)
                 {
                     Logging.Log("Broken message header.", Logging.LoggingLevel.Error);
                     continue;
                 }
 
-                WhateverMessageHeader header = WhateverthefuckMessage.ParseHeader(HeaderBuffer);
+                WhateverMessageHeader header = WhateverthefuckMessage.ParseHeader(this.HeaderBuffer);
 
                 MessageType messageType = (MessageType)header.Type;
                 int messageLength = header.Size;
 
-                byte[] BodyBuffer = new byte[messageLength];
-                bytesRead = NetworkStream.Read(BodyBuffer, 0, messageLength);
+                byte[] bodyBuffer = new byte[messageLength];
+                bytesRead = this.NetworkStream.Read(bodyBuffer, 0, messageLength);
                 if (bytesRead != messageLength) { throw new Exception("error reading message body"); }
 
-                //var message = WhateverthefuckMessage.Decode(messageType, BodyBuffer);
-                WhateverthefuckMessage message = WhateverthefuckMessage.DecodeMessage(header, BodyBuffer);
+                WhateverthefuckMessage message = WhateverthefuckMessage.DecodeMessage(header, bodyBuffer);
 
                 if (LogIncomingMessages)
                 {
@@ -87,7 +85,7 @@ namespace whateverthefuck.src.network
 #pragma warning restore CS0162 // Unreachable code detected
                 }
 
-                HandleMessage(message);
+                this.HandleMessage(message);
             }
         }
     }

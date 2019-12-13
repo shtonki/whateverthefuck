@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using whateverthefuck.src.network;
-
-namespace whateverthefuck.src.util
+﻿namespace whateverthefuck.src.util
 {
+    using System;
+
     public static class UserSettings
     {
         public static ConfigInfo Config { get; set; }
@@ -33,7 +27,6 @@ namespace whateverthefuck.src.util
 
     public class ConfigInfo
     {
-        //public LoginCredentials LoginCredentials;
         public string Username;
 
         public bool ConnectToLocalHost;

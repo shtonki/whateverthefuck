@@ -1,46 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
-using OpenTK.Input;
-using whateverthefuck.src.control;
-using whateverthefuck.src.model;
-using whateverthefuck.src.util;
-
-namespace whateverthefuck.src.view
+﻿namespace whateverthefuck.src.view
 {
+    using System;
+    using System.Drawing;
+    using System.Linq;
+    using System.Threading;
+    using OpenTK;
+    using OpenTK.Graphics;
+    using OpenTK.Graphics.OpenGL;
+    using OpenTK.Input;
+    using whateverthefuck.src.control;
+
     internal class GibbWindow : GameWindow
     {
         private ManualResetEventSlim LoadResetEvent;
 
-        public GibbWindow(ManualResetEventSlim loadResetEvent) : base(600, 600, new GraphicsMode(32, 24, 0, 32), "GibbWindow")
+        public GibbWindow(ManualResetEventSlim loadResetEvent)
+            : base(600, 600, new GraphicsMode(32, 24, 0, 32), "GibbWindow")
         {
-            ClientSize = new Size(600, 600);
+            this.ClientSize = new Size(600, 600);
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-            LoadResetEvent = loadResetEvent;
+            this.LoadResetEvent = loadResetEvent;
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            GL.Viewport(0, 0, Width, Height);
+            GL.Viewport(0, 0, this.Width, this.Height);
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            if (LoadResetEvent != null)
+            if (this.LoadResetEvent != null)
             {
-                LoadResetEvent.Set();
+                this.LoadResetEvent.Set();
             }
         }
 
@@ -53,15 +49,15 @@ namespace whateverthefuck.src.view
 
             var newSecond = DateTime.Now.Second;
 
-            if (newSecond == LastSecond)
+            if (newSecond == this.LastSecond)
             {
-                RenderCounter++;
+                this.RenderCounter++;
             }
             else
             {
-                LastSecond = newSecond;
-                Title = RenderCounter.ToString();
-                RenderCounter = 0;
+                this.LastSecond = newSecond;
+                this.Title = this.RenderCounter.ToString();
+                this.RenderCounter = 0;
             }
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -80,12 +76,12 @@ namespace whateverthefuck.src.view
             // Take account of Camera location and zoom
             if (GUI.Camera != null)
             {
-                //GL.Scale(GUI.Camera.Zoom.CurrentZoom, GUI.Camera.Zoom.CurrentZoom, 0);
-                //GL.Translate(-GUI.Camera.Location.X, -GUI.Camera.Location.Y, 0);
+                // GL.Scale(GUI.Camera.Zoom.CurrentZoom, GUI.Camera.Zoom.CurrentZoom, 0);
+                // GL.Translate(-GUI.Camera.Location.X, -GUI.Camera.Location.Y, 0);
             }
 
             // Draw entities with account to Camera location and zoom
-            // @Reconsider: refactor GetAllDrawables to GetAllEntities 
+            // @Reconsider: refactor GetAllDrawables to GetAllEntities
             // @High cost operation warning: Order by will eat many cycles, be very careful
             foreach (var drawable in GUI.GetAllDrawables().OrderBy(d => d.Height))
             {

@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using whateverthefuck.src.model;
-using whateverthefuck.src.model.entities;
-using whateverthefuck.src.network;
-using whateverthefuck.src.network.messages;
-using whateverthefuck.src.util;
-using whateverthefuck.src.view;
-
-namespace whateverthefuck
+﻿namespace whateverthefuck
 {
+    using System;
+    using whateverthefuck.src.model;
+    using whateverthefuck.src.network;
+    using whateverthefuck.src.util;
+    using whateverthefuck.src.view;
+
     internal class Program
     {
         public static ClientGameStateManager GameStateManager = new ClientGameStateManager();
 
         public static WhateverClientConnection ServerConnection { get; private set; }
 
-        public static void Main(String[] args)
+        public static void Main(string[] args)
         {
 #if false
             ItemBonus b1 = new ItemBonus(0x00040014);
@@ -62,7 +57,7 @@ namespace whateverthefuck
             Logging.Log("Connected to Server", Logging.LoggingLevel.Info);
 
             UserLogin.Login(UserSettings.Config.Username);
-            Logging.Log(String.Format("Logged on to Server as {0}", UserSettings.Config.Username), Logging.LoggingLevel.Info);
+            Logging.Log(string.Format("Logged on to Server as {0}", UserSettings.Config.Username), Logging.LoggingLevel.Info);
 
 #endif
         }

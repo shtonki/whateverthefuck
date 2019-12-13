@@ -1,14 +1,13 @@
-﻿using System.Drawing;
-using whateverthefuck.src.util;
-using whateverthefuck.src.view;
-
-namespace whateverthefuck.src.model.entities
+﻿namespace whateverthefuck.src.model.entities
 {
+    using whateverthefuck.src.util;
+
     public class PlayerCharacter : Character
     {
-        public PlayerCharacter(EntityIdentifier identifier, CreationArgs args) : base(identifier, EntityType.PlayerCharacter, args)
+        public PlayerCharacter(EntityIdentifier identifier, CreationArgs args)
+            : base(identifier, EntityType.PlayerCharacter, args)
         {
-            DrawColor = Coloring.RandomColor();
+            this.DrawColor = Coloring.RandomColor();
         }
     }
 }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.src.util
+﻿namespace whateverthefuck.src.util
 {
+    using System;
+
     public class WhateverthefuckVersion
     {
         public short Major { get; }
@@ -22,15 +18,15 @@ namespace whateverthefuck.src.util
 
         private WhateverthefuckVersion(short major, short minor, short build, short revision)
         {
-            Major = major;
-            Minor = minor;
-            Build = build;
-            Revision = revision;
+            this.Major = major;
+            this.Minor = minor;
+            this.Build = build;
+            this.Revision = revision;
         }
 
         public override string ToString()
         {
-            return String.Format("{0}.{1}.{2}.{3}", Major, Minor, Build, Revision == Pre ? "pre" : Revision.ToString());
+            return string.Format("{0}.{1}.{2}.{3}", this.Major, this.Minor, this.Build, this.Revision == Pre ? "pre" : this.Revision.ToString());
         }
     }
 }

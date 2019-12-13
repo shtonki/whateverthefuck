@@ -1,15 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading;
-using whateverthefuck.src.control;
-using whateverthefuck.src.model.entities;
-using whateverthefuck.src.network.messages;
-using whateverthefuck.src.util;
-using whateverthefuck.src.view;
-
-namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model
 {
+    using System;
+    using System.Collections.Generic;
+    using whateverthefuck.src.model.entities;
+    using whateverthefuck.src.network.messages;
+    using whateverthefuck.src.util;
+
     public class GameState
     {
         private List<GameEntity> EntityList { get; } = new List<GameEntity>();
@@ -20,25 +16,25 @@ namespace whateverthefuck.src.model
         private List<GameEntity> AddUs = new List<GameEntity>();
         private object LockSafeList = new object();
 
-        public IEnumerable<GameEntity> AllEntities => EntityListSafe;
+        public IEnumerable<GameEntity> AllEntities => this.EntityListSafe;
 
         public int StepCounter;
 
         public void UpdateLists()
         {
-            lock (LockSafeList)
+            lock (this.LockSafeList)
             {
-                foreach (var removeMe in RemoveUs)
+                foreach (var removeMe in this.RemoveUs)
                 {
-                    EntityList.Remove(removeMe);
+                    this.EntityList.Remove(removeMe);
                 }
 
-                EntityList.AddRange(AddUs);
+                this.EntityList.AddRange(this.AddUs);
 
-                RemoveUs.Clear();
-                AddUs.Clear();
+                this.RemoveUs.Clear();
+                this.AddUs.Clear();
 
-                EntityListSafe = new List<GameEntity>(EntityList);
+                this.EntityListSafe = new List<GameEntity>(this.EntityList);
             }
         }
 
@@ -48,30 +44,30 @@ namespace whateverthefuck.src.model
 
         public GameState()
         {
-            EntityGenerator = new EntityGenerator(IdGenerator);
+            this.EntityGenerator = new EntityGenerator(this.IdGenerator);
         }
 
         public void Step()
         {
-            UpdateLists();
+            this.UpdateLists();
 
-            foreach (var entity in AllEntities)
+            foreach (var entity in this.AllEntities)
             {
                 entity.Step(this);
             }
 
-            HandleCollisions();
-            StepCounter++;
+            this.HandleCollisions();
+            this.StepCounter++;
         }
 
         public GameEntity GetEntityById(int id)
         {
-            return EntityList.Find(e => e.Identifier.Id == id);
+            return this.EntityList.Find(e => e.Identifier.Id == id);
         }
 
         private void HandleCollisions()
         {
-            var collisions = DetectCollisions();
+            var collisions = this.DetectCollisions();
             collisions.Sort((r1, r2) => r1.Overlap.CompareTo(-r2.Overlap));
 
             foreach (var collision in collisions)
@@ -91,7 +87,7 @@ namespace whateverthefuck.src.model
                     var ishare = collision.EntityI.MovementCache.X / (collision.EntityI.MovementCache.X + collision.EntityJ.MovementCache.X);
                     var jshare = 1 - ishare;
                     if (!float.IsNaN(ishare))
-                    { 
+                    {
                         collision.EntityI.Location.X -= ishare * collision.Overlap;
                         collision.EntityJ.Location.X += jshare * collision.Overlap;
                     }
@@ -134,20 +130,20 @@ namespace whateverthefuck.src.model
 
         public void HandleGameEvents(params GameEvent[] es)
         {
-            HandleGameEvents((IEnumerable<GameEvent>)es);
+            this.HandleGameEvents((IEnumerable<GameEvent>)es);
         }
 
         public void HandleGameEvents(IEnumerable<GameEvent> es)
         {
             foreach (var e in es)
             {
-                HandleGameEvent(e);
+                this.HandleGameEvent(e);
             }
         }
 
         public SyncMessageBody GenerateSyncRecord()
         {
-            var rt = new SyncMessageBody(StepCounter, HashMe());
+            var rt = new SyncMessageBody(this.StepCounter, this.HashMe());
 
             if (false)
             {
@@ -162,25 +158,25 @@ namespace whateverthefuck.src.model
             if (e is CreateEntityEvent)
             {
                 CreateEntityEvent cee = (CreateEntityEvent)e;
-                var entity = EntityGenerator.GenerateEntity(cee);
+                var entity = this.EntityGenerator.GenerateEntity(cee);
                 entity.OnDeath += cee.OnDeathCallback;
                 entity.OnStep += cee.OnStepCallback;
 
                 // it has to be like this
                 cee.OnCreationCallback?.Invoke(entity);
 
-                AddEntities(entity);
+                this.AddEntities(entity);
             }
             else if (e is DestroyEntityEvent)
             {
                 DestroyEntityEvent dee = (DestroyEntityEvent)e;
-                var entity = GetEntityById(dee.Id);
-                RemoveEntity(entity);
+                var entity = this.GetEntityById(dee.Id);
+                this.RemoveEntity(entity);
             }
             else if (e is UpdateMovementEvent)
             {
                 UpdateMovementEvent uce = (UpdateMovementEvent)e;
-                var entity = GetEntityById(uce.Id);
+                var entity = this.GetEntityById(uce.Id);
 
                 if (entity == null)
                 {
@@ -193,9 +189,9 @@ namespace whateverthefuck.src.model
             else if (e is UseAbilityEvent)
             {
                 UseAbilityEvent uae = (UseAbilityEvent)e;
-                var caster = GetEntityById(uae.Id);
-                var castee = GetEntityById(uae.TargetId);
-                
+                var caster = this.GetEntityById(uae.Id);
+                var castee = this.GetEntityById(uae.TargetId);
+
                 if (caster == null || castee == null)
                 {
                     Logging.Log("Dubious UseAbilityEvent");
@@ -203,17 +199,17 @@ namespace whateverthefuck.src.model
                 }
 
                 var ca = new ProjectileArgs(caster);
-                var p = EntityGenerator.GenerateEntity(EntityType.Projectile, EntityIdentifier.RandomReserved(), ca);
+                var p = this.EntityGenerator.GenerateEntity(EntityType.Projectile, EntityIdentifier.RandomReserved(), ca);
                 p.Location = caster.Center;
                 p.Movements.FollowId = castee.Identifier.Id;
-                AddEntities(p);
+                this.AddEntities(p);
             }
             else if (e is DealDamageEvent)
             {
                 DealDamageEvent damage = (DealDamageEvent)e;
 
-                var attacker = GetEntityById(damage.AttackerId);
-                var defender = GetEntityById(damage.DefenderId);
+                var attacker = this.GetEntityById(damage.AttackerId);
+                var defender = this.GetEntityById(damage.DefenderId);
 
                 defender.CurrentHealth -= damage.Damage;
                 defender.LastDamageTaken = damage;
@@ -230,9 +226,9 @@ namespace whateverthefuck.src.model
         {
             List<GameEntity> rt = new List<GameEntity>();
 
-            foreach (var entity in EntityListSafe)
+            foreach (var entity in this.EntityListSafe)
             {
-                if (e != entity && DetectCollisions(e, entity).HasValue)
+                if (e != entity && this.DetectCollisions(e, entity).HasValue)
                 {
                     rt.Add(entity);
                 }
@@ -243,30 +239,30 @@ namespace whateverthefuck.src.model
 
         private void AddEntities(params GameEntity[] entities)
         {
-            lock (LockSafeList)
+            lock (this.LockSafeList)
             {
-                EntityList.AddRange(entities);
+                this.EntityList.AddRange(entities);
             }
         }
 
         private void RemoveEntity(GameEntity entity)
         {
-            lock (LockSafeList)
+            lock (this.LockSafeList)
             {
-                EntityList.Remove(entity);
+                this.EntityList.Remove(entity);
             }
         }
 
         private void RemoveEntity(EntityIdentifier id)
         {
-            RemoveEntity(GetEntityById(id.Id));
+            this.RemoveEntity(this.GetEntityById(id.Id));
         }
 
         public int HashMe()
         {
             int hash = 0;
 
-            foreach (var e in AllEntities)
+            foreach (var e in this.AllEntities)
             {
                 if (e.Identifier.Id < 0)
                 {
@@ -318,18 +314,18 @@ namespace whateverthefuck.src.model
         {
             var collisions = new List<CollisionRecord>();
 
-            for (int i = 0; i < EntityList.Count; i++)
+            for (int i = 0; i < this.EntityList.Count; i++)
             {
-                var entityI = EntityList[i];
+                var entityI = this.EntityList[i];
                 if (!entityI.Collidable) { continue; }
 
-                for (int j = i+1; j < EntityList.Count; j++)
+                for (int j = i + 1; j < this.EntityList.Count; j++)
                 {
-                    var entityJ = EntityList[j];
+                    var entityJ = this.EntityList[j];
 
                     if (!entityJ.Collidable || (!entityI.Movable && !entityJ.Movable)) { continue; }
 
-                    var collision = DetectCollisions(entityI, entityJ);
+                    var collision = this.DetectCollisions(entityI, entityJ);
                     if (collision.HasValue)
                     {
                         collisions.Add(collision.Value);
@@ -342,7 +338,11 @@ namespace whateverthefuck.src.model
 
         private enum CollisionDirection
         {
-            None, Left, Right, Top, Bottom,
+            None,
+            Left,
+            Right,
+            Top,
+            Bottom,
         }
 
         private struct CollisionRecord
@@ -355,14 +355,14 @@ namespace whateverthefuck.src.model
 
             public float Overlap { get; }
 
-            public bool IsCollision => Direction != CollisionDirection.None;
+            public bool IsCollision => this.Direction != CollisionDirection.None;
 
             public CollisionRecord(GameEntity entityI, GameEntity entityJ, CollisionDirection direction, float overlap)
             {
-                EntityI = entityI;
-                EntityJ = entityJ;
-                Direction = direction;
-                Overlap = overlap;
+                this.EntityI = entityI;
+                this.EntityJ = entityJ;
+                this.Direction = direction;
+                this.Overlap = overlap;
             }
         }
     }

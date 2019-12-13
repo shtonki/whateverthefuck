@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model
 {
     public class Item
     {
@@ -18,10 +12,10 @@ namespace whateverthefuck.src.model
 
         public Item(ItemType type, int stackSize, Rarity rarity, params ItemBonus[] bonuses)
         {
-            Type = type;
-            StackSize = stackSize;
-            Rarity = rarity;
-            Bonuses = bonuses;
+            this.Type = type;
+            this.StackSize = stackSize;
+            this.Rarity = rarity;
+            this.Bonuses = bonuses;
         }
     }
 
@@ -55,7 +49,7 @@ namespace whateverthefuck.src.model
     {
         public enum BonusType
         {
-            None, 
+            None,
 
             Test1,
             Test2,
@@ -70,30 +64,30 @@ namespace whateverthefuck.src.model
 
         public BonusType Type
         {
-            get { return (BonusType)(Value & LowMask);  }
-            set { Value = (int)((Value & HighMask) | ((int)value & LowMask)); }
+            get { return (BonusType)(this.Value & LowMask);  }
+            set { this.Value = (int)((this.Value & HighMask) | ((int)value & LowMask)); }
         }
 
         public short Modifier
         {
-            get { return (short)((Value & HighMask) >> 16); }
-            set { Value = (int)((Value & LowMask) | (((int)value & LowMask) << 16)); }
+            get { return (short)((this.Value & HighMask) >> 16); }
+            set { this.Value = (int)((this.Value & LowMask) | (((int)value & LowMask) << 16)); }
         }
 
         public ItemBonus(BonusType type, short value)
         {
-            Type = type;
-            Modifier = value;
+            this.Type = type;
+            this.Modifier = value;
         }
 
         public ItemBonus(int intValue)
         {
-            Value = intValue;
+            this.Value = intValue;
         }
 
         public int ToInt()
         {
-            return Value;
+            return this.Value;
         }
     }
 }

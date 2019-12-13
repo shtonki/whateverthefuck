@@ -1,39 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.src.network.messages
+﻿namespace whateverthefuck.src.network.messages
 {
+    using System.Runtime.InteropServices;
+
     internal class ExampleMessage : WhateverthefuckMessage
     {
-        public ExampleMessage() : base(MessageType.ExampleMessage)
+        public ExampleMessage()
+            : base(MessageType.ExampleMessage)
         {
-            MessageBody = new ExampleBody(0, 0);
+            this.MessageBody = new ExampleBody(0, 0);
         }
 
-        public ExampleMessage(int a, float b) : base(MessageType.ExampleMessage)
+        public ExampleMessage(int a, float b)
+            : base(MessageType.ExampleMessage)
         {
-            MessageBody = new ExampleBody(a, b);
+            this.MessageBody = new ExampleBody(a, b);
         }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct ExampleBody : MessageBody
+    internal struct ExampleBody : IMessageBody
     {
-        public int a;
-        public float b;
+        public int A;
+        public float B;
 
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)]
-        public string bs;
+        public string Bs;
 
         public ExampleBody(int a, float b)
         {
-            this.a = a;
-            this.b = b;
-            bs = "walla";
+            this.A = a;
+            this.B = b;
+            this.Bs = "walla";
         }
     }
 }

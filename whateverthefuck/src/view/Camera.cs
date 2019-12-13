@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.model;
-
-namespace whateverthefuck.src.view
+﻿namespace whateverthefuck.src.view
 {
+    using whateverthefuck.src.model;
+
     public class Zoomer
     {
         public float CurrentZoom { get; set; } = 1.0f;
@@ -20,25 +14,25 @@ namespace whateverthefuck.src.view
 
         public void ZoomIn()
         {
-            if (CurrentZoom - ZoomStepSize < MinZoom)
+            if (this.CurrentZoom - this.ZoomStepSize < this.MinZoom)
             {
-                CurrentZoom = MinZoom;
+                this.CurrentZoom = this.MinZoom;
             }
             else
             {
-                CurrentZoom -= ZoomStepSize;
+                this.CurrentZoom -= this.ZoomStepSize;
             }
         }
 
         public void ZoomOut()
         {
-            if (CurrentZoom + ZoomStepSize > MaxZoom)
+            if (this.CurrentZoom + this.ZoomStepSize > this.MaxZoom)
             {
-                CurrentZoom = MaxZoom;
+                this.CurrentZoom = this.MaxZoom;
             }
             else
             {
-                CurrentZoom += ZoomStepSize;
+                this.CurrentZoom += this.ZoomStepSize;
             }
         }
     }
@@ -51,14 +45,14 @@ namespace whateverthefuck.src.view
 
         public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
         {
-            var x = gameCoordinate.X - Location.X;
-            var y = gameCoordinate.Y - Location.Y;
+            var x = gameCoordinate.X - this.Location.X;
+            var y = gameCoordinate.Y - this.Location.Y;
             return new GLCoordinate(x, y);
         }
 
         public GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
         {
-            return new GameCoordinate((glCoordinate.X / Zoom.CurrentZoom) + Location.X, (glCoordinate.Y / Zoom.CurrentZoom) + Location.Y);
+            return new GameCoordinate((glCoordinate.X / this.Zoom.CurrentZoom) + this.Location.X, (glCoordinate.Y / this.Zoom.CurrentZoom) + this.Location.Y);
         }
     }
 
@@ -68,19 +62,19 @@ namespace whateverthefuck.src.view
 
         public FollowCamera(GameEntity following)
         {
-            Following = following;
+            this.Following = following;
         }
 
         public override Coordinate Location
         {
             get
             {
-                if (Following?.Location == null)
+                if (this.Following?.Location == null)
                 {
                     return new GameCoordinate(0, 0);
                 }
 
-                return Following.Center;
+                return this.Following.Center;
             }
         }
     }
@@ -89,7 +83,7 @@ namespace whateverthefuck.src.view
     {
         public StaticCamera(GameCoordinate origin)
         {
-            Location = origin;
+            this.Location = origin;
         }
     }
 }

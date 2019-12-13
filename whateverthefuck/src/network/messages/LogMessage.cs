@@ -1,29 +1,31 @@
-﻿using System.Runtime.InteropServices;
-
-namespace whateverthefuck.src.network.messages
+﻿namespace whateverthefuck.src.network.messages
 {
+    using System.Runtime.InteropServices;
+
     public class LogMessage : WhateverthefuckMessage
     {
-        public LogMessage() : base(MessageType.LogMessage)
+        public LogMessage()
+            : base(MessageType.LogMessage)
         {
-            MessageBody = new LogBody();
+            this.MessageBody = new LogBody();
         }
 
-        public LogMessage(string message) : base(MessageType.LogMessage)
+        public LogMessage(string message)
+            : base(MessageType.LogMessage)
         {
-            MessageBody = new LogBody(message);
+            this.MessageBody = new LogBody(message);
         }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct LogBody : MessageBody
+    public struct LogBody : IMessageBody
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string Message;
 
         public LogBody(string message)
         {
-            Message = message;
+            this.Message = message;
         }
     }
 }

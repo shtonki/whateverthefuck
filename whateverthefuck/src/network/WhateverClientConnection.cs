@@ -1,33 +1,31 @@
-﻿using System.Net.Sockets;
-using System.Threading;
-using whateverthefuck.src.network.messages;
-using whateverthefuck.src.util;
-using System.Linq;
-using System;
-using whateverthefuck.src.model;
-
-namespace whateverthefuck.src.network
+﻿namespace whateverthefuck.src.network
 {
+    using System;
+    using System.Net.Sockets;
+    using whateverthefuck.src.network.messages;
+    using whateverthefuck.src.util;
+
     internal class WhateverClientConnection : WhateverthefuckConnection
     {
         private const string ServerIp = "98.128.171.8";
         private const string BackupServerIp = "127.0.0.1";
         private const int ServerPort = 13000;
 
-        public WhateverClientConnection() : base(ConnectToServer())
+        public WhateverClientConnection()
+            : base(ConnectToServer())
         {
         }
 
         private static NetworkStream ConnectToServer()
         {
-            TcpClient ServerConnection;
+            TcpClient serverConnection;
             while (true)
             {
                 if (UserSettings.Config.ConnectToLocalHost)
                 {
                     try
                     {
-                        ServerConnection = new TcpClient(BackupServerIp, ServerPort);
+                        serverConnection = new TcpClient(BackupServerIp, ServerPort);
                         break;
                     }
                     catch (SocketException)
@@ -38,7 +36,7 @@ namespace whateverthefuck.src.network
 
                 try
                 {
-                    ServerConnection = new TcpClient(ServerIp, ServerPort);
+                    serverConnection = new TcpClient(ServerIp, ServerPort);
                     break;
                 }
                 catch (SocketException)
@@ -47,7 +45,7 @@ namespace whateverthefuck.src.network
                 }
             }
 
-            return ServerConnection.GetStream();
+            return serverConnection.GetStream();
         }
 
         protected override void HandleMessage(WhateverthefuckMessage message)
@@ -57,7 +55,7 @@ namespace whateverthefuck.src.network
                 case MessageType.LogMessage:
                 {
                     LogMessage logMessage = (LogMessage)message;
-                    LogBody logBody = (LogBody) message.MessageBody;
+                    LogBody logBody = (LogBody)message.MessageBody;
                     Logging.Log("Message from server: " + logBody.Message, Logging.LoggingLevel.Info);
                 } break;
 
@@ -69,7 +67,7 @@ namespace whateverthefuck.src.network
 
                 case MessageType.GrantControlMessage:
                 {
-                    GrantControlBody controlBody = (GrantControlBody) message.MessageBody;
+                    GrantControlBody controlBody = (GrantControlBody)message.MessageBody;
                     Program.GameStateManager.TakeControl(controlBody.Id);
                 } break;
 

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Input;
-using whateverthefuck.src.control;
-using whateverthefuck.src.model;
-using whateverthefuck.src.util;
-
-namespace whateverthefuck.src.view.guicomponents
+﻿namespace whateverthefuck.src.view.guicomponents
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+    using whateverthefuck.src.control;
+
     public abstract class GUIComponent : Drawable
     {
         public GLCoordinate Size { get; set; }
@@ -66,27 +60,29 @@ namespace whateverthefuck.src.view.guicomponents
             OnScrollOut?.Invoke(glMouseLocation);
         }
 #endif
-        protected GUIComponent() : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
+        protected GUIComponent()
+            : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
         {
         }
 
-        protected GUIComponent(GLCoordinate location, GLCoordinate size) : base(location)
+        protected GUIComponent(GLCoordinate location, GLCoordinate size)
+            : base(location)
         {
-            BackColor = Color.Aquamarine;
+            this.BackColor = Color.Aquamarine;
             this.Size = size;
         }
 
         public void AddBorder()
         {
-            Border = new Border(Color.Black);
+            this.Border = new Border(Color.Black);
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            //if(Border != null) drawAdapter.TraceRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Border.BorderColor, Border.Width);
-            drawAdapter.FillRectangle(0, 0, Size.X, Size.Y, BackColor);
+            // if(Border != null) drawAdapter.TraceRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Border.BorderColor, Border.Width);
+            drawAdapter.FillRectangle(0, 0, this.Size.X, this.Size.Y, this.BackColor);
 
-            foreach (var kiddo in Children)
+            foreach (var kiddo in this.Children)
             {
                 drawAdapter.PushMatrix();
                 drawAdapter.Translate(kiddo.Location.X, kiddo.Location.Y);
@@ -98,7 +94,7 @@ namespace whateverthefuck.src.view.guicomponents
 
             //drawAdapter.Translate(-this.Location.X, -this.Location.Y);
         }
-        
+
         public void HandleInput(InputUnion input)
         {
             List<GUIComponent> kiddos;
@@ -106,15 +102,15 @@ namespace whateverthefuck.src.view.guicomponents
             if (input.IsMouseInput)
             {
                 var glClicked = input.Location;
-                var offset = new GLCoordinate(glClicked.X - Location.X, glClicked.Y - Location.Y);
+                var offset = new GLCoordinate(glClicked.X - this.Location.X, glClicked.Y - this.Location.Y);
 
-                kiddos = InteractedChildren(offset);
+                kiddos = this.InteractedChildren(offset);
             }
             else
             {
-                kiddos = Children;
+                kiddos = this.Children;
             }
-            
+
             if (kiddos.Count() > 0)
             {
                 kiddos.ForEach(child => child.HandleInput(input));
@@ -122,15 +118,15 @@ namespace whateverthefuck.src.view.guicomponents
 
             if (input.IsMouseInput)
             {
-                OnMouseButtonPress?.Invoke(this, input);
+                this.OnMouseButtonPress?.Invoke(this, input);
             }
             else if (input.IsKeyboardInput)
             {
-                OnKeyboardButtonPress?.Invoke(this, input);
+                this.OnKeyboardButtonPress?.Invoke(this, input);
             }
             else if (input.IsMouseMove)
             {
-                OnMouseMove?.Invoke(this, input);
+                this.OnMouseMove?.Invoke(this, input);
             }
         }
 
@@ -163,7 +159,7 @@ namespace whateverthefuck.src.view.guicomponents
 #endif
         public virtual void Add(GUIComponent toAdd)
         {
-            Children.Add(toAdd);
+            this.Children.Add(toAdd);
         }
 
 #if false
@@ -178,14 +174,14 @@ namespace whateverthefuck.src.view.guicomponents
         public List<GUIComponent> InteractedChildren(GLCoordinate interactLocation)
         {
             var translatedLoc = interactLocation;
-            var v = Children.Where(c => c.Contains(translatedLoc)).ToList();
+            var v = this.Children.Where(c => c.Contains(translatedLoc)).ToList();
             return v;
         }
 
         public virtual bool Contains(GLCoordinate clicked)
         {
-            return clicked.X >= Location.X && clicked.X <= Location.X + Size.X &&
-                    clicked.Y >= Location.Y && clicked.Y <= Location.Y + Size.Y;
+            return clicked.X >= this.Location.X && clicked.X <= this.Location.X + this.Size.X &&
+                    clicked.Y >= this.Location.Y && clicked.Y <= this.Location.Y + this.Size.Y;
         }
     }
 

@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.model;
-
-using whateverthefuck.src.util;
-
-namespace whateverthefuck.src.view.guicomponents
+﻿namespace whateverthefuck.src.view.guicomponents
 {
+    using System.Drawing;
+    using whateverthefuck.src.util;
+
     internal class Button : GUIComponent
     {
-        public Button() : base()
+        public Button()
+            : base()
         {
         }
 
-        public Button(GLCoordinate location, GLCoordinate size) : base(location, size)
+        public Button(GLCoordinate location, GLCoordinate size)
+            : base(location, size)
         {
-            BackColor = Color.DarkGoldenrod;
+            this.BackColor = Color.DarkGoldenrod;
 
-            OnMouseButtonPress += (c, i) =>
+            this.OnMouseButtonPress += (c, i) =>
             {
                 if (i.Direction == control.InputUnion.Directions.Down)
                 {

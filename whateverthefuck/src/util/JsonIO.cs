@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using whateverthefuck.src.model;
-using whateverthefuck.src.model.entities;
-
-namespace whateverthefuck.src.util
+﻿namespace whateverthefuck.src.util
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using whateverthefuck.src.model;
+
     public class JsonIO
     {
         private static JsonSerializerSettings Settings = new JsonSerializerSettings
@@ -63,7 +59,8 @@ namespace whateverthefuck.src.util
         /// <param name="filePath">The file path to write the object instance to.</param>
         /// <param name="objectToWrite">The object instance to write to the file.</param>
         /// <param name="append">If false the file will be overwritten if it already exists. If true the contents will be appended to the file.</param>
-        public static void WriteToJsonFile<T>(string filePath, T objectToWrite, bool append = false) where T : new()
+        public static void WriteToJsonFile<T>(string filePath, T objectToWrite, bool append = false)
+            where T : new()
         {
             TextWriter writer = null;
             try
@@ -81,16 +78,17 @@ namespace whateverthefuck.src.util
             }
         }
 
-        public static string ConvertToJson<T>(T objectToWrite) where T : new()
+        public static string ConvertToJson<T>(T objectToWrite)
+            where T : new()
         {
             try
             {
                 return JsonConvert.SerializeObject(objectToWrite, typeof(T), Settings);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logging.Log("Could not serialize " + objectToWrite + ": " + e);
-                return "";
+                return string.Empty;
             }
         }
 
@@ -101,7 +99,8 @@ namespace whateverthefuck.src.util
         /// <typeparam name="T">The type of object to read from the file.</typeparam>
         /// <param name="filePath">The file path to read the object instance from.</param>
         /// <returns>Returns a new instance of the object read from the Json file.</returns>
-        public static T ReadFromJsonFile<T>(string filePath) where T : new()
+        public static T ReadFromJsonFile<T>(string filePath)
+            where T : new()
         {
             TextReader reader = null;
             try

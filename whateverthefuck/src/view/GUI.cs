@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using whateverthefuck.src.model;
-using whateverthefuck.src.view.guicomponents;
-
-namespace whateverthefuck.src.view
+﻿namespace whateverthefuck.src.view
 {
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Linq;
+    using System.Threading;
+    using whateverthefuck.src.model;
+    using whateverthefuck.src.view.guicomponents;
+
     public static class GUI
     {
         public static Camera Camera { get; set; }
@@ -80,7 +76,6 @@ namespace whateverthefuck.src.view
             dp.Add(b);
             GUIComponents.Add(dp);
 
-            //GUIComponents.Add(dp);
 #else
             //GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
 
@@ -98,18 +93,18 @@ namespace whateverthefuck.src.view
 
         public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate screenCoordinate)
         {
-            var X = ((float)screenCoordinate.X / Frame.ClientSize.Width * 2) - 1;
-            var Y = -(((float)screenCoordinate.Y / Frame.ClientSize.Height * 2) - 1);
+            var x = ((float)screenCoordinate.X / Frame.ClientSize.Width * 2) - 1;
+            var y = -(((float)screenCoordinate.Y / Frame.ClientSize.Height * 2) - 1);
 
-            return new GLCoordinate(X, Y);
+            return new GLCoordinate(x, y);
         }
 
         public static ScreenCoordinate TranslateGLToScreenCoordinates(GLCoordinate glCoordinate)
         {
-            var X = (glCoordinate.X + 1) / 2 * Frame.ClientSize.Width;
-            var Y = (glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height;
+            var x = (glCoordinate.X + 1) / 2 * Frame.ClientSize.Width;
+            var y = (glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height;
 
-            return new ScreenCoordinate((int)X, (int)Y);
+            return new ScreenCoordinate((int)x, (int)y);
         }
 
 #if false

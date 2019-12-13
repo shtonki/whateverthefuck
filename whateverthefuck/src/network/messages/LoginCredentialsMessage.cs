@@ -1,37 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using whateverthefuck.src.model.entities;
-using whateverthefuck.src.util;
-
-namespace whateverthefuck.src.network.messages
+﻿namespace whateverthefuck.src.network.messages
 {
+    using System.Runtime.InteropServices;
+
     public class LoginCredentialsMessage : WhateverthefuckMessage
     {
-        public LoginCredentialsMessage() : base(MessageType.LoginCredentialsMessage)
+        public LoginCredentialsMessage()
+            : base(MessageType.LoginCredentialsMessage)
         {
-            MessageBody = new LoginCredentialBody();
+            this.MessageBody = new LoginCredentialBody();
         }
 
-        public LoginCredentialsMessage(LoginCredentials loginCredentials) : base(MessageType.LoginCredentialsMessage)
+        public LoginCredentialsMessage(LoginCredentials loginCredentials)
+            : base(MessageType.LoginCredentialsMessage)
         {
-            MessageBody = new LoginCredentialBody(loginCredentials.Username);
+            this.MessageBody = new LoginCredentialBody(loginCredentials.Username);
         }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct LoginCredentialBody : MessageBody
+    public struct LoginCredentialBody : IMessageBody
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
         public string Username;
 
         public LoginCredentialBody(string username)
         {
-            Username = username;
+            this.Username = username;
         }
     }
 }

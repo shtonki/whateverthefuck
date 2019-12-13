@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using whateverthefuck.src.util;
-
-namespace whateverthefuck.src.network
+﻿namespace whateverthefuck.src.network
 {
     public class LoginCredentials
     {

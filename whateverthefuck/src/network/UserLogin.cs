@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.network.messages;
-using whateverthefuck.src.util;
-
-namespace whateverthefuck.src.network
+﻿namespace whateverthefuck.src.network
 {
+    using whateverthefuck.src.network.messages;
+
     public class UserLogin
     {
         public static void Login(string username)

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using whateverthefuck.src.util;
-using whateverthefuck.src.network.messages;
-using whateverthefuck.src.model;
-using System.Globalization;
-using System.Runtime.InteropServices;
-
-namespace whateverthefuck.src.network.messages
+﻿namespace whateverthefuck.src.network.messages
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using whateverthefuck.src.model;
+
     public abstract class WhateverthefuckMessage
     {
 #if false
@@ -29,11 +26,11 @@ namespace whateverthefuck.src.network.messages
 
         public MessageType MessageType { get; private set; }
 
-        public MessageBody MessageBody { get; set; }
+        public IMessageBody MessageBody { get; set; }
 
         protected WhateverthefuckMessage(MessageType messageType)
         {
-            MessageType = messageType;
+            this.MessageType = messageType;
         }
 
         public static WhateverthefuckMessage FromMessageTypex(MessageType type)
@@ -92,7 +89,7 @@ namespace whateverthefuck.src.network.messages
 
         protected virtual byte[] EncodeBody()
         {
-            return GetBytes(MessageBody);
+            return GetBytes(this.MessageBody);
         }
 
         public static WhateverthefuckMessage DecodeMessage(byte[] bs)
@@ -127,9 +124,9 @@ namespace whateverthefuck.src.network.messages
 
         protected virtual void DecodeBody(byte[] bs)
         {
-            MessageBody body = MessageBody;
-            body = (MessageBody)FromBytes(bs, body);
-            MessageBody = body;
+            IMessageBody body = this.MessageBody;
+            body = (IMessageBody)FromBytes(bs, body);
+            this.MessageBody = body;
         }
 
         public static WhateverMessageHeader ParseHeader(byte[] message)
@@ -170,9 +167,9 @@ namespace whateverthefuck.src.network.messages
         public override string ToString()
         {
             StringBuilder bodybuild = new StringBuilder();
-            var bb = EncodeBody();
+            var bb = this.EncodeBody();
 
-            bodybuild.Append(Enum.GetName(typeof(MessageType), MessageType));
+            bodybuild.Append(Enum.GetName(typeof(MessageType), this.MessageType));
 
             bodybuild.Append("<");
             foreach (var b in bb)
@@ -187,7 +184,7 @@ namespace whateverthefuck.src.network.messages
         }
     }
 
-    public interface MessageBody
+    public interface IMessageBody
     {
     }
 
@@ -201,21 +198,22 @@ namespace whateverthefuck.src.network.messages
 
         public float Y { get; }
 
-        public EntityLocationInfo(GameEntity entity) : this(entity.Identifier.Id, entity.Location.X, entity.Location.Y)
+        public EntityLocationInfo(GameEntity entity)
+            : this(entity.Identifier.Id, entity.Location.X, entity.Location.Y)
         {
         }
 
         public EntityLocationInfo(int id, float x, float y)
         {
-            Identifier = id;
-            X = x;
-            Y = y;
+            this.Identifier = id;
+            this.X = x;
+            this.Y = y;
         }
 
-        // todo should encode to byte[] like a sane person                                                                                                                     
+        // todo should encode to byte[] like a sane person
         public string Encode()
         {
-            return Identifier.ToString() + InfoSeperator + X.ToString("0.00", CultureInfo.InvariantCulture) + InfoSeperator + Y.ToString("0.00", CultureInfo.InvariantCulture);
+            return this.Identifier.ToString() + InfoSeperator + this.X.ToString("0.00", CultureInfo.InvariantCulture) + InfoSeperator + this.Y.ToString("0.00", CultureInfo.InvariantCulture);
         }
 
         public static EntityLocationInfo Decode(byte[] data)
@@ -223,10 +221,10 @@ namespace whateverthefuck.src.network.messages
             string str = System.Text.Encoding.ASCII.GetString(data);
 
             var dataStrings = str.Split(InfoSeperator);
-            int id = Int32.Parse(dataStrings[0]);
-            float X = float.Parse(dataStrings[1], CultureInfo.InvariantCulture);
-            float Y = float.Parse(dataStrings[2], CultureInfo.InvariantCulture);
-            return new EntityLocationInfo(id, X, Y);
+            int id = int.Parse(dataStrings[0]);
+            float x = float.Parse(dataStrings[1], CultureInfo.InvariantCulture);
+            float y = float.Parse(dataStrings[2], CultureInfo.InvariantCulture);
+            return new EntityLocationInfo(id, x, y);
         }
     }
 

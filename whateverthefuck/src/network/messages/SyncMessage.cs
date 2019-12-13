@@ -1,35 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace whateverthefuck.src.network.messages
+﻿namespace whateverthefuck.src.network.messages
 {
+    using System.Runtime.InteropServices;
+
     public class SyncMessage : WhateverthefuckMessage
     {
-        public SyncMessage() : base(MessageType.SyncMessage)
+        public SyncMessage()
+            : base(MessageType.SyncMessage)
         {
-            MessageBody = new SyncMessageBody();
+            this.MessageBody = new SyncMessageBody();
         }
 
-        public SyncMessage(SyncMessageBody body) : base(MessageType.SyncMessage)
+        public SyncMessage(SyncMessageBody body)
+            : base(MessageType.SyncMessage)
         {
-            MessageBody = body;
+            this.MessageBody = body;
         }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct SyncMessageBody : MessageBody
+    public struct SyncMessageBody : IMessageBody
     {
         public int Tick;
         public long Hash;
 
         public SyncMessageBody(int tick, long checksum)
         {
-            Tick = tick;
-            Hash = checksum;
+            this.Tick = tick;
+            this.Hash = checksum;
         }
     }
 }
