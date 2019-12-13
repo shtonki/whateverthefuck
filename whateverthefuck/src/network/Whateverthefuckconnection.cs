@@ -12,13 +12,13 @@
         private const bool LogOutgoingMessages = false;
         private const bool LogIncomingMessages = false;
 
-        private NetworkStream NetworkStream;
+        private NetworkStream networkStream;
 
-        private byte[] HeaderBuffer = new byte[WhateverthefuckMessage.HeaderSize];
+        private byte[] headerBuffer = new byte[WhateverthefuckMessage.HeaderSize];
 
         protected WhateverthefuckConnection(NetworkStream networkStream)
         {
-            this.NetworkStream = networkStream;
+            this.networkStream = networkStream;
             new Thread(this.ReceiveLoop).Start();
         }
 
@@ -27,7 +27,7 @@
             byte[] bytes = WhateverthefuckMessage.EncodeMessage(message);
             try
             {
-                this.NetworkStream.Write(bytes, 0, bytes.Length);
+                this.networkStream.Write(bytes, 0, bytes.Length);
             }
             catch (System.IO.IOException)
             {
@@ -53,7 +53,7 @@
 
                 try
                 {
-                    bytesRead = this.NetworkStream.Read(this.HeaderBuffer, 0, WhateverthefuckMessage.HeaderSize);
+                    bytesRead = this.networkStream.Read(this.headerBuffer, 0, WhateverthefuckMessage.HeaderSize);
                 }
                 catch (System.IO.IOException)
                 {
@@ -67,13 +67,13 @@
                     continue;
                 }
 
-                WhateverMessageHeader header = WhateverthefuckMessage.ParseHeader(this.HeaderBuffer);
+                WhateverMessageHeader header = WhateverthefuckMessage.ParseHeader(this.headerBuffer);
 
                 MessageType messageType = (MessageType)header.Type;
                 int messageLength = header.Size;
 
                 byte[] bodyBuffer = new byte[messageLength];
-                bytesRead = this.NetworkStream.Read(bodyBuffer, 0, messageLength);
+                bytesRead = this.networkStream.Read(bodyBuffer, 0, messageLength);
                 if (bytesRead != messageLength) { throw new Exception("error reading message body"); }
 
                 WhateverthefuckMessage message = WhateverthefuckMessage.DecodeMessage(header, bodyBuffer);

@@ -19,9 +19,6 @@
         private const int TickInterval = 10;
         private const float OneOverSquareRootOfTwo = 0.70710678118f;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClientGameStateManager"/> class.
-        /// </summary>
         public ClientGameStateManager()
         {
             this.GameState = new GameState();
@@ -29,10 +26,9 @@
             this.TickTimer = new Timer(_ => this.Tick(), null, 0, TickInterval);
         }
 
-        /// <summary>
-        /// Gets the GameState representing the clients state of the game.
-        /// </summary>
         public GameState GameState { get; private set; }
+
+        private GUIComponent Focused { get; set; }
 
         private Timer TickTimer { get; } // can't be removed or we stop moving after ~3 seconds
 
@@ -50,7 +46,7 @@
         private int? TakeControlId { get; set; }
 
         /// <summary>
-        /// Updated the underlying GameState by handling the given events then stepping.
+        /// Updates the underlying GameState by handling the given events then stepping.
         /// </summary>
         /// <param name="tick">The servers tick counter.</param>
         /// <param name="events">The GameEvents to be handled.</param>
@@ -100,19 +96,11 @@
             this.TakeControlId = identifier;
         }
 
-        /// <summary>
-        /// Centers the Camera on a GameEntity.
-        /// </summary>
-        /// <param name="entity">The GameEntity to center the camera on.</param>
         public void CenterCameraOn(GameEntity entity)
         {
             GUI.Camera = new FollowCamera(this.Hero);
         }
 
-        /// <summary>
-        /// Spawns loot for the player.
-        /// </summary>
-        /// <param name="message">The message containing informaion about what loot to spawn.</param>
         public void SpawnLoot(CreateLootMessage message)
           {
             var item = message.Item;
@@ -126,10 +114,6 @@
             this.GameState.HandleGameEvents(cevent);
         }
 
-        /// <summary>
-        /// Handles user input into the game.
-        /// </summary>
-        /// <param name="input">The input to be handled.</param>
         public void HandleInput(InputUnion input)
         {
             if (input.IsMouseInput && input.Direction == InputUnion.Directions.Down)
@@ -241,8 +225,6 @@
         {
             e.Items.Add(item);
         }
-
-        private GUIComponent Focused { get; set; }
 
         private void Focus(GUIComponent focused)
         {
@@ -368,24 +350,12 @@
     /// </summary>
     internal class HeroMovementStruct
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether the Hero is moving upwards.
-        /// </summary>
         public bool Upwards { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the Hero is moving downwards.
-        /// </summary>
         public bool Downwards { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the Hero is moving rightwards.
-        /// </summary>
         public bool Rightwards { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the Hero is moving leftwards.
-        /// </summary>
         public bool Leftwards { get; set; }
     }
 }

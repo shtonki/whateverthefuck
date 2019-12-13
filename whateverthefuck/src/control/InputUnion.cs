@@ -32,9 +32,6 @@
             this.Key = key;
         }
 
-        /// <summary>
-        /// Defines the direction of the button or key being pressed.
-        /// </summary>
         public enum Directions
         {
             Undefined,
@@ -42,9 +39,6 @@
             Down,
         }
 
-        /// <summary>
-        /// Gets the direction of the button or key being pressed.
-        /// </summary>
         public Directions Direction { get; }
 
         /// <summary>
@@ -52,9 +46,6 @@
         /// </summary>
         public Key? Key { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether the InputUnion is a keyboard input event.
-        /// </summary>
         public bool IsKeyboardInput => this.Key.HasValue;
 
         /// <summary>
@@ -62,9 +53,6 @@
         /// </summary>
         public MouseButton? MouseButton { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether the InputUnion is a mouse input event.
-        /// </summary>
         public bool IsMouseInput => this.MouseButton.HasValue;
 
         /// <summary>
@@ -77,40 +65,18 @@
         /// </summary>
         public GLCoordinate PreviousLocation { get; }
 
-        /// <summary>
-        /// Gets a value indicating whether the InputUnion is a mouse move event.
-        /// </summary>
         public bool IsMouseMove => this.PreviousLocation != null;
 
-        /// <summary>
-        /// Creates an InputUnion which represents a mouse move event.
-        /// </summary>
-        /// <param name="beforeMove">ScreenLocation of mouse before the mouse moved.</param>
-        /// <param name="afterMove">ScreenLocation of mouse after the mouse moved.</param>
-        /// <returns>The created InputUnion.</returns>
         public static InputUnion MakeMouseMoveInput(ScreenCoordinate beforeMove, ScreenCoordinate afterMove)
         {
             return new InputUnion(beforeMove, afterMove);
         }
 
-        /// <summary>
-        /// Creates an InputUnion which represents a keyboard event.
-        /// </summary>
-        /// <param name="direction">The Direction of the key press.</param>
-        /// <param name="key">The Key being pressed.</param>
-        /// <returns>The created InputUnion.</returns>
         public static InputUnion MakeKeyboardInput(Directions direction, Key key)
         {
             return new InputUnion(direction, key);
         }
 
-        /// <summary>
-        /// Creates an InputUnion which respresents a mouse button event.
-        /// </summary>
-        /// <param name="direction">The Direction of the button press.</param>
-        /// <param name="button">The MouseButton being pressed.</param>
-        /// <param name="location">The ScreenLocation of the button press.</param>
-        /// <returns>The created InputUnion.</returns>
         public static InputUnion MakeMouseButtonInput(Directions direction, MouseButton button, ScreenCoordinate location)
         {
             return new InputUnion(direction, button, location);

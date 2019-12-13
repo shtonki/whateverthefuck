@@ -3,6 +3,39 @@
     using System.Drawing;
     using whateverthefuck.src.model;
 
+    public abstract class Drawable
+    {
+        protected Drawable(Coordinate location)
+        {
+            this.Location = location;
+        }
+
+        public int Height { get; protected set; } = 1;
+
+        public bool Visible { get; set; } = true;
+
+        public Coordinate Location { get; set; }
+
+        protected float Rotation { get; set; } = 0;
+
+        public abstract void DrawMe(DrawAdapter drawAdapter);
+
+        public void Draw(DrawAdapter drawAdapter)
+        {
+            if (this.Visible)
+            {
+                drawAdapter.PushMatrix();
+
+                var l = this.Location.ToGLCoordinate();
+                drawAdapter.Translate(l.X, l.Y);
+
+                this.DrawMe(drawAdapter);
+
+                drawAdapter.PopMatrix();
+            }
+        }
+    }
+
     public class Line : Drawable
     {
         public float X1;
@@ -57,39 +90,6 @@
         public override void DrawMe(DrawAdapter drawAdapter)
         {
             drawAdapter.TraceRectangle(this.X1, this.Y1, this.X2, this.Y2, this.DrawColor, 4);
-        }
-    }
-
-    public abstract class Drawable
-    {
-        public int Height { get; protected set; } = 1;
-
-        protected float Rotation { get; set; } = 0;
-
-        public Coordinate Location { get; set; }
-
-        public bool Visible { get; set; } = true;
-
-        public abstract void DrawMe(DrawAdapter drawAdapter);
-
-        public void Draw(DrawAdapter drawAdapter)
-        {
-            if (this.Visible)
-            {
-                drawAdapter.PushMatrix();
-
-                var l = this.Location.ToGLCoordinate();
-                drawAdapter.Translate(l.X, l.Y);
-
-                this.DrawMe(drawAdapter);
-
-                drawAdapter.PopMatrix();
-            }
-        }
-
-        protected Drawable(Coordinate location)
-        {
-            this.Location = location;
         }
     }
 }

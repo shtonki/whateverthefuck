@@ -8,11 +8,6 @@
     /// </summary>
     public class GameCoordinate : Coordinate
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GameCoordinate"/> class.
-        /// </summary>
-        /// <param name="x">X value of coordinate.</param>
-        /// <param name="y">Y value of coordinate.</param>
         public GameCoordinate(float x, float y)
             : base(x, y)
         {

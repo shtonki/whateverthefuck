@@ -9,6 +9,8 @@
     /// </summary>
     public abstract class GameEvent
     {
+        public GameEventType Type { get; protected set; }
+
         public static GameEvent DecodeWithEventType(GameEventType type, byte[] body)
         {
             switch (type)
@@ -37,19 +39,11 @@
             }
         }
 
-        public GameEventType Type { get; protected set; }
-
         public abstract byte[] ToBytes();
     }
 
     public class UseAbilityEvent : GameEvent
     {
-        public int Id { get; private set; }
-
-        public Abilities AbilityType { get; private set; }
-
-        public int TargetId { get; private set; }
-
         public UseAbilityEvent(GameEntity caster, GameEntity target, Ability ability)
         {
             this.Type = GameEventType.UseAbility;
@@ -73,6 +67,12 @@
             bs = bs.Skip(sizeof(int));
         }
 
+        public int Id { get; private set; }
+
+        public Abilities AbilityType { get; private set; }
+
+        public int TargetId { get; private set; }
+
         public override byte[] ToBytes()
         {
             return BitConverter.GetBytes(this.Id).Concat(
@@ -84,26 +84,6 @@
 
     public class CreateEntityEvent : GameEvent
     {
-        public int Id { get; private set; }
-
-        public EntityType EntityType { get; private set; }
-
-        public float X { get; private set; }
-
-        public float Y { get; private set; }
-
-        public int CurrentHealth { get; private set; }
-
-        public int MaxHealth { get; private set; }
-
-        public CreationArgs CreationArgs { get; private set; }
-
-        public Action<GameEntity> OnCreationCallback { get; set; }
-
-        public Action<GameEntity, GameEntity> OnDeathCallback { get; set; }
-
-        public Action<GameEntity> OnStepCallback { get; set; }
-
         public CreateEntityEvent(GameEntity e)
         {
             this.Type = GameEventType.Create;
@@ -151,6 +131,26 @@
             bs = bs.Skip(sizeof(long));
         }
 
+        public int Id { get; private set; }
+
+        public EntityType EntityType { get; private set; }
+
+        public float X { get; private set; }
+
+        public float Y { get; private set; }
+
+        public int CurrentHealth { get; private set; }
+
+        public int MaxHealth { get; private set; }
+
+        public CreationArgs CreationArgs { get; private set; }
+
+        public Action<GameEntity> OnCreationCallback { get; set; }
+
+        public Action<GameEntity, GameEntity> OnDeathCallback { get; set; }
+
+        public Action<GameEntity> OnStepCallback { get; set; }
+
         public override byte[] ToBytes()
         {
             return BitConverter.GetBytes(this.Id).Concat(
@@ -165,12 +165,6 @@
 
     public class DealDamageEvent : GameEvent
     {
-        public int AttackerId { get; private set; }
-
-        public int DefenderId { get; private set; }
-
-        public int Damage { get; private set; }
-
         public DealDamageEvent(int attackerId, int defenderId, int damage)
         {
             this.AttackerId = attackerId;
@@ -202,6 +196,12 @@
             bytec += sizeof(int);
         }
 
+        public int AttackerId { get; private set; }
+
+        public int DefenderId { get; private set; }
+
+        public int Damage { get; private set; }
+
         public override byte[] ToBytes()
         {
             return BitConverter.GetBytes(this.AttackerId).Concat(
@@ -212,8 +212,6 @@
 
     public class DestroyEntityEvent : GameEvent
     {
-        public int Id { get; private set; }
-
         public DestroyEntityEvent(GameEntity e)
         {
             this.Type = GameEventType.Destroy;
@@ -228,6 +226,8 @@
             this.Id = BitConverter.ToInt32(bs.ToArray(), 0);
         }
 
+        public int Id { get; private set; }
+
         public override byte[] ToBytes()
         {
             return BitConverter.GetBytes(this.Id).ToArray();
@@ -236,10 +236,6 @@
 
     public class UpdateMovementEvent : GameEvent
     {
-        public int Id { get; private set; }
-
-        public MovementStruct Movements { get; private set; }
-
         public UpdateMovementEvent(GameEntity entity)
             : this(entity.Identifier.Id, entity.Movements)
         {
@@ -261,6 +257,10 @@
             bs = bs.Skip(sizeof(int)).ToArray();
             this.Movements = MovementStruct.Decode(bs.ToArray());
         }
+
+        public int Id { get; private set; }
+
+        public MovementStruct Movements { get; private set; }
 
         public override byte[] ToBytes()
         {

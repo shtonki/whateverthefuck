@@ -2,14 +2,6 @@
 {
     public class Item
     {
-        public ItemType Type { get; private set; }
-
-        public int StackSize { get; private set; }
-
-        public Rarity Rarity { get; private set; }
-
-        public ItemBonus[] Bonuses { get; private set; }
-
         public Item(ItemType type, int stackSize, Rarity rarity, params ItemBonus[] bonuses)
         {
             this.Type = type;
@@ -17,6 +9,14 @@
             this.Rarity = rarity;
             this.Bonuses = bonuses;
         }
+
+        public ItemType Type { get; private set; }
+
+        public int StackSize { get; private set; }
+
+        public Rarity Rarity { get; private set; }
+
+        public ItemBonus[] Bonuses { get; private set; }
     }
 
     public enum Rarity
@@ -47,6 +47,21 @@
 
     public class ItemBonus
     {
+        private const uint HighMask = 0xFFFF0000;
+        private const uint LowMask = 0x0000FFFF;
+        private int value;
+
+        public ItemBonus(BonusType type, short value)
+        {
+            this.Type = type;
+            this.Modifier = value;
+        }
+
+        public ItemBonus(int intValue)
+        {
+            this.value = intValue;
+        }
+
         public enum BonusType
         {
             None,
@@ -57,37 +72,21 @@
             Test4,
         }
 
-        private int Value;
-
-        private const uint HighMask = 0xFFFF0000;
-        private const uint LowMask = 0x0000FFFF;
-
         public BonusType Type
         {
-            get { return (BonusType)(this.Value & LowMask);  }
-            set { this.Value = (int)((this.Value & HighMask) | ((int)value & LowMask)); }
+            get { return (BonusType)(this.value & LowMask);  }
+            set { this.value = (int)((this.value & HighMask) | ((int)value & LowMask)); }
         }
 
         public short Modifier
         {
-            get { return (short)((this.Value & HighMask) >> 16); }
-            set { this.Value = (int)((this.Value & LowMask) | (((int)value & LowMask) << 16)); }
-        }
-
-        public ItemBonus(BonusType type, short value)
-        {
-            this.Type = type;
-            this.Modifier = value;
-        }
-
-        public ItemBonus(int intValue)
-        {
-            this.Value = intValue;
+            get { return (short)((this.value & HighMask) >> 16); }
+            set { this.value = (int)((this.value & LowMask) | (((int)value & LowMask) << 16)); }
         }
 
         public int ToInt()
         {
-            return this.Value;
+            return this.value;
         }
     }
 }

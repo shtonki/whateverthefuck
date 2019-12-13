@@ -50,25 +50,14 @@
     /// </summary>
     internal class HotkeyMapping
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HotkeyMapping"/> class mapping the given InputUnion to a GameAction.
-        /// </summary>
-        /// <param name="hotkey">The InputUnion mapped from.</param>
-        /// <param name="gameAction">The GameAction mapped to.</param>
         public HotkeyMapping(InputUnion hotkey, GameAction gameAction)
         {
             this.Hotkey = hotkey;
             this.GameAction = gameAction;
         }
 
-        /// <summary>
-        /// Gets the InputUnion mapped from.
-        /// </summary>
         public InputUnion Hotkey { get; }
 
-        /// <summary>
-        /// Gets the GameAction mapped to.
-        /// </summary>
         public GameAction GameAction { get; }
     }
 }

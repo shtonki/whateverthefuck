@@ -3,18 +3,14 @@
     using System.Collections.Generic;
     using System.Drawing;
 
-    internal class Projectile : GameEntity
+    public class Projectile : GameEntity
     {
-        private float AsplodeCutoff => this.MoveSpeed * 2;
-
-        private int controller;
-
         public Projectile(EntityIdentifier id, CreationArgs args)
             : base(id, EntityType.Projectile, args)
         {
             if (args.Value != 0)
             {
-                this.controller = new ProjectileArgs(args).ControllerId;
+                this.Controller = new ProjectileArgs(args).ControllerId;
             }
 
             this.Size = new GameCoordinate(0.01f, 0.01f);
@@ -23,15 +19,9 @@
             this.Collidable = false;
         }
 
-        private IEnumerable<GameEvent> Boom(GameEntity followed)
-        {
-            return new GameEvent[] { new DealDamageEvent(this.controller, followed.Identifier.Id, 10), new DestroyEntityEvent(this) };
-        }
+        private int Controller { get; }
 
-        private IEnumerable<GameEvent> Fizzle()
-        {
-            return new GameEvent[] { new DestroyEntityEvent(this) };
-        }
+        private float AsplodeCutoff => this.MoveSpeed * 2;
 
         public override void Step(GameState gameState)
         {
@@ -51,16 +41,20 @@
                 }
             }
         }
+
+        private IEnumerable<GameEvent> Boom(GameEntity followed)
+        {
+            return new GameEvent[] { new DealDamageEvent(this.Controller, followed.Identifier.Id, 10), new DestroyEntityEvent(this) };
+        }
+
+        private IEnumerable<GameEvent> Fizzle()
+        {
+            return new GameEvent[] { new DestroyEntityEvent(this) };
+        }
     }
 
     public class ProjectileArgs : CreationArgs
     {
-        public int ControllerId
-        {
-            get { return this.SecondInt; }
-            set { this.SecondInt = value; }
-        }
-
         public ProjectileArgs(GameEntity c)
             : base(0)
         {
@@ -70,6 +64,12 @@
         public ProjectileArgs(CreationArgs a)
             : base(a.Value)
         {
+        }
+
+        public int ControllerId
+        {
+            get { return this.SecondInt; }
+            set { this.SecondInt = value; }
         }
     }
 }

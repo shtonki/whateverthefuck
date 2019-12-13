@@ -7,6 +7,8 @@
 
     internal class LineOfSight
     {
+        private const float Spacing = -0.00005f;
+
         private const bool ShowOutlines = false;
 
         public static IEnumerable<GameEntity> CheckLOS(GameEntity looker, IEnumerable<GameEntity> looked)
@@ -71,8 +73,6 @@
             GUI.DebugInfo = extras;
             return rt;
         }
-
-        private const float Spacing = -0.00005f;
 
         private static bool LineIntersectsRect(PointF p1, PointF p2, GameEntity ge)
         {

@@ -17,21 +17,14 @@
 #endif
         public const int HeaderSize = 4;
 
-        public struct WhateverMessageHeader
+        protected WhateverthefuckMessage(MessageType messageType)
         {
-            public byte Type { get; set; }
-
-            public ushort Size { get; set; }
+            this.MessageType = messageType;
         }
 
         public MessageType MessageType { get; private set; }
 
         public IMessageBody MessageBody { get; set; }
-
-        protected WhateverthefuckMessage(MessageType messageType)
-        {
-            this.MessageType = messageType;
-        }
 
         public static WhateverthefuckMessage FromMessageTypex(MessageType type)
         {
@@ -87,11 +80,6 @@
             return headerBytes.Concat(contentBytes).ToArray();
         }
 
-        protected virtual byte[] EncodeBody()
-        {
-            return GetBytes(this.MessageBody);
-        }
-
         public static WhateverthefuckMessage DecodeMessage(byte[] bs)
         {
             WhateverMessageHeader header = ParseHeader(bs);
@@ -122,18 +110,30 @@
             return wmessage;
         }
 
-        protected virtual void DecodeBody(byte[] bs)
-        {
-            IMessageBody body = this.MessageBody;
-            body = (IMessageBody)FromBytes(bs, body);
-            this.MessageBody = body;
-        }
-
         public static WhateverMessageHeader ParseHeader(byte[] message)
         {
             WhateverMessageHeader header = new WhateverMessageHeader();
             header = (WhateverMessageHeader)FromBytes(message, header);
             return header;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder bodybuild = new StringBuilder();
+            var bb = this.EncodeBody();
+
+            bodybuild.Append(Enum.GetName(typeof(MessageType), this.MessageType));
+
+            bodybuild.Append("<");
+            foreach (var b in bb)
+            {
+                bodybuild.Append(b.ToString());
+                bodybuild.Append(",");
+            }
+
+            bodybuild.Append(">");
+
+            return bodybuild.ToString();
         }
 
         protected static byte[] GetBytes(object str)
@@ -164,67 +164,23 @@
             return str;
         }
 
-        public override string ToString()
+        protected virtual byte[] EncodeBody()
         {
-            StringBuilder bodybuild = new StringBuilder();
-            var bb = this.EncodeBody();
-
-            bodybuild.Append(Enum.GetName(typeof(MessageType), this.MessageType));
-
-            bodybuild.Append("<");
-            foreach (var b in bb)
-            {
-                bodybuild.Append(b.ToString());
-                bodybuild.Append(",");
-            }
-
-            bodybuild.Append(">");
-
-            return bodybuild.ToString();
-        }
-    }
-
-    public interface IMessageBody
-    {
-    }
-
-    public struct EntityLocationInfo
-    {
-        private const char InfoSeperator = '&';
-
-        public int Identifier { get; }
-
-        public float X { get; }
-
-        public float Y { get; }
-
-        public EntityLocationInfo(GameEntity entity)
-            : this(entity.Identifier.Id, entity.Location.X, entity.Location.Y)
-        {
+            return GetBytes(this.MessageBody);
         }
 
-        public EntityLocationInfo(int id, float x, float y)
+        protected virtual void DecodeBody(byte[] bs)
         {
-            this.Identifier = id;
-            this.X = x;
-            this.Y = y;
+            IMessageBody body = this.MessageBody;
+            body = (IMessageBody)FromBytes(bs, body);
+            this.MessageBody = body;
         }
 
-        // todo should encode to byte[] like a sane person
-        public string Encode()
+        public struct WhateverMessageHeader
         {
-            return this.Identifier.ToString() + InfoSeperator + this.X.ToString("0.00", CultureInfo.InvariantCulture) + InfoSeperator + this.Y.ToString("0.00", CultureInfo.InvariantCulture);
-        }
+            public byte Type { get; set; }
 
-        public static EntityLocationInfo Decode(byte[] data)
-        {
-            string str = System.Text.Encoding.ASCII.GetString(data);
-
-            var dataStrings = str.Split(InfoSeperator);
-            int id = int.Parse(dataStrings[0]);
-            float x = float.Parse(dataStrings[1], CultureInfo.InvariantCulture);
-            float y = float.Parse(dataStrings[2], CultureInfo.InvariantCulture);
-            return new EntityLocationInfo(id, x, y);
+            public ushort Size { get; set; }
         }
     }
 
@@ -240,5 +196,49 @@
         SyncMessage,
 
         CreateLootMessage,
+    }
+
+    public interface IMessageBody
+    {
+    }
+
+    public struct EntityLocationInfo
+    {
+        private const char InfoSeperator = '&';
+
+        public EntityLocationInfo(GameEntity entity)
+            : this(entity.Identifier.Id, entity.Location.X, entity.Location.Y)
+        {
+        }
+
+        public EntityLocationInfo(int id, float x, float y)
+        {
+            this.Identifier = id;
+            this.X = x;
+            this.Y = y;
+        }
+
+        public int Identifier { get; }
+
+        public float X { get; }
+
+        public float Y { get; }
+
+        public static EntityLocationInfo Decode(byte[] data)
+        {
+            string str = System.Text.Encoding.ASCII.GetString(data);
+
+            var dataStrings = str.Split(InfoSeperator);
+            int id = int.Parse(dataStrings[0]);
+            float x = float.Parse(dataStrings[1], CultureInfo.InvariantCulture);
+            float y = float.Parse(dataStrings[2], CultureInfo.InvariantCulture);
+            return new EntityLocationInfo(id, x, y);
+        }
+
+        // todo should encode to byte[] like a sane person
+        public string Encode()
+        {
+            return this.Identifier.ToString() + InfoSeperator + this.X.ToString("0.00", CultureInfo.InvariantCulture) + InfoSeperator + this.Y.ToString("0.00", CultureInfo.InvariantCulture);
+        }
     }
 }

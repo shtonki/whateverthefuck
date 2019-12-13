@@ -5,8 +5,6 @@
 
     public class Loot : GameEntity
     {
-        public List<Item> Items { get; private set; } = new List<Item>();
-
         public Loot(EntityIdentifier identifier, CreationArgs args)
             : base(identifier, EntityType.Loot, args)
         {
@@ -15,5 +13,7 @@
             this.Collidable = false;
             this.Targetable = true;
         }
+
+        public List<Item> Items { get; private set; } = new List<Item>();
     }
 }

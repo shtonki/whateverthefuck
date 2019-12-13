@@ -5,23 +5,14 @@
 
     public abstract class Coordinate
     {
-        public float X { get; set; }
-
-        public float Y { get; set; }
-
         protected Coordinate(float x, float y)
         {
             (this.X, this.Y) = (x, y);
         }
 
-        public GLCoordinate ToGLCoordinate()
-        {
-            if (this is GLCoordinate) { return this as GLCoordinate; }
-            if (this is GameCoordinate) { return GUI.Camera.GameToGLCoordinate(this as GameCoordinate) as GLCoordinate; }
-            if (this is ScreenCoordinate) { return GUI.TranslateScreenToGLCoordinates(this as ScreenCoordinate) as GLCoordinate; }
+        public float X { get; set; }
 
-            throw new NotImplementedException();
-        }
+        public float Y { get; set; }
 
         public static float AngleBetweenCoordinates(Coordinate c1, Coordinate c2)
         {
@@ -46,6 +37,15 @@
             var deltaX = c1.X - c2.X;
             var deltaY = c1.Y - c2.Y;
             return (float)Math.Sqrt((deltaX * deltaX) + (deltaY * deltaY));
+        }
+
+        public GLCoordinate ToGLCoordinate()
+        {
+            if (this is GLCoordinate) { return this as GLCoordinate; }
+            if (this is GameCoordinate) { return GUI.Camera.GameToGLCoordinate(this as GameCoordinate) as GLCoordinate; }
+            if (this is ScreenCoordinate) { return GUI.TranslateScreenToGLCoordinates(this as ScreenCoordinate) as GLCoordinate; }
+
+            throw new NotImplementedException();
         }
 
         public override string ToString()

@@ -2,8 +2,6 @@
 {
     public class LoginCredentials
     {
-        public string Username { get; private set; }
-
         public LoginCredentials()
         {
         }
@@ -12,5 +10,7 @@
         {
             this.Username = username;
         }
+
+        public string Username { get; private set; }
     }
 }

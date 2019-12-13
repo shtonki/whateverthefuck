@@ -2,6 +2,25 @@
 {
     using whateverthefuck.src.model;
 
+    public abstract class Camera
+    {
+        public virtual Coordinate Location { get; protected set; }
+
+        public Zoomer Zoom { get; } = new Zoomer();
+
+        public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
+        {
+            var x = gameCoordinate.X - this.Location.X;
+            var y = gameCoordinate.Y - this.Location.Y;
+            return new GLCoordinate(x, y);
+        }
+
+        public GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
+        {
+            return new GameCoordinate((glCoordinate.X / this.Zoom.CurrentZoom) + this.Location.X, (glCoordinate.Y / this.Zoom.CurrentZoom) + this.Location.Y);
+        }
+    }
+
     public class Zoomer
     {
         public float CurrentZoom { get; set; } = 1.0f;
@@ -37,44 +56,25 @@
         }
     }
 
-    public abstract class Camera
-    {
-        public virtual Coordinate Location { get; protected set; }
-
-        public Zoomer Zoom { get; } = new Zoomer();
-
-        public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
-        {
-            var x = gameCoordinate.X - this.Location.X;
-            var y = gameCoordinate.Y - this.Location.Y;
-            return new GLCoordinate(x, y);
-        }
-
-        public GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
-        {
-            return new GameCoordinate((glCoordinate.X / this.Zoom.CurrentZoom) + this.Location.X, (glCoordinate.Y / this.Zoom.CurrentZoom) + this.Location.Y);
-        }
-    }
-
     internal class FollowCamera : Camera
     {
-        private GameEntity Following;
+        private GameEntity following;
 
         public FollowCamera(GameEntity following)
         {
-            this.Following = following;
+            this.following = following;
         }
 
         public override Coordinate Location
         {
             get
             {
-                if (this.Following?.Location == null)
+                if (this.following?.Location == null)
                 {
                     return new GameCoordinate(0, 0);
                 }
 
-                return this.Following.Center;
+                return this.following.Center;
             }
         }
     }

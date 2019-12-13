@@ -4,22 +4,22 @@
 
     public static class UserSettings
     {
-        public static ConfigInfo Config { get; set; }
+        private static string configPath = "config.json";
 
-        private static string ConfigPath = "config.json";
+        public static ConfigInfo Config { get; set; }
 
         public static void LoadUserSettings()
         {
             try
             {
-                Config = JsonIO.ReadFromJsonFile<ConfigInfo>(ConfigPath);
+                Config = JsonIO.ReadFromJsonFile<ConfigInfo>(configPath);
                 Logging.Log("Loaded config from file");
             }
             catch (Exception)
             {
                 Config = new ConfigInfo();
                 Config.Username = "default";
-                JsonIO.WriteToJsonFile<ConfigInfo>(ConfigPath, Config);
+                JsonIO.WriteToJsonFile<ConfigInfo>(configPath, Config);
                 Logging.Log("Created default config file");
             }
         }
@@ -27,8 +27,8 @@
 
     public class ConfigInfo
     {
-        public string Username;
+        public string Username { get; set; }
 
-        public bool ConnectToLocalHost;
+        public bool ConnectToLocalHost { get; set; }
     }
 }

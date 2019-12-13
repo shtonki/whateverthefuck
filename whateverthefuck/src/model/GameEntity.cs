@@ -7,9 +7,6 @@
     using whateverthefuck.src.view;
     using Rectangle = whateverthefuck.src.view.Rectangle;
 
-    /// <summary>
-    /// The types of GameEntities.
-    /// </summary>
     public enum EntityType
     {
         None,
@@ -27,9 +24,6 @@
         Loot,
     }
 
-    /// <summary>
-    /// States of a GameEntity.
-    /// </summary>
     public enum GameEntityState
     {
         Alive,
@@ -41,12 +35,6 @@
     /// </summary>
     public abstract class GameEntity : Drawable
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GameEntity"/> class.
-        /// </summary>
-        /// <param name="identifier">EntityIdentifier of the GameEntity.</param>
-        /// <param name="type">EntityType of the GameEntity.</param>
-        /// <param name="args">CreationArgs or the GameEntity.</param>
         protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArgs args)
             : base(new GameCoordinate(0, 0))
         {
@@ -70,24 +58,12 @@
         /// </summary>
         public event Action<GameEntity> OnStep;
 
-        /// <summary>
-        /// Gets or sets maximum health of the GameEntity.
-        /// </summary>
         public int MaxHealth { get; set; } = 100;
 
-        /// <summary>
-        /// Gets or sets current health of the GameEntity.
-        /// </summary>
         public int CurrentHealth { get; set; } = 100;
 
-        /// <summary>
-        /// Gets or sets the Size of the GameEntity.
-        /// </summary>
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
-        /// <summary>
-        /// Gets the EntityType of the GameEntity.
-        /// </summary>
         public EntityType EntityType { get; }
 
         /// <summary>
@@ -101,7 +77,7 @@
         public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
 
         /// <summary>
-        /// Gets or sets a value indicating whether the GameEntity moves.
+        /// Gets or sets a value indicating whether the GameEntity can move.
         /// </summary>
         public bool Movable { get; protected set; } = false;
 
@@ -120,9 +96,6 @@
         /// </summary>
         public bool BlocksLOS { get; protected set; } = true;
 
-        /// <summary>
-        /// Gets or sets the biggest fucking hack ever.
-        /// </summary>
         public int LOSGraceTicks { get; set; } = 0;
 
         /// <summary>
@@ -130,9 +103,6 @@
         /// </summary>
         public MovementStruct Movements { get; set; } = new MovementStruct();
 
-        /// <summary>
-        /// Gets or sets the speed at which the GameEntity moves.
-        /// </summary>
         public float MoveSpeed { get; protected set; } = 0.01f;
 
         /// <summary>
@@ -174,14 +144,8 @@
             set { this.Location = new GameCoordinate(value.X - (this.Size.X / 2), value.Y - (this.Size.Y / 2)); }
         }
 
-        /// <summary>
-        /// Gets or sets the GameEntityState of the GameEntity.
-        /// </summary>
         public GameEntityState State { get; protected set; }
 
-        /// <summary>
-        /// Gets or sets the Color used to draw the background of the GameEntity.
-        /// </summary>
         protected Color DrawColor { get; set; } = Color.Black;
 
         /// <summary>
@@ -260,10 +224,6 @@
             return Coordinate.DistanceBetweenCoordinates(this.Location, other);
         }
 
-        /// <summary>
-        /// Generates the string encoding of the GameEntity.
-        /// </summary>
-        /// <returns>A nice string you can print the fuck out of.</returns>
         public override string ToString()
         {
             return string.Format("{0} at {1}:{2}", this.EntityType.ToString(), this.Location.X.ToString(), this.Location.Y.ToString());
@@ -321,9 +281,6 @@
     /// </summary>
     public class MovementStruct
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MovementStruct"/> class representing no movement.
-        /// </summary>
         public MovementStruct()
         {
             this.Direction = float.NaN;
@@ -406,6 +363,11 @@
 
         private static int randomCounter = 1;
 
+        public EntityIdentifier(int id)
+        {
+            this.Id = id;
+        }
+
         /// <summary>
         /// Gets an new invalid EntityIdentifier.
         /// </summary>
@@ -420,15 +382,6 @@
         /// Gets a value indicating whether the EntityIdentifier is valid.
         /// </summary>
         public bool IsValid => this.Id != InvalidId;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EntityIdentifier"/> class.
-        /// </summary>
-        /// <param name="id">The identifier.</param>
-        public EntityIdentifier(int id)
-        {
-            this.Id = id;
-        }
 
         /// <summary>
         /// Creates the next reserved EntityIdentifier.

@@ -9,10 +9,6 @@
     /// </summary>
     public class EntityGenerator
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EntityGenerator"/> class.
-        /// </summary>
-        /// <param name="idGenerator">The IdentifierGenerator used to assign EntityIdentifiers to generated GameEntities.</param>
         public EntityGenerator(IdentifierGenerator idGenerator)
         {
             this.IdGenerator = idGenerator;
@@ -22,13 +18,6 @@
 
         private IdentifierGenerator IdGenerator { get; }
 
-        /// <summary>
-        /// Generates a GameEntity.
-        /// </summary>
-        /// <param name="type">EntityType of the GameEntity.</param>
-        /// <param name="identifier">EntityIdentifier of the GameEntity.</param>
-        /// <param name="args">CreationArgs used to create the GameEntity.</param>
-        /// <returns>The created GameEntity.</returns>
         public GameEntity GenerateEntity(EntityType type, EntityIdentifier identifier, CreationArgs args)
         {
             switch (type)
@@ -72,11 +61,6 @@
             }
         }
 
-        /// <summary>
-        /// Generates a GameEntity from a CreateEntityEvent.
-        /// </summary>
-        /// <param name="e">The CreateEntityEvent containing the creation inforomation.</param>
-        /// <returns>The created GameEntity.</returns>
         public GameEntity GenerateEntity(CreateEntityEvent e)
         {
             var rt = this.GenerateEntity(e.EntityType, new EntityIdentifier(e.Id), e.CreationArgs);
@@ -86,23 +70,11 @@
             return rt;
         }
 
-        /// <summary>
-        /// Generates a GameEntity.
-        /// </summary>
-        /// <param name="e">The EntityType of the GameEntity.</param>
-        /// <param name="a">The CreationArgs used to create the GameEntity.</param>
-        /// <returns>The created GameEntity.</returns>
         public GameEntity GenerateEntity(EntityType e, CreationArgs a)
         {
             return this.GenerateEntity(e, this.IdGenerator.GenerateNextIdentifier(), a);
         }
 
-        /// <summary>
-        /// Generates a house consisting of Blocks, Floors, and Doors.
-        /// </summary>
-        /// <param name="xorg">Grid index of houses X starting location.</param>
-        /// <param name="yorg">Grid index of houses Y starting location.</param>
-        /// <returns>The GameEntities making up the created house.</returns>
         public IEnumerable<GameEntity> GenerateHouse(int xorg, int yorg)
         {
             var dca = new DoorCreationArgs(DoorCreationArgs.Types.Wood);
@@ -146,13 +118,16 @@
         }
     }
 
+    /// <summary>
+    /// Uniquely identifies a GameEntity within a GameState.
+    /// </summary>
     public class IdentifierGenerator
     {
-        private int IdCounter = 0;
+        private int idCounter = 0;
 
         public EntityIdentifier GenerateNextIdentifier()
         {
-            return new EntityIdentifier(this.IdCounter++);
+            return new EntityIdentifier(this.idCounter++);
         }
     }
 }

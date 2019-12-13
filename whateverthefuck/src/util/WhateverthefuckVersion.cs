@@ -4,17 +4,7 @@
 
     public class WhateverthefuckVersion
     {
-        public short Major { get; }
-
-        public short Minor { get; }
-
-        public short Build { get; }
-
-        public short Revision { get; }
-
         private const short Pre = short.MaxValue;
-
-        public static WhateverthefuckVersion CurrentVersion => new WhateverthefuckVersion(0, 0, 1, Pre);
 
         private WhateverthefuckVersion(short major, short minor, short build, short revision)
         {
@@ -23,6 +13,16 @@
             this.Build = build;
             this.Revision = revision;
         }
+
+        public static WhateverthefuckVersion CurrentVersion => new WhateverthefuckVersion(0, 0, 1, Pre);
+
+        public short Major { get; }
+
+        public short Minor { get; }
+
+        public short Build { get; }
+
+        public short Revision { get; }
 
         public override string ToString()
         {

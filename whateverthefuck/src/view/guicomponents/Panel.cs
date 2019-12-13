@@ -4,10 +4,6 @@
 
     internal class Panel : GUIComponent
     {
-        protected Zoomer Zoomer { get; set; }
-
-        protected MenuBar MBar { get; set; }
-
         public Panel()
             : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
         {
@@ -20,6 +16,10 @@
             this.Zoomer = new Zoomer();
         }
 
+        protected Zoomer Zoomer { get; set; }
+
+        protected MenuBar MBar { get; set; }
+
         public void AddMenuBar()
         {
             this.MBar = new MenuBar(this.Size.X);
@@ -29,35 +29,27 @@
         public override void DrawMe(DrawAdapter drawAdapter)
         {
             base.DrawMe(drawAdapter);
-#if false
-            drawAdapter.Translate(Location.X, Location.Y);
-            
-            MBar?.DrawMe(drawAdapter);
-
-            drawAdapter.Translate(-Location.X, -Location.Y);
-#endif
         }
 
-        // just fucking shoot me already
         internal class MenuBar : GUIComponent
         {
-            private static float BarHeight = 0.03f;
+            private static float barHeight = 0.03f;
 
-            private Button CloseButton;
-            private GLCoordinate ButtonSize = new GLCoordinate(BarHeight, BarHeight);
+            private Button closeButton;
+            private GLCoordinate buttonSize = new GLCoordinate(barHeight, barHeight);
 
             internal MenuBar(float width)
-                : base(new GLCoordinate(0, 0), new GLCoordinate(width, BarHeight))
+                : base(new GLCoordinate(0, 0), new GLCoordinate(width, barHeight))
             {
-                this.CloseButton = new Button(new GLCoordinate(width - this.ButtonSize.X, 0), this.ButtonSize);
-                this.CloseButton.BackColor = Color.Red;
+                this.closeButton = new Button(new GLCoordinate(width - this.buttonSize.X, 0), this.buttonSize);
+                this.closeButton.BackColor = Color.Red;
 #if false
                 CloseButton.OnLeftMouseDown += coordinate =>
                 {
                     CloseButton.BackColor = Color.Black;
                 };
 #endif
-                this.Add(this.CloseButton);
+                this.Add(this.closeButton);
 
                 this.BackColor = Color.Blue;
             }
@@ -65,22 +57,22 @@
             public override void DrawMe(DrawAdapter drawAdapter)
             {
                 base.DrawMe(drawAdapter);
-                this.CloseButton.DrawMe(drawAdapter);
+                this.closeButton.DrawMe(drawAdapter);
             }
         }
     }
 
     internal class DraggablePanel : Panel
     {
-        private Panel DraggedPanel;
+        private Panel draggedPanel;
 
-        private bool Dragging;
+        private bool dragging;
 
         public DraggablePanel()
             : base()
         {
-            this.DraggedPanel = new Panel();
-            base.Add(this.DraggedPanel);
+            this.draggedPanel = new Panel();
+            base.Add(this.draggedPanel);
 
             this.BackColor = Color.Black;
 
@@ -88,17 +80,17 @@
             {
                 if (i.MouseButton == OpenTK.Input.MouseButton.Left)
                 {
-                    this.Dragging = i.Direction == control.InputUnion.Directions.Down;
+                    this.dragging = i.Direction == control.InputUnion.Directions.Down;
                 }
             };
 
             this.OnMouseMove += (c, i) =>
             {
-                if (this.Dragging)
+                if (this.dragging)
                 {
                     var dx = i.Location.X - i.PreviousLocation.X;
                     var dy = i.Location.Y - i.PreviousLocation.Y;
-                    this.DraggedPanel.Location = new GLCoordinate(this.DraggedPanel.Location.X - dx, this.DraggedPanel.Location.Y - dy);
+                    this.draggedPanel.Location = new GLCoordinate(this.draggedPanel.Location.X - dx, this.draggedPanel.Location.Y - dy);
                 }
             };
         }
@@ -114,7 +106,7 @@
 
         public override void Add(GUIComponent toAdd)
         {
-            this.DraggedPanel.Add(toAdd);
+            this.draggedPanel.Add(toAdd);
         }
     }
 }

@@ -1,14 +1,7 @@
 ﻿namespace whateverthefuck.src.model
 {
-    /// <summary>
-    /// A container for the arguments used when creating a GameEntity.
-    /// </summary>
     public class CreationArgs
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CreationArgs"/> class.
-        /// </summary>
-        /// <param name="value">The unencoded value of the CreationArgs.</param>
         public CreationArgs(ulong value)
         {
             this.Value = value;

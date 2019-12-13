@@ -12,7 +12,10 @@
 
     internal class GibbWindow : GameWindow
     {
-        private ManualResetEventSlim LoadResetEvent;
+        private ManualResetEventSlim loadResetEvent;
+
+        private int lastSecond;
+        private int renderCounter;
 
         public GibbWindow(ManualResetEventSlim loadResetEvent)
             : base(600, 600, new GraphicsMode(32, 24, 0, 32), "GibbWindow")
@@ -22,7 +25,7 @@
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-            this.LoadResetEvent = loadResetEvent;
+            this.loadResetEvent = loadResetEvent;
         }
 
         protected override void OnResize(EventArgs e)
@@ -34,14 +37,11 @@
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            if (this.LoadResetEvent != null)
+            if (this.loadResetEvent != null)
             {
-                this.LoadResetEvent.Set();
+                this.loadResetEvent.Set();
             }
         }
-
-        private int LastSecond;
-        private int RenderCounter;
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
@@ -49,15 +49,15 @@
 
             var newSecond = DateTime.Now.Second;
 
-            if (newSecond == this.LastSecond)
+            if (newSecond == this.lastSecond)
             {
-                this.RenderCounter++;
+                this.renderCounter++;
             }
             else
             {
-                this.LastSecond = newSecond;
-                this.Title = this.RenderCounter.ToString();
-                this.RenderCounter = 0;
+                this.lastSecond = newSecond;
+                this.Title = this.renderCounter.ToString();
+                this.renderCounter = 0;
             }
 
             GL.Clear(ClearBufferMask.ColorBufferBit);

@@ -16,38 +16,6 @@
         {
         }
 
-        private static NetworkStream ConnectToServer()
-        {
-            TcpClient serverConnection;
-            while (true)
-            {
-                if (UserSettings.Config.ConnectToLocalHost)
-                {
-                    try
-                    {
-                        serverConnection = new TcpClient(BackupServerIp, ServerPort);
-                        break;
-                    }
-                    catch (SocketException)
-                    {
-                        Logging.Log("Failed to connect to Localhost");
-                    }
-                }
-
-                try
-                {
-                    serverConnection = new TcpClient(ServerIp, ServerPort);
-                    break;
-                }
-                catch (SocketException)
-                {
-                    Logging.Log("Failed to connect to main server.");
-                }
-            }
-
-            return serverConnection.GetStream();
-        }
-
         protected override void HandleMessage(WhateverthefuckMessage message)
         {
             switch (message.MessageType)
@@ -84,6 +52,38 @@
         protected override void HandleConnectionDeath()
         {
             throw new NotImplementedException();
+        }
+
+        private static NetworkStream ConnectToServer()
+        {
+            TcpClient serverConnection;
+            while (true)
+            {
+                if (UserSettings.Config.ConnectToLocalHost)
+                {
+                    try
+                    {
+                        serverConnection = new TcpClient(BackupServerIp, ServerPort);
+                        break;
+                    }
+                    catch (SocketException)
+                    {
+                        Logging.Log("Failed to connect to Localhost");
+                    }
+                }
+
+                try
+                {
+                    serverConnection = new TcpClient(ServerIp, ServerPort);
+                    break;
+                }
+                catch (SocketException)
+                {
+                    Logging.Log("Failed to connect to main server.");
+                }
+            }
+
+            return serverConnection.GetStream();
         }
     }
 }

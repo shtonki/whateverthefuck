@@ -9,7 +9,7 @@
 
     public class JsonIO
     {
-        private static JsonSerializerSettings Settings = new JsonSerializerSettings
+        private static JsonSerializerSettings settings = new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Auto,
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -46,7 +46,7 @@
 
         public static T ConvertToString<T>(string json)
         {
-            return JsonConvert.DeserializeObject<T>(json, Settings);
+            return JsonConvert.DeserializeObject<T>(json, settings);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@
             TextWriter writer = null;
             try
             {
-                var contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite, typeof(T), Settings);
+                var contentsToWriteToFile = JsonConvert.SerializeObject(objectToWrite, typeof(T), settings);
                 writer = new StreamWriter(filePath, append);
                 writer.Write(contentsToWriteToFile);
             }
@@ -83,7 +83,7 @@
         {
             try
             {
-                return JsonConvert.SerializeObject(objectToWrite, typeof(T), Settings);
+                return JsonConvert.SerializeObject(objectToWrite, typeof(T), settings);
             }
             catch (Exception e)
             {
@@ -107,7 +107,7 @@
             {
                 reader = new StreamReader(filePath);
                 var fileContents = reader.ReadToEnd();
-                var v = JsonConvert.DeserializeObject<T>(fileContents, Settings);
+                var v = JsonConvert.DeserializeObject<T>(fileContents, settings);
                 return v;
             }
             finally

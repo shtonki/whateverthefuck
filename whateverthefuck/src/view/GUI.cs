@@ -50,13 +50,6 @@
                 ;
         }
 
-        private static void LaunchGameWindow(object o)
-        {
-            ManualResetEventSlim loadre = (ManualResetEventSlim)o;
-            Frame = new GibbWindow(loadre);
-            Frame.Run(0, 0);
-        }
-
         public static void LoadGUI()
         {
 #if true
@@ -107,21 +100,11 @@
             return new ScreenCoordinate((int)x, (int)y);
         }
 
-#if false
-        // jesus fuck
-        public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate sc)
+        private static void LaunchGameWindow(object o)
         {
-            var correctish = SToGL(sc);
-            return new GLCoordinate(sc.X * 2.0f / Frame.ClientSize.Width - 1, -sc.Y * 2.0f / Frame.ClientSize.Height - 1);
+            ManualResetEventSlim loadre = (ManualResetEventSlim)o;
+            Frame = new GibbWindow(loadre);
+            Frame.Run(0, 0);
         }
-
-        public static ScreenCoordinate TranslateGLToScreenCoordinates(GLCoordinate gl)
-        {
-            int x = (int) ((gl.X + 1) * Frame.ClientSize.Width / 2);
-            int y = (int) ((gl.Y + 1) * Frame.ClientSize.Height / 2); 
-
-            return new ScreenCoordinate(x, y);
-        }
-#endif
     }
 }

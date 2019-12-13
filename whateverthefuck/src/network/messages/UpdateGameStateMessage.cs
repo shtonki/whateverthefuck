@@ -7,10 +7,6 @@
 
     public class UpdateGameStateMessage : WhateverthefuckMessage
     {
-        public int Tick { get; private set; }
-
-        public List<GameEvent> Events { get; private set; }
-
         public UpdateGameStateMessage(int tick, params GameEvent[] es)
             : this(tick, (IEnumerable<GameEvent>)es)
         {
@@ -28,6 +24,10 @@
         {
             this.Events = new List<GameEvent>();
         }
+
+        public int Tick { get; private set; }
+
+        public List<GameEvent> Events { get; private set; }
 
         protected override byte[] EncodeBody()
         {
