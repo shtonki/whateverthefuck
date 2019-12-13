@@ -44,7 +44,7 @@
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         private int[] bonuses = new int[4];
 
-        public IEnumerable<ItemBonus> Bonuses => bonuses.Select(b => new ItemBonus(b));
+        public IEnumerable<ItemBonus> Bonuses => this.bonuses.Select(b => new ItemBonus(b));
 
         public ItemMessageBody()
         {
@@ -56,7 +56,7 @@
             this.StackSize = item.StackSize;
             this.Rarity = item.Rarity;
             var bc = item.Bonuses.Select(b => b.ToInt()).ToArray();
-            Array.Copy(bc, 0, bonuses, 0, bc.Length);
+            Array.Copy(bc, 0, this.bonuses, 0, bc.Length);
         }
     }
 }

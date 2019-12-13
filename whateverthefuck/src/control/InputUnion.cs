@@ -82,7 +82,7 @@
         /// </summary>
         /// <param name="beforeMove">ScreenLocation of mouse before the mouse moved.</param>
         /// <param name="afterMove">ScreenLocation of mouse after the mouse moved.</param>
-        /// <returns>The created InputUnion</returns>
+        /// <returns>The created InputUnion.</returns>
         public static InputUnion MakeMouseMoveInput(ScreenCoordinate beforeMove, ScreenCoordinate afterMove)
         {
             return new InputUnion(beforeMove, afterMove);
@@ -93,7 +93,7 @@
         /// </summary>
         /// <param name="direction">The Direction of the key press.</param>
         /// <param name="key">The Key being pressed.</param>
-        /// <returns>The created InputUnion</returns>
+        /// <returns>The created InputUnion.</returns>
         public static InputUnion MakeKeyboardInput(Directions direction, Key key)
         {
             return new InputUnion(direction, key);
