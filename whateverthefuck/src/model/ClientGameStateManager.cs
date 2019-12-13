@@ -26,13 +26,15 @@
         {
             this.GameState = new GameState();
 
-            new Timer(_ => this.Tick(), null, 0, TickInterval);
+            this.TickTimer = new Timer(_ => this.Tick(), null, 0, TickInterval);
         }
 
         /// <summary>
         /// Gets the GameState representing the clients state of the game.
         /// </summary>
         public GameState GameState { get; private set; }
+
+        private Timer TickTimer { get; } // can't be removed or we stop moving after ~3 seconds
 
         private PlayerCharacter Hero { get; set; }
 
