@@ -83,10 +83,10 @@ namespace whateverthefuck.src.view.guicomponents
 
         private bool Dragging;
 
-        public DraggablePanel(Panel innerPanel) : base()
+        public DraggablePanel() : base()
         {
-            DraggedPanel = innerPanel;
-            base.Add(innerPanel);
+            DraggedPanel = new Panel();
+            base.Add(DraggedPanel);
 
             BackColor = Color.Black;
 
