@@ -46,7 +46,6 @@
             {
                 this.loadResetEvent.Set();
             }
-
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

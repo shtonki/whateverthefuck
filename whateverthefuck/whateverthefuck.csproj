@@ -48,6 +48,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="src\control\GameAction.cs" />
     <Compile Include="src\control\Hotkeys.cs" />
     <Compile Include="src\control\InputUnion.cs" />

@@ -16,7 +16,7 @@
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            drawAdapter.DrawSprite(sprite.sid, 0, 0, Size.X, Size.Y);
+            drawAdapter.DrawSprite(this.sprite.sid, 0, 0, this.Size.X, this.Size.Y);
         }
     }
 }
