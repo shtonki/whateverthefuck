@@ -58,7 +58,6 @@
 
             UserLogin.Login(UserSettings.Config.Username);
             Logging.Log(string.Format("Logged on to Server as {0}", UserSettings.Config.Username), Logging.LoggingLevel.Info);
-
 #endif
         }
     }

@@ -49,7 +49,7 @@ namespace whateverthefuckserver.gameserver
             if (c++ % 100 == 0)
             {
                 var ms = new MovementStruct();
-                ms.Direction = (float)(RNG.BetweenZeroAndOne() * Math.PI);
+                ms.Direction = (float)(RNG.BetweenZeroAndOne() * Math.PI * 2);
                 PublishArray(new UpdateMovementEvent(e.Identifier.Id, ms));
             }
         }

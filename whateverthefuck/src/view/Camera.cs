@@ -4,9 +4,13 @@
 
     public abstract class Camera
     {
-        public virtual Coordinate Location { get; protected set; }
+        private Coordinate lockedLocation;
+
+        public Coordinate Location => this.lockedLocation ?? this.CurrentLocation;
 
         public Zoomer Zoom { get; } = new Zoomer();
+
+        protected virtual Coordinate CurrentLocation { get; set; }
 
         public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
         {
@@ -17,7 +21,19 @@
 
         public GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
         {
-            return new GameCoordinate((glCoordinate.X / this.Zoom.CurrentZoom) + this.Location.X, (glCoordinate.Y / this.Zoom.CurrentZoom) + this.Location.Y);
+            return new GameCoordinate(
+                (glCoordinate.X / this.Zoom.CurrentZoom) + this.Location.X,
+                (glCoordinate.Y / this.Zoom.CurrentZoom) + this.Location.Y);
+        }
+
+        public void Lock()
+        {
+            this.lockedLocation = this.CurrentLocation;
+        }
+
+        public void Unlock()
+        {
+            this.lockedLocation = null;
         }
     }
 
@@ -65,7 +81,7 @@
             this.following = following;
         }
 
-        public override Coordinate Location
+        protected override Coordinate CurrentLocation
         {
             get
             {
@@ -83,7 +99,7 @@
     {
         public StaticCamera(GameCoordinate origin)
         {
-            this.Location = origin;
+            this.CurrentLocation = origin;
         }
     }
 }

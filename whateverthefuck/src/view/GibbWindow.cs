@@ -72,6 +72,8 @@
 
             var drawAdapter = new DrawAdapter();
 
+            GUI.Camera.Lock();
+
             // Draw GUI components
             foreach (var guiComponent in GUI.GUIComponents)
             {
@@ -92,6 +94,8 @@
             {
                 drawable.Draw(drawAdapter);
             }
+
+            GUI.Camera.Unlock();
 
             this.SwapBuffers();
             GL.PopMatrix();
