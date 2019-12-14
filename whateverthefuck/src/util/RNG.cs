@@ -48,11 +48,11 @@
         }
 
         /// <summary>
-        /// Returns an integer between a(including) and b(excluding)
+        /// Returns an integer between a(including) and b(excluding).
         /// </summary>
         /// <param name="a">min</param>
         /// <param name="b">max</param>
-        /// <returns> a <= n < b </returns>
+        /// <returns> a &lt;= n &lt; b</returns>
         public static int IntegerBetween(int a, int b)
         {
             return r.Next(a, b);

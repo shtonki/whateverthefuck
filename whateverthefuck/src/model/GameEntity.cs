@@ -35,6 +35,9 @@
     /// </summary>
     public abstract class GameEntity : Drawable
     {
+        private const float HealthbarWidth = 0.1f;
+        private const float HealthbarHeight = 0.02f;
+
         protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArgs args)
             : base(new GameCoordinate(0, 0))
         {
@@ -146,6 +149,8 @@
 
         public GameEntityState State { get; protected set; }
 
+        public Color HighlightColor { get; set; } = Color.Transparent;
+
         protected Color DrawColor { get; set; } = Color.Black;
 
         /// <summary>
@@ -153,10 +158,6 @@
         /// </summary>
         protected bool ShowHealth { get; set; } = false;
 
-        /// <summary>
-        /// Gets or sets something that's probably pretty cool if I knew what this did.
-        /// </summary>
-        private Color HighlightColor { get; set; } = Color.Transparent;
 
         /// <summary>
         /// The function used to draw the GameEntity.
@@ -173,22 +174,33 @@
 
             if (this.HighlightColor != Color.Transparent)
             {
-                Rectangle r = new view.Rectangle(x1, y1, x2, y2, this.HighlightColor);
+                Rectangle r = new view.Rectangle(x1, y1, Size.X, Size.Y, this.HighlightColor);
                 r.DrawMe(drawAdapter);
             }
 
             if (this.ShowHealth)
             {
-                float mid = (float)this.CurrentHealth / this.MaxHealth;
-                drawAdapter.FillRectangle(0, 0, this.Size.X * mid, 0.01f, Color.Green);
-                drawAdapter.FillRectangle(this.Size.X * mid, 0, this.Size.X, 0.01f, Color.Red);
-#if false
-                var full = new view.Rectangle(0, 0 + 0.01f, 0 + Size.X * mid, Top, Color.Green);
-                var missing = new view.Rectangle(0 + Size.X * mid, 0 + 0.01f, Right, Top, Color.Red);
+                float healthPercentageDividedBy100ForClarity = (float)this.CurrentHealth / this.MaxHealth;
 
-                full.DrawMe(drawAdapter);
-                missing.DrawMe(drawAdapter);
-#endif
+                var xorg = HealthbarWidth / 2;
+                var xoffset = this.Size.X / 2;
+
+                var currentHealthBar = new view.Rectangle(
+                    -xorg + xoffset,
+                    this.Size.Y,
+                    HealthbarWidth * healthPercentageDividedBy100ForClarity,
+                    HealthbarHeight,
+                    Color.Green);
+
+                var maxHealthBar = new view.Rectangle(
+                    -xorg + xoffset,
+                    this.Size.Y,
+                    HealthbarWidth,
+                    HealthbarHeight,
+                    Color.Red);
+
+                maxHealthBar.DrawMe(drawAdapter);
+                currentHealthBar.DrawMe(drawAdapter);
             }
         }
 

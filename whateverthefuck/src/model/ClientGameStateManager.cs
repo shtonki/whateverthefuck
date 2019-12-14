@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Linq;
     using System.Threading;
     using whateverthefuck.src.control;
@@ -36,7 +37,7 @@
 
         private HeroMovementStruct HeroMovements { get; } = new HeroMovementStruct();
 
-        private GameEntity Target { get; set; }
+        private GameEntity TargetedEntity { get; set; }
 
         private List<GUIComponent> ClickedDownGuiComponents { get; set; } = new List<GUIComponent>();
 
@@ -120,7 +121,7 @@
             {
                 var clicked = this.GUIComponentAt(input.Location.ToGLCoordinate());
 
-                if (clicked != null)
+                if (clicked != null && clicked.Visible)
                 {
                     this.Focus(clicked);
                 }
@@ -144,9 +145,9 @@
                 if (input.IsMouseInput)
                 {
                     var v = this.GetEntityAtLocation(GUI.Camera.GLToGameCoordinate(input.Location));
-                    if (v != null)
+                    if (v != null && v.Targetable)
                     {
-                        Logging.Log(v);
+                        this.Target(v);
                     }
                 }
                 else if (input.IsKeyboardInput)
@@ -159,6 +160,17 @@
                     }
                 }
             }
+        }
+
+        private void Target(GameEntity target)
+        {
+            if (this.TargetedEntity != null)
+            {
+                this.TargetedEntity.HighlightColor = Color.Transparent;
+            }
+
+            this.TargetedEntity = target;
+            this.TargetedEntity.HighlightColor = Color.Coral;
         }
 
         private void Tick()
@@ -231,16 +243,22 @@
             this.Focused = focused;
         }
 
+        private void CastAbility(Ability ability)
+        {
+
+            Program.ServerConnection.SendMessage(
+                new UpdateGameStateMessage(0, new UseAbilityEvent(this.Hero, this.TargetedEntity, ability)));
+        }
+
         private void ActivateAction(GameAction gameAction)
         {
             switch (gameAction)
             {
                 case GameAction.CastAbility1:
                 {
-                    if (this.GameState.GetEntityById(this.Target.Identifier.Id) != null)
+                    if (this.GameState.GetEntityById(this.TargetedEntity.Identifier.Id) != null)
                     {
-                        Program.ServerConnection.SendMessage(
-                            new UpdateGameStateMessage(0, new UseAbilityEvent(this.Hero, this.Target, new Ability(Abilities.Fireballx))));
+                        this.CastAbility(new Ability(Abilities.Fireballx));
                     }
                 } break;
 

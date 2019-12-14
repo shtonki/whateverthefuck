@@ -19,7 +19,7 @@
             HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.D), GameAction.HeroWalkRightwards));
             HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Up, Key.D), GameAction.HeroWalkRightwardsStop));
 
-            HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.Space), GameAction.CastAbility1));
+            HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.Number1), GameAction.CastAbility1));
 
             HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Up, Key.Tab), GameAction.TogglePanel));
         }

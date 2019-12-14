@@ -77,13 +77,13 @@
             this.drawColor = drawColor;
         }
 
-        public Rectangle(float x1, float y1, float x2, float y2, Color drawColor)
+        public Rectangle(float x1, float y1, float width, float height, Color drawColor)
             : base(new GameCoordinate(0, 0))
         {
             this.x1 = x1;
             this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
+            this.x2 = x1 + width;
+            this.y2 = y1 + height;
             this.drawColor = drawColor;
         }
 
