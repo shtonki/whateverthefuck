@@ -51,12 +51,15 @@ namespace whateverthefuck
 
             Logging.Log("Running version: " + WhateverthefuckVersion.CurrentVersion.ToString());
 
+
+
             GUI.CreateGameWindow();
             Logging.Log("Created Game Window", Logging.LoggingLevel.Info);
 
             GUI.LoadGUI();
             Logging.Log("Loaded GUI Components", Logging.LoggingLevel.Info);
 
+ 
             UserSettings.LoadUserSettings();
 
             ServerConnection = new WhateverClientConnection();
