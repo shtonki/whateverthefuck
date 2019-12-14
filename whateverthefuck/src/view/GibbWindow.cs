@@ -39,6 +39,10 @@ namespace whateverthefuck.src.view
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            ImageLoader.Init();
+            Logging.Log("Loaded resource locations.");
+
             if (LoadResetEvent != null) LoadResetEvent.Set();
         }
 

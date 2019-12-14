@@ -41,6 +41,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="src\control\GameAction.cs" />
     <Compile Include="src\control\HotkeyMapping.cs" />
     <Compile Include="src\control\Input.cs" />
@@ -77,6 +82,7 @@
     <Compile Include="src\network\WhateverthefuckConnection.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\util\Coloring.cs" />
+    <Compile Include="src\util\ImageLoader.cs" />
     <Compile Include="src\util\UserSettings.cs" />
     <Compile Include="src\util\WhateverEncoding.cs" />
     <Compile Include="src\util\WhateverthefuckVersion.cs" />
@@ -94,6 +100,7 @@
     <Compile Include="src\view\guicomponents\Panel.cs" />
     <Compile Include="src\view\guicomponents\GUIComponent.cs" />
     <Compile Include="src\view\ScreenCoordinate.cs" />
+    <Compile Include="src\view\Sprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -106,6 +113,14 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kappa.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
