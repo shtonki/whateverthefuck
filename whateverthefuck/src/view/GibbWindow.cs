@@ -9,6 +9,7 @@
     using OpenTK.Graphics.OpenGL;
     using OpenTK.Input;
     using whateverthefuck.src.control;
+    using whateverthefuck.src.util;
 
     internal class GibbWindow : GameWindow
     {
@@ -37,10 +38,15 @@
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            ImageLoader.Init();
+            Logging.Log("ImageLoader initialized.");
+
             if (this.loadResetEvent != null)
             {
                 this.loadResetEvent.Set();
             }
+
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
