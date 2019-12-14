@@ -64,16 +64,20 @@
 
     internal class DraggablePanel : Panel
     {
-        private Panel draggedPanel;
+        //private Panel draggedPanel;
 
         private bool dragging;
 
         public DraggablePanel()
             : base()
         {
+#if false
             this.draggedPanel = new Panel();
+            this.draggedPanel.Size = new GLCoordinate(1, 1);
+            this.draggedPanel.BackColor = Color.AntiqueWhite;
             base.Add(this.draggedPanel);
 
+#endif
             this.BackColor = Color.Black;
 
             this.OnMouseButtonPress += (c, i) =>
@@ -88,9 +92,16 @@
             {
                 if (this.dragging)
                 {
-                    var dx = i.Location.X - i.PreviousLocation.X;
-                    var dy = i.Location.Y - i.PreviousLocation.Y;
-                    this.draggedPanel.Location = new GLCoordinate(this.draggedPanel.Location.X - dx, this.draggedPanel.Location.Y - dy);
+                    var dx = i.PreviousLocation.X - i.Location.X;
+                    var dy = i.PreviousLocation.Y - i.Location.Y;
+                    var dcoordinate = new GLCoordinate(dx, dy);
+
+                    foreach (var kid in this.children)
+                    {
+                        kid.Location = (GLCoordinate)kid.Location + dcoordinate;
+                    }
+
+                    //this.draggedPanel.Location = new GLCoordinate(this.draggedPanel.Location.X - dx, this.draggedPanel.Location.Y - dy);
                 }
             };
         }
@@ -101,10 +112,12 @@
             base.DrawMe(drawAdapter);
             drawAdapter.DeactivateScissor();
         }
-
+#if false
         public override void Add(GUIComponent toAdd)
+
         {
             this.draggedPanel.Add(toAdd);
         }
+#endif
     }
 }

@@ -9,7 +9,7 @@
     public abstract class GUIComponent : Drawable
     {
         private Border border;
-        private List<GUIComponent> children = new List<GUIComponent>();
+        protected List<GUIComponent> children = new List<GUIComponent>();
 
         protected GUIComponent()
             : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
@@ -56,23 +56,25 @@
 
         public void HandleInput(InputUnion input)
         {
-            List<GUIComponent> kiddos;
+            HandleInput(input, new GLCoordinate(this.Location.X, this.Location.Y));
+        }
 
+        protected void HandleInput(InputUnion input, GLCoordinate initialOffset)
+        {
             if (input.IsMouseInput)
             {
                 var glClicked = input.Location;
-                var offset = new GLCoordinate(glClicked.X - this.Location.X, glClicked.Y - this.Location.Y);
+                var internalClickLocation = new GLCoordinate(glClicked.X - initialOffset.X, glClicked.Y - initialOffset.Y);
 
-                kiddos = this.InteractedChildren(offset);
-            }
-            else
-            {
-                kiddos = this.children;
-            }
+                var clickedChild = this.children.FirstOrDefault(c => c.Contains(internalClickLocation));
 
-            if (kiddos.Count() > 0)
-            {
-                kiddos.ForEach(child => child.HandleInput(input));
+                if (clickedChild != null)
+                {
+                    var newOffset = new GLCoordinate(initialOffset.X + clickedChild.Location.X, initialOffset.Y + clickedChild.Location.Y);
+
+                    clickedChild.HandleInput(input, newOffset);
+                    return;
+                }
             }
 
             if (input.IsMouseInput)
@@ -92,13 +94,6 @@
         public virtual void Add(GUIComponent toAdd)
         {
             this.children.Add(toAdd);
-        }
-
-        public List<GUIComponent> InteractedChildren(GLCoordinate interactLocation)
-        {
-            var translatedLoc = interactLocation;
-            var v = this.children.Where(c => c.Contains(translatedLoc)).ToList();
-            return v;
         }
 
         public virtual bool Contains(GLCoordinate clicked)

@@ -53,12 +53,17 @@
         public static void LoadGUI()
         {
 #if true
+            Panel outer = new Panel();
+            outer.Location = new GLCoordinate(-0.8f, -0.8f);
+            outer.Size = new GLCoordinate(1, 1);
+
             Panel p = new Panel();
             p.Location = new GLCoordinate(0.45f, 0.45f);
             p.Size = new GLCoordinate(0.2f, 0.2f);
             p.BackColor = Color.Pink;
             p.Add(new Button(new GLCoordinate(0.05f, 0.05f), new GLCoordinate(0.1f, 0.1f)));
-            GUIComponents.Add(p);
+            outer.Add(p);
+            //GUIComponents.Add(outer);
 
             Button b = new Button();
             b.BackColor = Color.HotPink;

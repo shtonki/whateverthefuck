@@ -8,6 +8,18 @@
         public Button()
             : base()
         {
+            // fix t ribbe
+            this.OnMouseButtonPress += (c, i) =>
+            {
+                if (i.Direction == control.InputUnion.Directions.Down)
+                {
+                    Logging.Log("down");
+                }
+                else if (i.Direction == control.InputUnion.Directions.Up)
+                {
+                    Logging.Log("up");
+                }
+            };
         }
 
         public Button(GLCoordinate location, GLCoordinate size)
