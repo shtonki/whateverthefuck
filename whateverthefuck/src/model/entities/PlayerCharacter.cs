@@ -15,7 +15,7 @@ namespace whateverthefuck.src.model.entities
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            drawAdapter.DrawSprite(s.sid, Location.X, Location.Y, Size.X, Size.Y);
+            drawAdapter.DrawSprite(s.sid, 0, 0, Size.X, Size.Y);
         }
     }
 }
