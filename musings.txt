@@ -1,0 +1,2 @@
+Clean up GameEvent so internals are usable to the GameState and handle conversion somewhere else.
+
