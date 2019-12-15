@@ -55,15 +55,22 @@
 
     public class ProjectileArgs : CreationArgs
     {
-        public ProjectileArgs(GameEntity c)
+        public ProjectileArgs(GameEntity controller, AbilityType abilityType)
             : base(0)
         {
-            this.ControllerId = c.Identifier.Id;
+            this.ControllerId = controller.Identifier.Id;
+            this.AbilityType = abilityType;
         }
 
         public ProjectileArgs(CreationArgs a)
             : base(a.Value)
         {
+        }
+
+        public AbilityType AbilityType
+        {
+            get { return (AbilityType)this.FirstInt; }
+            set { this.FirstInt = (int)value; }
         }
 
         public int ControllerId

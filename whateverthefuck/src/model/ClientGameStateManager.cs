@@ -108,7 +108,7 @@
             var lootee = this.GameState.GetEntityById(message.LooteeId);
 
             Loot lootbox = new Loot(EntityIdentifier.RandomReserved(), new CreationArgs(0));
-            lootbox.Location = lootee.Location;
+            lootbox.Center = lootee.Center;
             lootbox.Items.Add(item);
             var cevent = new CreateEntityEvent(lootbox);
             cevent.OnCreationCallback = e => this.AddLoot(e as Loot, item);
@@ -245,9 +245,13 @@
 
         private void CastAbility(Ability ability)
         {
+            if (this.TargetedEntity == null)
+            {
+                return;
+            }
 
             Program.ServerConnection.SendMessage(
-                new UpdateGameStateMessage(0, new UseAbilityEvent(this.Hero, this.TargetedEntity, ability)));
+                new UpdateGameStateMessage(0, new BeginCastAbility(this.Hero, this.TargetedEntity, ability)));
         }
 
         private void ActivateAction(GameAction gameAction)
@@ -256,10 +260,7 @@
             {
                 case GameAction.CastAbility1:
                 {
-                    if (this.GameState.GetEntityById(this.TargetedEntity.Identifier.Id) != null)
-                    {
-                        this.CastAbility(new Ability(Abilities.Fireballx));
-                    }
+                    this.CastAbility(new Ability(AbilityType.Fireballx));
                 } break;
 
                 case GameAction.HeroWalkUpwards:

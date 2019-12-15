@@ -63,7 +63,6 @@
             p.BackColor = Color.Pink;
             p.Add(new Button(new GLCoordinate(0.05f, 0.05f), new GLCoordinate(0.1f, 0.1f)));
             outer.Add(p);
-            //GUIComponents.Add(outer);
 
             Button b = new Button();
             b.BackColor = Color.HotPink;

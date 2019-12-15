@@ -151,13 +151,14 @@
 
         public Color HighlightColor { get; set; } = Color.Transparent;
 
+        protected CastingInfo CastingInfo { get; set; }
+
         protected Color DrawColor { get; set; } = Color.Black;
 
         /// <summary>
         /// Gets or sets a value indicating whether or not to show the health bar of the GameEntity.
         /// </summary>
         protected bool ShowHealth { get; set; } = false;
-
 
         /// <summary>
         /// The function used to draw the GameEntity.
@@ -210,20 +211,38 @@
         /// <param name="gameState">The GameState in which the GameEntity is ticked.</param>
         public virtual void Step(GameState gameState)
         {
+            if (this.CurrentHealth <= 0)
+            {
+                this.Die(gameState);
+            }
+
             if (this.State == GameEntityState.Dead)
             {
                 return;
             }
 
             this.OnStep?.Invoke(this);
-
             this.MovementCache = this.CalculateMovement(gameState);
             this.Location = (GameCoordinate)this.Location + this.MovementCache;
 
-            if (this.CurrentHealth < 0)
+            if (this.CastingInfo != null)
             {
-                this.Die(gameState);
+                this.CastingInfo.Step();
+                if (this.CastingInfo.DoneCasting)
+                {
+                    gameState.HandleGameEvents(new EndCastAbility(
+                        this,
+                        this.CastingInfo.Target,
+                        this.CastingInfo.CastingAbility));
+
+                    this.CastingInfo = null;
+                }
             }
+        }
+
+        public void CastAbility(Ability ability, GameEntity target)
+        {
+            this.CastingInfo = new CastingInfo(ability, target);
         }
 
         /// <summary>

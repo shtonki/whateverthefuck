@@ -187,67 +187,114 @@
             }
         }
 
-        private bool HandleGameEvent(GameEvent e)
+        private void HandleGameEvent(GameEvent e)
         {
             if (e is CreateEntityEvent cee)
             {
-                var entity = this.EntityGenerator.GenerateEntity(cee);
-                entity.OnDeath += cee.OnDeathCallback;
-                entity.OnStep += cee.OnStepCallback;
-
-                // it has to be like this
-                cee.OnCreationCallback?.Invoke(entity);
-
-                this.AddEntities(entity);
+                this.HandleEvent(cee);
             }
             else if (e is DestroyEntityEvent dee)
             {
-                var entity = this.GetEntityById(dee.Id);
-                this.RemoveEntity(entity);
+                this.HandleEvent(dee);
             }
             else if (e is UpdateMovementEvent uce)
             {
-                var entity = this.GetEntityById(uce.Id);
-
-                if (entity == null)
-                {
-                    Logging.Log("Dubious UpdateMovementEvent");
-                    return false;
-                }
-
-                entity.Movements = uce.Movements;
+                this.HandleEvent(uce);
             }
-            else if (e is UseAbilityEvent uae)
+            else if (e is BeginCastAbility uae)
             {
-                var caster = this.GetEntityById(uae.Id);
-                var castee = this.GetEntityById(uae.TargetId);
-
-                if (caster == null || castee == null)
-                {
-                    Logging.Log("Dubious UseAbilityEvent");
-                    return false;
-                }
-
-                var ca = new ProjectileArgs(caster);
-                var p = this.EntityGenerator.GenerateEntity(EntityType.Projectile, EntityIdentifier.RandomReserved(), ca);
-                p.Location = caster.Center;
-                p.Movements.FollowId = castee.Identifier.Id;
-                this.AddEntities(p);
+                this.HandleEvent(uae);
             }
-            else if (e is DealDamageEvent damage)
+            else if (e is DealDamageEvent dde)
             {
-                var defender = this.GetEntityById(damage.DefenderId);
-
-                defender.CurrentHealth -= damage.Damage;
-                defender.LastDamageTaken = damage;
+                this.HandleEvent(dde);
+            }
+            else if (e is EndCastAbility eca)
+            {
+                this.HandleEvent(eca);
             }
             else
             {
                 throw new NotImplementedException();
             }
-
-            return true;
         }
+
+        private void HandleEvent(BeginCastAbility beginCastAbility)
+        {
+            var caster = this.GetEntityById(beginCastAbility.CasterId);
+            var target = this.GetEntityById(beginCastAbility.TargetId);
+            var ability = new Ability(beginCastAbility.AbilityType);
+
+            caster.CastAbility(ability, target);
+        }
+
+        private void HandleEvent(UpdateMovementEvent updateMovementEvent)
+        {
+            var entity = this.GetEntityById(updateMovementEvent.Id);
+
+            if (entity == null)
+            {
+                Logging.Log("Dubious UpdateMovementEvent");
+                return;
+            }
+
+            entity.Movements = updateMovementEvent.Movements;
+        }
+
+        private void HandleEvent(EndCastAbility endAbilityEvent)
+        {
+            var caster = this.GetEntityById(endAbilityEvent.CasterId);
+            var castee = this.GetEntityById(endAbilityEvent.TargetId);
+
+            if (caster == null || castee == null)
+            {
+                Logging.Log("Dubious UseAbilityEvent");
+                return;
+            }
+
+            Ability ability = new Ability(endAbilityEvent.AbilityType);
+            CreateEntityEvent projectileCreationEvent = ability.Cast(caster);
+            var projectile = this.EntityGenerator.GenerateEntity(projectileCreationEvent);
+            projectile.Location = caster.Center;
+            projectile.Movements.FollowId = castee.Identifier.Id;
+            this.AddEntities(projectile);
+
+#if false
+            var ca = new ProjectileArgs(caster, endAbilityEvent.AbilityType);
+            var p = this.EntityGenerator.GenerateEntity(EntityType.Projectile, EntityIdentifier.RandomReserved(), ca);
+            p.Location = caster.Center;
+            p.Movements.FollowId = castee.Identifier.Id;
+            this.AddEntities(p);
+#endif
+        }
+
+        private void HandleEvent(DealDamageEvent dealDamageEvent)
+        {
+
+            var defender = this.GetEntityById(dealDamageEvent.DefenderId);
+
+            defender.CurrentHealth -= dealDamageEvent.Damage;
+            defender.LastDamageTaken = dealDamageEvent;
+        }
+
+        private void HandleEvent(CreateEntityEvent createEntityEvent)
+        {
+            var entity = this.EntityGenerator.GenerateEntity(createEntityEvent);
+            entity.OnDeath += createEntityEvent.OnDeathCallback;
+            entity.OnStep += createEntityEvent.OnStepCallback;
+
+            // it has to be like this
+            createEntityEvent.OnCreationCallback?.Invoke(entity);
+
+            this.AddEntities(entity);
+        }
+
+        private void HandleEvent(DestroyEntityEvent destroyEntityEvent)
+        {
+            var entity = this.GetEntityById(destroyEntityEvent.Id);
+            this.RemoveEntity(entity);
+        }
+
 
         private void AddEntities(params GameEntity[] entities)
         {

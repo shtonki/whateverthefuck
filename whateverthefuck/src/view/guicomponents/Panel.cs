@@ -100,8 +100,6 @@
                     {
                         kid.Location = (GLCoordinate)kid.Location + dcoordinate;
                     }
-
-                    //this.draggedPanel.Location = new GLCoordinate(this.draggedPanel.Location.X - dx, this.draggedPanel.Location.Y - dy);
                 }
             };
         }

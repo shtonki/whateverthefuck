@@ -32,7 +32,7 @@
 
                 case GameEventType.UseAbility:
                 {
-                    return new UseAbilityEvent(body);
+                    return new BeginCastAbility(body);
                 }
 
                 default: throw new Exception();
@@ -42,48 +42,74 @@
         public abstract byte[] ToBytes();
     }
 
-    public class UseAbilityEvent : GameEvent
+    public class BeginCastAbility : GameEvent
     {
-        public UseAbilityEvent(GameEntity caster, GameEntity target, Ability ability)
+        public BeginCastAbility(GameEntity caster, GameEntity target, Ability ability)
         {
             this.Type = GameEventType.UseAbility;
 
-            this.Id = caster.Identifier.Id;
+            this.CasterId = caster.Identifier.Id;
             this.AbilityType = ability.AbilityType;
             this.TargetId = target.Identifier.Id;
         }
 
-        public UseAbilityEvent(IEnumerable<byte> bs)
+        public BeginCastAbility(IEnumerable<byte> bs)
         {
             this.Type = GameEventType.UseAbility;
 
-            this.Id = BitConverter.ToInt32(bs.ToArray(), 0);
+            this.CasterId = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int));
 
-            this.AbilityType = (Abilities)BitConverter.ToInt32(bs.ToArray(), 0);
+            this.AbilityType = (AbilityType)BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int));
 
             this.TargetId = BitConverter.ToInt32(bs.ToArray(), 0);
             bs = bs.Skip(sizeof(int));
         }
 
-        public int Id { get; private set; }
+        public int CasterId { get; private set; }
 
-        public Abilities AbilityType { get; private set; }
+        public AbilityType AbilityType { get; private set; }
 
         public int TargetId { get; private set; }
 
         public override byte[] ToBytes()
         {
-            return BitConverter.GetBytes(this.Id).Concat(
+            return BitConverter.GetBytes(this.CasterId).Concat(
                 BitConverter.GetBytes((int)this.AbilityType).Concat(
                 BitConverter.GetBytes(this.TargetId)))
                 .ToArray();
         }
     }
 
+    public class EndCastAbility : GameEvent
+    {
+        public EndCastAbility(GameEntity caster, GameEntity target, Ability ability)
+        {
+            this.Type = GameEventType.UseAbility;
+
+            this.CasterId = caster.Identifier.Id;
+            this.AbilityType = ability.AbilityType;
+            this.TargetId = target.Identifier.Id;
+        }
+
+        public int CasterId { get; private set; }
+
+        public AbilityType AbilityType { get; private set; }
+
+        public int TargetId { get; private set; }
+
+        public override byte[] ToBytes()
+        {
+            throw new NotImplementedException(
+                "You shouldn't be sending this over the network.");
+        }
+    }
+
     public class CreateEntityEvent : GameEvent
     {
+
+
         public CreateEntityEvent(GameEntity e)
         {
             this.Type = GameEventType.Create;
@@ -129,6 +155,17 @@
 
             this.CreationArgs = new CreationArgs(BitConverter.ToUInt64(bs.ToArray(), 0));
             bs = bs.Skip(sizeof(long));
+        }
+
+        public CreateEntityEvent(EntityIdentifier id, EntityType entityType, float x, float y, int currentHealth, int maxHealth, CreationArgs creationArgs)
+        {
+            Id = id.Id;
+            EntityType = entityType;
+            X = x;
+            Y = y;
+            CurrentHealth = currentHealth;
+            MaxHealth = maxHealth;
+            CreationArgs = creationArgs;
         }
 
         public int Id { get; private set; }
