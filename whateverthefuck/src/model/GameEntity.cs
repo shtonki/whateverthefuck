@@ -236,7 +236,7 @@
         /// <param name="gameState">The GameState in which the GameEntity is ticked.</param>
         public virtual void Step(GameState gameState)
         {
-            if (this.CurrentHealth <= 0 && State != GameEntityState.Dead)
+            if (this.CurrentHealth <= 0 && this.State != GameEntityState.Dead)
             {
                 this.Die(gameState);
             }
@@ -258,7 +258,6 @@
                 }
                 else
                 {
-
                     this.CastingInfo.Step();
                     if (this.CastingInfo.DoneCasting)
                     {
@@ -393,12 +392,6 @@
         /// </summary>
         public bool IsMoving => this.IsDirectional || this.IsFollowing;
 
-        public void Stop()
-        {
-            Direction = NoDirection;
-            FollowId = null;
-        }
-
         /// <summary>
         /// Decodes an array of bytes into a MovementStruct.
         /// </summary>
@@ -422,6 +415,12 @@
             }
 
             return ms;
+        }
+
+        public void Stop()
+        {
+            this.Direction = NoDirection;
+            this.FollowId = null;
         }
 
         /// <summary>

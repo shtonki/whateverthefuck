@@ -3,13 +3,14 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+    using whateverthefuck.src.util;
     using whateverthefuck.src.view;
 
     internal class LineOfSight
     {
         private const float Spacing = -0.00005f;
 
-        private const bool ShowOutlines = false;
+        private static readonly bool ShowOutlines = false;
 
         public static IEnumerable<GameEntity> CheckLOS(GameEntity looker, IEnumerable<GameEntity> looked)
         {

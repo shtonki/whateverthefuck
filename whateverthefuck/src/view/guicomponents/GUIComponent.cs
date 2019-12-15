@@ -9,7 +9,6 @@
     public abstract class GUIComponent : Drawable
     {
         private Border border;
-        protected List<GUIComponent> children = new List<GUIComponent>();
 
         protected GUIComponent()
             : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
@@ -33,9 +32,16 @@
 
         public Color BackColor { get; set; }
 
+        protected List<GUIComponent> children { get; private set; } = new List<GUIComponent>();
+
         public void AddBorder()
         {
             this.border = new Border(Color.Black);
+        }
+
+        public virtual void Add(GUIComponent toAdd)
+        {
+            this.children.Add(toAdd);
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
@@ -57,6 +63,12 @@
         public void HandleInput(InputUnion input)
         {
             this.HandleInput(input, new GLCoordinate(this.Location.X, this.Location.Y));
+        }
+
+        public virtual bool Contains(GLCoordinate clicked)
+        {
+            return clicked.X >= this.Location.X && clicked.X <= this.Location.X + this.Size.X &&
+                    clicked.Y >= this.Location.Y && clicked.Y <= this.Location.Y + this.Size.Y;
         }
 
         protected void HandleInput(InputUnion input, GLCoordinate initialOffset)
@@ -89,17 +101,6 @@
             {
                 this.OnMouseMove?.Invoke(this, input);
             }
-        }
-
-        public virtual void Add(GUIComponent toAdd)
-        {
-            this.children.Add(toAdd);
-        }
-
-        public virtual bool Contains(GLCoordinate clicked)
-        {
-            return clicked.X >= this.Location.X && clicked.X <= this.Location.X + this.Size.X &&
-                    clicked.Y >= this.Location.Y && clicked.Y <= this.Location.Y + this.Size.Y;
         }
     }
 

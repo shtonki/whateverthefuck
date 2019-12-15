@@ -64,8 +64,7 @@
 
     internal class DraggablePanel : Panel
     {
-        //private Panel draggedPanel;
-
+        // private Panel draggedPanel;
         private bool dragging;
 
         public DraggablePanel()
