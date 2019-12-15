@@ -32,7 +32,7 @@
 
                 case GameEventType.UseAbility:
                 {
-                    return new BeginCastAbility(body);
+                    return new BeginCastAbilityEvent(body);
                 }
 
                 default: throw new Exception();
@@ -42,9 +42,9 @@
         public abstract byte[] ToBytes();
     }
 
-    public class BeginCastAbility : GameEvent
+    public class BeginCastAbilityEvent : GameEvent
     {
-        public BeginCastAbility(GameEntity caster, GameEntity target, Ability ability)
+        public BeginCastAbilityEvent(GameEntity caster, GameEntity target, Ability ability)
         {
             this.Type = GameEventType.UseAbility;
 
@@ -53,7 +53,7 @@
             this.TargetId = target.Identifier.Id;
         }
 
-        public BeginCastAbility(IEnumerable<byte> bs)
+        public BeginCastAbilityEvent(IEnumerable<byte> bs)
         {
             this.Type = GameEventType.UseAbility;
 
@@ -108,8 +108,6 @@
 
     public class CreateEntityEvent : GameEvent
     {
-
-
         public CreateEntityEvent(GameEntity e)
         {
             this.Type = GameEventType.Create;
@@ -159,13 +157,13 @@
 
         public CreateEntityEvent(EntityIdentifier id, EntityType entityType, float x, float y, int currentHealth, int maxHealth, CreationArgs creationArgs)
         {
-            Id = id.Id;
-            EntityType = entityType;
-            X = x;
-            Y = y;
-            CurrentHealth = currentHealth;
-            MaxHealth = maxHealth;
-            CreationArgs = creationArgs;
+            this.Id = id.Id;
+            this.EntityType = entityType;
+            this.X = x;
+            this.Y = y;
+            this.CurrentHealth = currentHealth;
+            this.MaxHealth = maxHealth;
+            this.CreationArgs = creationArgs;
         }
 
         public int Id { get; private set; }

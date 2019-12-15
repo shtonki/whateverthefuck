@@ -243,7 +243,7 @@
             this.Focused = focused;
         }
 
-        private void CastAbility(Ability ability)
+        private void BeginCastAbility(Ability ability)
         {
             if (this.TargetedEntity == null)
             {
@@ -251,7 +251,7 @@
             }
 
             Program.ServerConnection.SendMessage(
-                new UpdateGameStateMessage(0, new BeginCastAbility(this.Hero, this.TargetedEntity, ability)));
+                new UpdateGameStateMessage(0, new BeginCastAbilityEvent(this.Hero, this.TargetedEntity, ability)));
         }
 
         private void ActivateAction(GameAction gameAction)
@@ -260,7 +260,7 @@
             {
                 case GameAction.CastAbility1:
                 {
-                    this.CastAbility(new Ability(AbilityType.Fireballx));
+                    this.BeginCastAbility(new Ability(AbilityType.Fireballx));
                 } break;
 
                 case GameAction.HeroWalkUpwards:

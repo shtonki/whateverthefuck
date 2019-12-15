@@ -56,7 +56,7 @@
 
         public void HandleInput(InputUnion input)
         {
-            HandleInput(input, new GLCoordinate(this.Location.X, this.Location.Y));
+            this.HandleInput(input, new GLCoordinate(this.Location.X, this.Location.Y));
         }
 
         protected void HandleInput(InputUnion input, GLCoordinate initialOffset)

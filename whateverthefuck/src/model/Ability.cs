@@ -32,7 +32,6 @@
             return null;
         }
 
-
         /// <summary>
         /// Used when a Character finishes the casting time of an Ability and the effect of the spell is to take place.
         /// </summary>
@@ -61,6 +60,8 @@
 
         public bool DoneCasting => this.ElapsedTicks >= this.MaxTicks;
 
+        public float PercentageDone => (float)this.ElapsedTicks / MaxTicks;
+
         public Ability CastingAbility { get; }
 
         public GameEntity Target { get; }
@@ -71,7 +72,7 @@
 
         public void Step()
         {
-            ElapsedTicks++;
+            this.ElapsedTicks++;
         }
     }
 }

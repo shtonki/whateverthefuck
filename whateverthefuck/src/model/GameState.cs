@@ -201,7 +201,7 @@
             {
                 this.HandleEvent(uce);
             }
-            else if (e is BeginCastAbility uae)
+            else if (e is BeginCastAbilityEvent uae)
             {
                 this.HandleEvent(uae);
             }
@@ -219,7 +219,7 @@
             }
         }
 
-        private void HandleEvent(BeginCastAbility beginCastAbility)
+        private void HandleEvent(BeginCastAbilityEvent beginCastAbility)
         {
             var caster = this.GetEntityById(beginCastAbility.CasterId);
             var target = this.GetEntityById(beginCastAbility.TargetId);
@@ -270,7 +270,6 @@
 
         private void HandleEvent(DealDamageEvent dealDamageEvent)
         {
-
             var defender = this.GetEntityById(dealDamageEvent.DefenderId);
 
             defender.CurrentHealth -= dealDamageEvent.Damage;
@@ -294,7 +293,6 @@
             var entity = this.GetEntityById(destroyEntityEvent.Id);
             this.RemoveEntity(entity);
         }
-
 
         private void AddEntities(params GameEntity[] entities)
         {

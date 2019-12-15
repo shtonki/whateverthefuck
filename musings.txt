@@ -1,2 +1,4 @@
 Clean up GameEvent so internals are usable to the GameState and handle conversion somewhere else.
 
+Known bug: Hero will jitter around like a three year old on adderall sometimes.
+

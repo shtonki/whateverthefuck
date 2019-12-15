@@ -175,8 +175,33 @@
 
             if (this.HighlightColor != Color.Transparent)
             {
-                Rectangle r = new view.Rectangle(x1, y1, Size.X, Size.Y, this.HighlightColor);
+                Rectangle r = new view.Rectangle(x1, y1, this.Size.X, this.Size.Y, this.HighlightColor);
                 r.DrawMe(drawAdapter);
+            }
+
+            if (this.CastingInfo != null)
+            {
+                float healthPercentageDividedBy100ForClarity = this.CastingInfo.PercentageDone;
+
+                var xorg = HealthbarWidth / 2;
+                var xoffset = this.Size.X / 2;
+
+                var currentHealthBar = new view.Rectangle(
+                    -xorg + xoffset,
+                    0,
+                    HealthbarWidth * healthPercentageDividedBy100ForClarity,
+                    HealthbarHeight,
+                    Color.Gold);
+
+                var maxHealthBar = new view.Rectangle(
+                    -xorg + xoffset,
+                    0,
+                    HealthbarWidth,
+                    HealthbarHeight,
+                    Color.DarkGray);
+
+                maxHealthBar.DrawMe(drawAdapter);
+                currentHealthBar.DrawMe(drawAdapter);
             }
 
             if (this.ShowHealth)
@@ -211,7 +236,7 @@
         /// <param name="gameState">The GameState in which the GameEntity is ticked.</param>
         public virtual void Step(GameState gameState)
         {
-            if (this.CurrentHealth <= 0)
+            if (this.CurrentHealth <= 0 && State != GameEntityState.Dead)
             {
                 this.Die(gameState);
             }
@@ -227,21 +252,39 @@
 
             if (this.CastingInfo != null)
             {
-                this.CastingInfo.Step();
-                if (this.CastingInfo.DoneCasting)
+                if (this.Movements.IsMoving && !this.CanMoveWhileCasting(this.CastingInfo.CastingAbility))
                 {
-                    gameState.HandleGameEvents(new EndCastAbility(
-                        this,
-                        this.CastingInfo.Target,
-                        this.CastingInfo.CastingAbility));
-
                     this.CastingInfo = null;
+                }
+                else
+                {
+
+                    this.CastingInfo.Step();
+                    if (this.CastingInfo.DoneCasting)
+                    {
+                        gameState.HandleGameEvents(new EndCastAbility(
+                            this,
+                            this.CastingInfo.Target,
+                            this.CastingInfo.CastingAbility));
+
+                        this.CastingInfo = null;
+                    }
                 }
             }
         }
 
         public void CastAbility(Ability ability, GameEntity target)
         {
+            if (this.CastingInfo != null)
+            {
+                return;
+            }
+
+            if (!this.CanMoveWhileCasting(ability) && this.Movements.IsMoving)
+            {
+                return;
+            }
+
             this.CastingInfo = new CastingInfo(ability, target);
         }
 
@@ -305,6 +348,11 @@
                 return new GameCoordinate((float)Math.Sin(this.Movements.Direction) * this.MoveSpeed, (float)Math.Cos(this.Movements.Direction) * this.MoveSpeed);
             }
         }
+
+        private bool CanMoveWhileCasting(Ability ability)
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -312,6 +360,8 @@
     /// </summary>
     public class MovementStruct
     {
+        private const float NoDirection = float.NaN;
+
         public MovementStruct()
         {
             this.Direction = float.NaN;
@@ -342,6 +392,12 @@
         /// Gets a value indicating whether the GameEntity is moving at all.
         /// </summary>
         public bool IsMoving => this.IsDirectional || this.IsFollowing;
+
+        public void Stop()
+        {
+            Direction = NoDirection;
+            FollowId = null;
+        }
 
         /// <summary>
         /// Decodes an array of bytes into a MovementStruct.
