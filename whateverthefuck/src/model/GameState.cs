@@ -83,9 +83,11 @@
             var rt = new SyncMessageBody(this.StepCounter, this.HashMe());
 
             if (false)
+#pragma warning disable 162
             {
                 Logging.Log(string.Format("Tick '{0}' Hash '{1}'", rt.Tick, rt.Hash.ToString("X8")));
             }
+#pragma warning restore 162
 
             return rt;
         }

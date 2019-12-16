@@ -1,6 +1,4 @@
-﻿
-
-namespace whateverthefuck.src.util
+﻿namespace whateverthefuck.src.util
 {
     using System.Collections.Generic;
     using System.Drawing;

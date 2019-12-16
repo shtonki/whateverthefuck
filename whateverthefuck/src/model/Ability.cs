@@ -16,7 +16,7 @@
         {
             this.AbilityType = abilityType;
 
-            this.LoadBaseStats(AbilityType);
+            this.LoadBaseStats(this.AbilityType);
         }
 
         public int CastTime { get; private set; }
@@ -92,7 +92,7 @@
 
         public bool DoneCasting => this.ElapsedTicks >= this.MaxTicks;
 
-        public float PercentageDone => (float)this.ElapsedTicks / MaxTicks;
+        public float PercentageDone => (float)this.ElapsedTicks / this.MaxTicks;
 
         public Ability CastingAbility { get; }
 

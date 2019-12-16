@@ -183,13 +183,12 @@
 
             if (this.Sprite != null)
             {
-                drawAdapter.DrawSprite(x1, y1, x2, y2, Sprite);
+                drawAdapter.DrawSprite(x1, y1, x2, y2, this.Sprite);
             }
             else
             {
                 drawAdapter.FillRectangle(x1, y1, x2, y2, this.DrawColor);
             }
-
 
             if (this.HighlightColor != Color.Transparent)
             {
@@ -276,7 +275,6 @@
                 }
                 else
                 {
-
                     this.CastingInfo.Step();
                     if (this.CastingInfo.DoneCasting)
                     {
@@ -446,12 +444,6 @@
         /// </summary>
         public bool IsMoving => this.IsDirectional || this.IsFollowing;
 
-        public void Stop()
-        {
-            Direction = NoDirection;
-            FollowId = null;
-        }
-
         /// <summary>
         /// Decodes an array of bytes into a MovementStruct.
         /// </summary>
@@ -475,6 +467,12 @@
             }
 
             return ms;
+        }
+
+        public void Stop()
+        {
+            this.Direction = NoDirection;
+            this.FollowId = null;
         }
 
         /// <summary>

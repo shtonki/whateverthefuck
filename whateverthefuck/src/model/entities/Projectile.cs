@@ -76,16 +76,6 @@
         {
         }
 
-        public SpriteID GetSpriteID()
-        {
-            switch (this.AbilityType)
-            {
-                case AbilityType.Fireball: return SpriteID.ability_Fireball;
-            }
-
-            return SpriteID.testSprite1;
-        }
-
         public AbilityType AbilityType
         {
             get { return (AbilityType)this.FirstInt; }
@@ -96,6 +86,16 @@
         {
             get { return this.SecondInt; }
             set { this.SecondInt = value; }
+        }
+
+        public SpriteID GetSpriteID()
+        {
+            switch (this.AbilityType)
+            {
+                case AbilityType.Fireball: return SpriteID.ability_Fireball;
+            }
+
+            return SpriteID.testSprite1;
         }
     }
 }

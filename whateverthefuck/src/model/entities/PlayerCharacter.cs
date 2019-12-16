@@ -9,7 +9,7 @@
             : base(identifier, EntityType.PlayerCharacter, args)
         {
             this.DrawColor = Coloring.RandomColor();
-            Sprite = new Sprite(SpriteID.testSprite1);
+            this.Sprite = new Sprite(SpriteID.testSprite1);
         }
     }
 }

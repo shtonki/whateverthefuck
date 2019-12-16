@@ -7,7 +7,6 @@
         {
         }
 
-
         public static GLCoordinate operator +(GLCoordinate a, GLCoordinate b)
         {
             return new GLCoordinate(a.X + b.X, a.Y + b.Y);

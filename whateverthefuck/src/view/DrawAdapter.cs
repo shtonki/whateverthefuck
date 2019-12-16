@@ -10,7 +10,6 @@ namespace whateverthefuck.src.view
         {
         }
 
-
         public void PushMatrix()
         {
             GL.PushMatrix();
