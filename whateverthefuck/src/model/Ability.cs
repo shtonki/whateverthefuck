@@ -1,11 +1,13 @@
 ﻿namespace whateverthefuck.src.model
 {
+    using System;
     using System.Collections.Generic;
     using whateverthefuck.src.model.entities;
 
     public enum AbilityType
     {
-        Fireballx,
+        Fireball,
+        Fireburst,
     }
 
     public class Ability
@@ -13,7 +15,15 @@
         public Ability(AbilityType abilityType)
         {
             this.AbilityType = abilityType;
+
+            this.LoadBaseStats(AbilityType);
         }
+
+        public int CastTime { get; private set; }
+
+        public int BaseCooldown { get; private set; }
+
+        public int CurrentCooldown { get; set; }
 
         public AbilityType AbilityType { get; private set; }
 
@@ -23,13 +33,20 @@
 
             switch (this.AbilityType)
             {
-                case AbilityType.Fireballx:
+                case AbilityType.Fireball:
                 {
                     events.Add(new DealDamageEvent(caster, target, 15));
                 } break;
+
+                case AbilityType.Fireburst:
+                {
+                    events.Add(new DealDamageEvent(caster, target, 25));
+                } break;
+
+                default: throw new NotImplementedException();
             }
 
-            return null;
+            return events;
         }
 
         /// <summary>
@@ -43,9 +60,24 @@
             return new CreateEntityEvent(EntityIdentifier.RandomReserved(), EntityType.Projectile, caster.Center.X, caster.Center.Y, 1, 1, ca);
         }
 
-        public int CastTicks()
+        private void LoadBaseStats(AbilityType abilityType)
         {
-            return 100;
+            switch (abilityType)
+            {
+                case AbilityType.Fireball:
+                {
+                    this.CastTime = 100;
+                    this.BaseCooldown = 0;
+                } break;
+
+                case AbilityType.Fireburst:
+                {
+                    this.CastTime = 0;
+                    this.BaseCooldown = 400;
+                } break;
+
+                default: throw new NotImplementedException();
+            }
         }
     }
 
@@ -55,7 +87,7 @@
         {
             this.CastingAbility = castingAbility;
             this.Target = target;
-            this.MaxTicks = castingAbility.CastTicks();
+            this.MaxTicks = castingAbility.CastTime;
         }
 
         public bool DoneCasting => this.ElapsedTicks >= this.MaxTicks;

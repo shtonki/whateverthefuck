@@ -285,6 +285,11 @@
                 return;
             }
 
+            if (!this.Hero.CanCastAbility(ability, this.TargetedEntity))
+            {
+                return;
+            }
+
             Program.ServerConnection.SendMessage(
                 new UpdateGameStateMessage(0, new BeginCastAbilityEvent(this.Hero, this.TargetedEntity, ability)));
         }
@@ -293,9 +298,14 @@
         {
             switch (gameAction)
             {
+                case GameAction.CastAbility0:
+                {
+                    this.BeginCastAbility(this.Hero.Ability(0));
+                } break;
+
                 case GameAction.CastAbility1:
                 {
-                    this.BeginCastAbility(new Ability(AbilityType.Fireballx));
+                    this.BeginCastAbility(this.Hero.Ability(1));
                 } break;
 
                 case GameAction.HeroWalkUpwards:

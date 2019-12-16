@@ -38,6 +38,10 @@
         private const float HealthbarWidth = 0.1f;
         private const float HealthbarHeight = 0.02f;
 
+        private List<Ability> abilities = new List<Ability>();
+
+        private int globalCooldownTicks = 100;
+
         protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArgs args)
             : base(new GameCoordinate(0, 0))
         {
@@ -49,6 +53,9 @@
             this.State = GameEntityState.Alive;
 
             this.Visible = true;
+
+            this.abilities.Add(new Ability(AbilityType.Fireball));
+            this.abilities.Add(new Ability(AbilityType.Fireburst));
         }
 
         /// <summary>
@@ -271,6 +278,34 @@
                     }
                 }
             }
+
+            foreach (var a in this.abilities)
+            {
+                if (a.CurrentCooldown > 0)
+                {
+                    a.CurrentCooldown--;
+                }
+            }
+        }
+
+        public Ability Ability(int index)
+        {
+            return this.abilities[index];
+        }
+
+        public Ability Ability(AbilityType abilityType)
+        {
+            return this.abilities.First(a => a.AbilityType == abilityType);
+        }
+
+        public bool CanCastAbility(Ability ability, GameEntity target)
+        {
+            if (ability.CurrentCooldown == 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public void CastAbility(Ability ability, GameEntity target)
@@ -285,6 +320,8 @@
                 return;
             }
 
+            this.abilities.ForEach(a => a.CurrentCooldown = this.globalCooldownTicks);
+            ability.CurrentCooldown = ability.BaseCooldown;
             this.CastingInfo = new CastingInfo(ability, target);
         }
 
@@ -351,6 +388,11 @@
 
         private bool CanMoveWhileCasting(Ability ability)
         {
+            if (ability.CastTime == 0)
+            {
+                return true;
+            }
+
             return false;
         }
     }

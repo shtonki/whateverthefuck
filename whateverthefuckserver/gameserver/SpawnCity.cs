@@ -39,6 +39,7 @@ namespace whateverthefuckserver.gameserver
             var rt = new CreateEntityEvent(mob);
             rt.OnDeathCallback = (idiot, killer) => Program.GameServer.SpawnLootForPlayer(idiot, killer);
             rt.OnStepCallback = (e) => stepme(e);
+
             PublishArray(rt);
         }
 

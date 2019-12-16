@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Linq;
 
     public class Projectile : GameEntity
     {
@@ -18,6 +19,8 @@
             this.MoveSpeed = 0.02f;
             this.Collidable = false;
         }
+
+        public IEnumerable<GameEvent> ResolveEvents { get; set; }
 
         private int Controller { get; }
 
@@ -44,7 +47,7 @@
 
         private IEnumerable<GameEvent> Boom(GameEntity followed)
         {
-            return new GameEvent[] { new DealDamageEvent(this.Controller, followed.Identifier.Id, 10), new DestroyEntityEvent(this) };
+            return this.ResolveEvents.Append(new DestroyEntityEvent(this));
         }
 
         private IEnumerable<GameEvent> Fizzle()
