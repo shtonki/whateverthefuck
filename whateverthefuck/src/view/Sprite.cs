@@ -7,11 +7,11 @@
     {
         public Sprite(SpriteID sid)
         {
-            this.sid = sid;
+            this.ID = sid;
         }
 
-        public SpriteID sid { get; protected set; }
+        public SpriteID ID { get; protected set; }
 
-        public Image Image() => ImageLoader.GetImage(this.sid);
+        public Image Image() => ImageLoader.GetImage(this.ID);
     }
 }

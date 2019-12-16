@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+    using whateverthefuck.src.util;
     using whateverthefuck.src.view;
     using Rectangle = whateverthefuck.src.view.Rectangle;
 
@@ -158,6 +159,8 @@
 
         public Color HighlightColor { get; set; } = Color.Transparent;
 
+        protected Sprite Sprite { get; set; }
+
         protected CastingInfo CastingInfo { get; set; }
 
         protected Color DrawColor { get; set; } = Color.Black;
@@ -178,7 +181,15 @@
             float x2 = x1 + this.Size.X;
             float y2 = y1 + this.Size.Y;
 
-            drawAdapter.FillRectangle(x1, y1, x2, y2, this.DrawColor);
+            if (this.Sprite != null)
+            {
+                drawAdapter.DrawSprite(x1, y1, x2, y2, Sprite);
+            }
+            else
+            {
+                drawAdapter.FillRectangle(x1, y1, x2, y2, this.DrawColor);
+            }
+
 
             if (this.HighlightColor != Color.Transparent)
             {
@@ -243,7 +254,7 @@
         /// <param name="gameState">The GameState in which the GameEntity is ticked.</param>
         public virtual void Step(GameState gameState)
         {
-            if (this.CurrentHealth <= 0 && State != GameEntityState.Dead)
+            if (this.CurrentHealth <= 0 && this.State != GameEntityState.Dead)
             {
                 this.Die(gameState);
             }

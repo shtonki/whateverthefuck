@@ -1,10 +1,8 @@
 namespace whateverthefuck.src.view
 {
     using System.Drawing;
-    using System.Drawing.Imaging;
     using OpenTK.Graphics.OpenGL;
     using whateverthefuck.src.util;
-    using PixelFormat = OpenTK.Graphics.OpenGL.PixelFormat;
 
     public class DrawAdapter
     {
@@ -12,44 +10,6 @@ namespace whateverthefuck.src.view
         {
         }
 
-        /// <summary>
-        /// Binds an Image in OpenGL.
-        /// </summary>
-        /// <param name="image">The image to be bound to a texture.</param>
-        /// <returns>The integer Used by OpenGL to identify the created texture.</returns>
-        public static int CreateTexture(Image image)
-        {
-            int id = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, id);
-
-            Bitmap bmp = new Bitmap(image);
-
-            BitmapData data = bmp.LockBits(
-                new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
-                ImageLockMode.ReadOnly,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-
-            GL.TexImage2D(
-                TextureTarget.Texture2D,
-                0,
-                PixelInternalFormat.Rgba,
-                data.Width,
-                data.Height,
-                0,
-                PixelFormat.Bgra,
-                PixelType.UnsignedByte,
-                data.Scan0);
-
-            bmp.UnlockBits(data);
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-
-            return id;
-        }
 
         public void PushMatrix()
         {
@@ -142,7 +102,7 @@ namespace whateverthefuck.src.view
             GL.PopAttrib();
         }
 
-        public void DrawSprite(SpriteID sid, float x, float y, float w, float h)
+        public void DrawSprite(float x, float y, float w, float h, Sprite sprite)
         {
             GL.PushMatrix();
 
@@ -151,7 +111,7 @@ namespace whateverthefuck.src.view
 
             GL.Color4(Color.White);
 
-            GL.BindTexture(TextureTarget.Texture2D, ImageLoader.GetBinding(sid));
+            GL.BindTexture(TextureTarget.Texture2D, ImageLoader.GetBinding(sprite.ID));
             GL.Begin(PrimitiveType.Quads);
 
             GL.TexCoord2(1, 1);

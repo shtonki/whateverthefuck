@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+    using whateverthefuck.src.util;
+    using whateverthefuck.src.view;
 
     public class Projectile : GameEntity
     {
@@ -14,10 +16,14 @@
                 this.Controller = new ProjectileArgs(args).ControllerId;
             }
 
-            this.Size = new GameCoordinate(0.01f, 0.01f);
+            ProjectileArgs pa = new ProjectileArgs(args);
+
+            this.Size = new GameCoordinate(0.1f, 0.1f);
             this.DrawColor = Color.Black;
             this.MoveSpeed = 0.02f;
             this.Collidable = false;
+
+            this.Sprite = new Sprite(pa.GetSpriteID());
         }
 
         public IEnumerable<GameEvent> ResolveEvents { get; set; }
@@ -68,6 +74,16 @@
         public ProjectileArgs(CreationArgs a)
             : base(a.Value)
         {
+        }
+
+        public SpriteID GetSpriteID()
+        {
+            switch (this.AbilityType)
+            {
+                case AbilityType.Fireball: return SpriteID.ability_Fireball;
+            }
+
+            return SpriteID.testSprite1;
         }
 
         public AbilityType AbilityType

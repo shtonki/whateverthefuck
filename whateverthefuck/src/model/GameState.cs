@@ -223,7 +223,7 @@
         {
             var caster = this.GetEntityById(beginCastAbility.CasterId);
             var target = this.GetEntityById(beginCastAbility.TargetId);
-            var ability = new Ability(beginCastAbility.AbilityType);
+            var ability = caster.Ability(beginCastAbility.AbilityType);
 
             caster.CastAbility(ability, target);
         }
