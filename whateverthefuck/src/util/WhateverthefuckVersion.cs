@@ -14,7 +14,7 @@
             this.Revision = revision;
         }
 
-        public static WhateverthefuckVersion CurrentVersion => new WhateverthefuckVersion(0, 0, 1, Pre);
+        public static WhateverthefuckVersion CurrentVersion => new WhateverthefuckVersion(0, 0, 1, 3);
 
         public short Major { get; }
 
