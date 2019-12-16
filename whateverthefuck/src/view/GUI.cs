@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading;
     using whateverthefuck.src.model;
+    using whateverthefuck.src.util;
     using whateverthefuck.src.view.guicomponents;
 
     public static class GUI
@@ -66,12 +67,33 @@
 
             Button b = new Button();
             b.BackColor = Color.HotPink;
+            b.OnMouseButtonPress += (e, i) =>
+            {
+                Logging.Log("Inner button pressed");
+            };
             b.Size = new GLCoordinate(0.1f, 0.1f);
 
             DraggablePanel dp = new DraggablePanel();
             dp.Size = new GLCoordinate(0.5f, 0.5f);
+            dp.OnMouseButtonPress += (_, i) =>
+            {
+                Logging.Log(i.Direction);
+            };
             dp.Add(b);
             GUIComponents.Add(dp);
+
+            Panel pp = new Panel();
+            pp.Location = new GLCoordinate(-0.5f, -0.5f);
+            pp.Size = new GLCoordinate(0.2f, 0.2f);
+            pp.BackColor = Color.Aquamarine;
+
+            Button bb = new Button();
+            bb.Location = new GLCoordinate(0.05f, 0.05f);
+            bb.Size = new GLCoordinate(0.1f, 0.1f);
+            bb.BackColor = Color.Orange;
+            pp.Add(bb);
+
+            GUIComponents.Add(pp);
 
 #else
             //GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));

@@ -83,7 +83,6 @@
             Used when a Character finishes the casting time of an Ability and the effect of the spell is to take place.
             </summary>
             <param name="caster">The GameEntity which cast the ability.</param>
-            <param name="target">The GameEntity which is the target of the Ability.</param>
             <returns>The event which creates the Projectile if there should be one, null otherwise.</returns>
         </member>
         <member name="T:whateverthefuck.src.model.ClientGameStateManager">

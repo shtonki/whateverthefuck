@@ -29,7 +29,7 @@
 
         public GameState GameState { get; private set; }
 
-        private GUIComponent Focused { get; set; }
+        private GUIComponent FocusedGUIComponent { get; set; }
 
         private Timer TickTimer { get; } // can't be removed or we stop moving after ~3 seconds
 
@@ -117,28 +117,25 @@
 
         public void HandleInput(InputUnion input)
         {
+            GUIComponent interactedGUIComponent = null;
+
+            if (input.Location != null)
+            {
+                interactedGUIComponent = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
+            }
+
             if (input.IsMouseInput && input.Direction == InputUnion.Directions.Down)
             {
-                var clicked = this.GUIComponentAt(input.Location.ToGLCoordinate());
-
-                if (clicked != null && clicked.Visible)
-                {
-                    this.Focus(clicked);
-                }
-                else
-                {
-                    this.Focus(null);
-                }
+                this.Focus(interactedGUIComponent);
             }
 
-            if (input.IsMouseInput && input.Direction == InputUnion.Directions.Up && this.Focused == null)
+            if (interactedGUIComponent != null && !input.IsKeyboardInput)
             {
-                this.Focus(null);
+                interactedGUIComponent.HandleInput(input);
             }
-
-            if (this.Focused != null)
+            else if (this.FocusedGUIComponent != null)
             {
-                this.Focused.HandleInput(input);
+                this.FocusedGUIComponent.HandleInput(input);
             }
             else
             {
@@ -160,6 +157,44 @@
                     }
                 }
             }
+#if false
+            if (input.IsMouseInput)
+            {
+                // todo handle visible component "underneath" invisible one
+                var interacted = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
+
+                if (input.Direction == InputUnion.Directions.Down)
+                {
+                    if (interacted != null && interacted.Visible)
+                    {
+                        this.Focus(interacted);
+                    }
+                    else
+                    {
+                        this.Focus(null);
+                    }
+                }
+            }
+
+            if (input.IsMouseMove)
+            {
+                // todo handle visible component "underneath" invisible one
+                var interacted = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
+
+                if (interacted != null)
+                {
+                    interacted.HandleInput(input);
+                }
+            }
+
+            if (this.FocusedGUIComponent != null)
+            {
+                this.FocusedGUIComponent.HandleInput(input);
+            }
+            else
+            {
+            }
+#endif
         }
 
         private void Target(GameEntity target)
@@ -240,7 +275,7 @@
 
         private void Focus(GUIComponent focused)
         {
-            this.Focused = focused;
+            this.FocusedGUIComponent = focused;
         }
 
         private void BeginCastAbility(Ability ability)
@@ -350,11 +385,11 @@
             return picked.First();
         }
 
-        private GUIComponent GUIComponentAt(GLCoordinate location)
+        private GUIComponent FirstVisibleGUIComponentAt(GLCoordinate location)
         {
             foreach (var c in GUI.GUIComponents)
             {
-                if (c.Contains(location))
+                if (c.Contains(location) && c.Visible)
                 {
                     return c;
                 }
