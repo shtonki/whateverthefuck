@@ -20,6 +20,7 @@
         NPC,
         Door,
         Floor,
+        Mankey,
 
         Loot,
     }

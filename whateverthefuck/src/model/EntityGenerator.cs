@@ -46,7 +46,7 @@
                     {
                         return new Floor(identifier, args);
                     }
-
+                
                 case EntityType.Projectile:
                     {
                         return new Projectile(identifier, args);

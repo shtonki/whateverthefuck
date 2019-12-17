@@ -21,8 +21,8 @@
     CS1573: Parameter 'parameter' has no matching param tag in the XML comment for 'parameter' (but other parameters do)
     CS1591: Missing XML comment for publicly visible type or member 'Type_or_Member'
     -->
-  <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-  <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -96,6 +96,7 @@
     <Compile Include="src\network\WhateverClientConnection.cs" />
     <Compile Include="src\network\WhateverthefuckConnection.cs" />
     <Compile Include="src\Program.cs" />
+    <Compile Include="src\util\Boombox.cs" />
     <Compile Include="src\util\Coloring.cs" />
     <Compile Include="src\util\ImageLoader.cs" />
     <Compile Include="src\util\UserSettings.cs" />
@@ -138,6 +139,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\kappa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\soundeffect2.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\soundeffect3.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\africatoto.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\soundeffect1.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\piano.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mankey.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

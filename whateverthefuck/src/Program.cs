@@ -1,4 +1,6 @@
-﻿namespace whateverthefuck
+﻿using System.Threading;
+
+namespace whateverthefuck
 {
     using System;
     using whateverthefuck.src.model;
@@ -47,6 +49,14 @@
 
             GUI.CreateGameWindow();
             Logging.Log("Created Game Window", Logging.LoggingLevel.Info);
+
+            System.Threading.Thread t = new Thread(() =>
+            {
+                Boombox.Init();
+                Logging.Log("Initialized sounds.");
+                Boombox.Play(Boombox.Songs.Africa, -1f, 0);
+            });
+            t.Start();
 
             GUI.LoadGUI();
             Logging.Log("Loaded GUI Components", Logging.LoggingLevel.Info);

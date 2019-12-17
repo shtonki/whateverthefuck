@@ -7,6 +7,7 @@
     public enum SpriteID
     {
         testSprite1,
+        Mankey,
     }
 
     public static class ImageLoader
@@ -17,6 +18,7 @@
         public static void Init()
         {
             images[SpriteID.testSprite1] = new Bitmap(Properties.Resources.kappa);
+            images[SpriteID.Mankey] = new Bitmap(Properties.Resources.mankey);
 
             foreach (var img in images)
             {
