@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
-    using whateverthefuck.src.util;
     using whateverthefuck.src.view;
     using Rectangle = whateverthefuck.src.view.Rectangle;
 

@@ -141,10 +141,19 @@
             {
                 if (input.IsMouseInput)
                 {
-                    var v = this.GetEntityAtLocation(GUI.Camera.GLToGameCoordinate(input.Location));
-                    if (v != null && v.Targetable)
+                    var clickedEntity = this.GetEntityAtLocation(GUI.Camera.GLToGameCoordinate(input.Location));
+
+                    if (clickedEntity != null)
                     {
-                        this.Target(v);
+                        if (clickedEntity.Targetable)
+                        {
+                            this.Target(clickedEntity);
+                        }
+
+                        if (clickedEntity is IInteractable interactWithMe)
+                        {
+                            interactWithMe.Interact();
+                        }
                     }
                 }
                 else if (input.IsKeyboardInput)

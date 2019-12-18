@@ -40,7 +40,7 @@
 
                 case AbilityType.Fireburst:
                 {
-                    events.Add(new DealDamageEvent(caster, target, 25));
+                    events.Add(new DealDamageEvent(caster, target, 420));
                 } break;
 
                 default: throw new NotImplementedException();
