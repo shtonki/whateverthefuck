@@ -20,9 +20,39 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="P:whateverthefuck.Properties.Resources.africatoto">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
         <member name="P:whateverthefuck.Properties.Resources.kappa">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.mankey">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.piano">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.soundeffect1">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.soundeffect2">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.soundeffect3">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
             </summary>
         </member>
         <member name="T:whateverthefuck.src.control.Hotkeys">
@@ -83,7 +113,6 @@
             Used when a Character finishes the casting time of an Ability and the effect of the spell is to take place.
             </summary>
             <param name="caster">The GameEntity which cast the ability.</param>
-            <param name="target">The GameEntity which is the target of the Ability.</param>
             <returns>The event which creates the Projectile if there should be one, null otherwise.</returns>
         </member>
         <member name="T:whateverthefuck.src.model.ClientGameStateManager">
@@ -403,62 +432,62 @@
             <summary>
             Return a random point within radius.
             </summary>
-            <param name="radius"></param>
-            <returns></returns>
+            <param name="radius">Radius of circle.</param>
+            <returns>A random GameCoordinate within the circle.</returns>
         </member>
         <member name="M:whateverthefuck.src.util.RNG.RandomPointWithinCircleRelativeToLocation(whateverthefuck.src.model.GameCoordinate,whateverthefuck.src.view.GLCoordinate)">
             <summary>
             Returns a random point within a circle around a given location.
             </summary>
-            <param name="location"></param>
-            <param name="circleRadius"></param>
-            <returns></returns>
+            <param name="location">Relative GameCoordinate.</param>
+            <param name="circleRadius">Circle Radius in GameCoordinate.</param>
+            <returns>A random point within the circle.</returns>
         </member>
         <member name="M:whateverthefuck.src.util.RNG.XTimesInY(System.Int32,System.Int32)">
             <summary>
             Returns true x out of y times.
             For example x = 5, y = 100 would return true 5 in 100 times.
             </summary>
-            <param name="x"></param>
-            <param name="y"></param>
-            <returns></returns>
+            <param name="x">Low.</param>
+            <param name="y">High.</param>
+            <returns>Bool X times in Y.</returns>
         </member>
         <member name="M:whateverthefuck.src.util.RNG.IntegerBetween(System.Int32,System.Int32)">
             <summary>
             Returns an integer between a(including) and b(excluding).
             </summary>
-            <param name="a">min</param>
-            <param name="b">max</param>
-            <returns> a &lt;= n &lt; b</returns>
+            <param name="a">min.</param>
+            <param name="b">max.</param>
+            <returns> a less than or equals to n less than b.</returns>
         </member>
         <member name="M:whateverthefuck.src.util.RNG.BetweenZeroAndOne">
             <summary>
-            Returns a float between [0, 1)
+            Returns a float between [0, 1).
             </summary>
-            <returns></returns>
+            <returns>A float between [0, 1).</returns>
         </member>
         <member name="M:whateverthefuck.src.util.RNG.NegativeOrPositiveOne">
             <summary>
             Returns either -1 or 1.
             </summary>
-            <returns></returns>
+            <returns>-1 or 1.</returns>
         </member>
         <member name="M:whateverthefuck.src.util.RNG.RandomLocationWithinSquare(whateverthefuck.src.model.GameCoordinate,whateverthefuck.src.model.GameCoordinate)">
             <summary>
             Returns a random location within a square defined from two points.
             For now unexpected stuff can happen if terminus is bigger than origin.
             </summary>
-            <param name="origin"></param>
-            <param name="terminus"></param>
-            <returns></returns>
+            <param name="origin">Origin Coordinate of rectangle.</param>
+            <param name="terminus">Terminus Coordinate of rectangle.</param>
+            <returns>A random Coordinate within the Square.</returns>
         </member>
         <member name="M:whateverthefuck.src.util.RNG.RandomElement``1(System.Collections.Generic.List{``0})">
             <summary>
             Returns a random element in the provided list.
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="list"></param>
-            <returns></returns>
+            <typeparam name="T">Type of the element which the list holds.</typeparam>
+            <param name="list">List of elements.</param>
+            <returns>A random element within the given list of elements.</returns>
         </member>
         <member name="M:whateverthefuck.src.view.DrawAdapter.CreateTexture(System.Drawing.Image)">
             <summary>

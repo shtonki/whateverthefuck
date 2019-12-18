@@ -256,7 +256,6 @@
             if (this is PlayerCharacter)
             {
                 Boombox.SetListenerPosition(this.Location.X, this.Location.Y);
-                Console.WriteLine("Centering listener to: " + this.Location);
             }
 
             if (this.CastingInfo != null)

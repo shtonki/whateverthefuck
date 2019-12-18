@@ -48,16 +48,22 @@
             // Play(Songs.Africa);
         }
 
+        public static void SetSourcePosition(AudioInfo audioInfo, float x, float y)
+        {
+            AL.Source(audioInfo.SourceId, ALSource3f.Position, x, y, 0);
+        }
+
         public static void SetListenerPosition(float x, float y)
         {
             AL.Listener(ALListener3f.Position,  x,  y, 1); // position listener in a Z-direction away from sources for 3d sound not to switch directions instantly.
         }
 
-        public static void Play(SoundEffects soundEffect)
+        public static AudioInfo Play(SoundEffects soundEffect)
         {
             try
             {
                 AL.SourcePlay(SoundEffectToSourceIdDictionary[soundEffect].SourceId);
+                return SoundEffectToSourceIdDictionary[soundEffect];
             }
             catch (Exception e)
             {
@@ -66,7 +72,7 @@
             }
         }
 
-        public static void Play(Songs song, float x = 0, float y = 0)
+        public static AudioInfo Play(Songs song, float x = 0, float y = 0)
         {
             try
             {
@@ -117,6 +123,7 @@
                 currentlyPlayingSongs.Add(audioInfo, song);
                 AL.SourcePlay(sourceId);
                 disposeTimer.Start();
+                return audioInfo;
             }
             catch (Exception e)
             {
@@ -129,7 +136,7 @@
         {
             if (percentage < 0 || percentage > 100)
             {
-                Console.WriteLine("Percentage is not percentage but I got you!");
+                Logging.Log("Give number between 0 and 100 including.", Logging.LoggingLevel.Info);
                 if (percentage < 0)
                 {
                     percentage = 0;
@@ -139,7 +146,7 @@
                     percentage = 100;
                 }
             }
-            Console.WriteLine("Setting volume of source to: " + percentage);
+            Logging.Log("Setting volume of source to: " + percentage, Logging.LoggingLevel.Info);
             AL.Source(sourceID, ALSourcef.Gain, (float)percentage / 100);
         }
 
@@ -298,6 +305,16 @@
 
             // ReSharper disable once UnusedAutoPropertyAccessor.Local, to be needed.
             private int BufferId { get; set; }
+
+            public void SetPosition(float x, float y)
+            {
+                Boombox.SetSourcePosition(this, x, y);
+            }
+
+            public void SetVolume(int percentage)
+            {
+                Boombox.SetVolume(this.SourceId, 40);
+            }
         }
 
         public class WaveInfo

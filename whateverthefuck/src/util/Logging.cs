@@ -33,6 +33,11 @@
             Log(o.ToString());
         }
 
+        public static void Log(object o, LoggingLevel l)
+        {
+            Log(o.ToString(), l);
+        }
+
         public static void Log(string message)
         {
             Log(message, defaultLevel);

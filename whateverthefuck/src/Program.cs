@@ -43,7 +43,7 @@
             int v = 4;
 #else
             Logging.AddLoggingOutput(new ConsoleOutput(Logging.LoggingLevel.All, true));
-
+            Logging.SetDefaultLoggingLevel(Logging.LoggingLevel.Info);
             Logging.Log("Running version: " + WhateverthefuckVersion.CurrentVersion.ToString());
 
             GUI.CreateGameWindow();
@@ -54,16 +54,18 @@
 
             UserSettings.LoadUserSettings();
 
-            ServerConnection = new WhateverClientConnection();
-            Logging.Log("Connected to Server", Logging.LoggingLevel.Info);
-
             System.Threading.Thread t = new Thread(() =>
             {
                 Boombox.Init();
                 Logging.Log("Initialized sounds.");
-                Boombox.Play(Boombox.Songs.Africa, 0f, 0);
+                var audioInfo = Boombox.Play(Boombox.Songs.Africa, 0f, 0);
+                audioInfo.SetPosition(0.5f, 0);
+                audioInfo.SetVolume(2);
             });
             t.Start();
+
+            ServerConnection = new WhateverClientConnection();
+            Logging.Log("Connected to Server", Logging.LoggingLevel.Info);
 
             UserLogin.Login(UserSettings.Config.Username);
             Logging.Log(string.Format("Logged on to Server as {0}", UserSettings.Config.Username), Logging.LoggingLevel.Info);
