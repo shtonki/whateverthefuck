@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using whateverthefuck.src.model.entities;
+    using whateverthefuck.src.util;
 
     public enum AbilityType
     {
@@ -26,6 +27,8 @@
         public int CurrentCooldown { get; set; }
 
         public AbilityType AbilityType { get; private set; }
+
+        public float CooldownPercentage => this.BaseCooldown == 0 ? 0 : (float)this.CurrentCooldown / this.BaseCooldown;
 
         public IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target)
         {
@@ -66,7 +69,7 @@
             {
                 case AbilityType.Fireball:
                 {
-                    this.CastTime = 100;
+                    this.CastTime = 50;
                     this.BaseCooldown = 0;
                 } break;
 

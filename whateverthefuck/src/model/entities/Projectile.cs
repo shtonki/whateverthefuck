@@ -23,7 +23,7 @@
             this.MoveSpeed = 0.02f;
             this.Collidable = false;
 
-            this.Sprite = new Sprite(pa.GetSpriteID());
+            this.Sprite = pa.GetSprite();
         }
 
         public IEnumerable<GameEvent> ResolveEvents { get; set; }
@@ -88,14 +88,9 @@
             set { this.SecondInt = value; }
         }
 
-        public SpriteID GetSpriteID()
+        public Sprite GetSprite()
         {
-            switch (this.AbilityType)
-            {
-                case AbilityType.Fireball: return SpriteID.ability_Fireball;
-            }
-
-            return SpriteID.testSprite1;
+            return Sprite.GetSprite(this.AbilityType);
         }
     }
 }

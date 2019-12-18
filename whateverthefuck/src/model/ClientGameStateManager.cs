@@ -82,6 +82,7 @@
                 if (this.Hero != null)
                 {
                     this.CenterCameraOn(this.Hero);
+                    GUI.LoadAbilityBar(this.Hero);
                 }
 
                 this.TakeControlId = null;

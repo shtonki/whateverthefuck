@@ -16,6 +16,8 @@
 
         public Coordinate Location { get; set; }
 
+        public Sprite Sprite { get; protected set; }
+
         protected float Rotation { get; set; } = 0;
 
         public abstract void DrawMe(DrawAdapter drawAdapter);

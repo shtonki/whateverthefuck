@@ -112,6 +112,7 @@
     <Compile Include="src\view\GibbWindow.cs" />
     <Compile Include="src\view\GLCoordinate.cs" />
     <Compile Include="src\view\GUI.cs" />
+    <Compile Include="src\view\guicomponents\AbilityButton.cs" />
     <Compile Include="src\view\guicomponents\Button.cs" />
     <Compile Include="src\view\guicomponents\Panel.cs" />
     <Compile Include="src\view\guicomponents\GUIComponent.cs" />

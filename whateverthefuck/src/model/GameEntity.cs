@@ -41,6 +41,7 @@
         private List<Ability> abilities = new List<Ability>();
 
         private int globalCooldownTicks = 100;
+        private int currentGlobalCooldown = 0;
 
         protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArgs args)
             : base(new GameCoordinate(0, 0))
@@ -158,8 +159,6 @@
 
         public Color HighlightColor { get; set; } = Color.Transparent;
 
-        protected Sprite Sprite { get; set; }
-
         protected CastingInfo CastingInfo { get; set; }
 
         protected Color DrawColor { get; set; } = Color.Black;
@@ -262,7 +261,6 @@
                 return;
             }
 
-            this.OnStep?.Invoke(this);
             this.MovementCache = this.CalculateMovement(gameState);
             this.Location = (GameCoordinate)this.Location + this.MovementCache;
 
@@ -270,7 +268,9 @@
             {
                 if (this.Movements.IsMoving && !this.CanMoveWhileCasting(this.CastingInfo.CastingAbility))
                 {
+                    // cancel the cast
                     this.CastingInfo = null;
+                    this.currentGlobalCooldown = 0;
                 }
                 else
                 {
@@ -287,6 +287,11 @@
                 }
             }
 
+            if (this.currentGlobalCooldown > 0)
+            {
+                this.currentGlobalCooldown--;
+            }
+
             foreach (var a in this.abilities)
             {
                 if (a.CurrentCooldown > 0)
@@ -294,6 +299,8 @@
                     a.CurrentCooldown--;
                 }
             }
+
+            this.OnStep?.Invoke(this);
         }
 
         public Ability Ability(int index)
@@ -308,6 +315,11 @@
 
         public bool CanCastAbility(Ability ability, GameEntity target)
         {
+            if (this.currentGlobalCooldown > 0)
+            {
+                return false;
+            }
+
             if (ability.CurrentCooldown == 0)
             {
                 return true;
@@ -328,9 +340,25 @@
                 return;
             }
 
-            this.abilities.ForEach(a => a.CurrentCooldown = this.globalCooldownTicks);
+            this.currentGlobalCooldown = this.globalCooldownTicks;
+
             ability.CurrentCooldown = ability.BaseCooldown;
             this.CastingInfo = new CastingInfo(ability, target);
+        }
+
+        public float CooldownPercentage(Ability ability)
+        {
+            var globalCooldownPercentage = (float)this.currentGlobalCooldown / this.globalCooldownTicks;
+            var abilityCooldownPercentage = ability.CooldownPercentage;
+
+            if (this.currentGlobalCooldown > ability.CurrentCooldown)
+            {
+                return globalCooldownPercentage;
+            }
+            else
+            {
+                return abilityCooldownPercentage;
+            }
         }
 
         /// <summary>

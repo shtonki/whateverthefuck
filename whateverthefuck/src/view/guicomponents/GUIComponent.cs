@@ -46,8 +46,14 @@
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            // if(Border != null) drawAdapter.TraceRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Border.BorderColor, Border.Width);
-            drawAdapter.FillRectangle(0, 0, this.Size.X, this.Size.Y, this.BackColor);
+            if (this.Sprite != null)
+            {
+                drawAdapter.DrawSprite(0, 0, this.Size.X, this.Size.Y, this.Sprite);
+            }
+            else
+            {
+                drawAdapter.FillRectangle(0, 0, this.Size.X, this.Size.Y, this.BackColor);
+            }
 
             foreach (var kiddo in this.children)
             {
