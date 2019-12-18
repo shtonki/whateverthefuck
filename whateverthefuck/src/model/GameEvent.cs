@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using whateverthefuck.src.util;
 
     /// <summary>
     /// Represents an event which alters a GameState.

@@ -1,8 +1,7 @@
-﻿using System.Threading;
-
-namespace whateverthefuck
+﻿namespace whateverthefuck
 {
     using System;
+    using System.Threading;
     using whateverthefuck.src.model;
     using whateverthefuck.src.network;
     using whateverthefuck.src.util;
@@ -50,14 +49,6 @@ namespace whateverthefuck
             GUI.CreateGameWindow();
             Logging.Log("Created Game Window", Logging.LoggingLevel.Info);
 
-            System.Threading.Thread t = new Thread(() =>
-            {
-                Boombox.Init();
-                Logging.Log("Initialized sounds.");
-                Boombox.Play(Boombox.Songs.Africa, -1f, 0);
-            });
-            t.Start();
-
             GUI.LoadGUI();
             Logging.Log("Loaded GUI Components", Logging.LoggingLevel.Info);
 
@@ -65,6 +56,14 @@ namespace whateverthefuck
 
             ServerConnection = new WhateverClientConnection();
             Logging.Log("Connected to Server", Logging.LoggingLevel.Info);
+
+            System.Threading.Thread t = new Thread(() =>
+            {
+                Boombox.Init();
+                Logging.Log("Initialized sounds.");
+                Boombox.Play(Boombox.Songs.Africa, 0f, 0);
+            });
+            t.Start();
 
             UserLogin.Login(UserSettings.Config.Username);
             Logging.Log(string.Format("Logged on to Server as {0}", UserSettings.Config.Username), Logging.LoggingLevel.Info);

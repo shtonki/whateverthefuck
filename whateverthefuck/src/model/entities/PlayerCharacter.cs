@@ -1,5 +1,6 @@
 ﻿namespace whateverthefuck.src.model.entities
 {
+    using System;
     using whateverthefuck.src.util;
     using whateverthefuck.src.view;
 

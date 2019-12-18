@@ -10,14 +10,14 @@
 
     public static class Boombox
     {
+        private static readonly Dictionary<SoundEffects, AudioInfo> SoundEffectToSourceIdDictionary = new Dictionary<SoundEffects, AudioInfo>();
+        private static Dictionary<Songs, string> songsToResourceNameDictionary = new Dictionary<Songs, string>();
+        private static Dictionary<AudioInfo, Songs> currentlyPlayingSongs = new Dictionary<AudioInfo, Songs>(); // will probably need to make this public later on but style cop is very anger
+
         public enum SoundEffects
         {
-            soundeffect1,
-            soundeffect2,
-            soundeffect3,
-            soundeffect4,
-            soundeffect5,
-            soundeffect6,
+            SoundEffect1,
+            SoundEffect2,
         }
 
         public enum Songs
@@ -27,34 +27,39 @@
             Africa,
         }
 
-        static Dictionary<SoundEffects, AudioInfo> SoundEffectToSourceIDDictionary = new Dictionary<SoundEffects, AudioInfo>();
-        static Dictionary<Songs, string> SongsToResourceNameDictionary = new Dictionary<Songs, string>();
-        public static Dictionary<AudioInfo, Songs> CurrentlyPlayingSongs = new Dictionary<AudioInfo, Songs>();
+        private static IList<string> AvailableDevices => AudioContext.AvailableDevices;
 
         public static void Init()
         {
-            IntPtr device = Alc.OpenDevice(AvailableDevices[0]); // My default device. 
-            ContextHandle context = Alc.CreateContext(device, new[] {-1});
+            IntPtr device = Alc.OpenDevice(null); // My default device.
+            ContextHandle context = Alc.CreateContext(device, new[] { -1 });
             Alc.MakeContextCurrent(context);
-            CurrentlyPlayingSongs = new Dictionary<AudioInfo, Songs>();
+            currentlyPlayingSongs = new Dictionary<AudioInfo, Songs>();
 
-            AL.Listener(ALListener3f.Position, 0, 0, 1); //position listener in a Z-direction away from sources for 3d sound not to switch directions instantly.
+            AL.DistanceModel(ALDistanceModel.InverseDistanceClamped);
+
+            AL.Listener(ALListener3f.Position, 0, 0, 1); // position listener in a Z-direction away from sources for 3d sound not to switch directions instantly.
 
             var soundEffectResources = SetupSoundEffectResourceDictionary();
-            SongsToResourceNameDictionary = SetupSongResourceDictionary();
+            songsToResourceNameDictionary = SetupSongResourceDictionary();
             LoadSoundEffects(soundEffectResources);
 
-            //Play(SoundEffects.soundeffect1);
-            //Play(Songs.Africa);
+            // Play(SoundEffects.soundeffect1);
+            // Play(Songs.Africa);
+        }
+
+        public static void SetListenerPosition(float x, float y)
+        {
+            AL.Listener(ALListener3f.Position,  x,  y, 1); // position listener in a Z-direction away from sources for 3d sound not to switch directions instantly.
         }
 
         public static void Play(SoundEffects soundEffect)
         {
             try
             {
-                AL.SourcePlay(SoundEffectToSourceIDDictionary[soundEffect].SourceId);
+                AL.SourcePlay(SoundEffectToSourceIdDictionary[soundEffect].SourceId);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw;
@@ -65,7 +70,9 @@
         {
             try
             {
-                WaveInfo waveInfo = ReadWavFile(Path.Combine(System.IO.Path.GetFullPath(@"..\..\"), "Resources\\") + SongsToResourceNameDictionary[song] + ".wav"); // Should probably already be .wav when it gets in here.
+                // Should probably already be .wav when it gets in here.
+                string path = Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location, System.IO.Path.GetFullPath(@"..\..\Resources\")) + songsToResourceNameDictionary[song] + ".wav";
+                WaveInfo waveInfo = ReadWavFile(path);
 
                 AL.GenBuffers(1, out int bufferID);
                 AL.GenSources(1, out int sourceId);
@@ -76,6 +83,27 @@
 
                 AL.Source(sourceId, ALSource3f.Position, x, y, 0);
 
+                AL.Source(sourceId, ALSourcef.ReferenceDistance, 0f); // songs will play at same volume no matter what position listener is located.
+
+                // AL.DistanceModel(ALDistanceModel.ExponentDistanceClamped);
+
+                // Exponent distance: gain = (distance / referenceDistance) ** (- rollOffFactor)
+                // Clamped distance: max(referenceDistance, min(distance, maxDistance))
+                // sound to be dead when listener 2f away from source (one screen)
+                // gain = 0.01 = ((distance/referenceDistance)^(-rollOffFactor)), and we clamp 0.01 ->
+                // // clamp: max(referenceDistance, min(distance, maxDistance)) less than 0.01
+                // Look at that! No real solutions exist :)) Todo: deal with this headache
+                // https://www.desmos.com/calculator/xzqjyqhvzb
+                /*AL.DistanceModel(ALDistanceModel.InverseDistanceClamped);
+                AL.Source(sourceId, ALSourcef.MaxDistance, 0.2f);
+                AL.Source(sourceId, ALSourcef.ReferenceDistance, 1.2f);
+                AL.Source(sourceId, ALSourcef.RolloffFactor, 10f);
+                */
+                AL.DistanceModel(ALDistanceModel.LinearDistanceClamped);
+                AL.Source(sourceId, ALSourcef.MaxDistance, 1.73f); // sqrt 3 (1z, 2x -> 3 hypotenuse)
+                AL.Source(sourceId, ALSourcef.ReferenceDistance, 1.73f / 10f); // half attentuation by 10 steps until 0
+                AL.Source(sourceId, ALSourcef.RolloffFactor, 1); // default roll off
+
                 System.Timers.Timer disposeTimer = new System.Timers.Timer(waveInfo.NumberOfSeconds * 1000);
 
                 var audioInfo = new AudioInfo(sourceId, bufferID);
@@ -83,10 +111,10 @@
                 disposeTimer.Elapsed += (sender, args) =>
                 {
                     DisposeBuffer(bufferID, sourceId);
-                    CurrentlyPlayingSongs.Remove(audioInfo);
+                    currentlyPlayingSongs.Remove(audioInfo);
                     disposeTimer.Dispose();
                 };
-                CurrentlyPlayingSongs.Add(audioInfo, song);
+                currentlyPlayingSongs.Add(audioInfo, song);
                 AL.SourcePlay(sourceId);
                 disposeTimer.Start();
             }
@@ -97,81 +125,22 @@
             }
         }
 
-        private static void LoadSoundEffects(Dictionary<SoundEffects, string> resourceDictionary)
-        {
-            foreach (var resource in resourceDictionary)
-            {
-
-                WaveInfo waveInfo = ReadWavFile(Path.Combine(System.IO.Path.GetFullPath(@"..\..\"), "Resources\\") + resource.Value + ".wav"); // Should probably already be .wav when it gets in here.
-
-                AL.GenBuffers(1, out int bufferId);
-                AL.GenSources(1, out int sourceId);
-
-                AL.BufferData(bufferId, ALFormat.Stereo16, waveInfo.ByteData, waveInfo.ByteData.Length, waveInfo.SampleRate);
-
-                AL.Source(sourceId, ALSourcei.Buffer, bufferId); // Bind source to buffer
-
-                SoundEffectToSourceIDDictionary[resource.Key] = new AudioInfo(sourceId, bufferId);
-
-                /*System.Timers.Timer disposeTimer = new System.Timers.Timer(1000);
-                disposeTimer.Elapsed += (sender, args) =>
-                {
-                    DisposeBuffer(resource.Key);
-                    disposeTimer.Dispose();
-                };
-                disposeTimer.Start();*/
-
-            }
-        }
-
-
-        public static void SetListenerPosition(float x, float y)
-        {
-            AL.Listener(ALListener3f.Position,  x,  y, 1); //position listener in a Z-direction away from sources for 3d sound not to switch directions instantly.
-        }
-
-        private static void DisposeBuffer(int bufferID, int sourceID)
-        {
-            Console.WriteLine("Song finished playing.");
-            AL.DeleteSource(sourceID);
-            AL.DeleteBuffer(bufferID);
-        }
-
-        private static void DisposeBuffer(SoundEffects soundEffect)
-        {
-            Console.WriteLine("Sound effect finished playing.");
-            throw new NotImplementedException();
-        }
-
-        private static Dictionary<SoundEffects, string> SetupSoundEffectResourceDictionary()
-        {
-            return new Dictionary<SoundEffects, string>()
-            {
-                { SoundEffects.soundeffect1, nameof(Properties.Resources.soundeffect1) },
-                { SoundEffects.soundeffect2, nameof(Properties.Resources.soundeffect3) },
-            };
-        }
-
-        private static Dictionary<Songs, string> SetupSongResourceDictionary()
-        {
-            return new Dictionary<Songs, string>()
-            {
-                { Songs.Song1, nameof(Properties.Resources.piano) },
-                { Songs.Africa, nameof(Properties.Resources.africatoto)},
-            };
-        }
-
-
         public static void SetVolume(int sourceID, int percentage)
         {
             if (percentage < 0 || percentage > 100)
             {
                 Console.WriteLine("Percentage is not percentage but I got you!");
-                if (percentage < 0) percentage = 0;
-                else percentage = 100;
+                if (percentage < 0)
+                {
+                    percentage = 0;
+                }
+                else
+                {
+                    percentage = 100;
+                }
             }
-            Console.WriteLine("Setting volume of source to: "+ percentage);
-            AL.Source(sourceID, ALSourcef.Gain, (float)percentage/100);
+            Console.WriteLine("Setting volume of source to: " + percentage);
+            AL.Source(sourceID, ALSourcef.Gain, (float)percentage / 100);
         }
 
         public static void FadeOut()
@@ -196,7 +165,52 @@
             }*/
         }
 
-        public static WaveInfo ReadWavFile(string filename)
+        private static void LoadSoundEffects(Dictionary<SoundEffects, string> resourceDictionary)
+        {
+            foreach (var resource in resourceDictionary)
+            {
+                // Should probably already be .wav when it gets in here.
+                string path = Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location, System.IO.Path.GetFullPath(@"..\..\Resources\")) + resource.Value + ".wav";
+                WaveInfo waveInfo = ReadWavFile(path);
+                Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location, System.IO.Path.GetFullPath(@"..\..\"));
+
+                AL.GenBuffers(1, out int bufferId);
+                AL.GenSources(1, out int sourceId);
+
+                AL.BufferData(bufferId, ALFormat.Stereo16, waveInfo.ByteData, waveInfo.ByteData.Length, waveInfo.SampleRate);
+
+                AL.Source(sourceId, ALSourcei.Buffer, bufferId); // Bind source to buffer
+
+                SoundEffectToSourceIdDictionary[resource.Key] = new AudioInfo(sourceId, bufferId);
+            }
+        }
+
+        private static void DisposeBuffer(int bufferID, int sourceID)
+        {
+            Logging.Log("Song finished playing.", Logging.LoggingLevel.Info);
+            AL.DeleteSource(sourceID);
+            AL.DeleteBuffer(bufferID);
+        }
+
+        private static Dictionary<SoundEffects, string> SetupSoundEffectResourceDictionary()
+        {
+            return new Dictionary<SoundEffects, string>()
+            {
+                { SoundEffects.SoundEffect1, nameof(Properties.Resources.soundeffect1) },
+                { SoundEffects.SoundEffect2, nameof(Properties.Resources.soundeffect3) },
+            };
+        }
+
+        private static Dictionary<Songs, string> SetupSongResourceDictionary()
+        {
+            return new Dictionary<Songs, string>()
+            {
+                { Songs.Song1, nameof(Properties.Resources.piano) },
+                { Songs.Africa, nameof(Properties.Resources.africatoto) },
+            };
+        }
+
+        private static WaveInfo ReadWavFile(string filename)
         {
             try
             {
@@ -225,8 +239,7 @@
                         reader.ReadBytes(fmtExtraSize);
                     }
 
-
-                    // chunk 2 -- HERE'S THE NEW STUFF (ignore these subchunks, I don't know what they are!)
+                    // chunk 2
                     int bytes;
                     while (new string(reader.ReadChars(4)) != "data")
                     {
@@ -254,9 +267,9 @@
                             Buffer.BlockCopy(waveInfo.ByteData, 0, asFloat, 0, bytes);
                             break;
                         case 16:
-                            Int16[] asInt16 = new Int16[samps];
+                            var asInt16 = new short[samps];
                             System.Buffer.BlockCopy(waveInfo.ByteData, 0, asInt16, 0, bytes);
-                            asFloat = Array.ConvertAll(asInt16, e => e / (float)Int16.MaxValue);
+                            asFloat = Array.ConvertAll(asInt16, e => e / (float)short.MaxValue);
                             break;
                         default:
                             return waveInfo;
@@ -272,19 +285,19 @@
                 return null;
             }
         }
-        private static IList<string> AvailableDevices => AudioContext.AvailableDevices;
 
         public class AudioInfo
         {
             public AudioInfo(int sid, int bid)
             {
-                SourceId = sid;
-                BufferId = bid;
+                this.SourceId = sid;
+                this.BufferId = bid;
             }
 
             public int SourceId { get; set; }
 
-            public int BufferId { get; set; }
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local, to be needed.
+            private int BufferId { get; set; }
         }
 
         public class WaveInfo
@@ -313,9 +326,9 @@
 
             public byte[] ByteData { get; set; }
 
-            private int BitsPerSample => this.ByteRate / this.SampleRate * 8;
-
             public int NumberOfSeconds => (int)Math.Ceiling((double)this.ByteData.Length / (this.SampleRate * (this.BitsPerSample / 8)));
+
+            private int BitsPerSample => this.ByteRate / this.SampleRate * 8;
         }
     }
 }

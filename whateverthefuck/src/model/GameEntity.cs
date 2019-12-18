@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+    using whateverthefuck.src.model.entities;
+    using whateverthefuck.src.util;
     using whateverthefuck.src.view;
     using Rectangle = whateverthefuck.src.view.Rectangle;
 
@@ -250,6 +252,12 @@
             this.OnStep?.Invoke(this);
             this.MovementCache = this.CalculateMovement(gameState);
             this.Location = (GameCoordinate)this.Location + this.MovementCache;
+
+            if (this is PlayerCharacter)
+            {
+                Boombox.SetListenerPosition(this.Location.X, this.Location.Y);
+                Console.WriteLine("Centering listener to: " + this.Location);
+            }
 
             if (this.CastingInfo != null)
             {
