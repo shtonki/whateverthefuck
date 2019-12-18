@@ -1,5 +1,3 @@
 Known stinky code: Clean up GameEvent so internals are usable to the GameState and handle conversion somewhere else.
 
 Known bug: Hero will jitter around like a three year old on adderall sometimes.
-
-Known bug: Can only hit a NPC with spells if cast from the North.

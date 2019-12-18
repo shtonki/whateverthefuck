@@ -341,7 +341,7 @@
         /// <returns>The distance to the other GameEntity.</returns>
         public float DistanceTo(GameCoordinate other)
         {
-            return Coordinate.DistanceBetweenCoordinates(this.Location, other);
+            return Coordinate.DistanceBetweenCoordinates(this.Center, other);
         }
 
         public override string ToString()
