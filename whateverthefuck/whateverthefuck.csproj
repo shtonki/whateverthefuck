@@ -98,6 +98,7 @@
     <Compile Include="src\Program.cs" />
     <Compile Include="src\util\Boombox.cs" />
     <Compile Include="src\util\Coloring.cs" />
+    <Compile Include="src\util\ContextHandler.cs" />
     <Compile Include="src\util\ImageLoader.cs" />
     <Compile Include="src\util\UserSettings.cs" />
     <Compile Include="src\util\WhateverEncoding.cs" />

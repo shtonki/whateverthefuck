@@ -8,6 +8,22 @@
     using OpenTK.Audio;
     using OpenTK.Audio.OpenAL;
 
+    public static class BoomBoxSetterUpper
+    {
+        public static void SetupBoombox()
+        {
+            System.Threading.Thread t = new Thread(() =>
+            {
+                Boombox.Init();
+                Logging.Log("Initialized sounds.");
+                var audioInfo = Boombox.Play(Boombox.Songs.Africa, 0f, 0);
+                audioInfo.SetPosition(0f, 0);
+                audioInfo.SetVolume(80);
+            });
+            t.Start();
+        }
+    }
+
     public static class Boombox
     {
         private static readonly Dictionary<SoundEffects, AudioInfo> SoundEffectToSourceIdDictionary = new Dictionary<SoundEffects, AudioInfo>();
@@ -77,7 +93,7 @@
             try
             {
                 // Should probably already be .wav when it gets in here.
-                string path = Path.Combine(System.Reflection.Assembly.GetExecutingAssembly().Location, System.IO.Path.GetFullPath(@"..\..\Resources\")) + songsToResourceNameDictionary[song] + ".wav";
+                string path = Path.Combine(System.Reflection.Assembly.GetCallingAssembly().Location, System.IO.Path.GetFullPath(@"..\..\Resources\")) + songsToResourceNameDictionary[song] + ".wav";
                 WaveInfo waveInfo = ReadWavFile(path);
 
                 AL.GenBuffers(1, out int bufferID);
@@ -106,8 +122,8 @@
                 AL.Source(sourceId, ALSourcef.RolloffFactor, 10f);
                 */
                 AL.DistanceModel(ALDistanceModel.LinearDistanceClamped);
-                AL.Source(sourceId, ALSourcef.MaxDistance, 1.73f); // sqrt 3 (1z, 2x -> 3 hypotenuse)
-                AL.Source(sourceId, ALSourcef.ReferenceDistance, 1.73f / 10f); // half attentuation by 10 steps until 0
+                AL.Source(sourceId, ALSourcef.MaxDistance, 2.236f); // sqrt 5 (1z, 2x -> 1^2+2^2 hypotenuse)
+                AL.Source(sourceId, ALSourcef.ReferenceDistance, 2.236f / 10f); // half attentuation by 10 steps until 0
                 AL.Source(sourceId, ALSourcef.RolloffFactor, 1); // default roll off
 
                 System.Timers.Timer disposeTimer = new System.Timers.Timer(waveInfo.NumberOfSeconds * 1000);
@@ -313,7 +329,7 @@
 
             public void SetVolume(int percentage)
             {
-                Boombox.SetVolume(this.SourceId, 40);
+                Boombox.SetVolume(this.SourceId, percentage);
             }
         }
 

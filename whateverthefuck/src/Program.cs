@@ -54,15 +54,9 @@
 
             UserSettings.LoadUserSettings();
 
-            System.Threading.Thread t = new Thread(() =>
-            {
-                Boombox.Init();
-                Logging.Log("Initialized sounds.");
-                var audioInfo = Boombox.Play(Boombox.Songs.Africa, 0f, 0);
-                audioInfo.SetPosition(0.5f, 0);
-                audioInfo.SetVolume(2);
-            });
-            t.Start();
+            ContextHandler.SetupUnifiedContext();
+
+            BoomBoxSetterUpper.SetupBoombox();
 
             ServerConnection = new WhateverClientConnection();
             Logging.Log("Connected to Server", Logging.LoggingLevel.Info);
