@@ -2,8 +2,9 @@
 {
     using System.Collections.Generic;
     using System.Drawing;
+    using whateverthefuck.src.util;
 
-    public class Loot : GameEntity
+    public class Loot : GameEntity, IInteractable
     {
         public Loot(EntityIdentifier identifier, CreationArgs args)
             : base(identifier, EntityType.Loot, args)
@@ -15,5 +16,13 @@
         }
 
         public List<Item> Items { get; private set; } = new List<Item>();
+
+        public void Interact()
+        {
+            foreach (var item in this.Items)
+            {
+                Logging.Log(item.Type);
+            }
+        }
     }
 }

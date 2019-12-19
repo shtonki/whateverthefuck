@@ -41,6 +41,11 @@
         private const float HealthbarWidth = 0.1f;
         private const float HealthbarHeight = 0.02f;
 
+        private List<Ability> abilities = new List<Ability>();
+
+        private int globalCooldownTicks = 100;
+        private int currentGlobalCooldown = 0;
+
         protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArgs args)
             : base(new GameCoordinate(0, 0))
         {
@@ -52,6 +57,9 @@
             this.State = GameEntityState.Alive;
 
             this.Visible = true;
+
+            this.abilities.Add(new Ability(AbilityType.Fireball));
+            this.abilities.Add(new Ability(AbilityType.Fireburst));
         }
 
         /// <summary>
@@ -174,7 +182,14 @@
             float x2 = x1 + this.Size.X;
             float y2 = y1 + this.Size.Y;
 
-            drawAdapter.FillRectangle(x1, y1, x2, y2, this.DrawColor);
+            if (this.Sprite != null)
+            {
+                drawAdapter.DrawSprite(x1, y1, x2, y2, this.Sprite);
+            }
+            else
+            {
+                drawAdapter.FillRectangle(x1, y1, x2, y2, this.DrawColor);
+            }
 
             if (this.HighlightColor != Color.Transparent)
             {
@@ -249,7 +264,6 @@
                 return;
             }
 
-            this.OnStep?.Invoke(this);
             this.MovementCache = this.CalculateMovement(gameState);
             this.Location = (GameCoordinate)this.Location + this.MovementCache;
 
@@ -262,7 +276,9 @@
             {
                 if (this.Movements.IsMoving && !this.CanMoveWhileCasting(this.CastingInfo.CastingAbility))
                 {
+                    // cancel the cast
                     this.CastingInfo = null;
+                    this.currentGlobalCooldown = 0;
                 }
                 else
                 {
@@ -278,6 +294,46 @@
                     }
                 }
             }
+
+            if (this.currentGlobalCooldown > 0)
+            {
+                this.currentGlobalCooldown--;
+            }
+
+            foreach (var a in this.abilities)
+            {
+                if (a.CurrentCooldown > 0)
+                {
+                    a.CurrentCooldown--;
+                }
+            }
+
+            this.OnStep?.Invoke(this);
+        }
+
+        public Ability Ability(int index)
+        {
+            return this.abilities[index];
+        }
+
+        public Ability Ability(AbilityType abilityType)
+        {
+            return this.abilities.First(a => a.AbilityType == abilityType);
+        }
+
+        public bool CanCastAbility(Ability ability, GameEntity target)
+        {
+            if (this.currentGlobalCooldown > 0)
+            {
+                return false;
+            }
+
+            if (ability.CurrentCooldown == 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public void CastAbility(Ability ability, GameEntity target)
@@ -292,7 +348,25 @@
                 return;
             }
 
+            this.currentGlobalCooldown = this.globalCooldownTicks;
+
+            ability.CurrentCooldown = ability.BaseCooldown;
             this.CastingInfo = new CastingInfo(ability, target);
+        }
+
+        public float CooldownPercentage(Ability ability)
+        {
+            var globalCooldownPercentage = (float)this.currentGlobalCooldown / this.globalCooldownTicks;
+            var abilityCooldownPercentage = ability.CooldownPercentage;
+
+            if (this.currentGlobalCooldown > ability.CurrentCooldown)
+            {
+                return globalCooldownPercentage;
+            }
+            else
+            {
+                return abilityCooldownPercentage;
+            }
         }
 
         /// <summary>
@@ -302,7 +376,7 @@
         /// <returns>The distance to the other GameEntity.</returns>
         public float DistanceTo(GameCoordinate other)
         {
-            return Coordinate.DistanceBetweenCoordinates(this.Location, other);
+            return Coordinate.DistanceBetweenCoordinates(this.Center, other);
         }
 
         public override string ToString()
@@ -358,6 +432,11 @@
 
         private bool CanMoveWhileCasting(Ability ability)
         {
+            if (ability.CastTime == 0)
+            {
+                return true;
+            }
+
             return false;
         }
     }

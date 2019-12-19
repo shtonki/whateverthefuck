@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Threading;
     using whateverthefuck.src.model;
+    using whateverthefuck.src.model.entities;
+    using whateverthefuck.src.util;
     using whateverthefuck.src.view.guicomponents;
 
     public static class GUI
@@ -52,6 +54,7 @@
 
         public static void LoadGUI()
         {
+            return;
 #if true
             Panel outer = new Panel();
             outer.Location = new GLCoordinate(-0.8f, -0.8f);
@@ -66,12 +69,33 @@
 
             Button b = new Button();
             b.BackColor = Color.HotPink;
+            b.OnMouseButtonPress += (e, i) =>
+            {
+                Logging.Log("Inner button pressed");
+            };
             b.Size = new GLCoordinate(0.1f, 0.1f);
 
             DraggablePanel dp = new DraggablePanel();
             dp.Size = new GLCoordinate(0.5f, 0.5f);
+            dp.OnMouseButtonPress += (_, i) =>
+            {
+                Logging.Log(i.Direction);
+            };
             dp.Add(b);
             GUIComponents.Add(dp);
+
+            Panel pp = new Panel();
+            pp.Location = new GLCoordinate(-0.5f, -0.5f);
+            pp.Size = new GLCoordinate(0.2f, 0.2f);
+            pp.BackColor = Color.Aquamarine;
+
+            Button bb = new Button();
+            bb.Location = new GLCoordinate(0.05f, 0.05f);
+            bb.Size = new GLCoordinate(0.1f, 0.1f);
+            bb.BackColor = Color.Orange;
+            pp.Add(bb);
+
+            GUIComponents.Add(pp);
 
 #else
             //GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
@@ -86,6 +110,33 @@
 
             GUIComponents.Add(f);
 #endif
+        }
+
+        public static void LoadAbilityBar(PlayerCharacter hero)
+        {
+            Panel abilityBar = new Panel();
+            abilityBar.Location = new GLCoordinate(-0.9f, -0.9f);
+            abilityBar.Size = new GLCoordinate(1.8f, 0.4f);
+
+            var a0 = hero.Ability(0);
+            AbilityButton b0 = new AbilityButton(a0);
+            b0.Size = new GLCoordinate(0.3f, 0.3f);
+            b0.Location = new GLCoordinate(0.05f, 0.05f);
+            abilityBar.Add(b0);
+
+            var a1 = hero.Ability(1);
+            AbilityButton b1 = new AbilityButton(a1);
+            b1.Size = new GLCoordinate(0.3f, 0.3f);
+            b1.Location = new GLCoordinate(0.05f + 0.4f, 0.05f);
+            abilityBar.Add(b1);
+
+            hero.OnStep += e =>
+            {
+                b0.CooldownPercentage = e.CooldownPercentage(a0);
+                b1.CooldownPercentage = e.CooldownPercentage(a1);
+            };
+
+            GUIComponents.Add(abilityBar);
         }
 
         public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate screenCoordinate)

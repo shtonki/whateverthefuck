@@ -1,6 +1,7 @@
 ﻿namespace whateverthefuck.src.view.guicomponents
 {
     using System.Drawing;
+    using whateverthefuck.src.util;
 
     internal class Panel : GUIComponent
     {
@@ -64,7 +65,6 @@
 
     internal class DraggablePanel : Panel
     {
-        // private Panel draggedPanel;
         private bool dragging;
 
         public DraggablePanel()
@@ -89,6 +89,7 @@
 
             this.OnMouseMove += (c, i) =>
             {
+                Logging.Log("dragged");
                 if (this.dragging)
                 {
                     var dx = i.PreviousLocation.X - i.Location.X;
