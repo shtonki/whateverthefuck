@@ -116,6 +116,7 @@
     <Compile Include="src\view\guicomponents\Button.cs" />
     <Compile Include="src\view\guicomponents\Panel.cs" />
     <Compile Include="src\view\guicomponents\GUIComponent.cs" />
+    <Compile Include="src\view\LayoutManager.cs" />
     <Compile Include="src\view\ScreenCoordinate.cs" />
     <Compile Include="src\view\Sprite.cs" />
   </ItemGroup>

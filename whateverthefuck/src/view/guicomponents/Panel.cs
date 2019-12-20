@@ -24,7 +24,7 @@
         public void AddMenuBar()
         {
             this.MBar = new MenuBar(this.Size.X);
-            this.Add(this.MBar);
+            this.AddChild(this.MBar);
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
@@ -50,7 +50,7 @@
                     CloseButton.BackColor = Color.Black;
                 };
 #endif
-                this.Add(this.closeButton);
+                this.AddChild(this.closeButton);
 
                 this.BackColor = Color.Blue;
             }
@@ -79,24 +79,31 @@
 #endif
             this.BackColor = Color.Black;
 
-            this.OnMouseButtonPress += (c, i) =>
+            this.OnMouseButtonDown += (c, i) =>
             {
                 if (i.MouseButton == OpenTK.Input.MouseButton.Left)
                 {
-                    this.dragging = i.Direction == control.InputUnion.Directions.Down;
+                    this.dragging = true;
+                }
+            };
+
+            this.OnMouseButtonUp += (c, i) =>
+            {
+                if (i.MouseButton == OpenTK.Input.MouseButton.Left)
+                {
+                    this.dragging = false;
                 }
             };
 
             this.OnMouseMove += (c, i) =>
             {
-                Logging.Log("dragged");
                 if (this.dragging)
                 {
                     var dx = i.PreviousLocation.X - i.Location.X;
                     var dy = i.PreviousLocation.Y - i.Location.Y;
                     var dcoordinate = new GLCoordinate(dx, dy);
 
-                    foreach (var kid in this.children)
+                    foreach (var kid in this.Children)
                     {
                         kid.Location = (GLCoordinate)kid.Location + dcoordinate;
                     }
