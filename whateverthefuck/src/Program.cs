@@ -1,6 +1,5 @@
 ﻿namespace whateverthefuck
 {
-    using System;
     using whateverthefuck.src.model;
     using whateverthefuck.src.network;
     using whateverthefuck.src.util;

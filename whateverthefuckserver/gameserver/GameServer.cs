@@ -122,6 +122,9 @@ namespace whateverthefuckserver.gameserver
         {
             if (killer is PlayerCharacter)
             {
+                // @fix for christ sake just store the PlayerCharacter in the user so we don't end up looping through the entire server every
+                // time someone kills something and also this has a very real risk of breaking regardless of what the error message says
+                // t ribbe
                 User killerx = null;
 
                 lock (PlayersLock)
@@ -141,7 +144,7 @@ namespace whateverthefuckserver.gameserver
                     Logging.Log("this will never happen so you will never see this.", Logging.LoggingLevel.Error);
                 }
 
-                Item item = new Item(ItemType.Test4, 20, Rarity.Epic, 
+                Item item = new Item(ItemType.BronzeDagger, 20, Rarity.Epic, 
                     new ItemBonus(ItemBonus.BonusType.Test4, 20),
                     new ItemBonus(ItemBonus.BonusType.Test1, -4)
                     );

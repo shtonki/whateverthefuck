@@ -68,12 +68,7 @@
 
             foreach (var kiddo in this.Children)
             {
-                drawAdapter.PushMatrix();
-                drawAdapter.Translate(kiddo.Location.X, kiddo.Location.Y);
-
-                kiddo.DrawMe(drawAdapter);
-
-                drawAdapter.PopMatrix();
+                kiddo.Draw(drawAdapter);
             }
         }
 

@@ -13,7 +13,6 @@
         public Panel(GLCoordinate location, GLCoordinate size)
             : base(location, size)
         {
-            this.Visible = false;
             this.Zoomer = new Zoomer();
         }
 

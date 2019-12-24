@@ -114,6 +114,7 @@
     <Compile Include="src\view\GUI.cs" />
     <Compile Include="src\view\guicomponents\AbilityButton.cs" />
     <Compile Include="src\view\guicomponents\Button.cs" />
+    <Compile Include="src\view\guicomponents\LootPanel.cs" />
     <Compile Include="src\view\guicomponents\Panel.cs" />
     <Compile Include="src\view\guicomponents\GUIComponent.cs" />
     <Compile Include="src\view\LayoutManager.cs" />
@@ -144,6 +145,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pngfind.com-flame-emoji-png-169553.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bronze_dagger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\item_banana.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

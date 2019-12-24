@@ -21,6 +21,8 @@
 
         private static GibbWindow Frame { get; set; }
 
+        private static LootPanel LootPanel { get; set; }
+
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
         /// of said window to be called. Roughly speaking.
@@ -123,6 +125,14 @@
             };
 
             GUIComponents.Add(abilityBar);
+        }
+
+        public static void ShowLoot(Loot loot)
+        {
+            LootPanel lootPanel = new LootPanel(new GLCoordinate(0.85f, 0.85f/6), loot);
+            lootPanel.Location = new GLCoordinate(-0.425f, 0.1f);
+
+            GUIComponents.Add(lootPanel);
         }
 
         public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate screenCoordinate)

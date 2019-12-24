@@ -151,7 +151,8 @@
                             this.Target(clickedEntity);
                         }
 
-                        if (clickedEntity is IInteractable interactWithMe)
+                        if (clickedEntity is IInteractable interactWithMe &&
+                            input.Direction == InputUnion.Directions.Up)
                         {
                             interactWithMe.Interact();
                         }
@@ -205,6 +206,11 @@
             {
             }
 #endif
+        }
+
+        public void ShowLoot(Loot loot)
+        {
+            GUI.ShowLoot(loot);
         }
 
         private void Target(GameEntity target)
