@@ -19,10 +19,7 @@
 
         public void Interact()
         {
-            foreach (var item in this.Items)
-            {
-                Logging.Log(item.Type);
-            }
+            Program.GameStateManager.ShowLoot(this);
         }
     }
 }

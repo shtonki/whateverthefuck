@@ -11,5 +11,10 @@
             this.Movable = true;
             this.MoveSpeed = 0.001f;
         }
+
+        public override void Step(GameState gameState)
+        {
+            base.Step(gameState);
+        }
     }
 }

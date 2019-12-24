@@ -8,7 +8,7 @@ namespace whateverthefuck.src.view.guicomponents
     {
         public AbilityButton(Ability a)
         {
-            this.Sprite = Sprite.GetSprite(a.AbilityType);
+            this.Sprite = Sprite.GetAbilitySprite(a.AbilityType);
         }
 
         public float CooldownPercentage { get; set; }

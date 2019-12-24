@@ -16,7 +16,7 @@
 
         public Coordinate Location { get; set; }
 
-        public Sprite Sprite { get; protected set; }
+        public Sprite Sprite { get; set; }
 
         protected float Rotation { get; set; } = 0;
 

@@ -70,7 +70,7 @@
         /// <summary>
         /// Event for when the GameEntity is stepped.
         /// </summary>
-        public event Action<GameEntity> OnStep;
+        public event Action<GameEntity, GameState> OnStep;
 
         public int MaxHealth { get; set; } = 100;
 
@@ -308,7 +308,7 @@
                 }
             }
 
-            this.OnStep?.Invoke(this);
+            this.OnStep?.Invoke(this, gameState);
         }
 
         public Ability Ability(int index)

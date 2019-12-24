@@ -90,7 +90,7 @@
 
         public Sprite GetSprite()
         {
-            return Sprite.GetSprite(this.AbilityType);
+            return Sprite.GetAbilitySprite(this.AbilityType);
         }
     }
 }

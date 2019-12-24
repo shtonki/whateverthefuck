@@ -2,13 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Linq;
     using whateverthefuck.src.model;
     using whateverthefuck.src.view;
 
     public static class RNG
     {
-        private static Random r = new Random(Guid.NewGuid().GetHashCode());
+        private static Random r = new Random();
 
         /// <summary>
         /// Return a random point within radius.
@@ -98,6 +99,11 @@
         public static T RandomElement<T>(List<T> list)
         {
             return list.ElementAt(RNG.IntegerBetween(0, list.Count()));
+        }
+
+        public static Color RandomColor()
+        {
+            return Color.FromArgb(r.Next(0, byte.MaxValue), r.Next(0, byte.MaxValue), r.Next(0, byte.MaxValue));
         }
     }
 }

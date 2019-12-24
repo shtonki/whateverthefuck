@@ -22,9 +22,13 @@
             this.Size = size;
         }
 
-        public event Action<GUIComponent, InputUnion> OnMouseButtonPress;
+        public event Action<GUIComponent, InputUnion> OnMouseButtonDown;
 
-        public event Action<GUIComponent, InputUnion> OnKeyboardButtonPress;
+        public event Action<GUIComponent, InputUnion> OnMouseButtonUp;
+
+        public event Action<GUIComponent, InputUnion> OnKeyboardButtonDown;
+
+        public event Action<GUIComponent, InputUnion> OnKeyboardButtonUp;
 
         public event Action<GUIComponent, InputUnion> OnMouseMove;
 
@@ -32,16 +36,23 @@
 
         public Color BackColor { get; set; }
 
-        protected List<GUIComponent> children { get; private set; } = new List<GUIComponent>();
+        public List<GUIComponent> Children { get; } = new List<GUIComponent>();
+
+        public LayoutManager LayoutManager { get; set; }
 
         public void AddBorder()
         {
             this.border = new Border(Color.Black);
         }
 
-        public virtual void Add(GUIComponent toAdd)
+        public virtual void AddChild(GUIComponent child)
         {
-            this.children.Add(toAdd);
+            if (this.LayoutManager != null)
+            {
+                this.LayoutManager.Layout(this, child);
+            }
+
+            this.Children.Add(child);
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
@@ -55,14 +66,9 @@
                 drawAdapter.FillRectangle(0, 0, this.Size.X, this.Size.Y, this.BackColor);
             }
 
-            foreach (var kiddo in this.children)
+            foreach (var kiddo in this.Children)
             {
-                drawAdapter.PushMatrix();
-                drawAdapter.Translate(kiddo.Location.X, kiddo.Location.Y);
-
-                kiddo.DrawMe(drawAdapter);
-
-                drawAdapter.PopMatrix();
+                kiddo.Draw(drawAdapter);
             }
         }
 
@@ -84,7 +90,7 @@
                 var glClicked = input.Location;
                 var internalClickLocation = new GLCoordinate(glClicked.X - initialOffset.X, glClicked.Y - initialOffset.Y);
 
-                var clickedChild = this.children.FirstOrDefault(c => c.Contains(internalClickLocation));
+                var clickedChild = this.Children.FirstOrDefault(c => c.Contains(internalClickLocation));
 
                 if (clickedChild != null)
                 {
@@ -97,11 +103,25 @@
 
             if (input.IsMouseInput)
             {
-                this.OnMouseButtonPress?.Invoke(this, input);
+                if (input.Direction == InputUnion.Directions.Down)
+                {
+                    this.OnMouseButtonDown?.Invoke(this, input);
+                }
+                else if (input.Direction == InputUnion.Directions.Up)
+                {
+                    this.OnMouseButtonUp?.Invoke(this, input);
+                }
             }
             else if (input.IsKeyboardInput)
             {
-                this.OnKeyboardButtonPress?.Invoke(this, input);
+                if (input.Direction == InputUnion.Directions.Down)
+                {
+                    this.OnKeyboardButtonDown?.Invoke(this, input);
+                }
+                else if (input.Direction == InputUnion.Directions.Up)
+                {
+                    this.OnKeyboardButtonUp?.Invoke(this, input);
+                }
             }
             else if (input.IsMouseMove)
             {

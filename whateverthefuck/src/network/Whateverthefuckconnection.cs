@@ -72,11 +72,21 @@
                 MessageType messageType = (MessageType)header.Type;
                 int messageLength = header.Size;
 
+                bytesRead = 0;
                 byte[] bodyBuffer = new byte[messageLength];
-                bytesRead = this.networkStream.Read(bodyBuffer, 0, messageLength);
-                if (bytesRead != messageLength)
+
+                while (true)
                 {
-                    throw new Exception("error reading message body");
+                    bytesRead += this.networkStream.Read(bodyBuffer, bytesRead, messageLength);
+
+                    if (bytesRead == messageLength)
+                    {
+                        break;
+                    }
+                    else if (bytesRead > messageLength)
+                    {
+                        throw new Exception(string.Format("Expected body length <{0}>, got <{1}>", messageLength, bytesRead));
+                    }
                 }
 
                 WhateverthefuckMessage message = WhateverthefuckMessage.DecodeMessage(header, bodyBuffer);

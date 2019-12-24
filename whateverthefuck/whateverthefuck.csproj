@@ -67,6 +67,7 @@
     <Compile Include="src\model\Ability.cs" />
     <Compile Include="src\model\ClientGameStateManager.cs" />
     <Compile Include="src\model\entities\Block.cs" />
+    <Compile Include="src\model\entities\Brain.cs" />
     <Compile Include="src\model\entities\Character.cs" />
     <Compile Include="src\model\CreationArgs.cs" />
     <Compile Include="src\model\entities\Door.cs" />
@@ -116,8 +117,10 @@
     <Compile Include="src\view\GUI.cs" />
     <Compile Include="src\view\guicomponents\AbilityButton.cs" />
     <Compile Include="src\view\guicomponents\Button.cs" />
+    <Compile Include="src\view\guicomponents\LootPanel.cs" />
     <Compile Include="src\view\guicomponents\Panel.cs" />
     <Compile Include="src\view\guicomponents\GUIComponent.cs" />
+    <Compile Include="src\view\LayoutManager.cs" />
     <Compile Include="src\view\ScreenCoordinate.cs" />
     <Compile Include="src\view\Sprite.cs" />
   </ItemGroup>
@@ -161,6 +164,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pngfind.com-flame-emoji-png-169553.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bronze_dagger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\item_banana.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

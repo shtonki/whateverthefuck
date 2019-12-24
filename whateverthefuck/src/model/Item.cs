@@ -1,4 +1,6 @@
-﻿namespace whateverthefuck.src.model
+﻿using whateverthefuck.src.view;
+
+namespace whateverthefuck.src.model
 {
     public class Item
     {
@@ -17,6 +19,8 @@
         public Rarity Rarity { get; private set; }
 
         public ItemBonus[] Bonuses { get; private set; }
+
+        public Sprite Sprite => Sprite.GetItemSprite(this);
     }
 
     public enum Rarity
@@ -34,15 +38,9 @@
     {
         None,
 
-        Test1,
-        Test2,
-        Test3,
-        Test4,
-        Test5,
-        Test6,
-        Test7,
-
         BronzeDagger,
+
+        Banana,
     }
 
     public class ItemBonus
