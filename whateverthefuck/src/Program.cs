@@ -56,7 +56,7 @@
 
             ContextHandler.SetupUnifiedContext();
 
-            BoomBoxSetterUpper.SetupBoombox();
+            //BoomBoxSetterUpper.SetupBoombox();
 
             ServerConnection = new WhateverClientConnection();
             Logging.Log("Connected to Server", Logging.LoggingLevel.Info);

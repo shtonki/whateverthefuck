@@ -53,6 +53,11 @@
         public static void LoadGUI()
         {
 #if true
+            #if true
+            SlickMenuPanel smp = new SlickMenuPanel();
+            GUIComponents.Add(smp);
+
+            #else
             Panel outer = new Panel();
             outer.Location = new GLCoordinate(-0.8f, -0.8f);
             outer.Size = new GLCoordinate(1, 1);
@@ -72,6 +77,7 @@
             dp.Size = new GLCoordinate(0.5f, 0.5f);
             dp.Add(b);
             GUIComponents.Add(dp);
+            #endif
 
 #else
             //GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));

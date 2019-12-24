@@ -116,7 +116,7 @@
                 // // clamp: max(referenceDistance, min(distance, maxDistance)) less than 0.01
                 // Look at that! No real solutions exist :)) Todo: deal with this headache
                 // https://www.desmos.com/calculator/xzqjyqhvzb
-                /*AL.DistanceModel(ALDistanceModel.InverseDistanceClamped);
+                /* AL.DistanceModel(ALDistanceModel.InverseDistanceClamped);
                 AL.Source(sourceId, ALSourcef.MaxDistance, 0.2f);
                 AL.Source(sourceId, ALSourcef.ReferenceDistance, 1.2f);
                 AL.Source(sourceId, ALSourcef.RolloffFactor, 10f);

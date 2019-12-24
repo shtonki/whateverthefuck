@@ -1,4 +1,7 @@
-﻿namespace whateverthefuck.src.view
+﻿using System;
+using whateverthefuck.src.view.guicomponents;
+
+namespace whateverthefuck.src.view
 {
     using System.Drawing;
     using whateverthefuck.src.model;
@@ -33,6 +36,28 @@
 
                 drawAdapter.PopMatrix();
             }
+        }
+    }
+
+    public class GUILine : GUIComponent
+    {
+        private float x1;
+        private float y1;
+        private float x2;
+        private float y2;
+
+        public GUILine(GUIComponent o, GUIComponent e)
+            : base(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
+        {
+            this.x1 = o.Location.X + (o.Size.X / 2);
+            this.y1 = o.Location.Y - (o.Size.Y / 2);
+            this.x2 = e.Location.X + (e.Size.X / 2);
+            this.y2 = e.Location.Y - (e.Size.Y / 2);
+        }
+
+        public override void DrawMe(DrawAdapter drawAdapter)
+        {
+            drawAdapter.FillLine(this.x1, this.y1, this.x2, this.y2, Color.White);
         }
     }
 
