@@ -48,6 +48,7 @@ namespace whateverthefuckserver.gameserver
             SpawnCity = new SpawnCity(GameState, es => PendEvents(es));
             SpawnCity.SpawnWorld();
             SpawnCity.SpawnMob();
+            SpawnCity.SpawnMob();
         }
 
         private void Tick()

@@ -1,5 +1,6 @@
 ﻿namespace whateverthefuck.src.view.guicomponents
 {
+    using System.Drawing;
     using whateverthefuck.src.model.entities;
     using whateverthefuck.src.util;
 
@@ -8,6 +9,8 @@
         public LootPanel(GLCoordinate size, Loot loot)
             : base(new GLCoordinate(0, 0), size)
         {
+            this.BackColor = Color.RosyBrown;
+
             var glm = new GridLayoutManager();
             glm.Rows = 1;
             glm.Width = this.Size.X / 6;
