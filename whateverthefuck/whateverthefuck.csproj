@@ -67,6 +67,7 @@
     <Compile Include="src\model\Ability.cs" />
     <Compile Include="src\model\ClientGameStateManager.cs" />
     <Compile Include="src\model\entities\Block.cs" />
+    <Compile Include="src\model\entities\Brain.cs" />
     <Compile Include="src\model\entities\Character.cs" />
     <Compile Include="src\model\CreationArgs.cs" />
     <Compile Include="src\model\entities\Door.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="src\model\GameState.cs" />
     <Compile Include="src\model\entities\PlayerCharacter.cs" />
     <Compile Include="src\model\EntityGenerator.cs" />
+    <Compile Include="src\model\IInteractable.cs" />
+    <Compile Include="src\model\Inventory.cs" />
     <Compile Include="src\model\Item.cs" />
     <Compile Include="src\model\LineOfSight.cs" />
     <Compile Include="src\network\messages\ExampleMessage.cs" />
@@ -113,10 +116,14 @@
     <Compile Include="src\view\GibbWindow.cs" />
     <Compile Include="src\view\GLCoordinate.cs" />
     <Compile Include="src\view\GUI.cs" />
+    <Compile Include="src\view\guicomponents\AbilityButton.cs" />
     <Compile Include="src\view\guicomponents\Button.cs" />
+    <Compile Include="src\view\guicomponents\InventoryPanel.cs" />
+    <Compile Include="src\view\guicomponents\ItemContainer.cs" />
+    <Compile Include="src\view\guicomponents\LootPanel.cs" />
     <Compile Include="src\view\guicomponents\Panel.cs" />
     <Compile Include="src\view\guicomponents\GUIComponent.cs" />
-    <Compile Include="src\view\guicomponents\SlickMenuPanel.cs" />
+    <Compile Include="src\view\LayoutManager.cs" />
     <Compile Include="src\view\ScreenCoordinate.cs" />
     <Compile Include="src\view\Sprite.cs" />
   </ItemGroup>
@@ -137,6 +144,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -158,7 +166,13 @@
     <None Include="Resources\piano.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\mankey.png" />
+    <None Include="Resources\pngfind.com-flame-emoji-png-169553.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bronze_dagger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\item_banana.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -185,7 +185,7 @@
 
         public Action<GameEntity, GameEntity> OnDeathCallback { get; set; }
 
-        public Action<GameEntity> OnStepCallback { get; set; }
+        public Action<GameEntity, GameState> OnStepCallback { get; set; }
 
         public override byte[] ToBytes()
         {

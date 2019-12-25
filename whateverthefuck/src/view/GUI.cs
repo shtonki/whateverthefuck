@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Threading;
     using whateverthefuck.src.model;
+    using whateverthefuck.src.model.entities;
+    using whateverthefuck.src.util;
     using whateverthefuck.src.view.guicomponents;
 
     public static class GUI
@@ -18,6 +20,10 @@
         public static List<GUIComponent> GUIComponents { get; set; } = new List<GUIComponent>();
 
         private static GibbWindow Frame { get; set; }
+
+        private static LootPanel LootPanel { get; set; }
+
+        private static InventoryPanel InventoryPanel { get; set; } = new InventoryPanel();
 
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
@@ -52,46 +58,72 @@
 
         public static void LoadGUI()
         {
-#if true
-            #if true
-            SlickMenuPanel smp = new SlickMenuPanel();
-            GUIComponents.Add(smp);
-
-            #else
-            Panel outer = new Panel();
-            outer.Location = new GLCoordinate(-0.8f, -0.8f);
-            outer.Size = new GLCoordinate(1, 1);
-
+#if false
             Panel p = new Panel();
-            p.Location = new GLCoordinate(0.45f, 0.45f);
-            p.Size = new GLCoordinate(0.2f, 0.2f);
-            p.BackColor = Color.Pink;
-            p.Add(new Button(new GLCoordinate(0.05f, 0.05f), new GLCoordinate(0.1f, 0.1f)));
-            outer.Add(p);
+            p.Size = new GLCoordinate(0.5f, 0.5f);
 
-            Button b = new Button();
-            b.BackColor = Color.HotPink;
-            b.Size = new GLCoordinate(0.1f, 0.1f);
+            GridLayoutManager glm = new GridLayoutManager();
+            glm.Rows = 1;
+            glm.Height = 0.1f;
+            glm.Width = 0.1f;
+            glm.XPadding = 0.05f;
+            glm.YPadding = 0.05f;
+            p.LayoutManager = glm;
 
-            DraggablePanel dp = new DraggablePanel();
-            dp.Size = new GLCoordinate(0.5f, 0.5f);
-            dp.Add(b);
-            GUIComponents.Add(dp);
-            #endif
+            for (int i = 0; i < 10; i++)
+            {
+                int v = i;
+                Button b = new Button();
+                b.BackColor = RNG.RandomColor();
+                b.OnMouseButtonDown += (c, input) => Logging.Log(v);
+                p.AddChild(b);
+            }
 
+            p.Visible = true;
+
+            GUIComponents.Add(p);
 #else
-            //GUIComponents.Add(new Button(new GLCoordinate(-0.8f, -0.8f), new GLCoordinate(0.1f, 0.1f)));
-
-            DraggablePanel f = new DraggablePanel(new GLCoordinate(-0.1f, -0.1f), new GLCoordinate(0.5f, 0.5f));
-            //f.AddMenuBar();
-            Button b1 = new Button(new GLCoordinate(0.1f, 0.1f), new GLCoordinate(0.1f, 0.1f));
-            Button b2 = new Button(new GLCoordinate(0.3f, 0.1f), new GLCoordinate(0.1f, 0.1f));
-            Button b3 = new Button(new GLCoordinate(0.1f, 0.3f), new GLCoordinate(0.1f, 0.1f));
-            Button b4 = new Button(new GLCoordinate(0.3f, 0.3f), new GLCoordinate(0.1f, 0.1f));
-            f.Add(b1, b2, b3, b4);
-
-            GUIComponents.Add(f);
+            GUIComponents.Add(InventoryPanel);
 #endif
+        }
+
+        public static void LoadAbilityBar(PlayerCharacter hero)
+        {
+            Panel abilityBar = new Panel();
+            abilityBar.Location = new GLCoordinate(-0.9f, -0.9f);
+            abilityBar.Size = new GLCoordinate(1.8f, 0.4f);
+
+            GridLayoutManager glm = new GridLayoutManager();
+            glm.Height = 0.3f;
+            glm.Width = 0.3f;
+            glm.XPadding = 0.05f;
+            glm.YPadding = 0.05f;
+            glm.Rows = 1;
+            abilityBar.LayoutManager = glm;
+
+            var a0 = hero.Ability(0);
+            AbilityButton b0 = new AbilityButton(a0);
+            abilityBar.AddChild(b0);
+
+            var a1 = hero.Ability(1);
+            AbilityButton b1 = new AbilityButton(a1);
+            abilityBar.AddChild(b1);
+
+            hero.OnStep += (entity, gameState) =>
+            {
+                b0.CooldownPercentage = entity.CooldownPercentage(a0);
+                b1.CooldownPercentage = entity.CooldownPercentage(a1);
+            };
+
+            GUIComponents.Add(abilityBar);
+        }
+
+        public static void ShowLoot(Loot loot)
+        {
+            LootPanel lootPanel = new LootPanel(new GLCoordinate(0.85f, 0.85f/6), loot);
+            lootPanel.Location = new GLCoordinate(-0.425f, 0.1f);
+
+            GUIComponents.Add(lootPanel);
         }
 
         public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate screenCoordinate)
@@ -108,6 +140,16 @@
             var y = (glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height;
 
             return new ScreenCoordinate((int)x, (int)y);
+        }
+
+        public static void UpdateInventoryPanel(Inventory inventory)
+        {
+            InventoryPanel.Update(inventory);
+        }
+
+        public static void ToggleInventoryPanel()
+        {
+            InventoryPanel.Visible = !InventoryPanel.Visible;
         }
 
         private static void LaunchGameWindow(object o)

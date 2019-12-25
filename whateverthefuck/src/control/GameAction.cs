@@ -13,11 +13,13 @@
         HeroWalkRightwards,
         HeroWalkRightwardsStop,
 
+        CastAbility0,
         CastAbility1,
 
         CameraZoomOut,
         CameraZoomIn,
 
         TogglePanel,
+        ToggleInventory,
     }
 }

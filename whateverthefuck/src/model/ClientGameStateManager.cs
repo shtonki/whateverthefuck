@@ -25,11 +25,16 @@
             this.GameState = new GameState();
 
             this.TickTimer = new Timer(_ => this.Tick(), null, 0, TickInterval);
+
+            this.Inventory.OnInventoryChanged += () =>
+            {
+                GUI.UpdateInventoryPanel(this.Inventory);
+            };
         }
 
         public GameState GameState { get; private set; }
 
-        private GUIComponent Focused { get; set; }
+        private GUIComponent FocusedGUIComponent { get; set; }
 
         private Timer TickTimer { get; } // can't be removed or we stop moving after ~3 seconds
 
@@ -40,6 +45,8 @@
         private GameEntity TargetedEntity { get; set; }
 
         private List<GUIComponent> ClickedDownGuiComponents { get; set; } = new List<GUIComponent>();
+
+        public Inventory Inventory { get; set; } = new Inventory();
 
         private float PrevDirection { get; set; }
 
@@ -75,13 +82,14 @@
                 Program.ServerConnection.SendMessage(new SyncMessage(syncRecord));
             }
 
-            // fix me t. ribbe
+            // @fix me t. ribbe
             if (this.TakeControlId.HasValue)
             {
                 this.Hero = (PlayerCharacter)this.GameState.GetEntityById(this.TakeControlId.Value);
                 if (this.Hero != null)
                 {
                     this.CenterCameraOn(this.Hero);
+                    GUI.LoadAbilityBar(this.Hero);
                 }
 
                 this.TakeControlId = null;
@@ -108,46 +116,58 @@
             var lootee = this.GameState.GetEntityById(message.LooteeId);
 
             Loot lootbox = new Loot(EntityIdentifier.RandomReserved(), new CreationArgs(0));
-            lootbox.Center = lootee.Center;
+            lootbox.Center = lootee.Center + new GameCoordinate(0.2f, 0);
             lootbox.Items.Add(item);
             var cevent = new CreateEntityEvent(lootbox);
             cevent.OnCreationCallback = e => this.AddLoot(e as Loot, item);
             this.GameState.HandleGameEvents(cevent);
         }
 
+        public void AddItemToInventory(Item item)
+        {
+            this.Inventory.AddItem(item);
+        }
+
         public void HandleInput(InputUnion input)
         {
+            GUIComponent interactedGUIComponent = null;
+
+            if (input.Location != null)
+            {
+                interactedGUIComponent = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
+            }
+
             if (input.IsMouseInput && input.Direction == InputUnion.Directions.Down)
             {
-                var clicked = this.GUIComponentAt(input.Location.ToGLCoordinate());
-
-                if (clicked != null && clicked.Visible)
-                {
-                    this.Focus(clicked);
-                }
-                else
-                {
-                    this.Focus(null);
-                }
+                this.Focus(interactedGUIComponent);
             }
 
-            if (input.IsMouseInput && input.Direction == InputUnion.Directions.Up && this.Focused == null)
+            if (interactedGUIComponent != null && !input.IsKeyboardInput)
             {
-                this.Focus(null);
+                interactedGUIComponent.HandleInput(input);
             }
-
-            if (this.Focused != null)
+            else if (this.FocusedGUIComponent != null)
             {
-                this.Focused.HandleInput(input);
+                this.FocusedGUIComponent.HandleInput(input);
             }
             else
             {
                 if (input.IsMouseInput)
                 {
-                    var v = this.GetEntityAtLocation(GUI.Camera.GLToGameCoordinate(input.Location));
-                    if (v != null && v.Targetable)
+                    var clickedEntity = this.GetEntityAtLocation(GUI.Camera.GLToGameCoordinate(input.Location));
+
+                    if (clickedEntity != null)
                     {
-                        this.Target(v);
+                        if (clickedEntity.Targetable)
+                        {
+                            this.Target(clickedEntity);
+                        }
+
+                        if (clickedEntity is IInteractable interactWithMe &&
+                            input.Direction == InputUnion.Directions.Up)
+                        {
+                            interactWithMe.Interact();
+                        }
                     }
                 }
                 else if (input.IsKeyboardInput)
@@ -160,6 +180,49 @@
                     }
                 }
             }
+#if false
+            if (input.IsMouseInput)
+            {
+                // todo handle visible component "underneath" invisible one
+                var interacted = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
+
+                if (input.Direction == InputUnion.Directions.Down)
+                {
+                    if (interacted != null && interacted.Visible)
+                    {
+                        this.Focus(interacted);
+                    }
+                    else
+                    {
+                        this.Focus(null);
+                    }
+                }
+            }
+
+            if (input.IsMouseMove)
+            {
+                // todo handle visible component "underneath" invisible one
+                var interacted = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
+
+                if (interacted != null)
+                {
+                    interacted.HandleInput(input);
+                }
+            }
+
+            if (this.FocusedGUIComponent != null)
+            {
+                this.FocusedGUIComponent.HandleInput(input);
+            }
+            else
+            {
+            }
+#endif
+        }
+
+        public void ShowLoot(Loot loot)
+        {
+            GUI.ShowLoot(loot);
         }
 
         private void Target(GameEntity target)
@@ -240,12 +303,17 @@
 
         private void Focus(GUIComponent focused)
         {
-            this.Focused = focused;
+            this.FocusedGUIComponent = focused;
         }
 
         private void BeginCastAbility(Ability ability)
         {
             if (this.TargetedEntity == null)
+            {
+                return;
+            }
+
+            if (!this.Hero.CanCastAbility(ability, this.TargetedEntity))
             {
                 return;
             }
@@ -258,9 +326,14 @@
         {
             switch (gameAction)
             {
+                case GameAction.CastAbility0:
+                {
+                    this.BeginCastAbility(this.Hero.Ability(0));
+                } break;
+
                 case GameAction.CastAbility1:
                 {
-                    this.BeginCastAbility(new Ability(AbilityType.Fireballx));
+                    this.BeginCastAbility(this.Hero.Ability(1));
                 } break;
 
                 case GameAction.HeroWalkUpwards:
@@ -321,6 +394,11 @@
                     }
                 } break;
 
+                case GameAction.ToggleInventory:
+                {
+                    GUI.ToggleInventoryPanel();
+                } break;
+
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
             }
         }
@@ -350,11 +428,11 @@
             return picked.First();
         }
 
-        private GUIComponent GUIComponentAt(GLCoordinate location)
+        private GUIComponent FirstVisibleGUIComponentAt(GLCoordinate location)
         {
             foreach (var c in GUI.GUIComponents)
             {
-                if (c.Contains(location))
+                if (c.Contains(location) && c.Visible)
                 {
                     return c;
                 }

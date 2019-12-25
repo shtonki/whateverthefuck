@@ -8,7 +8,7 @@
 
     public abstract class GUIComponent : Drawable
     {
-        private Border border;
+        protected Border Border;
 
         protected GUIComponent()
             : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
@@ -22,9 +22,13 @@
             this.Size = size;
         }
 
-        public event Action<GUIComponent, InputUnion> OnMouseButtonPress;
+        public event Action<GUIComponent, InputUnion> OnMouseButtonDown;
 
-        public event Action<GUIComponent, InputUnion> OnKeyboardButtonPress;
+        public event Action<GUIComponent, InputUnion> OnMouseButtonUp;
+
+        public event Action<GUIComponent, InputUnion> OnKeyboardButtonDown;
+
+        public event Action<GUIComponent, InputUnion> OnKeyboardButtonUp;
 
         public event Action<GUIComponent, InputUnion> OnMouseMove;
 
@@ -32,31 +36,49 @@
 
         public Color BackColor { get; set; }
 
-        protected List<GUIComponent> children { get; private set; } = new List<GUIComponent>();
+        public List<GUIComponent> Children { get; } = new List<GUIComponent>();
+
+        public LayoutManager LayoutManager { get; set; }
 
         public void AddBorder()
         {
-            this.border = new Border(Color.Black);
+            this.Border = new Border(Color.Black);
         }
 
-        public virtual void Add(GUIComponent toAdd)
+        public void AddChild(GUIComponent child)
         {
-            this.children.Add(toAdd);
+            if (this.LayoutManager != null)
+            {
+                this.LayoutManager.Layout(this, child);
+            }
+
+            this.Children.Add(child);
+        }
+
+        public void ClearChildren()
+        {
+            this.Children.Clear();
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
         {
-            // if(Border != null) drawAdapter.TraceRectangle(Location.X, Location.Y, Location.X + Size.X, Location.Y + Size.Y, Border.BorderColor, Border.Width);
-            drawAdapter.FillRectangle(0, 0, this.Size.X, this.Size.Y, this.BackColor);
-
-            foreach (var kiddo in this.children)
+            if (this.Sprite != null)
             {
-                drawAdapter.PushMatrix();
-                drawAdapter.Translate(kiddo.Location.X, kiddo.Location.Y);
+                drawAdapter.DrawSprite(0, 0, this.Size.X, this.Size.Y, this.Sprite);
+            }
+            else
+            {
+                drawAdapter.FillRectangle(0, 0, this.Size.X, this.Size.Y, this.BackColor);
+            }
 
-                kiddo.DrawMe(drawAdapter);
+            if (this.Border != null)
+            {
+                drawAdapter.TraceRectangle(0, 0, this.Size.X, this.Size.Y, this.Border.BorderColor, this.Border.Width);
+            }
 
-                drawAdapter.PopMatrix();
+            foreach (var kiddo in this.Children)
+            {
+                kiddo.Draw(drawAdapter);
             }
         }
 
@@ -78,7 +100,7 @@
                 var glClicked = input.Location;
                 var internalClickLocation = new GLCoordinate(glClicked.X - initialOffset.X, glClicked.Y - initialOffset.Y);
 
-                var clickedChild = this.children.FirstOrDefault(c => c.Contains(internalClickLocation));
+                var clickedChild = this.Children.FirstOrDefault(c => c.Contains(internalClickLocation));
 
                 if (clickedChild != null)
                 {
@@ -91,11 +113,25 @@
 
             if (input.IsMouseInput)
             {
-                this.OnMouseButtonPress?.Invoke(this, input);
+                if (input.Direction == InputUnion.Directions.Down)
+                {
+                    this.OnMouseButtonDown?.Invoke(this, input);
+                }
+                else if (input.Direction == InputUnion.Directions.Up)
+                {
+                    this.OnMouseButtonUp?.Invoke(this, input);
+                }
             }
             else if (input.IsKeyboardInput)
             {
-                this.OnKeyboardButtonPress?.Invoke(this, input);
+                if (input.Direction == InputUnion.Directions.Down)
+                {
+                    this.OnKeyboardButtonDown?.Invoke(this, input);
+                }
+                else if (input.Direction == InputUnion.Directions.Up)
+                {
+                    this.OnKeyboardButtonUp?.Invoke(this, input);
+                }
             }
             else if (input.IsMouseMove)
             {
@@ -104,7 +140,7 @@
         }
     }
 
-    internal class Border
+    public class Border
     {
         internal Border(Color borderColor, float width = 4f)
         {

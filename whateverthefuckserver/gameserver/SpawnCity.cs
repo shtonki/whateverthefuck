@@ -34,24 +34,34 @@ namespace whateverthefuckserver.gameserver
 
         public void SpawnMob()
         {
-            var mob = GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new CreationArgs(0));
-            mob.Location = new GameCoordinate(-0.5f, -0.5f);
+            var mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new CreationArgs(0));
+            mob.Location = new GameCoordinate(-0.5f, RNG.BetweenZeroAndOne());
             var rt = new CreateEntityEvent(mob);
             rt.OnDeathCallback = (idiot, killer) => Program.GameServer.SpawnLootForPlayer(idiot, killer);
-            rt.OnStepCallback = (e) => stepme(e);
+
+            Brain brain = new Brain();
+            rt.OnStepCallback = (entity, gameState) => UseBrain(brain, entity, gameState);
+
             PublishArray(rt);
         }
 
-        int c = 0;
-
-        private void stepme(GameEntity e)
+        private void UseBrain(Brain brain, GameEntity entity, GameState gameState)
         {
+            if (entity.LastDamageTaken != null)
+            {
+                MovementStruct ms = new MovementStruct();
+                ms.FollowId = entity.LastDamageTaken.AttackerId;
+                var updateMovementEvent = new UpdateMovementEvent(entity.Identifier.Id, ms);
+                PublishArray(updateMovementEvent);
+            }
+#if false
             if (c++ % 100 == 0)
             {
                 var ms = new MovementStruct();
                 ms.Direction = (float)(RNG.BetweenZeroAndOne() * Math.PI * 2);
-                PublishArray(new UpdateMovementEvent(e.Identifier.Id, ms));
+                PublishArray(new UpdateMovementEvent(entity.Identifier.Id, ms));
             }
+#endif
         }
 
         public void SpawnWorld()
