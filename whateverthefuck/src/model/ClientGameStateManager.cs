@@ -46,7 +46,7 @@
 
         private List<GUIComponent> ClickedDownGuiComponents { get; set; } = new List<GUIComponent>();
 
-        public Inventory Inventory { get; set; } = new Inventory();
+        private Inventory Inventory { get; set; } = new Inventory();
 
         private float PrevDirection { get; set; }
 

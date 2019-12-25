@@ -2,10 +2,8 @@
 {
     using System.Drawing;
     using whateverthefuck.src.model.entities;
-    using whateverthefuck.src.util;
 
-
-    //@todo: use ItemContainer instead of plain button
+    // @todo: use ItemContainer instead of plain button
     internal class LootPanel : Panel
     {
         public LootPanel(GLCoordinate size, Loot loot)

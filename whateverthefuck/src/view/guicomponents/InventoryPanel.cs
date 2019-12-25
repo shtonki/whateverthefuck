@@ -4,16 +4,14 @@
 
     internal class InventoryPanel : Panel
     {
-        private static int NumberOfRows = 3;
-        private static int NumberOfColumns = 3;
-
-        private static int InventorySize => NumberOfRows * NumberOfColumns;
+        private static readonly int NumberOfRows = 3;
+        private static readonly int NumberOfColumns = 3;
 
         private static readonly GLCoordinate Location = new GLCoordinate(0, 0);
         private static readonly GLCoordinate Size = new GLCoordinate(0.5f, 0.5f);
         private static readonly GLCoordinate Padding = new GLCoordinate(0.02f, 0.02f);
 
-        internal InventoryPanel() 
+        internal InventoryPanel()
             : base(Location,  Size)
         {
             var glm = new GridLayoutManager();
@@ -30,9 +28,11 @@
             this.Visible = false;
         }
 
+        private static int InventorySize => NumberOfRows * NumberOfColumns;
+
         public bool AddItem(Item i)
         {
-            if (Children.Count >= InventorySize)
+            if (this.Children.Count >= InventorySize)
             {
                 return false;
             }
@@ -49,7 +49,7 @@
 
             foreach (var i in inventory.AllItems)
             {
-                AddItem(i);
+                this.AddItem(i);
             }
         }
     }

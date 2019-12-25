@@ -1,8 +1,7 @@
-﻿using System.Drawing;
-using whateverthefuck.src.model;
-
-namespace whateverthefuck.src.view.guicomponents
+﻿namespace whateverthefuck.src.view.guicomponents
 {
+    using System.Drawing;
+    using whateverthefuck.src.model;
 
     internal class AbilityButton : Button
     {

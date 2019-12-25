@@ -8,8 +8,6 @@
 
     public abstract class GUIComponent : Drawable
     {
-        protected Border Border;
-
         protected GUIComponent()
             : this(new GLCoordinate(0, 0), new GLCoordinate(0, 0))
         {
@@ -39,6 +37,8 @@
         public List<GUIComponent> Children { get; } = new List<GUIComponent>();
 
         public LayoutManager LayoutManager { get; set; }
+
+        public Border Border { get; set; }
 
         public void AddBorder()
         {

@@ -7,14 +7,9 @@
     {
         public event Action OnInventoryChanged;
 
-        private List<Item> Items = new List<Item>();
-
         public IEnumerable<Item> AllItems => this.Items;
 
-        public Inventory()
-        {
-
-        }
+        private List<Item> Items { get; } = new List<Item>();
 
         public void AddItem(Item i)
         {

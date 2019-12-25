@@ -1,7 +1,7 @@
-﻿using whateverthefuck.src.view;
-
-namespace whateverthefuck.src.model
+﻿namespace whateverthefuck.src.model
 {
+    using whateverthefuck.src.view;
+
     public class Item
     {
         public Item(ItemType type, int stackSize, Rarity rarity, params ItemBonus[] bonuses)

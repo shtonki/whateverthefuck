@@ -1,10 +1,9 @@
-﻿using System;
-using whateverthefuck.src.view.guicomponents;
-
-namespace whateverthefuck.src.view
+﻿namespace whateverthefuck.src.view
 {
+    using System;
     using System.Drawing;
     using whateverthefuck.src.model;
+    using whateverthefuck.src.view.guicomponents;
 
     public abstract class Drawable
     {

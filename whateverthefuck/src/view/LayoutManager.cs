@@ -1,7 +1,7 @@
-﻿using whateverthefuck.src.view.guicomponents;
-
-namespace whateverthefuck.src.view
+﻿namespace whateverthefuck.src.view
 {
+    using whateverthefuck.src.view.guicomponents;
+
     public abstract class LayoutManager
     {
         public abstract void Layout(GUIComponent parent, GUIComponent child);

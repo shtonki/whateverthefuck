@@ -57,6 +57,5 @@
         }
 
         public Image Image() => ImageLoader.GetImage(this.ID);
-
     }
 }

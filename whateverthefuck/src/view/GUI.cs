@@ -120,7 +120,7 @@
 
         public static void ShowLoot(Loot loot)
         {
-            LootPanel lootPanel = new LootPanel(new GLCoordinate(0.85f, 0.85f/6), loot);
+            LootPanel lootPanel = new LootPanel(new GLCoordinate(0.85f, 0.85f / 6), loot);
             lootPanel.Location = new GLCoordinate(-0.425f, 0.1f);
 
             GUIComponents.Add(lootPanel);
