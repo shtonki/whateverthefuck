@@ -336,6 +336,11 @@
                     this.BeginCastAbility(this.Hero.Ability(1));
                 } break;
 
+                case GameAction.CastAbility2:
+                {
+                    this.BeginCastAbility(this.Hero.Ability(2));
+                } break;
+
                 case GameAction.HeroWalkUpwards:
                 {
                     this.HeroMovements.Upwards = true;

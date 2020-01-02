@@ -109,10 +109,15 @@
             AbilityButton b1 = new AbilityButton(a1);
             abilityBar.AddChild(b1);
 
+            var a2 = hero.Ability(1);
+            AbilityButton b2 = new AbilityButton(a2);
+            abilityBar.AddChild(b2);
+
             hero.OnStep += (entity, gameState) =>
             {
                 b0.CooldownPercentage = entity.CooldownPercentage(a0);
                 b1.CooldownPercentage = entity.CooldownPercentage(a1);
+                b2.CooldownPercentage = entity.CooldownPercentage(a2);
             };
 
             GUIComponents.Add(abilityBar);

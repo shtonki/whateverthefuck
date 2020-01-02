@@ -250,12 +250,21 @@
             }
 
             Ability ability = caster.Ability(endCastAbilityEvent.AbilityType);
-            CreateEntityEvent projectileCreationEvent = ability.Cast(caster);
-            var projectile = (Projectile)this.EntityGenerator.GenerateEntity(projectileCreationEvent);
-            projectile.Location = caster.Center;
-            projectile.Movements.FollowId = castee.Identifier.Id;
-            projectile.ResolveEvents = ability.Resolve(caster, castee);
-            this.AddEntities(projectile);
+
+            if (ability.CreateProjectile)
+            {
+
+                CreateEntityEvent projectileCreationEvent = ability.Cast(caster);
+                var projectile = (Projectile)this.EntityGenerator.GenerateEntity(projectileCreationEvent);
+                projectile.Location = caster.Center;
+                projectile.Movements.FollowId = castee.Identifier.Id;
+                projectile.ResolveEvents = ability.Resolve(caster, castee);
+                this.AddEntities(projectile);
+            }
+            else
+            {
+                this.HandleGameEvents(ability.Resolve(caster, castee));
+            }
         }
 
         private void HandleEvent(UpdateMovementEvent updateMovementEvent)

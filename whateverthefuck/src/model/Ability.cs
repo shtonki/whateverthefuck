@@ -9,10 +9,14 @@
     {
         Fireball,
         Fireburst,
+
+        Bite,
     }
 
     public class Ability
     {
+        private const float MeleeRange = 0.2f;
+
         public Ability(AbilityType abilityType)
         {
             this.AbilityType = abilityType;
@@ -29,6 +33,8 @@
         public AbilityType AbilityType { get; private set; }
 
         public float Range { get; private set; }
+
+        public bool CreateProjectile { get; private set; }
 
         public TargetingRule TargetingRule { get; private set; }
 
@@ -48,6 +54,11 @@
                 case AbilityType.Fireburst:
                 {
                     events.Add(new DealDamageEvent(caster, target, 420));
+                } break;
+
+                case AbilityType.Bite:
+                {
+                    events.Add(new DealDamageEvent(caster, target, 20));
                 } break;
 
                 default: throw new NotImplementedException();
@@ -76,8 +87,7 @@
                     this.CastTime = 50;
                     this.BaseCooldown = 0;
                     this.Range = 0.5f;
-                    this.TargetingRule =
-                            TargetingRule.ConstructRuleWithAnd(TargetingRule.IsNotDead, TargetingRule.IsNotSelf, TargetingRule.IsCharacter);
+                    this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
                 } break;
 
                 case AbilityType.Fireburst:
@@ -85,9 +95,16 @@
                     this.CastTime = 0;
                     this.BaseCooldown = 400;
                     this.Range = 0.9f;
-                    this.TargetingRule =
-                        TargetingRule.ConstructRuleWithAnd(TargetingRule.IsNotDead, TargetingRule.IsNotSelf, TargetingRule.IsCharacter);
-                    } break;
+                    this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
+                } break;
+
+                case AbilityType.Bite:
+                {
+                    this.CastTime = 0;
+                    this.BaseCooldown = 0;
+                    this.Range = MeleeRange;
+                    this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
+                } break;
 
                 default: throw new NotImplementedException();
             }
@@ -108,6 +125,8 @@
         public static TargetingRule IsSelf { get; } = new TargetingRule((caster, target, state) => target == caster);
 
         public static TargetingRule IsCharacter { get; } = new TargetingRule((caster, target, state) => target is Character);
+
+        public static TargetingRule IsAliveEnemyCharacter { get; } = ConstructRuleWithAnd(TargetingRule.IsNotDead, TargetingRule.IsNotSelf, TargetingRule.IsCharacter);
 
         private Func<GameEntity, GameEntity, GameState, bool> Rule { get; }
 

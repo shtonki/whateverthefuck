@@ -40,19 +40,18 @@ namespace whateverthefuckserver.gameserver
             rt.OnDeathCallback = (idiot, killer) => Program.GameServer.SpawnLootForPlayer(idiot, killer);
 
             Brain brain = new Brain();
-            rt.OnStepCallback = (entity, gameState) => UseBrain(brain, entity, gameState);
+            rt.OnStepCallback = (entity, gameState) => UseBrain(brain, entity as NPC, gameState);
 
             PublishArray(rt);
         }
 
-        private void UseBrain(Brain brain, GameEntity entity, GameState gameState)
+        private void UseBrain(Brain brain, NPC npc, GameState gameState)
         {
-            if (entity.LastDamageTaken != null)
+            var action = brain.Use(npc, gameState);
+
+            if (action != null)
             {
-                MovementStruct ms = new MovementStruct();
-                ms.FollowId = entity.LastDamageTaken.AttackerId;
-                var updateMovementEvent = new UpdateMovementEvent(entity.Identifier.Id, ms);
-                PublishArray(updateMovementEvent);
+                PublishArray(action);
             }
 #if false
             if (c++ % 100 == 0)

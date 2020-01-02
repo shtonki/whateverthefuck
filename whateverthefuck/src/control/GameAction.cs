@@ -15,6 +15,7 @@
 
         CastAbility0,
         CastAbility1,
+        CastAbility2,
 
         CameraZoomOut,
         CameraZoomIn,

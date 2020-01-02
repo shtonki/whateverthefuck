@@ -21,6 +21,7 @@
 
             HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.Number1), GameAction.CastAbility0));
             HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.Number2), GameAction.CastAbility1));
+            HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.Number3), GameAction.CastAbility2));
 
             HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Up, Key.Tab), GameAction.TogglePanel));
             HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.I), GameAction.ToggleInventory));

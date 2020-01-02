@@ -41,7 +41,7 @@
         private const float HealthbarWidth = 0.1f;
         private const float HealthbarHeight = 0.02f;
 
-        private List<Ability> abilities = new List<Ability>();
+        protected List<Ability> abilities = new List<Ability>();
 
         private int globalCooldownTicks = 100;
         private int currentGlobalCooldown = 0;
@@ -57,9 +57,6 @@
             this.State = GameEntityState.Alive;
 
             this.Visible = true;
-
-            this.abilities.Add(new Ability(AbilityType.Fireball));
-            this.abilities.Add(new Ability(AbilityType.Fireburst));
         }
 
         /// <summary>
@@ -321,6 +318,11 @@
         public Ability Ability(AbilityType abilityType)
         {
             return this.abilities.First(a => a.AbilityType == abilityType);
+        }
+
+        public IEnumerable<Ability> CastableAbilities(GameEntity target, GameState gameState)
+        {
+            return this.abilities.Where(a => this.CanCastAbility(a, target, gameState));
         }
 
         public bool CanCastAbility(Ability ability, GameEntity target, GameState gameState)
