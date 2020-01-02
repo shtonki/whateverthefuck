@@ -18,7 +18,7 @@
                 Logging.Log("Initialized sounds.");
                 var audioInfo = Boombox.Play(Boombox.Songs.Africa, 0f, 0);
                 audioInfo.SetPosition(0f, 0);
-                audioInfo.SetVolume(80);
+                audioInfo.SetVolume(2);
             });
             t.Start();
         }

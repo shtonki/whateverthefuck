@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a Character in the game.
     /// </summary>
-    public abstract class Character : GameEntity
+    public abstract class Character : Lootable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Character"/> class.

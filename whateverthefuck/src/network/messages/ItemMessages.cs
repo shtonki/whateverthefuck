@@ -8,6 +8,8 @@
 
     public class CreateLootMessage : WhateverthefuckMessage
     {
+        private Item[] items;
+
         public CreateLootMessage()
             : base(MessageType.CreateLootMessage)
         {

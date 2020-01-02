@@ -6,7 +6,7 @@
     // @todo: use ItemContainer instead of plain button
     internal class LootPanel : Panel
     {
-        public LootPanel(GLCoordinate size, Loot loot)
+        public LootPanel(GLCoordinate size, Lootable lootee)
             : base(new GLCoordinate(0, 0), size)
         {
             this.BackColor = Color.RosyBrown;
@@ -17,14 +17,14 @@
             glm.Height = this.Size.Y;
             this.LayoutManager = glm;
 
-            foreach (var item in loot.Items)
+            foreach (var item in lootee.Items)
             {
                 Button lootButton = new Button();
                 lootButton.Sprite = item.Sprite;
                 lootButton.OnMouseButtonDown += (c, i) =>
                 {
                     lootButton.Visible = false;
-                    Program.GameStateManager.AddItemToInventory(item);
+                    Program.GameStateManager.LootItem(lootee, item);
                 };
                 this.AddChild(lootButton);
             }

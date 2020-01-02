@@ -33,6 +33,14 @@
         {
             lock (this.lockSafeList)
             {
+                foreach (var entity in this.AllEntities)
+                {
+                    if (entity.Destroy)
+                    {
+                        this.removeUs.Add(entity);
+                    }
+                }
+
                 foreach (var removeMe in this.removeUs)
                 {
                     this.EntityList.Remove(removeMe);

@@ -110,6 +110,8 @@
         /// </summary>
         public bool BlocksLOS { get; protected set; } = true;
 
+        public bool Destroy { get; set; }
+
         public int LOSGraceTicks { get; set; } = 0;
 
         /// <summary>
@@ -369,14 +371,14 @@
             }
         }
 
-        /// <summary>
-        /// Calculates the distance to another GameEntity.
-        /// </summary>
-        /// <param name="other">The GameEntity to which distance is to be calculated.</param>
-        /// <returns>The distance to the other GameEntity.</returns>
-        public float DistanceTo(GameCoordinate other)
+        public float DistanceTo(GameEntity other)
         {
-            return Coordinate.DistanceBetweenCoordinates(this.Center, other);
+            return this.DistanceTo(other.Center);
+        }
+
+        public float DistanceTo(GameCoordinate location)
+        {
+            return Coordinate.DistanceBetweenCoordinates(this.Center, location);
         }
 
         public override string ToString()

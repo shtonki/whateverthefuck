@@ -52,11 +52,6 @@
                         return new Projectile(identifier, args);
                     }
 
-                case EntityType.Loot:
-                    {
-                        return new Loot(identifier, args);
-                    }
-
                 default: throw new Exception();
             }
         }

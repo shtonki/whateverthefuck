@@ -310,13 +310,6 @@
             </summary>
             <param name="gameState">The GameState in which the GameEntity is ticked.</param>
         </member>
-        <member name="M:whateverthefuck.src.model.GameEntity.DistanceTo(whateverthefuck.src.model.GameCoordinate)">
-            <summary>
-            Calculates the distance to another GameEntity.
-            </summary>
-            <param name="other">The GameEntity to which distance is to be calculated.</param>
-            <returns>The distance to the other GameEntity.</returns>
-        </member>
         <member name="M:whateverthefuck.src.model.GameEntity.Die(whateverthefuck.src.model.GameState)">
             <summary>
             This kills the GameEntity.

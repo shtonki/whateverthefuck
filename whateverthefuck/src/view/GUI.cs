@@ -118,12 +118,17 @@
             GUIComponents.Add(abilityBar);
         }
 
-        public static void ShowLoot(Loot loot)
+        public static void ShowLoot(Lootable lootee)
         {
-            LootPanel lootPanel = new LootPanel(new GLCoordinate(0.85f, 0.85f / 6), loot);
-            lootPanel.Location = new GLCoordinate(-0.425f, 0.1f);
+            LootPanel = new LootPanel(new GLCoordinate(0.85f, 0.85f / 6), lootee);
+            LootPanel.Location = new GLCoordinate(-0.425f, 0.1f);
 
-            GUIComponents.Add(lootPanel);
+            GUIComponents.Add(LootPanel);
+        }
+
+        public static void CloseLootPanel()
+        {
+            GUIComponents.Remove(LootPanel);
         }
 
         public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate screenCoordinate)

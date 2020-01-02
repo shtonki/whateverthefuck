@@ -18,7 +18,7 @@
     internal class ClientGameStateManager
     {
         private const int TickInterval = 10;
-        private const float OneOverSquareRootOfTwo = 0.70710678118f;
+        private const float LootingMaxDistance = 0.25f;
 
         public ClientGameStateManager()
         {
@@ -39,6 +39,8 @@
         private Timer TickTimer { get; } // can't be removed or we stop moving after ~3 seconds
 
         private PlayerCharacter Hero { get; set; }
+
+        private Lootable Looting { get; set; }
 
         private HeroMovementStruct HeroMovements { get; } = new HeroMovementStruct();
 
@@ -75,10 +77,9 @@
             this.GameState.Step();
             this.UpdateLOS();
 
-            var syncRecord = this.GameState.GenerateSyncRecord();
-
-            if (syncRecord.Tick % 100 == 1)
+            if (tick % 100 == 0)
             {
+                var syncRecord = this.GameState.GenerateSyncRecord();
                 Program.ServerConnection.SendMessage(new SyncMessage(syncRecord));
             }
 
@@ -113,19 +114,20 @@
         public void SpawnLoot(CreateLootMessage message)
           {
             var item = message.Item;
-            var lootee = this.GameState.GetEntityById(message.LooteeId);
+            var lootee = this.GameState.GetEntityById(message.LooteeId) as Lootable;
 
-            Loot lootbox = new Loot(EntityIdentifier.RandomReserved(), new CreationArgs(0));
-            lootbox.Center = lootee.Center + new GameCoordinate(0.2f, 0);
-            lootbox.Items.Add(item);
-            var cevent = new CreateEntityEvent(lootbox);
-            cevent.OnCreationCallback = e => this.AddLoot(e as Loot, item);
-            this.GameState.HandleGameEvents(cevent);
+            lootee.AddLoot(item);
         }
 
-        public void AddItemToInventory(Item item)
+        public void LootItem(Lootable lootee, Item item)
         {
             this.Inventory.AddItem(item);
+            lootee.RemoveItem(item);
+
+            if (lootee.Items.Count() == 0)
+            {
+                this.StopLooting();
+            }
         }
 
         public void HandleInput(InputUnion input)
@@ -180,49 +182,33 @@
                     }
                 }
             }
-#if false
-            if (input.IsMouseInput)
-            {
-                // todo handle visible component "underneath" invisible one
-                var interacted = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
-
-                if (input.Direction == InputUnion.Directions.Down)
-                {
-                    if (interacted != null && interacted.Visible)
-                    {
-                        this.Focus(interacted);
-                    }
-                    else
-                    {
-                        this.Focus(null);
-                    }
-                }
-            }
-
-            if (input.IsMouseMove)
-            {
-                // todo handle visible component "underneath" invisible one
-                var interacted = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
-
-                if (interacted != null)
-                {
-                    interacted.HandleInput(input);
-                }
-            }
-
-            if (this.FocusedGUIComponent != null)
-            {
-                this.FocusedGUIComponent.HandleInput(input);
-            }
-            else
-            {
-            }
-#endif
         }
 
-        public void ShowLoot(Loot loot)
+        public void Loot(Lootable lootee)
         {
-            GUI.ShowLoot(loot);
+            if (this.Hero.DistanceTo(lootee) > LootingMaxDistance)
+            {
+                return;
+            }
+
+            if (this.Looting == lootee)
+            {
+                return;
+            }
+
+            if (this.Looting != null)
+            {
+                this.StopLooting();
+            }
+
+            this.Looting = lootee;
+            GUI.ShowLoot(this.Looting);
+        }
+
+        private void StopLooting()
+        {
+            GUI.CloseLootPanel();
+            this.Looting = null;
         }
 
         private void Target(GameEntity target)
@@ -240,60 +226,74 @@
         {
             if (this.Hero != null)
             {
-                MovementStruct ms = new MovementStruct();
+                this.HandleHeroMovement();
 
-                double direction = 0;
-
-                if (this.HeroMovements.Upwards && this.HeroMovements.Leftwards)
+                if (this.Looting != null)
                 {
-                    direction = 7 * Math.PI / 4;
+                    if (this.Hero.DistanceTo(this.Looting) > LootingMaxDistance)
+                    {
+                        GUI.CloseLootPanel();
+                        this.Looting = null;
+                    }
                 }
-                else if (this.HeroMovements.Upwards && this.HeroMovements.Rightwards)
-                {
-                    direction = Math.PI / 4;
-                }
-                else if (this.HeroMovements.Downwards && this.HeroMovements.Leftwards)
-                {
-                    direction = 5 * Math.PI / 4;
-                }
-                else if (this.HeroMovements.Downwards && this.HeroMovements.Rightwards)
-                {
-                    direction = 3 * Math.PI / 4;
-                }
-                else if (this.HeroMovements.Leftwards)
-                {
-                    direction = 3 * Math.PI / 2;
-                }
-                else if (this.HeroMovements.Rightwards)
-                {
-                    direction = Math.PI / 2;
-                }
-                else if (this.HeroMovements.Upwards)
-                {
-                    direction = 2 * Math.PI;
-                }
-                else if (this.HeroMovements.Downwards)
-                {
-                    direction = Math.PI;
-                }
-
-                if (direction == 0)
-                {
-                    ms.Direction = float.NaN;
-                }
-                else
-                {
-                    ms.Direction = (float)direction;
-                }
-
-                if (!ms.Direction.Equals(this.PrevDirection))
-                {
-                    var e = new UpdateMovementEvent(this.Hero.Identifier.Id, ms);
-                    Program.ServerConnection.SendMessage(new UpdateGameStateMessage(0, e));
-                }
-
-                this.PrevDirection = ms.Direction;
             }
+        }
+
+        private void HandleHeroMovement()
+        {
+            MovementStruct ms = new MovementStruct();
+
+            double direction = 0;
+
+            if (this.HeroMovements.Upwards && this.HeroMovements.Leftwards)
+            {
+                direction = 7 * Math.PI / 4;
+            }
+            else if (this.HeroMovements.Upwards && this.HeroMovements.Rightwards)
+            {
+                direction = Math.PI / 4;
+            }
+            else if (this.HeroMovements.Downwards && this.HeroMovements.Leftwards)
+            {
+                direction = 5 * Math.PI / 4;
+            }
+            else if (this.HeroMovements.Downwards && this.HeroMovements.Rightwards)
+            {
+                direction = 3 * Math.PI / 4;
+            }
+            else if (this.HeroMovements.Leftwards)
+            {
+                direction = 3 * Math.PI / 2;
+            }
+            else if (this.HeroMovements.Rightwards)
+            {
+                direction = Math.PI / 2;
+            }
+            else if (this.HeroMovements.Upwards)
+            {
+                direction = 2 * Math.PI;
+            }
+            else if (this.HeroMovements.Downwards)
+            {
+                direction = Math.PI;
+            }
+
+            if (direction == 0)
+            {
+                ms.Direction = float.NaN;
+            }
+            else
+            {
+                ms.Direction = (float)direction;
+            }
+
+            if (!ms.Direction.Equals(this.PrevDirection))
+            {
+                var e = new UpdateMovementEvent(this.Hero.Identifier.Id, ms);
+                Program.ServerConnection.SendMessage(new UpdateGameStateMessage(0, e));
+            }
+
+            this.PrevDirection = ms.Direction;
         }
 
         private void AddLoot(Loot e, Item item)

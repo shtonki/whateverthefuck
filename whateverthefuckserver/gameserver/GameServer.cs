@@ -145,11 +145,15 @@ namespace whateverthefuckserver.gameserver
                     Logging.Log("this will never happen so you will never see this.", Logging.LoggingLevel.Error);
                 }
 
-                Item item = new Item(ItemType.BronzeDagger, 20, Rarity.Epic, 
+                Item item = new Item(ItemType.BronzeDagger, 20, Rarity.Epic,
                     new ItemBonus(ItemBonus.BonusType.Test4, 20),
                     new ItemBonus(ItemBonus.BonusType.Test1, -4)
                     );
                 CreateLootMessage message = new CreateLootMessage(dead, item);
+                killerx.PlayerConnection.SendMessage(message);
+
+                item = new Item(ItemType.Banana, 20, Rarity.Epic);
+                message = new CreateLootMessage(dead, item);
                 killerx.PlayerConnection.SendMessage(message);
             }
         }
