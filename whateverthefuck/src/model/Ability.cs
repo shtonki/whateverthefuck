@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using whateverthefuck.src.model.entities;
-    using whateverthefuck.src.util;
+    using System.Linq;
 
     public enum AbilityType
     {
@@ -27,6 +27,10 @@
         public int CurrentCooldown { get; set; }
 
         public AbilityType AbilityType { get; private set; }
+
+        public float Range { get; private set; }
+
+        public TargetingRule TargetingRule { get; private set; }
 
         public float CooldownPercentage => this.BaseCooldown == 0 ? 0 : (float)this.CurrentCooldown / this.BaseCooldown;
 
@@ -71,16 +75,55 @@
                 {
                     this.CastTime = 50;
                     this.BaseCooldown = 0;
+                    this.Range = 0.5f;
+                    this.TargetingRule =
+                            TargetingRule.ConstructRuleWithAnd(TargetingRule.IsNotDead, TargetingRule.IsNotSelf, TargetingRule.IsCharacter);
                 } break;
 
                 case AbilityType.Fireburst:
                 {
                     this.CastTime = 0;
                     this.BaseCooldown = 400;
-                } break;
+                    this.Range = 0.9f;
+                    this.TargetingRule =
+                        TargetingRule.ConstructRuleWithAnd(TargetingRule.IsNotDead, TargetingRule.IsNotSelf, TargetingRule.IsCharacter);
+                    } break;
 
                 default: throw new NotImplementedException();
             }
+        }
+    }
+
+    public class TargetingRule
+    {
+        private TargetingRule(Func<GameEntity, GameEntity, GameState, bool> rule)
+        {
+            this.Rule = rule;
+        }
+
+        public static TargetingRule IsNotDead { get; } = new TargetingRule((caster, target, state) => target.State != GameEntityState.Dead);
+
+        public static TargetingRule IsNotSelf { get; } = new TargetingRule((caster, target, state) => target != caster);
+
+        public static TargetingRule IsSelf { get; } = new TargetingRule((caster, target, state) => target == caster);
+
+        public static TargetingRule IsCharacter { get; } = new TargetingRule((caster, target, state) => target is Character);
+
+        private Func<GameEntity, GameEntity, GameState, bool> Rule { get; }
+
+        public static TargetingRule ConstructRuleWithAnd(params TargetingRule[] rules)
+        {
+            return new TargetingRule((caster, target, state) => rules.All(r => r.ApplyRule(caster, target, state)));
+        }
+
+        public static TargetingRule ConstructRuleWithOr(params TargetingRule[] rules)
+        {
+            return new TargetingRule((caster, target, state) => rules.Any(r => r.ApplyRule(caster, target, state)));
+        }
+
+        public bool ApplyRule(GameEntity caster, GameEntity target, GameState state)
+        {
+            return this.Rule(caster, target, state);
         }
     }
 

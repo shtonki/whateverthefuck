@@ -323,19 +323,29 @@
             return this.abilities.First(a => a.AbilityType == abilityType);
         }
 
-        public bool CanCastAbility(Ability ability, GameEntity target)
+        public bool CanCastAbility(Ability ability, GameEntity target, GameState gameState)
         {
             if (this.currentGlobalCooldown > 0)
             {
                 return false;
             }
 
-            if (ability.CurrentCooldown == 0)
+            if (ability.CurrentCooldown > 0)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            if (ability.Range < this.DistanceTo(target))
+            {
+                return false;
+            }
+
+            if (!ability.TargetingRule.ApplyRule(this, target, gameState))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void CastAbility(Ability ability, GameEntity target)

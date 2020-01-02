@@ -313,7 +313,7 @@
                 return;
             }
 
-            if (!this.Hero.CanCastAbility(ability, this.TargetedEntity))
+            if (!this.Hero.CanCastAbility(ability, this.TargetedEntity, this.GameState))
             {
                 return;
             }
