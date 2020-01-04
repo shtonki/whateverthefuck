@@ -391,13 +391,6 @@ namespace whateverthefuck
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-            GL.UseProgram(0);
-
-            DrawAdapter da = new DrawAdapter();
-
-            da.FillRectangle(0, 0, 1f, 1f, Color.Pink);
-
             _drawing.ProjectionMatrix = _projectionMatrix;
 
             _frameCount++;

@@ -37,8 +37,8 @@ namespace whateverthefuck.src.view
 
         public void ActivateScissor(GLCoordinate location, GLCoordinate size)
         {
-            var locScreenCoords = GUI.TranslateGLToScreenCoordinates(location);
-            var sizeScreenCoords = GUI.TranslateGLToScreenCoordinates(new GLCoordinate(size.X - 1, size.Y - 1));
+            var locScreenCoords = GUI.GLToScreenCoordinates(location);
+            var sizeScreenCoords = GUI.GLToScreenCoordinates(new GLCoordinate(size.X - 1, size.Y - 1));
 
             GL.Scissor(
                 locScreenCoords.X,

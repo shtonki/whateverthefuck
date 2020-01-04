@@ -156,7 +156,7 @@
             {
                 if (input.IsMouseInput)
                 {
-                    var clickedEntity = this.GetEntityAtLocation(GUI.Camera.GLToGameCoordinate(input.Location));
+                    var clickedEntity = this.GetEntityAtLocation(GUI.GLToGameCoordinate(input.Location));
 
                     if (clickedEntity != null)
                     {

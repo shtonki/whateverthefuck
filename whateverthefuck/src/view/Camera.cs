@@ -12,20 +12,6 @@
 
         protected virtual Coordinate CurrentLocation { get; set; }
 
-        public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
-        {
-            var x = gameCoordinate.X - this.Location.X;
-            var y = gameCoordinate.Y - this.Location.Y;
-            return new GLCoordinate(x, y);
-        }
-
-        public GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
-        {
-            return new GameCoordinate(
-                (glCoordinate.X / this.Zoom.CurrentZoom) + this.Location.X,
-                (glCoordinate.Y / this.Zoom.CurrentZoom) + this.Location.Y);
-        }
-
         public void Lock()
         {
             this.lockedLocation = this.CurrentLocation;

@@ -15,15 +15,15 @@
     {
         private InputUnion(ScreenCoordinate beforeMove, ScreenCoordinate afterMove)
         {
-            this.Location = GUI.TranslateScreenToGLCoordinates(afterMove);
-            this.PreviousLocation = GUI.TranslateScreenToGLCoordinates(beforeMove);
+            this.Location = GUI.ScreenToGLCoordinates(afterMove);
+            this.PreviousLocation = GUI.ScreenToGLCoordinates(beforeMove);
         }
 
         private InputUnion(Directions direction, MouseButton mouseButton, ScreenCoordinate location)
         {
             this.Direction = direction;
             this.MouseButton = mouseButton;
-            this.Location = GUI.TranslateScreenToGLCoordinates(location);
+            this.Location = GUI.ScreenToGLCoordinates(location);
         }
 
         private InputUnion(Directions direction, Key key)

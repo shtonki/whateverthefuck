@@ -7,6 +7,11 @@
         {
         }
 
+        public ScreenCoordinate(float x, float y)
+            : this((int)x, (int)y)
+        {
+        }
+
         public new int X => (int)base.X;
 
         public new int Y => (int)base.Y;

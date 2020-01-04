@@ -1,5 +1,6 @@
 ﻿namespace whateverthefuck.src.view
 {
+    using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
@@ -83,7 +84,7 @@
 
             GUIComponents.Add(p);
 #else
-            TextPanel p = new TextPanel("we did it reddit");
+            TextPanel p = new TextPanel("we did it reddit" + Environment.NewLine + "dab420xdabx");
             GUIComponents.Add(p);
             p.BackColor = Color.White;
             p.Visible = true;
@@ -141,7 +142,7 @@
             GUIComponents.Remove(LootPanel);
         }
 
-        public static GLCoordinate TranslateScreenToGLCoordinates(ScreenCoordinate screenCoordinate)
+        public static GLCoordinate ScreenToGLCoordinates(ScreenCoordinate screenCoordinate)
         {
             var x = ((float)screenCoordinate.X / Frame.ClientSize.Width * 2) - 1;
             var y = -(((float)screenCoordinate.Y / Frame.ClientSize.Height * 2) - 1);
@@ -149,7 +150,7 @@
             return new GLCoordinate(x, y);
         }
 
-        public static ScreenCoordinate TranslateGLToScreenCoordinates(GLCoordinate glCoordinate)
+        public static ScreenCoordinate GLToScreenCoordinates(GLCoordinate glCoordinate)
         {
             var x = (glCoordinate.X + 1) / 2 * Frame.ClientSize.Width;
             var y = (glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height;
@@ -165,6 +166,20 @@
         public static void ToggleInventoryPanel()
         {
             InventoryPanel.Visible = !InventoryPanel.Visible;
+        }
+
+        public static GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
+        {
+            var x = gameCoordinate.X - Camera.Location.X;
+            var y = gameCoordinate.Y - Camera.Location.Y;
+            return new GLCoordinate(x, y);
+        }
+
+        public static GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
+        {
+            return new GameCoordinate(
+                (glCoordinate.X / Camera.Zoom.CurrentZoom) + Camera.Location.X,
+                (glCoordinate.Y / Camera.Zoom.CurrentZoom) + Camera.Location.Y);
         }
 
         private static void LaunchGameWindow(object o)
