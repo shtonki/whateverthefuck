@@ -88,6 +88,7 @@
                     this.BaseCooldown = 0;
                     this.Range = 0.5f;
                     this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
+                    this.CreateProjectile = true;
                 } break;
 
                 case AbilityType.Fireburst:
@@ -96,6 +97,7 @@
                     this.BaseCooldown = 400;
                     this.Range = 0.9f;
                     this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
+                    this.CreateProjectile = true;
                 } break;
 
                 case AbilityType.Bite:
