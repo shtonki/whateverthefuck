@@ -83,6 +83,11 @@
 
             GUIComponents.Add(p);
 #else
+            TextPanel p = new TextPanel("we did it reddit");
+            GUIComponents.Add(p);
+            p.BackColor = Color.White;
+            p.Visible = true;
+
             GUIComponents.Add(InventoryPanel);
 #endif
         }

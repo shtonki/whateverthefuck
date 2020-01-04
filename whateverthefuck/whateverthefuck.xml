@@ -510,5 +510,37 @@
             of said window to be called. Roughly speaking.
             </summary>
         </member>
+        <member name="M:whateverthefuck.Game.#ctor">
+            <summary>Creates a 800x600 window with the specified title.</summary>
+        </member>
+        <member name="M:whateverthefuck.Game.OnLoad(System.EventArgs)">
+            <summary>Load resources here.</summary>
+            <param name="e">Not used.</param>
+        </member>
+        <member name="M:whateverthefuck.Game.OnResize(System.EventArgs)">
+            <summary>
+            Called when your window is resized. Set your viewport here. It is also
+            a good place to set up your projection matrix (which probably changes
+            along when the aspect ratio of your window).
+            </summary>
+            <param name="e">Not used.</param>
+        </member>
+        <member name="M:whateverthefuck.Game.OnUpdateFrame(OpenTK.FrameEventArgs)">
+            <summary>
+            Called when it is time to setup the next frame. Add you game logic here.
+            </summary>
+            <param name="e">Contains timing information for framerate independent logic.</param>
+        </member>
+        <member name="M:whateverthefuck.Game.OnRenderFrame(OpenTK.FrameEventArgs)">
+            <summary>
+            Called when it is time to render the next frame. Add your rendering code here.
+            </summary>
+            <param name="e">Contains timing information.</param>
+        </member>
+        <member name="M:whateverthefuck.Game.TextorMain">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
     </members>
 </doc>
