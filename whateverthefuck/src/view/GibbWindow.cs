@@ -8,6 +8,7 @@
     using OpenTK.Graphics;
     using OpenTK.Graphics.OpenGL;
     using OpenTK.Input;
+    using QuickFont;
     using whateverthefuck.src.control;
     using whateverthefuck.src.util;
 
@@ -26,10 +27,14 @@
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
+            FontDrawing = new QFontDrawing();
+
             this.loadResetEvent = loadResetEvent;
         }
 
         public static Matrix4 ProjectionMatrix { get; private set; }
+
+        public static QFontDrawing FontDrawing { get; private set; }
 
         protected override void OnResize(EventArgs e)
         {
@@ -58,31 +63,20 @@
         {
             base.OnRenderFrame(e);
 
-            var newSecond = DateTime.Now.Second;
-
-            if (newSecond == this.lastSecond)
-            {
-                this.renderCounter++;
-            }
-            else
-            {
-                this.lastSecond = newSecond;
-                this.Title = this.renderCounter.ToString();
-                this.renderCounter = 0;
-            }
+            this.UpdateFPSCounter();
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
-
-            FontLoader.Drawing.ProjectionMatrix = GibbWindow.ProjectionMatrix;
-            FontLoader.Drawing.DrawingPrimitives.Clear();
-
-            GL.UseProgram(0);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
 
             GL.ClearColor(Color.Fuchsia);
             GL.PushMatrix();
 
-            var drawAdapter = new DrawAdapter();
+            FontDrawing.ProjectionMatrix = GibbWindow.ProjectionMatrix;
+            FontDrawing.DrawingPrimitives.Clear();
+
+            GL.UseProgram(0);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
+            var drawAdapter = new DrawAdapter(FontDrawing);
 
             GUI.Camera.Lock();
 
@@ -108,8 +102,8 @@
 
             GUI.Camera.Unlock();
 
-            FontLoader.Drawing.RefreshBuffers();
-            FontLoader.Drawing.Draw();
+            FontDrawing.RefreshBuffers();
+            FontDrawing.Draw();
 
             this.SwapBuffers();
             GL.PopMatrix();
@@ -158,6 +152,22 @@
         {
             InputUnion keyboardInput = InputUnion.MakeKeyboardInput(InputUnion.Directions.Up, e.Key);
             Program.GameStateManager.HandleInput(keyboardInput);
+        }
+
+        private void UpdateFPSCounter()
+        {
+            var newSecond = DateTime.Now.Second;
+
+            if (newSecond == this.lastSecond)
+            {
+                this.renderCounter++;
+            }
+            else
+            {
+                this.lastSecond = newSecond;
+                this.Title = this.renderCounter.ToString();
+                this.renderCounter = 0;
+            }
         }
     }
 }

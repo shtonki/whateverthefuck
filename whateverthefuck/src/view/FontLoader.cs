@@ -7,12 +7,9 @@ namespace whateverthefuck.src.view
     {
         public static QFont DefaultFont { get; private set; }
 
-        public static QFontDrawing Drawing { get; private set; }
 
         public static void LoadFonts()
         {
-            Drawing = new QFontDrawing();
-
             var builderConfig = new QFontBuilderConfiguration(true)
             {
                 ShadowConfig =

@@ -1,14 +1,19 @@
 namespace whateverthefuck.src.view
 {
+    using System;
     using System.Drawing;
     using OpenTK.Graphics.OpenGL;
+    using QuickFont;
     using whateverthefuck.src.util;
 
     public class DrawAdapter
     {
-        public DrawAdapter()
+        public DrawAdapter(QFontDrawing fontDrawing)
         {
+            this.FontDrawing = fontDrawing;
         }
+
+        private QFontDrawing FontDrawing { get; }
 
         public void PushMatrix()
         {
@@ -55,6 +60,12 @@ namespace whateverthefuck.src.view
         public void DeactivateScissor()
         {
             GL.Disable(EnableCap.ScissorTest);
+        }
+
+        public void DrawText(QFont defaultFont, string text, GLCoordinate gLCoordinate, QFontAlignment left, QFontRenderOptions renderOptions)
+        {
+            var location = GUI.GLToScreenCoordinates(gLCoordinate);
+            this.FontDrawing.Print(defaultFont, text, new OpenTK.Vector3(location.X, location.Y, 0), QFontAlignment.Left, renderOptions);
         }
 
         public void FillRectangle(float x1, float y1, float x2, float y2, Color c)
