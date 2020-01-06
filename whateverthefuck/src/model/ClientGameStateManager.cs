@@ -34,11 +34,11 @@
 
         public GameState GameState { get; private set; }
 
+        public PlayerCharacter Hero { get; private set; }
+
         private GUIComponent FocusedGUIComponent { get; set; }
 
         private Timer TickTimer { get; } // can't be removed or we stop moving after ~3 seconds
-
-        private PlayerCharacter Hero { get; set; }
 
         private Lootable Looting { get; set; }
 

@@ -22,6 +22,10 @@
 
         private static GibbWindow Frame { get; set; }
 
+        private static Timer StepTimer { get; set; }
+
+        private static int StepInterval { get; } = 10;
+
         private static LootPanel LootPanel { get; set; }
 
         private static InventoryPanel InventoryPanel { get; set; } = new InventoryPanel();
@@ -33,6 +37,8 @@
         public static void CreateGameWindow()
         {
             Camera = new StaticCamera(new GameCoordinate(0, 0));
+
+            StepTimer = new Timer(_ => StepAllComponents(), null, 0, StepInterval);
 
             ManualResetEventSlim loadre = new ManualResetEventSlim();
             Thread t = new Thread(LaunchGameWindow);
@@ -59,38 +65,7 @@
 
         public static void LoadGUI()
         {
-#if false
-            Panel p = new Panel();
-            p.Size = new GLCoordinate(0.5f, 0.5f);
-
-            GridLayoutManager glm = new GridLayoutManager();
-            glm.Rows = 1;
-            glm.Height = 0.1f;
-            glm.Width = 0.1f;
-            glm.XPadding = 0.05f;
-            glm.YPadding = 0.05f;
-            p.LayoutManager = glm;
-
-            for (int i = 0; i < 10; i++)
-            {
-                int v = i;
-                Button b = new Button();
-                b.BackColor = RNG.RandomColor();
-                b.OnMouseButtonDown += (c, input) => Logging.Log(v);
-                p.AddChild(b);
-            }
-
-            p.Visible = true;
-
-            GUIComponents.Add(p);
-#else
-            TextPanel p = new TextPanel("we did it reddit" + Environment.NewLine + "dab420xdabx");
-            GUIComponents.Add(p);
-            p.BackColor = Color.White;
-            p.Visible = true;
-
             GUIComponents.Add(InventoryPanel);
-#endif
         }
 
         public static void LoadAbilityBar(PlayerCharacter hero)
@@ -168,6 +143,13 @@
             InventoryPanel.Visible = !InventoryPanel.Visible;
         }
 
+        public static void AddDamageText(GameCoordinate location, string text)
+        {
+            var textPanel = new DamageTextPanel(text, Color.Orange, location);
+
+            GUIComponents.Add(textPanel);
+        }
+
         public static GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
         {
             var x = gameCoordinate.X - Camera.Location.X;
@@ -180,6 +162,14 @@
             return new GameCoordinate(
                 (glCoordinate.X / Camera.Zoom.CurrentZoom) + Camera.Location.X,
                 (glCoordinate.Y / Camera.Zoom.CurrentZoom) + Camera.Location.Y);
+        }
+
+        private static void StepAllComponents()
+        {
+            foreach (var component in GUIComponents)
+            {
+                component.Step();
+            }
         }
 
         private static void LaunchGameWindow(object o)

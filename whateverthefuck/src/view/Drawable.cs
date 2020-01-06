@@ -7,16 +7,17 @@
 
     public abstract class Drawable
     {
-        protected Drawable(Coordinate location)
+        protected Drawable()
         {
-            this.Location = location;
         }
 
         public int Height { get; protected set; } = 1;
 
         public bool Visible { get; set; } = true;
 
-        public Coordinate Location { get; set; }
+        public virtual GLCoordinate Location { get; set; }
+
+        public GameCoordinate GameLocation { get; set; }
 
         public Sprite Sprite { get; set; }
 
@@ -70,7 +71,6 @@
         private float y2;
 
         public Line(GameEntity o, GameEntity e)
-            : base(new GameCoordinate(0, 0))
         {
             this.x1 = o.Center.X;
             this.y1 = o.Center.Y;
@@ -94,7 +94,6 @@
         private Color drawColor;
 
         public Rectangle(GameEntity o, Color drawColor)
-            : base(new GameCoordinate(0, 0))
         {
             this.x1 = o.Left;
             this.y1 = o.Bottom;
@@ -104,7 +103,6 @@
         }
 
         public Rectangle(float x1, float y1, float width, float height, Color drawColor)
-            : base(new GameCoordinate(0, 0))
         {
             this.x1 = x1;
             this.y1 = y1;

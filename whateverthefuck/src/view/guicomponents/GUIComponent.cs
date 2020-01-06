@@ -14,10 +14,10 @@
         }
 
         protected GUIComponent(GLCoordinate location, GLCoordinate size)
-            : base(location)
         {
             this.BackColor = Color.Aquamarine;
             this.Size = size;
+            this.Location = location;
         }
 
         public event Action<GUIComponent, InputUnion> OnMouseButtonDown;
@@ -39,6 +39,11 @@
         public LayoutManager LayoutManager { get; set; }
 
         public Border Border { get; set; }
+
+        public virtual void Step()
+        {
+
+        }
 
         public void AddBorder()
         {
@@ -66,7 +71,7 @@
             {
                 drawAdapter.DrawSprite(0, 0, this.Size.X, this.Size.Y, this.Sprite);
             }
-            else
+            else if (this.BackColor != Color.Transparent)
             {
                 drawAdapter.FillRectangle(0, 0, this.Size.X, this.Size.Y, this.BackColor);
             }

@@ -1,17 +1,18 @@
-﻿using OpenTK.Graphics;
-using QuickFont;
-using System;
-using System.Drawing;
-
-namespace whateverthefuck.src.view.guicomponents
+﻿namespace whateverthefuck.src.view.guicomponents
 {
+    using System.Drawing;
+    using QuickFont;
+    using whateverthefuck.src.model;
+
     internal class TextPanel : Panel
     {
-        public TextPanel(string text) : base()
+        public TextPanel(string text, Color color)
+            : base()
         {
             this.Text = text;
-            this.RenderOptions = new QFontRenderOptions { Colour = Color.Black, DropShadowActive = true };
+            this.RenderOptions = new QFontRenderOptions { Colour = color, DropShadowActive = true };
             this.Size = this.CalculateSize(this.Text);
+            this.BackColor = Color.Transparent;
         }
 
         public string Text { get; set; }
@@ -22,7 +23,6 @@ namespace whateverthefuck.src.view.guicomponents
         {
             base.DrawMe(drawAdapter);
 
-            var loc = GUI.GLToScreenCoordinates(this.Location as GLCoordinate);
             drawAdapter.DrawText(FontLoader.DefaultFont, this.Text, this.Location as GLCoordinate, QFontAlignment.Left, this.RenderOptions);
         }
 
@@ -30,6 +30,31 @@ namespace whateverthefuck.src.view.guicomponents
         {
             var textSize = FontLoader.DefaultFont.Measure(this.Text);
             return GUI.ScreenToGLCoordinates(new ScreenCoordinate(textSize.Width, textSize.Height)) + new GLCoordinate(1, -1);
+        }
+    }
+
+    internal class DamageTextPanel : TextPanel
+    {
+        private const int MaxDuration = 80;
+
+        private int counter;
+        private GameCoordinate entityLocation;
+
+        public DamageTextPanel(string text, Color color, GameCoordinate location)
+            : base(text, color)
+        {
+            this.entityLocation = location;
+        }
+
+        public override void Step()
+        {
+            // @fucked this doesn't actually remove the damn thing so it's going ot be floating around for all eternity
+            if (this.counter++ > MaxDuration)
+            {
+                this.Visible = false;
+            }
+
+            this.Location = GUI.GameToGLCoordinate(this.entityLocation) + new GLCoordinate(0, 0.005f * this.counter);
         }
     }
 }

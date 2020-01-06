@@ -115,8 +115,8 @@
 
             this.Id = e.Identifier.Id;
             this.EntityType = e.EntityType;
-            this.X = e.Location.X;
-            this.Y = e.Location.Y;
+            this.X = e.GameLocation.X;
+            this.Y = e.GameLocation.Y;
             this.CurrentHealth = e.CurrentHealth;
             this.MaxHealth = e.MaxHealth;
 

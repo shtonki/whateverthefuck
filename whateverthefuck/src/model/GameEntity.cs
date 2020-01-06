@@ -47,7 +47,6 @@
         private int currentGlobalCooldown = 0;
 
         protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArgs args)
-            : base(new GameCoordinate(0, 0))
         {
             this.Identifier = identifier;
             this.EntityType = type;
@@ -57,6 +56,8 @@
             this.State = GameEntityState.Alive;
 
             this.Visible = true;
+
+            this.GameLocation = new GameCoordinate(0, 0);
         }
 
         /// <summary>
@@ -68,6 +69,12 @@
         /// Event for when the GameEntity is stepped.
         /// </summary>
         public event Action<GameEntity, GameState> OnStep;
+
+        public override GLCoordinate Location
+        {
+            get => GUI.GameToGLCoordinate(this.GameLocation);
+            set => this.GameLocation = GUI.GLToGameCoordinate(value);
+        }
 
         public int MaxHealth { get; set; } = 100;
 
@@ -131,30 +138,30 @@
         /// <summary>
         /// Gets the X value of the left edge of the GameEntity.
         /// </summary>
-        public float Left => this.Location.X;
+        public float Left => this.GameLocation.X;
 
         /// <summary>
         /// Gets the X value of the right edge of the GameEntity.
         /// </summary>
-        public float Right => this.Location.X + this.Size.X;
+        public float Right => this.GameLocation.X + this.Size.X;
 
         /// <summary>
         /// Gets the Y value of the bottom edge of the GameEntity.
         /// </summary>
-        public float Bottom => this.Location.Y;
+        public float Bottom => this.GameLocation.Y;
 
         /// <summary>
         /// Gets the Y value of the top edge of the GameEntity.
         /// </summary>
-        public float Top => this.Location.Y + this.Size.Y;
+        public float Top => this.GameLocation.Y + this.Size.Y;
 
         /// <summary>
         /// Gets or sets the GameCoordinate in the center of the GameEntity.
         /// </summary>
         public GameCoordinate Center
         {
-            get { return new GameCoordinate(this.Location.X + (this.Size.X / 2), this.Location.Y + (this.Size.Y / 2)); }
-            set { this.Location = new GameCoordinate(value.X - (this.Size.X / 2), value.Y - (this.Size.Y / 2)); }
+            get { return new GameCoordinate(this.GameLocation.X + (this.Size.X / 2), this.GameLocation.Y + (this.Size.Y / 2)); }
+            set { this.GameLocation = new GameCoordinate(value.X - (this.Size.X / 2), value.Y - (this.Size.Y / 2)); }
         }
 
         public GameEntityState State { get; protected set; }
@@ -264,11 +271,11 @@
             }
 
             this.MovementCache = this.CalculateMovement(gameState);
-            this.Location = (GameCoordinate)this.Location + this.MovementCache;
+            this.GameLocation = this.GameLocation + this.MovementCache;
 
             if (this is PlayerCharacter)
             {
-                Boombox.SetListenerPosition(this.Location.X, this.Location.Y);
+                Boombox.SetListenerPosition(this.GameLocation.X, this.GameLocation.Y);
             }
 
             if (this.CastingInfo != null)
@@ -395,7 +402,7 @@
 
         public override string ToString()
         {
-            return string.Format("{0} at {1}:{2}", this.EntityType.ToString(), this.Location.X.ToString(), this.Location.Y.ToString());
+            return string.Format("{0} at {1}:{2}", this.EntityType.ToString(), this.GameLocation.X.ToString(), this.GameLocation.Y.ToString());
         }
 
         /// <summary>

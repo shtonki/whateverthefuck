@@ -207,7 +207,7 @@
         private const char InfoSeperator = '&';
 
         public EntityLocationInfo(GameEntity entity)
-            : this(entity.Identifier.Id, entity.Location.X, entity.Location.Y)
+            : this(entity.Identifier.Id, entity.GameLocation.X, entity.GameLocation.Y)
         {
         }
 

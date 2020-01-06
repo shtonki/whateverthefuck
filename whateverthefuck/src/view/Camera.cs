@@ -71,7 +71,7 @@
         {
             get
             {
-                if (this.following?.Location == null)
+                if (this.following?.GameLocation == null)
                 {
                     return new GameCoordinate(0, 0);
                 }

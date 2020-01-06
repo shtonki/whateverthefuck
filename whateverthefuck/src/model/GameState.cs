@@ -5,6 +5,7 @@
     using whateverthefuck.src.model.entities;
     using whateverthefuck.src.network.messages;
     using whateverthefuck.src.util;
+    using whateverthefuck.src.view;
 
     public class GameState
     {
@@ -111,8 +112,8 @@
                     continue;
                 }
 
-                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.Location.X), 0);
-                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.Location.Y), 0);
+                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.GameLocation.X), 0);
+                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.GameLocation.Y), 0);
                 hash ^= (int)e.EntityType;
             }
 
@@ -157,8 +158,8 @@
                     var jshare = 1 - ishare;
                     if (!float.IsNaN(ishare))
                     {
-                        collision.EntityI.Location.X -= ishare * collision.Overlap;
-                        collision.EntityJ.Location.X += jshare * collision.Overlap;
+                        collision.EntityI.GameLocation.X -= ishare * collision.Overlap;
+                        collision.EntityJ.GameLocation.X += jshare * collision.Overlap;
                     }
                 }
                 else if (collision.Direction == CollisionRecord.CollisionDirection.Right)
@@ -168,8 +169,8 @@
 
                     if (!float.IsNaN(ishare))
                     {
-                        collision.EntityI.Location.X += ishare * collision.Overlap;
-                        collision.EntityJ.Location.X -= jshare * collision.Overlap;
+                        collision.EntityI.GameLocation.X += ishare * collision.Overlap;
+                        collision.EntityJ.GameLocation.X -= jshare * collision.Overlap;
                     }
                 }
                 else if (collision.Direction == CollisionRecord.CollisionDirection.Top)
@@ -179,8 +180,8 @@
 
                     if (!float.IsNaN(ishare))
                     {
-                        collision.EntityI.Location.Y += ishare * collision.Overlap;
-                        collision.EntityJ.Location.Y -= jshare * collision.Overlap;
+                        collision.EntityI.GameLocation.Y += ishare * collision.Overlap;
+                        collision.EntityJ.GameLocation.Y -= jshare * collision.Overlap;
                     }
                 }
                 else if (collision.Direction == CollisionRecord.CollisionDirection.Bottom)
@@ -190,8 +191,8 @@
 
                     if (!float.IsNaN(ishare))
                     {
-                        collision.EntityI.Location.Y -= ishare * collision.Overlap;
-                        collision.EntityJ.Location.Y += jshare * collision.Overlap;
+                        collision.EntityI.GameLocation.Y -= ishare * collision.Overlap;
+                        collision.EntityJ.GameLocation.Y += jshare * collision.Overlap;
                     }
                 }
             }
@@ -256,7 +257,7 @@
 
                 CreateEntityEvent projectileCreationEvent = ability.Cast(caster);
                 var projectile = (Projectile)this.EntityGenerator.GenerateEntity(projectileCreationEvent);
-                projectile.Location = caster.Center;
+                projectile.GameLocation = caster.Center;
                 projectile.Movements.FollowId = castee.Identifier.Id;
                 projectile.ResolveEvents = ability.Resolve(caster, castee);
                 this.AddEntities(projectile);
@@ -286,6 +287,14 @@
 
             defender.CurrentHealth -= dealDamageEvent.Damage;
             defender.LastDamageTaken = dealDamageEvent;
+
+            if (Program.GameStateManager.Hero != null)
+            {
+                if (dealDamageEvent.AttackerId == Program.GameStateManager.Hero.Identifier.Id)
+                {
+                    GUI.AddDamageText(defender.Center, dealDamageEvent.Damage.ToString());
+                }
+            }
         }
 
         private void HandleEvent(CreateEntityEvent createEntityEvent)

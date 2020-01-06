@@ -4,6 +4,10 @@ Known bug: Hero will jitter around like a three year old on adderall sometimes.
 
 Known bug: GUIComponents are rendered before GameEntities so we end up with GameEntities on top of our GUI
 
+Known bug: Context handling doesn't actually handle the context.
+
 Suspected bug: Network thread keeps running in background after window is closed so our program doesn't exit forcing me to restart my console making me a very angry boy
 
 Suspected bug: Healthbars don't realize shit's dead until one step after so when we severly overkill something the healthbar bugs the fuck out and gets bigger than my pp
+
+

@@ -77,7 +77,7 @@
 
         private static bool LineIntersectsRect(PointF p1, PointF p2, GameEntity ge)
         {
-            RectangleF r = new RectangleF(ge.Location.X + Spacing, ge.Location.Y + Spacing, ge.Size.X - Spacing, ge.Size.Y - Spacing);
+            RectangleF r = new RectangleF(ge.GameLocation.X + Spacing, ge.GameLocation.Y + Spacing, ge.Size.X - Spacing, ge.Size.Y - Spacing);
             return LineIntersectsLine(p1, p2, new PointF(r.X, r.Y), new PointF(r.X + r.Width, r.Y)) ||
                    LineIntersectsLine(p1, p2, new PointF(r.X + r.Width, r.Y), new PointF(r.X + r.Width, r.Y + r.Height)) ||
                    LineIntersectsLine(p1, p2, new PointF(r.X + r.Width, r.Y + r.Height), new PointF(r.X, r.Y + r.Height)) ||
