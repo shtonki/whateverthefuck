@@ -287,6 +287,10 @@
             var defender = this.GetEntityById(dealDamageEvent.DefenderId);
 
             defender.CurrentHealth -= dealDamageEvent.Damage;
+            if (defender.CurrentHealth < 0)
+            {
+                defender.CurrentHealth = 0;
+            }
             defender.LastDamageTaken = dealDamageEvent;
 
             if (Program.GameStateManager.Hero != null)

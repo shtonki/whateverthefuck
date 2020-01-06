@@ -205,7 +205,7 @@
 
             if (this.CastingInfo != null)
             {
-                float healthPercentageDividedBy100ForClarity = this.CastingInfo.PercentageDone;
+                float castingPercentage = this.CastingInfo.PercentageDone;
 
                 var xorg = HealthbarWidth / 2;
                 var xoffset = this.Size.X / 2;
@@ -213,7 +213,7 @@
                 var currentHealthBar = new view.Rectangle(
                     -xorg + xoffset,
                     0,
-                    HealthbarWidth * healthPercentageDividedBy100ForClarity,
+                    HealthbarWidth * castingPercentage,
                     HealthbarHeight,
                     Color.Gold);
 
@@ -230,7 +230,7 @@
 
             if (this.ShowHealth)
             {
-                float healthPercentageDividedBy100ForClarity = (float)this.CurrentHealth / this.MaxHealth;
+                float healthPercentage = (float)this.CurrentHealth / this.MaxHealth;
 
                 var xorg = HealthbarWidth / 2;
                 var xoffset = this.Size.X / 2;
@@ -238,7 +238,7 @@
                 var currentHealthBar = new view.Rectangle(
                     -xorg + xoffset,
                     this.Size.Y,
-                    HealthbarWidth * healthPercentageDividedBy100ForClarity,
+                    HealthbarWidth * healthPercentage,
                     HealthbarHeight,
                     Color.Green);
 
