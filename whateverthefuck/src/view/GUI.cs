@@ -143,9 +143,9 @@
             InventoryPanel.Visible = !InventoryPanel.Visible;
         }
 
-        public static void AddDamageText(GameCoordinate location, string text)
+        public static void AddDamageText(GameCoordinate location, string text, Color color)
         {
-            var textPanel = new DamageTextPanel(text, Color.Orange, location);
+            var textPanel = new DamageTextPanel(text, color, location);
 
             GUIComponents.Add(textPanel);
         }

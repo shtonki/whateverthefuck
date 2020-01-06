@@ -8,6 +8,6 @@ Known bug: Context handling doesn't actually handle the context.
 
 Suspected bug: Network thread keeps running in background after window is closed so our program doesn't exit forcing me to restart my console making me a very angry boy
 
-Suspected bug: Healthbars don't realize shit's dead until one step after so when we severly overkill something the healthbar bugs the fuck out and gets bigger than my pp
+Known bug: Healthbars don't realize shit's dead until one step after so when we severly overkill something the healthbar bugs the fuck out and gets bigger than my pp
 
-
+Known bug: We sometimes don't realize we sync on the same tick since either the server or more likely the client captures the tick which is synced incorrectly.

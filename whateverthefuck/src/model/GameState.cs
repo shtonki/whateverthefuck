@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using whateverthefuck.src.model.entities;
     using whateverthefuck.src.network.messages;
     using whateverthefuck.src.util;
@@ -292,7 +293,11 @@
             {
                 if (dealDamageEvent.AttackerId == Program.GameStateManager.Hero.Identifier.Id)
                 {
-                    GUI.AddDamageText(defender.Center, dealDamageEvent.Damage.ToString());
+                    GUI.AddDamageText(defender.Center, dealDamageEvent.Damage.ToString(), Color.Orange);
+                }
+                else if (dealDamageEvent.DefenderId == Program.GameStateManager.Hero.Identifier.Id)
+                {
+                    GUI.AddDamageText(defender.Center, dealDamageEvent.Damage.ToString(), Color.DarkRed);
                 }
             }
         }
