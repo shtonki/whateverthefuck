@@ -11,3 +11,5 @@ Suspected bug: Network thread keeps running in background after window is closed
 Known bug: Healthbars don't realize shit's dead until one step after so when we severly overkill something the healthbar bugs the fuck out and gets bigger than my pp. This has sorta been fixed by health no longer going beneath 0.
 
 Known bug: We sometimes don't realize we sync on the same tick since either the server or more likely the client captures the tick which is synced incorrectly.
+
+Known bug: We can begin casting an ability when we're dead but it makes no progress.

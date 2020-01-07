@@ -58,6 +58,9 @@
             this.Visible = true;
 
             this.GameLocation = new GameCoordinate(0, 0);
+
+            this.BaseStats = new EntityStats();
+            this.CurrentStats = new EntityStats();
         }
 
         /// <summary>
@@ -75,6 +78,12 @@
             get => GUI.GameToGLCoordinate(this.GameLocation);
             set => this.GameLocation = GUI.GLToGameCoordinate(value);
         }
+
+        public EntityStats BaseStats { get; }
+
+        public EntityStats CurrentStats { get; }
+
+        public List<Status> ActiveStatuses { get; } = new List<Status>();
 
         public int MaxHealth { get; set; } = 100;
 
@@ -122,8 +131,6 @@
         /// Gets or sets current movement being made by the GameEntity.
         /// </summary>
         public MovementStruct Movements { get; set; } = new MovementStruct();
-
-        public float MoveSpeed { get; protected set; } = 0.01f;
 
         /// <summary>
         /// Gets or sets the last DealDamageEvent to deal damage to the GameEntity.
@@ -260,7 +267,16 @@
         /// <param name="gameState">The GameState in which the GameEntity is ticked.</param>
         public virtual void Step(GameState gameState)
         {
-            if (this.CurrentHealth <= 0 && this.State != GameEntityState.Dead)
+            foreach (var status in this.ActiveStatuses)
+            {
+                status.Duration--;
+            }
+
+            this.ActiveStatuses.RemoveAll(s => s.Duration <= 0);
+
+            this.UpdateCurrentStats();
+
+            if (this.CurrentHealth <= 0 && this.State != GameEntityState.Dead)  
             {
                 this.Die(gameState);
             }
@@ -271,7 +287,7 @@
             }
 
             this.MovementCache = this.CalculateMovement(gameState);
-            this.GameLocation = this.GameLocation + this.MovementCache;
+            this.GameLocation += this.MovementCache;
 
             if (this is PlayerCharacter)
             {
@@ -317,6 +333,21 @@
             this.OnStep?.Invoke(this, gameState);
         }
 
+        public void ApplyStatus(Status status)
+        {
+            var activeStatus = this.ActiveStatuses.FirstOrDefault(s => s.Type == status.Type);
+
+            if (activeStatus != null)
+            {
+                activeStatus.Stacks += status.Stacks;
+                activeStatus.Duration = Math.Max(activeStatus.Duration, status.Duration);
+            }
+            else
+            {
+                this.ActiveStatuses.Add(status);
+            }
+        }
+
         public Ability Ability(int index)
         {
             return this.abilities[index];
@@ -344,12 +375,12 @@
                 return false;
             }
 
-            if (ability.Range < this.DistanceTo(target))
+            if (!ability.TargetingRule.ApplyRule(this, target, gameState))
             {
                 return false;
             }
 
-            if (!ability.TargetingRule.ApplyRule(this, target, gameState))
+            if (ability.Range < this.DistanceTo(target))
             {
                 return false;
             }
@@ -424,6 +455,11 @@
         /// <returns>The Coordinate of the next movement to be made.</returns>
         protected virtual GameCoordinate CalculateMovement(GameState gameState)
         {
+            if (!this.Movable)
+            {
+                return new GameCoordinate(0, 0);
+            }
+
             if (this.Movements.FollowId.HasValue)
             {
                 var followed = gameState.GetEntityById(this.Movements.FollowId.Value);
@@ -432,7 +468,7 @@
                 {
                     var followingToLocation = followed.Center;
 
-                    if (Coordinate.DistanceBetweenCoordinates(this.Center, followingToLocation) < this.MoveSpeed)
+                    if (Coordinate.DistanceBetweenCoordinates(this.Center, followingToLocation) < this.CurrentStats.MoveSpeed)
                     {
                         return followingToLocation - this.Center;
                     }
@@ -447,7 +483,18 @@
             }
             else
             {
-                return new GameCoordinate((float)Math.Sin(this.Movements.Direction) * this.MoveSpeed, (float)Math.Cos(this.Movements.Direction) * this.MoveSpeed);
+                return new GameCoordinate((float)Math.Sin(this.Movements.Direction) * this.CurrentStats.MoveSpeed, (float)Math.Cos(this.Movements.Direction) * this.CurrentStats.MoveSpeed);
+            }
+        }
+
+        private void UpdateCurrentStats()
+        {
+            this.CurrentStats.MoveSpeed = this.BaseStats.MoveSpeed;
+
+            var sanic = this.ActiveStatuses.FirstOrDefault(s => s.Type == Statuses.Sanic);
+            if (sanic != null)
+            {
+                this.CurrentStats.MoveSpeed *= 3;
             }
         }
 

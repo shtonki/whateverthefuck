@@ -10,6 +10,8 @@
         Fireball,
         Fireburst,
 
+        Sanic,
+
         Bite,
     }
 
@@ -61,6 +63,11 @@
                     events.Add(new DealDamageEvent(caster, target, 20));
                 } break;
 
+                case AbilityType.Sanic:
+                {
+                    events.Add(new ApplyStatusEvent(caster, new Status(Statuses.Sanic, 100, 1)));
+                } break;
+
                 default: throw new NotImplementedException();
             }
 
@@ -82,11 +89,19 @@
         {
             switch (abilityType)
             {
+                case AbilityType.Sanic:
+                {
+                    this.CastTime = 0;
+                    this.BaseCooldown = 0;
+                    this.Range = 0;
+                    this.TargetingRule = TargetingRule.Any;
+                } break;
+
                 case AbilityType.Fireball:
                 {
                     this.CastTime = 50;
                     this.BaseCooldown = 0;
-                    this.Range = 0.5f;
+                    this.Range = 1.5f;
                     this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
                     this.CreateProjectile = true;
                 } break;
@@ -127,6 +142,8 @@
         public static TargetingRule IsSelf { get; } = new TargetingRule((caster, target, state) => target == caster);
 
         public static TargetingRule IsCharacter { get; } = new TargetingRule((caster, target, state) => target is Character);
+
+        public static TargetingRule Any { get; } = new TargetingRule((caster, target, state) => true);
 
         public static TargetingRule IsAliveEnemyCharacter { get; } = ConstructRuleWithAnd(TargetingRule.IsNotDead, TargetingRule.IsNotSelf, TargetingRule.IsCharacter);
 

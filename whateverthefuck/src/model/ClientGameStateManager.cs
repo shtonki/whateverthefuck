@@ -308,18 +308,15 @@
 
         private void BeginCastAbility(Ability ability)
         {
-            if (this.TargetedEntity == null)
-            {
-                return;
-            }
+            var target = this.TargetedEntity ?? this.Hero;
 
-            if (!this.Hero.CanCastAbility(ability, this.TargetedEntity, this.GameState))
+            if (!this.Hero.CanCastAbility(ability, target, this.GameState))
             {
                 return;
             }
 
             Program.ServerConnection.SendMessage(
-                new UpdateGameStateMessage(0, new BeginCastAbilityEvent(this.Hero, this.TargetedEntity, ability)));
+                new UpdateGameStateMessage(0, new BeginCastAbilityEvent(this.Hero, target, ability)));
         }
 
         private void ActivateAction(GameAction gameAction)

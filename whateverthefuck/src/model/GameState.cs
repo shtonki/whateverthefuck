@@ -225,10 +225,19 @@
             {
                 this.HandleEvent(eca);
             }
+            else if (e is ApplyStatusEvent ase)
+            {
+                this.HandleEvent(ase);
+            }
             else
             {
                 throw new NotImplementedException();
             }
+        }
+
+        private void HandleEvent(ApplyStatusEvent applyStatusEvent)
+        {
+            applyStatusEvent.Entity.ApplyStatus(applyStatusEvent.AppliedStatus);
         }
 
         private void HandleEvent(BeginCastAbilityEvent beginCastAbility)
@@ -258,7 +267,7 @@
 
                 CreateEntityEvent projectileCreationEvent = ability.Cast(caster);
                 var projectile = (Projectile)this.EntityGenerator.GenerateEntity(projectileCreationEvent);
-                projectile.GameLocation = caster.Center;
+                projectile.Center = caster.Center;
                 projectile.Movements.FollowId = castee.Identifier.Id;
                 projectile.ResolveEvents = ability.Resolve(caster, castee);
                 this.AddEntities(projectile);

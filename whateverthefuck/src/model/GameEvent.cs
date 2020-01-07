@@ -40,7 +40,24 @@
             }
         }
 
-        public abstract byte[] ToBytes();
+        public virtual byte[] ToBytes()
+        {
+            throw new NotImplementedException("You shouldn't be sending this over the network.");
+        }
+    }
+
+    public class ApplyStatusEvent : GameEvent
+    {
+        public ApplyStatusEvent(GameEntity entity, Status appliedStatus)
+        {
+            Entity = entity;
+            AppliedStatus = appliedStatus;
+        }
+
+        public GameEntity Entity { get; }
+
+        public Status AppliedStatus { get; }
+
     }
 
     public class BeginCastAbilityEvent : GameEvent
@@ -99,12 +116,6 @@
         public AbilityType AbilityType { get; private set; }
 
         public int TargetId { get; private set; }
-
-        public override byte[] ToBytes()
-        {
-            throw new NotImplementedException(
-                "You shouldn't be sending this over the network.");
-        }
     }
 
     public class CreateEntityEvent : GameEvent
@@ -314,6 +325,7 @@
         Destroy,
         Control,
         Damage,
+        ApplyStatus,
 
         UseAbility,
     }

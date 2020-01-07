@@ -20,8 +20,10 @@
 
             this.Size = new GameCoordinate(0.1f, 0.1f);
             this.DrawColor = Color.Black;
-            this.MoveSpeed = 0.02f;
             this.Collidable = false;
+            this.Movable = true;
+
+            this.BaseStats.MoveSpeed = 0.02f;
 
             this.Sprite = pa.GetSprite();
         }
@@ -30,7 +32,7 @@
 
         private int Controller { get; }
 
-        private float AsplodeCutoff => this.MoveSpeed * 2;
+        private float AsplodeCutoff => this.CurrentStats.MoveSpeed * 2;
 
         public override void Step(GameState gameState)
         {

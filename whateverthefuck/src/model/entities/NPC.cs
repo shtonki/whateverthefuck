@@ -9,14 +9,10 @@
         {
             this.DrawColor = Color.Red;
             this.Movable = true;
-            this.MoveSpeed = 0.001f;
+
+            this.BaseStats.MoveSpeed = 0.001f;
 
             this.abilities.Add(new Ability(AbilityType.Bite));
-        }
-
-        public override void Step(GameState gameState)
-        {
-            base.Step(gameState);
         }
     }
 }

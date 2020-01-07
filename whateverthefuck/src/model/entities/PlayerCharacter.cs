@@ -12,9 +12,11 @@
             this.DrawColor = Coloring.RandomColor();
             this.Sprite = new Sprite(SpriteID.testSprite1);
 
+            this.BaseStats.MoveSpeed = 0.01f;
+
             this.abilities.Add(new Ability(AbilityType.Fireburst));
             this.abilities.Add(new Ability(AbilityType.Fireball));
-            this.abilities.Add(new Ability(AbilityType.Bite));
+            this.abilities.Add(new Ability(AbilityType.Sanic));
         }
     }
 }
