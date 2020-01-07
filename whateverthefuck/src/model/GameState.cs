@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using System.Linq;
     using whateverthefuck.src.model.entities;
     using whateverthefuck.src.network.messages;
     using whateverthefuck.src.util;
@@ -23,7 +24,11 @@
 
         public IEnumerable<GameEntity> AllEntities => this.EntityListSafe;
 
+        public EntityDrawingInfo EntityDrawingInfo { get; private set; }
+
         public EntityGenerator EntityGenerator { get; private set; }
+
+        public Camera CurrentCamera { get; set; }
 
         public int StepCounter { get; set; }
 
@@ -68,6 +73,21 @@
 
             this.HandleCollisions();
             this.StepCounter++;
+
+            this.UpdateEntityDrawingInfo();
+        }
+
+        private void UpdateEntityDrawingInfo()
+        {
+            if (this.CurrentCamera == null)
+            {
+                return;
+            }
+
+            var visibleEntities = this.AllEntities.Select(e => new EntityDrawable(e));
+            var cameraClone = new StaticCamera(new GameCoordinate(this.CurrentCamera.Location.X, this.CurrentCamera.Location.Y));
+
+            this.EntityDrawingInfo = new EntityDrawingInfo(cameraClone, visibleEntities);
         }
 
         public GameEntity GetEntityById(int id)
@@ -443,4 +463,19 @@
             public bool IsCollision => this.Direction != CollisionDirection.None;
         }
     }
+
+
+    public class EntityDrawingInfo
+    {
+        public EntityDrawingInfo(Camera camera, IEnumerable<EntityDrawable> entityDrawables)
+        {
+            this.Camera = camera;
+            this.EntityDrawables = entityDrawables;
+        }
+
+        public Camera Camera { get; }
+
+        public IEnumerable<EntityDrawable> EntityDrawables { get; }
+    }
+
 }

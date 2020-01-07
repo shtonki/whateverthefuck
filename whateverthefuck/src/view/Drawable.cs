@@ -11,13 +11,9 @@
         {
         }
 
-        public int Height { get; protected set; } = 1;
-
         public bool Visible { get; set; } = true;
 
         public virtual GLCoordinate Location { get; set; }
-
-        public GameCoordinate GameLocation { get; set; }
 
         public Sprite Sprite { get; set; }
 
@@ -31,8 +27,7 @@
             {
                 drawAdapter.PushMatrix();
 
-                var l = this.Location.ToGLCoordinate();
-                drawAdapter.Translate(l.X, l.Y);
+                drawAdapter.Translate(this.Location.X, this.Location.Y);
 
                 this.DrawMe(drawAdapter);
 

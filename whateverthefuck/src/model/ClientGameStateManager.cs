@@ -97,6 +97,7 @@
             }
         }
 
+
         /// <summary>
         /// Grants the player control of a GameEntity.
         /// </summary>
@@ -108,7 +109,7 @@
 
         public void CenterCameraOn(GameEntity entity)
         {
-            GUI.Camera = new FollowCamera(this.Hero);
+            this.GameState.CurrentCamera = new FollowCamera(this.Hero);
         }
 
         public void SpawnLoot(CreateLootMessage message)
@@ -136,7 +137,10 @@
 
             if (input.Location != null)
             {
-                interactedGUIComponent = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
+                throw new NotImplementedException();
+#if false
+              //interactedGUIComponent = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
+#endif
             }
 
             if (input.IsMouseInput && input.Direction == InputUnion.Directions.Down)
@@ -156,6 +160,8 @@
             {
                 if (input.IsMouseInput)
                 {
+                    throw new NotImplementedException();
+#if false
                     var clickedEntity = this.GetEntityAtLocation(GUI.GLToGameCoordinate(input.Location));
 
                     if (clickedEntity != null)
@@ -171,6 +177,7 @@
                             interactWithMe.Interact();
                         }
                     }
+#endif
                 }
                 else if (input.IsKeyboardInput)
                 {
@@ -380,12 +387,18 @@
 
                 case GameAction.CameraZoomIn:
                 {
+                    throw new NotImplementedException();
+#if false
                     GUI.Camera?.Zoom.ZoomIn();
+#endif
                 } break;
 
                 case GameAction.CameraZoomOut:
                 {
-                    GUI.Camera?.Zoom.ZoomOut();
+                        throw new NotImplementedException();
+#if false
+                        GUI.Camera?.Zoom.ZoomOut();
+#endif
                 } break;
 
                 case GameAction.TogglePanel:
@@ -407,6 +420,7 @@
 
         private void UpdateLOS()
         {
+#if false
             var inLOS = LineOfSight.CheckLOS(this.Hero, this.GameState.AllEntities);
 
             foreach (var e in inLOS)
@@ -419,6 +433,7 @@
                 e.LOSGraceTicks--;
                 e.Visible = e.LOSGraceTicks > 0;
             }
+#endif
         }
 
         private GameEntity GetEntityAtLocation(GameCoordinate location)
@@ -457,4 +472,5 @@
 
         public bool Leftwards { get; set; }
     }
+
 }

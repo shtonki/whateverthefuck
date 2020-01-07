@@ -41,10 +41,11 @@
 
         public GLCoordinate ToGLCoordinate()
         {
+#if false
             if (this is GLCoordinate) { return this as GLCoordinate; }
             if (this is GameCoordinate) { return GUI.GameToGLCoordinate(this as GameCoordinate) as GLCoordinate; }
             if (this is ScreenCoordinate) { return GUI.ScreenToGLCoordinates(this as ScreenCoordinate) as GLCoordinate; }
-
+#endif
             throw new NotImplementedException();
         }
 

@@ -117,6 +117,7 @@
     <Compile Include="src\view\Coordinate.cs" />
     <Compile Include="src\view\Drawable.cs" />
     <Compile Include="src\view\DrawAdapter.cs" />
+    <Compile Include="src\view\EntityDrawable.cs" />
     <Compile Include="src\view\FontLoader.cs" />
     <Compile Include="src\view\GibbWindow.cs" />
     <Compile Include="src\view\GLCoordinate.cs" />

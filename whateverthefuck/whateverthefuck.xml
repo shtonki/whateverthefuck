@@ -298,12 +298,6 @@
             Gets or sets a value indicating whether or not to show the health bar of the GameEntity.
             </summary>
         </member>
-        <member name="M:whateverthefuck.src.model.GameEntity.DrawMe(whateverthefuck.src.view.DrawAdapter)">
-            <summary>
-            The function used to draw the GameEntity.
-            </summary>
-            <param name="drawAdapter">The DrawAdapter used to draw the GameEntity.</param>
-        </member>
         <member name="M:whateverthefuck.src.model.GameEntity.Step(whateverthefuck.src.model.GameState)">
             <summary>
             Steps the GameEntity advancing its state by one (1) tick.

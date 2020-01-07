@@ -10,7 +10,6 @@
             : base(identifier, EntityType.PlayerCharacter, args)
         {
             this.DrawColor = Coloring.RandomColor();
-            this.Sprite = new Sprite(SpriteID.testSprite1);
 
             this.BaseStats.MoveSpeed = 0.01f;
 

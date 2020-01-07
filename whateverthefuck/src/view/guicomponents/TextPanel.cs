@@ -1,5 +1,6 @@
 ﻿namespace whateverthefuck.src.view.guicomponents
 {
+    using System;
     using System.Drawing;
     using QuickFont;
     using whateverthefuck.src.model;
@@ -54,7 +55,10 @@
                 this.Visible = false;
             }
 
+            throw new NotImplementedException();
+#if false
             this.Location = GUI.GameToGLCoordinate(this.entityLocation) + new GLCoordinate(0, 0.005f * this.counter);
+#endif
         }
     }
 }

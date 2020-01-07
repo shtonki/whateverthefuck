@@ -6,7 +6,7 @@
     using whateverthefuck.src.util;
     using whateverthefuck.src.view;
 
-    internal class LineOfSight
+    internal static class LineOfSight
     {
         private const float Spacing = -0.00005f;
 

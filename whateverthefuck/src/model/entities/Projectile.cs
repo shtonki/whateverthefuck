@@ -24,8 +24,6 @@
             this.Movable = true;
 
             this.BaseStats.MoveSpeed = 0.02f;
-
-            this.Sprite = pa.GetSprite();
         }
 
         public IEnumerable<GameEvent> ResolveEvents { get; set; }

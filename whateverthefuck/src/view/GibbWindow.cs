@@ -63,12 +63,14 @@
         {
             base.OnRenderFrame(e);
 
-            this.UpdateFPSCounter();
+            //this.UpdateFPSCounter();
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
-
             GL.ClearColor(Color.Fuchsia);
-            GL.PushMatrix();
+
+            var drawAdapter = new DrawAdapter(FontDrawing);
+
+            drawAdapter.PushMatrix();
 
             FontDrawing.ProjectionMatrix = GibbWindow.ProjectionMatrix;
             FontDrawing.DrawingPrimitives.Clear();
@@ -76,22 +78,21 @@
             GL.UseProgram(0);
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
-            var drawAdapter = new DrawAdapter(FontDrawing);
-
-            GUI.Camera.Lock();
 
             // Draw GUI components
             foreach (var guiComponent in GUI.GUIComponents.ToList())
             {
-                guiComponent.Draw(drawAdapter);
+                //guiComponent.Draw(drawAdapter);
             }
-
+#if false
             // Take account of Camera zoom
             if (GUI.Camera != null)
             {
                 // GL.Scale(GUI.Camera.Zoom.CurrentZoom, GUI.Camera.Zoom.CurrentZoom, 0);
             }
+#endif
 
+#if false
             // Draw entities with account to Camera location and zoom
             // @Reconsider: refactor GetAllDrawables to GetAllEntities
             // @High cost operation warning: Order by will eat many cycles, be very careful
@@ -99,14 +100,33 @@
             {
                 drawable.Draw(drawAdapter);
             }
+#endif
+            var entityDrawing = Program.GameStateManager.GameState.EntityDrawingInfo;
 
-            GUI.Camera.Unlock();
+            if (entityDrawing != null)
+            {
+                drawAdapter.PushMatrix();
 
-            FontDrawing.RefreshBuffers();
-            FontDrawing.Draw();
+                drawAdapter.Translate(-entityDrawing.Camera.Location.X, -entityDrawing.Camera.Location.Y);
+
+                foreach (var ed in entityDrawing.EntityDrawables)
+                {
+                    ed.Draw(drawAdapter);
+                }
+
+                drawAdapter.PopMatrix();
+            }
+
+            //FontDrawing.RefreshBuffers();
+            //FontDrawing.Draw();
 
             this.SwapBuffers();
-            GL.PopMatrix();
+            drawAdapter.PopMatrix();
+
+            if (drawAdapter.MatrixCount != 0)
+            {
+                Logging.Log("Unbalanced Push/Pop of GL matricies", Logging.LoggingLevel.Warning);
+            }
         }
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
@@ -126,8 +146,10 @@
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
+#if false
             var mouseMovedInput = InputUnion.MakeMouseMoveInput(new ScreenCoordinate(e.X, e.Y), new ScreenCoordinate(e.X - e.XDelta, e.Y - e.YDelta));
             Program.GameStateManager.HandleInput(mouseMovedInput);
+#endif
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)

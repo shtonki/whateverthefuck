@@ -1,5 +1,6 @@
 ﻿namespace whateverthefuck.src.model.entities
 {
+    using System;
     using System.Drawing;
     using whateverthefuck.src.view;
 
@@ -8,13 +9,10 @@
         public MousePicker()
             : base(EntityIdentifier.Invalid, EntityType.GameMechanic, new CreationArgs(0))
         {
-            this.Visible = true;
             this.DrawColor = Color.CornflowerBlue;
             this.Size = new GameCoordinate(0.000001f, 0.000001f);
+            throw new NotImplementedException();
         }
 
-        public override void DrawMe(DrawAdapter drawAdapter)
-        {
-        }
     }
 }

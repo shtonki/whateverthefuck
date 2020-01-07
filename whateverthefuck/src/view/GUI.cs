@@ -12,7 +12,7 @@
 
     public static class GUI
     {
-        public static Camera Camera { get; set; }
+        //public static Camera Camera { get; set; }
 
         public static GameState ForceToDrawGameState { get; set; }
 
@@ -36,8 +36,6 @@
         /// </summary>
         public static void CreateGameWindow()
         {
-            Camera = new StaticCamera(new GameCoordinate(0, 0));
-
             StepTimer = new Timer(_ => StepAllComponents(), null, 0, StepInterval);
 
             ManualResetEventSlim loadre = new ManualResetEventSlim();
@@ -48,6 +46,8 @@
 
         public static IEnumerable<Drawable> GetAllDrawables()
         {
+            throw new NotImplementedException();
+#if false
             IEnumerable<Drawable> entities;
             if (ForceToDrawGameState != null)
             {
@@ -61,6 +61,7 @@
             return entities
                 .Concat(DebugInfo)
                 ;
+#endif
         }
 
         public static void LoadGUI()
@@ -149,7 +150,7 @@
 
             GUIComponents.Add(textPanel);
         }
-
+#if false
         public static GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
         {
             var x = gameCoordinate.X - Camera.Location.X;
@@ -163,7 +164,7 @@
                 (glCoordinate.X / Camera.Zoom.CurrentZoom) + Camera.Location.X,
                 (glCoordinate.Y / Camera.Zoom.CurrentZoom) + Camera.Location.Y);
         }
-
+#endif
         private static void StepAllComponents()
         {
             foreach (var component in GUIComponents)

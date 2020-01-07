@@ -36,7 +36,7 @@
     /// <summary>
     /// Represents an entity in the game.
     /// </summary>
-    public abstract class GameEntity : Drawable
+    public abstract class GameEntity
     {
         private const float HealthbarWidth = 0.1f;
         private const float HealthbarHeight = 0.02f;
@@ -55,8 +55,6 @@
 
             this.State = GameEntityState.Alive;
 
-            this.Visible = true;
-
             this.GameLocation = new GameCoordinate(0, 0);
 
             this.BaseStats = new EntityStats();
@@ -73,11 +71,9 @@
         /// </summary>
         public event Action<GameEntity, GameState> OnStep;
 
-        public override GLCoordinate Location
-        {
-            get => GUI.GameToGLCoordinate(this.GameLocation);
-            set => this.GameLocation = GUI.GLToGameCoordinate(value);
-        }
+        public int Height { get; protected set; } = 1;
+
+        public GameCoordinate GameLocation { get; set; }
 
         public EntityStats BaseStats { get; }
 
@@ -184,6 +180,7 @@
         /// </summary>
         protected bool ShowHealth { get; set; } = false;
 
+#if false
         /// <summary>
         /// The function used to draw the GameEntity.
         /// </summary>
@@ -260,6 +257,8 @@
                 currentHealthBar.DrawMe(drawAdapter);
             }
         }
+
+#endif
 
         /// <summary>
         /// Steps the GameEntity advancing its state by one (1) tick.

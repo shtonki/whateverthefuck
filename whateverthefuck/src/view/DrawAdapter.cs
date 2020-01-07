@@ -13,16 +13,20 @@ namespace whateverthefuck.src.view
             this.FontDrawing = fontDrawing;
         }
 
+        public int MatrixCount { get; private set; } = 0;
+
         private QFontDrawing FontDrawing { get; }
 
         public void PushMatrix()
         {
             GL.PushMatrix();
+            MatrixCount++;
         }
 
         public void PopMatrix()
         {
             GL.PopMatrix();
+            MatrixCount--;
         }
 
         public void Translate(float x, float y)

@@ -1,5 +1,6 @@
 ﻿namespace whateverthefuck.src.view
 {
+    using System;
     using whateverthefuck.src.model;
 
     public abstract class Camera
@@ -14,11 +15,13 @@
 
         public void Lock()
         {
+            throw new NotImplementedException();
             this.lockedLocation = this.CurrentLocation;
         }
 
         public void Unlock()
         {
+            throw new NotImplementedException();
             this.lockedLocation = null;
         }
     }
