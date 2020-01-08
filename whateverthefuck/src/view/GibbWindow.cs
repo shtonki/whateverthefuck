@@ -63,7 +63,7 @@
         {
             base.OnRenderFrame(e);
 
-            //this.UpdateFPSCounter();
+            this.UpdateFPSCounter();
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.ClearColor(Color.Fuchsia);
@@ -73,16 +73,15 @@
             drawAdapter.PushMatrix();
 
             FontDrawing.ProjectionMatrix = GibbWindow.ProjectionMatrix;
-            FontDrawing.DrawingPrimitives.Clear();
+          //FontDrawing.DrawingPrimitives.Clear();
 
             GL.UseProgram(0);
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
-
             // Draw GUI components
             foreach (var guiComponent in GUI.GUIComponents.ToList())
             {
-                //guiComponent.Draw(drawAdapter);
+                guiComponent.Draw(drawAdapter);
             }
 #if false
             // Take account of Camera zoom
@@ -92,15 +91,6 @@
             }
 #endif
 
-#if false
-            // Draw entities with account to Camera location and zoom
-            // @Reconsider: refactor GetAllDrawables to GetAllEntities
-            // @High cost operation warning: Order by will eat many cycles, be very careful
-            foreach (var drawable in GUI.GetAllDrawables().OrderBy(d => d.Height))
-            {
-                drawable.Draw(drawAdapter);
-            }
-#endif
             var entityDrawing = Program.GameStateManager.GameState.EntityDrawingInfo;
 
             if (entityDrawing != null)
@@ -117,8 +107,8 @@
                 drawAdapter.PopMatrix();
             }
 
-            //FontDrawing.RefreshBuffers();
-            //FontDrawing.Draw();
+            FontDrawing.RefreshBuffers();
+            FontDrawing.Draw();
 
             this.SwapBuffers();
             drawAdapter.PopMatrix();

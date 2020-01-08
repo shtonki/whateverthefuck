@@ -1,5 +1,3 @@
-Known bug: Hero will jitter around like a three year old on adderall sometimes.
-
 Known bug: GUIComponents are rendered before GameEntities so we end up with GameEntities on top of our GUI
 
 Known bug: Context handling doesn't actually handle the context.

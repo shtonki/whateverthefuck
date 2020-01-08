@@ -84,7 +84,7 @@
                 return;
             }
 
-            var visibleEntities = this.AllEntities.Select(e => new EntityDrawable(e));
+            var visibleEntities = this.AllEntities.Select(e => new EntityDrawable(e)).ToList();
             var cameraClone = new StaticCamera(new GameCoordinate(this.CurrentCamera.Location.X, this.CurrentCamera.Location.Y));
 
             this.EntityDrawingInfo = new EntityDrawingInfo(cameraClone, visibleEntities);
@@ -467,7 +467,7 @@
 
     public class EntityDrawingInfo
     {
-        public EntityDrawingInfo(Camera camera, IEnumerable<EntityDrawable> entityDrawables)
+        public EntityDrawingInfo(Camera camera, List<EntityDrawable> entityDrawables)
         {
             this.Camera = camera;
             this.EntityDrawables = entityDrawables;
@@ -475,7 +475,9 @@
 
         public Camera Camera { get; }
 
-        public IEnumerable<EntityDrawable> EntityDrawables { get; }
+        public Guid id { get; }
+
+        public List<EntityDrawable> EntityDrawables { get; }
     }
 
 }
