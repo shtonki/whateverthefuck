@@ -2,38 +2,33 @@
 {
     using System.Runtime.InteropServices;
     using whateverthefuck.src.model;
+    using whateverthefuck.src.util;
 
     public class GrantControlMessage : WhateverthefuckMessage
     {
-        public GrantControlMessage()
-            : base(MessageType.GrantControlMessage)
-        {
-            this.MessageBody = new GrantControlBody();
-        }
-
-        public GrantControlMessage(GameEntity entity)
-            : base(MessageType.GrantControlMessage)
-        {
-            this.MessageBody = new GrantControlBody(entity);
-        }
-
         public GrantControlMessage(int id)
             : base(MessageType.GrantControlMessage)
         {
-            var v = new GrantControlBody();
-            v.Id = id;
-            this.MessageBody = v;
+            Id = new EntityIdentifier(id);
         }
-    }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct GrantControlBody : IMessageBody
-    {
-        public int Id;
-
-        public GrantControlBody(GameEntity entity)
+        public GrantControlMessage(byte[] bs)
+            : base(MessageType.GrantControlMessage)
         {
-            this.Id = entity.Identifier.Id;
+            WhateverDecoder decoder = new WhateverDecoder(bs);
+
+            this.Id = new EntityIdentifier(decoder.DecodeInt());
+        }
+
+        public EntityIdentifier Id { get; }
+
+        protected override byte[] EncodeBody()
+        {
+            WhateverEncoder encoder = new WhateverEncoder();
+
+            encoder.Encode(this.Id.Id);
+
+            return encoder.GetBytes();
         }
     }
 }

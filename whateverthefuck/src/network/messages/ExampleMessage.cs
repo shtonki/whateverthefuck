@@ -1,36 +1,44 @@
 ﻿namespace whateverthefuck.src.network.messages
 {
+    using System;
     using System.Runtime.InteropServices;
+    using whateverthefuck.src.util;
 
     internal class ExampleMessage : WhateverthefuckMessage
     {
-        public ExampleMessage()
+        public ExampleMessage(int a, float b, string c)
             : base(MessageType.ExampleMessage)
-        {
-            this.MessageBody = new ExampleBody(0, 0);
-        }
-
-        public ExampleMessage(int a, float b)
-            : base(MessageType.ExampleMessage)
-        {
-            this.MessageBody = new ExampleBody(a, b);
-        }
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct ExampleBody : IMessageBody
-    {
-        public int A;
-        public float B;
-
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 5)]
-        public string Bs;
-
-        public ExampleBody(int a, float b)
         {
             this.A = a;
             this.B = b;
-            this.Bs = "walla";
+            this.C = c;
+        }
+
+        public ExampleMessage(byte[] body)
+            : base(MessageType.ExampleMessage)
+        {
+            WhateverDecoder decoder = new WhateverDecoder(body);
+
+            this.A = decoder.DecodeInt();
+            this.B = decoder.DecodeFloat();
+            this.C = decoder.DecodeString();
+        }
+
+        public int A { get; private set; }
+
+        public float B { get; private set; }
+
+        public string C { get; private set; }
+
+        protected override byte[] EncodeBody()
+        {
+            WhateverEncoder encoder = new WhateverEncoder();
+
+            encoder.Encode(this.A);
+            encoder.Encode(this.B);
+            encoder.Encode(this.C);
+
+            return encoder.GetBytes();
         }
     }
 }

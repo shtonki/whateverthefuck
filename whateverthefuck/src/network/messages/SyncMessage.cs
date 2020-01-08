@@ -1,32 +1,39 @@
 ﻿namespace whateverthefuck.src.network.messages
 {
     using System.Runtime.InteropServices;
+    using whateverthefuck.src.util;
 
     public class SyncMessage : WhateverthefuckMessage
     {
-        public SyncMessage()
+        public SyncMessage(byte[] bs)
             : base(MessageType.SyncMessage)
         {
-            this.MessageBody = new SyncMessageBody();
+            WhateverDecoder decoder = new WhateverDecoder(bs);
+
+            this.Tick = decoder.DecodeInt();
+            this.Hash = decoder.DecodeLong();
         }
 
-        public SyncMessage(SyncMessageBody body)
+        public SyncMessage(int tick, long hash)
             : base(MessageType.SyncMessage)
-        {
-            this.MessageBody = body;
-        }
-    }
-
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct SyncMessageBody : IMessageBody
-    {
-        public int Tick;
-        public long Hash;
-
-        public SyncMessageBody(int tick, long checksum)
         {
             this.Tick = tick;
-            this.Hash = checksum;
+            this.Hash = hash;
+        }
+
+        public int Tick { get; }
+
+        public long Hash { get; }
+
+        protected override byte[] EncodeBody()
+        {
+            WhateverEncoder encoder = new WhateverEncoder();
+
+            encoder.Encode(this.Tick);
+            encoder.Encode(this.Hash);
+
+            return encoder.GetBytes();
         }
     }
+
 }

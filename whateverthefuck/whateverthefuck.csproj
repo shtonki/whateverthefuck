@@ -93,7 +93,6 @@
     <Compile Include="src\network\messages\ExampleMessage.cs" />
     <Compile Include="src\network\messages\GrantControlMessage.cs" />
     <Compile Include="src\network\messages\ItemMessages.cs" />
-    <Compile Include="src\network\messages\LogMessage.cs" />
     <Compile Include="src\network\messages\LoginCredentialsMessage.cs" />
     <Compile Include="src\network\messages\SyncMessage.cs" />
     <Compile Include="src\network\messages\UpdateGameStateMessage.cs" />

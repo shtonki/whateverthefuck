@@ -1,31 +1,36 @@
 ﻿namespace whateverthefuck.src.network.messages
 {
     using System.Runtime.InteropServices;
+    using whateverthefuck.src.util;
 
     public class LoginCredentialsMessage : WhateverthefuckMessage
     {
-        public LoginCredentialsMessage()
+        public LoginCredentialsMessage(byte[] bs)
             : base(MessageType.LoginCredentialsMessage)
         {
-            this.MessageBody = new LoginCredentialBody();
+            WhateverDecoder decoder = new WhateverDecoder(bs);
+
+            var username = decoder.DecodeString();
+
+            this.LoginCredentials = new LoginCredentials(username);
         }
 
         public LoginCredentialsMessage(LoginCredentials loginCredentials)
             : base(MessageType.LoginCredentialsMessage)
         {
-            this.MessageBody = new LoginCredentialBody(loginCredentials.Username);
+            this.LoginCredentials = loginCredentials;
         }
-    }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct LoginCredentialBody : IMessageBody
-    {
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
-        public string Username;
+        public LoginCredentials LoginCredentials { get; }
 
-        public LoginCredentialBody(string username)
+        protected override byte[] EncodeBody()
         {
-            this.Username = username;
+            WhateverEncoder encoder = new WhateverEncoder();
+
+            encoder.Encode(this.LoginCredentials.Username);
+
+            return encoder.GetBytes();
         }
     }
+
 }

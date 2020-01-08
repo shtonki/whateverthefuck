@@ -8,14 +8,39 @@
     using System.Text;
     using whateverthefuck.src.model;
 
+    public struct WhateverMessageHeader
+    {
+        public WhateverMessageHeader(MessageType type, int size)
+        {
+            if (size > ushort.MaxValue)
+            {
+                throw new Exception();
+            }
+            this.Type = type;
+            this.Size = (ushort)size;
+        }
+
+        public MessageType Type { get; }
+
+        public ushort Size { get; }
+
+        public byte[] Encode()
+        {
+            return BitConverter.GetBytes((ushort)this.Type).Concat(BitConverter.GetBytes(this.Size)).ToArray();
+        }
+
+        public static WhateverMessageHeader Decode(byte[] bytes)
+        {
+            var type = BitConverter.ToUInt16(bytes, 0);
+            var size = BitConverter.ToUInt16(bytes, 2);
+
+            return new WhateverMessageHeader((MessageType)type, size);
+        }
+    }
+
     public abstract class WhateverthefuckMessage
     {
-#if false
-        private const int TypeSize = 1;
-        private const int LengthSize = 2;
-
-#endif
-        public const int HeaderSize = 4;
+        WhateverMessageHeader Header;
 
         protected WhateverthefuckMessage(MessageType messageType)
         {
@@ -24,51 +49,69 @@
 
         public MessageType MessageType { get; private set; }
 
-        public IMessageBody MessageBody { get; set; }
+        protected abstract byte[] EncodeBody();
 
-        public static WhateverthefuckMessage FromMessageTypex(MessageType type)
+        public static byte[] EncodeMessage(WhateverthefuckMessage message)
+        {
+            byte[] bodyBytes = message.EncodeBody();
+
+            WhateverMessageHeader header = new WhateverMessageHeader(message.MessageType, bodyBytes.Length);
+            byte[] headerBytes = header.Encode();
+            return headerBytes.Concat(bodyBytes).ToArray();
+        }
+
+        public static WhateverthefuckMessage DecodeMessage(byte[] bs)
+        {
+            WhateverMessageHeader header = WhateverMessageHeader.Decode(bs);
+
+            int headerSize = Marshal.SizeOf(header);
+
+            var messageType = header.Type;
+            var bodyLength = header.Size;
+
+            var wmessage = FromMessageTypex(messageType, bs.Skip(headerSize).ToArray());
+
+            return wmessage;
+        }
+
+        public static WhateverthefuckMessage FromMessageTypex(MessageType type, byte[] bodyBytes)
         {
             switch (type)
             {
                 case MessageType.ExampleMessage:
                 {
-                    return new ExampleMessage();
+                    return new ExampleMessage(bodyBytes);
                 }
 
                 case MessageType.GrantControlMessage:
                 {
-                    return new GrantControlMessage();
-                }
-
-                case MessageType.LogMessage:
-                {
-                    return new LogMessage();
+                    return new GrantControlMessage(bodyBytes);
                 }
 
                 case MessageType.UpdateGameStateMessage:
                 {
-                    return new UpdateGameStateMessage();
+                    return new UpdateGameStateMessage(bodyBytes);
                 }
 
                 case MessageType.LoginCredentialsMessage:
                 {
-                    return new LoginCredentialsMessage();
+                    return new LoginCredentialsMessage(bodyBytes);
                 }
 
                 case MessageType.SyncMessage:
                 {
-                    return new SyncMessage();
+                    return new SyncMessage(bodyBytes);
                 }
 
                 case MessageType.CreateLootMessage:
                 {
-                    return new CreateLootMessage();
+                    return new CreateLootMessage(bodyBytes);
                 }
 
                 default: throw new NotImplementedException();
             }
         }
-
+#if false
         public static byte[] EncodeMessage(WhateverthefuckMessage message)
         {
             byte[] contentBytes = message.EncodeBody();
@@ -182,13 +225,12 @@
 
             public ushort Size { get; set; }
         }
+#endif
     }
 
     public enum MessageType
     {
         ExampleMessage,
-
-        LogMessage,
 
         UpdateGameStateMessage,
         GrantControlMessage,
@@ -196,10 +238,6 @@
         SyncMessage,
 
         CreateLootMessage,
-    }
-
-    public interface IMessageBody
-    {
     }
 
     public struct EntityLocationInfo

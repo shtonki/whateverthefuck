@@ -2,10 +2,6 @@
 {
     public class LoginCredentials
     {
-        public LoginCredentials()
-        {
-        }
-
         public LoginCredentials(string username)
         {
             this.Username = username;
