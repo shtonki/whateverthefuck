@@ -24,7 +24,7 @@ namespace whateverthefuckserver.gameserver
         private List<GameEvent> PendingEvents = new List<GameEvent>();
         object EventsLock = new object();
 
-        private SyncMessageBody SyncCity;
+        private SyncRecord SyncCity;
 
         private SpawnCity SpawnCity { get; }
 

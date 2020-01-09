@@ -7,7 +7,7 @@
         public static void Login(string username)
         {
             LoginCredentials loginCreds = new LoginCredentials(username);
-            Program.ServerConnection.SendMessage(new LoginCredentialsMessage(loginCreds));
+            Program.ServerConnection.SendMessage(new LoginMessage(loginCreds));
         }
     }
 }

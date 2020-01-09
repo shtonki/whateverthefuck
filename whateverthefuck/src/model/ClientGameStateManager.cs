@@ -102,9 +102,9 @@
         /// Grants the player control of a GameEntity.
         /// </summary>
         /// <param name="identifier">The identifier of the GameEntity the player is to control.</param>
-        public void TakeControl(int identifier)
+        public void TakeControl(EntityIdentifier identifier)
         {
-            this.TakeControlId = identifier;
+            this.TakeControlId = identifier.Id;
         }
 
         public void CenterCameraOn(GameEntity entity)
@@ -114,10 +114,12 @@
 
         public void SpawnLoot(CreateLootMessage message)
           {
-            var item = message.Item;
-            var lootee = this.GameState.GetEntityById(message.LooteeId) as Lootable;
+            var lootee = this.GameState.GetEntity(message.LooteeId) as Lootable;
 
-            lootee.AddLoot(item);
+            foreach (var item in message.Items)
+            {
+                lootee.AddLoot(item);
+            }
         }
 
         public void LootItem(Lootable lootee, Item item)

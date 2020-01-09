@@ -142,7 +142,7 @@
             <param name="tick">The servers tick counter.</param>
             <param name="events">The GameEvents to be handled.</param>
         </member>
-        <member name="M:whateverthefuck.src.model.ClientGameStateManager.TakeControl(System.Int32)">
+        <member name="M:whateverthefuck.src.model.ClientGameStateManager.TakeControl(whateverthefuck.src.model.EntityIdentifier)">
             <summary>
             Grants the player control of a GameEntity.
             </summary>

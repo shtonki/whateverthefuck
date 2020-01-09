@@ -5,63 +5,68 @@
     using System.Linq;
     using System.Runtime.InteropServices;
     using whateverthefuck.src.model;
+    using whateverthefuck.src.util;
 
     public class CreateLootMessage : WhateverthefuckMessage
     {
-        private Item[] items;
-
         public CreateLootMessage()
             : base(MessageType.CreateLootMessage)
         {
-            this.MessageBody = new ItemMessageBody();
         }
 
-        public CreateLootMessage(GameEntity lootee, Item item)
+        public CreateLootMessage(GameEntity lootee, params Item[] items)
             : base(MessageType.CreateLootMessage)
         {
-            var itemBody = new ItemMessageBody(item);
-            itemBody.LooteeEntityId = lootee.Identifier.Id;
-            this.MessageBody = itemBody;
+            this.LooteeId = lootee.Identifier;
+            this.Items = items;
         }
 
-        public Item Item => this.GenerateItem();
+        public Item[] Items { get; private set; }
 
-        public int LooteeId => ((ItemMessageBody)this.MessageBody).LooteeEntityId;
+        public EntityIdentifier LooteeId { get; private set; }
 
-        private Item GenerateItem()
+        public override void Encode(WhateverEncoder encoder)
         {
-            ItemMessageBody item = (ItemMessageBody)this.MessageBody;
-            return new Item(item.Type, item.StackSize, item.Rarity, item.Bonuses.ToArray());
+            encoder.Encode(this.LooteeId.Id);
+
+            encoder.Encode(this.Items.Length);
+            foreach (var item in this.Items)
+            {
+                encoder.Encode((int)item.Type);
+                encoder.Encode((int)item.Rarity);
+                encoder.Encode(item.StackSize);
+                encoder.Encode(item.Bonuses.Length);
+                foreach (var bonus in item.Bonuses)
+                {
+                    encoder.Encode(bonus.ToInt());
+                }
+            }
         }
-    }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal class ItemMessageBody : IMessageBody
-    {
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        private int[] bonuses = new int[4];
-
-        public ItemMessageBody()
+        public override void Decode(WhateverDecoder decoder)
         {
+            this.LooteeId = new EntityIdentifier(decoder.DecodeInt());
+
+            var itemCount = decoder.DecodeInt();
+
+            this.Items = new Item[itemCount];
+
+            for (int i = 0; i < itemCount; i++)
+            {
+                var type = (ItemType)decoder.DecodeInt();
+                var rarity = (Rarity)decoder.DecodeInt();
+                var stackSize = decoder.DecodeInt();
+
+                var bonusCount = decoder.DecodeInt();
+                var bonuses = new ItemBonus[bonusCount];
+
+                for (int j = 0; j < bonusCount; j++)
+                {
+                    bonuses[j] = new ItemBonus(decoder.DecodeInt());
+                }
+
+                this.Items[i] = new Item(type, stackSize, rarity, bonuses);
+            }
         }
-
-        public ItemMessageBody(Item item)
-        {
-            this.Type = item.Type;
-            this.StackSize = item.StackSize;
-            this.Rarity = item.Rarity;
-            var bc = item.Bonuses.Select(b => b.ToInt()).ToArray();
-            Array.Copy(bc, 0, this.bonuses, 0, bc.Length);
-        }
-
-        public int LooteeEntityId { get; set; }
-
-        public ItemType Type { get; set; }
-
-        public int StackSize { get; set; }
-
-        public Rarity Rarity { get; set; }
-
-        public IEnumerable<ItemBonus> Bonuses => this.bonuses.Select(b => new ItemBonus(b));
     }
 }

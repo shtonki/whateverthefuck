@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using whateverthefuck.src.model;
+    using whateverthefuck.src.util;
 
     public class UpdateGameStateMessage : WhateverthefuckMessage
     {
@@ -29,6 +30,16 @@
 
         public List<GameEvent> Events { get; private set; }
 
+        public override void Encode(WhateverEncoder encoder)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            throw new NotImplementedException();
+        }
+#if false
         protected override byte[] EncodeBody()
         {
             List<byte> bs = new List<byte>();
@@ -78,5 +89,6 @@
 
             this.Events = events.ToList();
         }
+#endif
     }
 }

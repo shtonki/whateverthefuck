@@ -9,26 +9,24 @@
         public GrantControlMessage(int id)
             : base(MessageType.GrantControlMessage)
         {
-            Id = new EntityIdentifier(id);
+            this.Id = new EntityIdentifier(id);
         }
 
-        public GrantControlMessage(byte[] bs)
+        public GrantControlMessage()
             : base(MessageType.GrantControlMessage)
         {
-            WhateverDecoder decoder = new WhateverDecoder(bs);
-
-            this.Id = new EntityIdentifier(decoder.DecodeInt());
         }
 
-        public EntityIdentifier Id { get; }
+        public EntityIdentifier Id { get; private set; }
 
-        protected override byte[] EncodeBody()
+        public override void Encode(WhateverEncoder encoder)
         {
-            WhateverEncoder encoder = new WhateverEncoder();
-
             encoder.Encode(this.Id.Id);
+        }
 
-            return encoder.GetBytes();
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.Id = new EntityIdentifier(decoder.DecodeInt());
         }
     }
 }

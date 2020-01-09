@@ -90,6 +90,12 @@
             this.EntityDrawingInfo = new EntityDrawingInfo(cameraClone, visibleEntities);
         }
 
+        public GameEntity GetEntity(EntityIdentifier id)
+        {
+            return this.EntityList.Find(e => e.Identifier.Id == id.Id);
+        }
+
+        // @deprecatered
         public GameEntity GetEntityById(int id)
         {
             return this.EntityList.Find(e => e.Identifier.Id == id);
@@ -108,16 +114,9 @@
             }
         }
 
-        public SyncMessageBody GenerateSyncRecord()
+        public SyncRecord GenerateSyncRecord()
         {
-            var rt = new SyncMessageBody(this.StepCounter, this.HashMe());
-
-            if (false)
-#pragma warning disable 162
-            {
-                Logging.Log(string.Format("Tick '{0}' Hash '{1}'", rt.Tick, rt.Hash.ToString("X8")));
-            }
-#pragma warning restore 162
+            var rt = new SyncRecord(this.StepCounter, this.HashMe());
 
             return rt;
         }

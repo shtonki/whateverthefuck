@@ -20,13 +20,6 @@
         {
             switch (message.MessageType)
             {
-                case MessageType.LogMessage:
-                {
-                    LogMessage logMessage = (LogMessage)message;
-                    LogBody logBody = (LogBody)message.MessageBody;
-                    Logging.Log("Message from server: " + logBody.Message, Logging.LoggingLevel.Info);
-                } break;
-
                 case MessageType.UpdateGameStateMessage:
                 {
                     UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
@@ -35,8 +28,8 @@
 
                 case MessageType.GrantControlMessage:
                 {
-                    GrantControlBody controlBody = (GrantControlBody)message.MessageBody;
-                    Program.GameStateManager.TakeControl(controlBody.Id);
+                    GrantControlMessage controlMessage = (GrantControlMessage)message;
+                    Program.GameStateManager.TakeControl(controlMessage.Id);
                 } break;
 
                 case MessageType.CreateLootMessage:

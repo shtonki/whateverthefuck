@@ -14,7 +14,7 @@
 
         private NetworkStream networkStream;
 
-        private byte[] headerBuffer = new byte[WhateverthefuckMessage.HeaderSize];
+        private byte[] headerBuffer = new byte[WhateverMessageHeader.HeaderSize];
 
         protected WhateverthefuckConnection(NetworkStream networkStream)
         {
@@ -24,10 +24,17 @@
 
         public void SendMessage(WhateverthefuckMessage message)
         {
-            byte[] bytes = WhateverthefuckMessage.EncodeMessage(message);
+            byte[] messageBytes = WhateverthefuckMessage.EncodeMessage(message);
+
+            WhateverMessageHeader header = new WhateverMessageHeader(message.MessageType, messageBytes.Length);
+            var headerEncoder = new WhateverEncoder();
+            header.Encode(headerEncoder);
+            var headerBytes = headerEncoder.GetBytes();
+
             try
             {
-                this.networkStream.Write(bytes, 0, bytes.Length);
+                this.networkStream.Write(headerBytes, 0, headerBytes.Length);
+                this.networkStream.Write(messageBytes, 0, messageBytes.Length);
             }
             catch (System.IO.IOException)
             {
@@ -53,7 +60,7 @@
 
                 try
                 {
-                    bytesRead = this.networkStream.Read(this.headerBuffer, 0, WhateverthefuckMessage.HeaderSize);
+                    bytesRead = this.networkStream.Read(this.headerBuffer, 0, this.headerBuffer.Length);
                 }
                 catch (System.IO.IOException)
                 {
@@ -61,35 +68,38 @@
                     return;
                 }
 
-                if (bytesRead != WhateverthefuckMessage.HeaderSize)
+                if (bytesRead != this.headerBuffer.Length)
                 {
                     Logging.Log("Broken message header.", Logging.LoggingLevel.Error);
                     continue;
                 }
 
-                WhateverMessageHeader header = WhateverthefuckMessage.ParseHeader(this.headerBuffer);
-
-                MessageType messageType = (MessageType)header.Type;
-                int messageLength = header.Size;
+                WhateverDecoder headerDecoder = new WhateverDecoder(this.headerBuffer);
+                WhateverMessageHeader header = new WhateverMessageHeader();
+                header.Decode(headerDecoder);
 
                 bytesRead = 0;
-                byte[] bodyBuffer = new byte[messageLength];
+                byte[] bodyBuffer = new byte[header.MessageSize];
 
                 while (true)
                 {
-                    bytesRead += this.networkStream.Read(bodyBuffer, bytesRead, messageLength);
+                    bytesRead += this.networkStream.Read(bodyBuffer, bytesRead, bodyBuffer.Length);
 
-                    if (bytesRead == messageLength)
+                    if (bytesRead == bodyBuffer.Length)
                     {
                         break;
                     }
-                    else if (bytesRead > messageLength)
+                    else if (bytesRead > bodyBuffer.Length)
                     {
-                        throw new Exception(string.Format("Expected body length <{0}>, got <{1}>", messageLength, bytesRead));
+                        throw new Exception(string.Format("Expected body length <{0}>, got <{1}>", bodyBuffer.Length, bytesRead));
+                    }
+                    else
+                    {
+                        Logging.Log("Read a message larger than advertised", Logging.LoggingLevel.Error);
                     }
                 }
 
-                WhateverthefuckMessage message = WhateverthefuckMessage.DecodeMessage(header, bodyBuffer);
+                WhateverthefuckMessage message = WhateverthefuckMessage.DecodeMessage(header.MessageType, bodyBuffer);
 
                 if (LogIncomingMessages)
                 {

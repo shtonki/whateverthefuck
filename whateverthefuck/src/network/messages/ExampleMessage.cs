@@ -14,14 +14,9 @@
             this.C = c;
         }
 
-        public ExampleMessage(byte[] body)
+        public ExampleMessage()
             : base(MessageType.ExampleMessage)
         {
-            WhateverDecoder decoder = new WhateverDecoder(body);
-
-            this.A = decoder.DecodeInt();
-            this.B = decoder.DecodeFloat();
-            this.C = decoder.DecodeString();
         }
 
         public int A { get; private set; }
@@ -30,15 +25,18 @@
 
         public string C { get; private set; }
 
-        protected override byte[] EncodeBody()
+        public override void Encode(WhateverEncoder encoder)
         {
-            WhateverEncoder encoder = new WhateverEncoder();
-
             encoder.Encode(this.A);
             encoder.Encode(this.B);
             encoder.Encode(this.C);
+        }
 
-            return encoder.GetBytes();
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.A = decoder.DecodeInt();
+            this.B = decoder.DecodeFloat();
+            this.C = decoder.DecodeString();
         }
     }
 }

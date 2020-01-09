@@ -1,47 +1,41 @@
 ﻿namespace whateverthefuck.src.network.messages
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
-    using System.Text;
     using whateverthefuck.src.model;
+    using whateverthefuck.src.util;
 
-    public struct WhateverMessageHeader
+    public struct WhateverMessageHeader : IEncodable
     {
+        public const int HeaderSize = sizeof(int) + sizeof(int);
+
         public WhateverMessageHeader(MessageType type, int size)
         {
-            if (size > ushort.MaxValue)
-            {
-                throw new Exception();
-            }
-            this.Type = type;
-            this.Size = (ushort)size;
+            this.MessageType = type;
+            this.MessageSize = (ushort)size;
         }
 
-        public MessageType Type { get; }
+        public MessageType MessageType { get; private set; }
 
-        public ushort Size { get; }
+        public int MessageSize { get; private set; }
 
-        public byte[] Encode()
+        public void Encode(WhateverEncoder encoder)
         {
-            return BitConverter.GetBytes((ushort)this.Type).Concat(BitConverter.GetBytes(this.Size)).ToArray();
+            encoder.Encode((int)this.MessageType);
+            encoder.Encode(this.MessageSize);
         }
 
-        public static WhateverMessageHeader Decode(byte[] bytes)
+        public void Decode(WhateverDecoder decoder)
         {
-            var type = BitConverter.ToUInt16(bytes, 0);
-            var size = BitConverter.ToUInt16(bytes, 2);
-
-            return new WhateverMessageHeader((MessageType)type, size);
+            this.MessageType = (MessageType)decoder.DecodeInt();
+            this.MessageSize = decoder.DecodeInt();
         }
     }
 
-    public abstract class WhateverthefuckMessage
+    public abstract class WhateverthefuckMessage : IEncodable
     {
-        WhateverMessageHeader Header;
-
         protected WhateverthefuckMessage(MessageType messageType)
         {
             this.MessageType = messageType;
@@ -49,63 +43,61 @@
 
         public MessageType MessageType { get; private set; }
 
-        protected abstract byte[] EncodeBody();
+        public abstract void Encode(WhateverEncoder encoder);
+
+        public abstract void Decode(WhateverDecoder decoder);
 
         public static byte[] EncodeMessage(WhateverthefuckMessage message)
         {
-            byte[] bodyBytes = message.EncodeBody();
+            WhateverEncoder encoder = new WhateverEncoder();
 
-            WhateverMessageHeader header = new WhateverMessageHeader(message.MessageType, bodyBytes.Length);
-            byte[] headerBytes = header.Encode();
-            return headerBytes.Concat(bodyBytes).ToArray();
+            message.Encode(encoder);
+
+            return encoder.GetBytes();
         }
 
-        public static WhateverthefuckMessage DecodeMessage(byte[] bs)
+        public static WhateverthefuckMessage DecodeMessage(MessageType type, byte[] bs)
         {
-            WhateverMessageHeader header = WhateverMessageHeader.Decode(bs);
+            WhateverDecoder decoder = new WhateverDecoder(bs);
 
-            int headerSize = Marshal.SizeOf(header);
-
-            var messageType = header.Type;
-            var bodyLength = header.Size;
-
-            var wmessage = FromMessageTypex(messageType, bs.Skip(headerSize).ToArray());
+            var wmessage = FromMessageType(type);
+            wmessage.Decode(decoder);
 
             return wmessage;
         }
 
-        public static WhateverthefuckMessage FromMessageTypex(MessageType type, byte[] bodyBytes)
+        public static WhateverthefuckMessage FromMessageType(MessageType type)
         {
             switch (type)
             {
                 case MessageType.ExampleMessage:
                 {
-                    return new ExampleMessage(bodyBytes);
+                    return new ExampleMessage();
                 }
 
                 case MessageType.GrantControlMessage:
                 {
-                    return new GrantControlMessage(bodyBytes);
+                    return new GrantControlMessage();
                 }
 
                 case MessageType.UpdateGameStateMessage:
                 {
-                    return new UpdateGameStateMessage(bodyBytes);
+                    return new UpdateGameStateMessage();
                 }
 
                 case MessageType.LoginCredentialsMessage:
                 {
-                    return new LoginCredentialsMessage(bodyBytes);
+                    return new LoginMessage();
                 }
 
                 case MessageType.SyncMessage:
                 {
-                    return new SyncMessage(bodyBytes);
+                    return new SyncMessage();
                 }
 
                 case MessageType.CreateLootMessage:
                 {
-                    return new CreateLootMessage(bodyBytes);
+                    return new CreateLootMessage();
                 }
 
                 default: throw new NotImplementedException();
@@ -239,7 +231,7 @@
 
         CreateLootMessage,
     }
-
+#if true
     public struct EntityLocationInfo
     {
         private const char InfoSeperator = '&';
@@ -279,4 +271,5 @@
             return this.Identifier.ToString() + InfoSeperator + this.X.ToString("0.00", CultureInfo.InvariantCulture) + InfoSeperator + this.Y.ToString("0.00", CultureInfo.InvariantCulture);
         }
     }
+#endif
 }

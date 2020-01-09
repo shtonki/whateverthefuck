@@ -3,6 +3,13 @@
     using System;
     using System.Collections.Generic;
 
+    public interface IEncodable
+    {
+        void Encode(WhateverEncoder encoder);
+
+        void Decode(WhateverDecoder decoder);
+    }
+
     public class WhateverEncoder
     {
         private List<byte> bytes;

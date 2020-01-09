@@ -5,35 +5,53 @@
 
     public class SyncMessage : WhateverthefuckMessage
     {
-        public SyncMessage(byte[] bs)
+        public SyncMessage()
             : base(MessageType.SyncMessage)
         {
-            WhateverDecoder decoder = new WhateverDecoder(bs);
-
-            this.Tick = decoder.DecodeInt();
-            this.Hash = decoder.DecodeLong();
         }
 
-        public SyncMessage(int tick, long hash)
+        public SyncMessage(SyncRecord record)
             : base(MessageType.SyncMessage)
+        {
+            this.SyncRecord = record;
+        }
+
+        public SyncRecord SyncRecord { get; private set; }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            this.SyncRecord.Encode(encoder);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.SyncRecord = new SyncRecord();
+            this.SyncRecord.Decode(decoder);
+        }
+    }
+
+    public struct SyncRecord : IEncodable
+    {
+        public SyncRecord(int tick, long hash)
         {
             this.Tick = tick;
             this.Hash = hash;
         }
 
-        public int Tick { get; }
+        public int Tick { get; private set; }
 
-        public long Hash { get; }
+        public long Hash { get; private set; }
 
-        protected override byte[] EncodeBody()
+        public void Encode(WhateverEncoder encoder)
         {
-            WhateverEncoder encoder = new WhateverEncoder();
-
             encoder.Encode(this.Tick);
             encoder.Encode(this.Hash);
+        }
 
-            return encoder.GetBytes();
+        public void Decode(WhateverDecoder decoder)
+        {
+            this.Tick = decoder.DecodeInt();
+            this.Hash = decoder.DecodeLong();
         }
     }
-
 }
