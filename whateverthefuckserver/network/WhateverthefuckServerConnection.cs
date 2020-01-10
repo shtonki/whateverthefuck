@@ -24,6 +24,12 @@ namespace whateverthefuckserver.network
         {
             switch (message.MessageType)
             {
+                case MessageType.GameEventMessage:
+                {
+                    GameEventsMessage gem = (GameEventsMessage)message;
+                    Program.GameServer.HandleRequests(gem.Events);
+                } break;
+
                 case MessageType.LoginMessage:
                 {
                     LoginMessage loginMessage = (LoginMessage)message;

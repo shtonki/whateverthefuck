@@ -511,7 +511,7 @@
     /// <summary>
     /// Contains the movement info of a GameEntity.
     /// </summary>
-    public class MovementStruct
+    public class MovementStruct : IEncodable
     {
         private const float NoDirection = float.NaN;
 
@@ -547,6 +547,23 @@
         /// </summary>
         public bool IsMoving => this.IsDirectional || this.IsFollowing;
 
+        public void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode(this.Direction);
+            encoder.Encode(this.FollowId.HasValue ? this.FollowId.Value : 0);
+        }
+
+        public void Decode(WhateverDecoder decoder)
+        {
+            this.Direction = decoder.DecodeFloat();
+            var val = decoder.DecodeInt();
+            if (val != 0)
+            {
+                this.FollowId = val;
+            }
+        }
+
+#if false
         /// <summary>
         /// Decodes an array of bytes into a MovementStruct.
         /// </summary>
@@ -572,12 +589,6 @@
             return ms;
         }
 
-        public void Stop()
-        {
-            this.Direction = NoDirection;
-            this.FollowId = null;
-        }
-
         /// <summary>
         /// Encodes a MovementStruct into a byte[].
         /// </summary>
@@ -593,6 +604,7 @@
                 return BitConverter.GetBytes(false).Concat(BitConverter.GetBytes(this.Direction)).ToArray();
             }
         }
+#endif
     }
 
     /// <summary>

@@ -347,19 +347,6 @@
             Gets a value indicating whether the GameEntity is moving at all.
             </summary>
         </member>
-        <member name="M:whateverthefuck.src.model.MovementStruct.Decode(System.Byte[])">
-            <summary>
-            Decodes an array of bytes into a MovementStruct.
-            </summary>
-            <param name="bs">The bytes to decode.</param>
-            <returns>The decoded MovementStruct.</returns>
-        </member>
-        <member name="M:whateverthefuck.src.model.MovementStruct.Encode">
-            <summary>
-            Encodes a MovementStruct into a byte[].
-            </summary>
-            <returns>The bytes representing the MovementStruct.</returns>
-        </member>
         <member name="T:whateverthefuck.src.model.EntityIdentifier">
             <summary>
             Uniquely identifies a GameEntity within a GameState.

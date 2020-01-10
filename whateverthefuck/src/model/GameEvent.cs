@@ -19,15 +19,20 @@
         {
             switch (type)
             {
+                case GameEventType.UpdateMovement:
+                {
+                    return new UpdateMovementEvent();
+                }
+
                 case GameEventType.Create:
                 {
                     return new CreateEntityEvent();
-                } break;
+                }
 
                 default:
                 {
                     throw new Exception();
-                } break;
+                }
             }
         }
 
@@ -206,6 +211,11 @@
 
     public class UpdateMovementEvent : GameEvent
     {
+        public UpdateMovementEvent()
+            : base(GameEventType.UpdateMovement)
+        {
+        }
+
         public UpdateMovementEvent(GameEntity entity)
             : this(entity.Identifier, entity.Movements)
         {
@@ -221,6 +231,20 @@
         public EntityIdentifier Identifier { get; private set; }
 
         public MovementStruct Movements { get; private set; }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode(this.Identifier.Id);
+            this.Movements.Encode(encoder);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.Identifier = new EntityIdentifier(decoder.DecodeInt());
+            var movements = new MovementStruct();
+            movements.Decode(decoder);
+            this.Movements = movements;
+        }
     }
 
     public enum GameEventType

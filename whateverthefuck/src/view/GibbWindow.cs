@@ -72,8 +72,8 @@
 
             drawAdapter.PushMatrix();
 
-            FontDrawing.ProjectionMatrix = GibbWindow.ProjectionMatrix;
-          //FontDrawing.DrawingPrimitives.Clear();
+            //FontDrawing.ProjectionMatrix = GibbWindow.ProjectionMatrix;
+            //FontDrawing.DrawingPrimitives.Clear();
 
             GL.UseProgram(0);
             GL.BindTexture(TextureTarget.Texture2D, 0);
@@ -107,8 +107,8 @@
                 drawAdapter.PopMatrix();
             }
 
-            FontDrawing.RefreshBuffers();
-            FontDrawing.Draw();
+            //FontDrawing.RefreshBuffers();
+            //FontDrawing.Draw();
 
             this.SwapBuffers();
             drawAdapter.PopMatrix();

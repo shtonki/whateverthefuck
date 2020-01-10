@@ -306,8 +306,7 @@
             {
                 var e = new UpdateMovementEvent(this.Hero.Identifier, ms);
 
-                throw new NotImplementedException();
-                //Program.ServerConnection.SendMessage(new UpdateGameStateMessage(0, e));
+                Program.ServerConnection.SendMessage(new GameEventsMessage(e));
             }
 
             this.PrevDirection = ms.Direction;

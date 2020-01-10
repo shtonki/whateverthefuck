@@ -77,6 +77,11 @@ namespace whateverthefuckserver.gameserver
             }
         }
 
+        public void HandleRequests(IEnumerable<GameEvent> requests)
+        {
+            PendEvents(requests);
+        }
+
         public void AddUser(User user)
         {
             IEnumerable<GameEvent> createEvents;

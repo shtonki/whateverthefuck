@@ -26,6 +26,12 @@
                     Program.GameStateManager.UpdateGameState(gem.Tick, gem.Events);
                 } break;
 
+                case MessageType.GrantControlMessage:
+                {
+                    GrantControlMessage gcm = (GrantControlMessage)message;
+                    Program.GameStateManager.TakeControl(gcm.ControlledIdentifier);
+                } break;
+
                 default:
                 {
                     Logging.Log("Unhandled message of type " + message.MessageType, Logging.LoggingLevel.Warning);

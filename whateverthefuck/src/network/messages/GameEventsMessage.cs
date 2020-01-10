@@ -15,6 +15,11 @@
             this.Events = events;
         }
 
+        public GameEventsMessage(GameEvent e)
+            : this(0, new GameEvent[] { e })
+        {
+        }
+
         public GameEventsMessage()
             : base(MessageType.GameEventMessage)
         {
