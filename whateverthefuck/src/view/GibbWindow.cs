@@ -10,6 +10,7 @@
     using OpenTK.Input;
     using QuickFont;
     using whateverthefuck.src.control;
+    using whateverthefuck.src.model;
     using whateverthefuck.src.util;
 
     internal class GibbWindow : GameWindow
@@ -31,6 +32,8 @@
 
             this.loadResetEvent = loadResetEvent;
         }
+
+        public EntityDrawingInfo EntityDrawingInfoCache { get; private set; }
 
         public static Matrix4 ProjectionMatrix { get; private set; }
 
@@ -106,6 +109,8 @@
 
                 drawAdapter.PopMatrix();
             }
+
+            this.EntityDrawingInfoCache = entityDrawing;
 
             //FontDrawing.RefreshBuffers();
             //FontDrawing.Draw();

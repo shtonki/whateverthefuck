@@ -13,16 +13,19 @@
 
         protected virtual Coordinate CurrentLocation { get; set; }
 
-        public void Lock()
+        // @fix maybe look at zoom when we fix zoom
+        public GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
         {
-            throw new NotImplementedException();
-            this.lockedLocation = this.CurrentLocation;
+            var x = gameCoordinate.X - Location.X;
+            var y = gameCoordinate.Y - Location.Y;
+            return new GLCoordinate(x, y);
         }
 
-        public void Unlock()
+        public GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
         {
-            throw new NotImplementedException();
-            this.lockedLocation = null;
+            return new GameCoordinate(
+                (glCoordinate.X / Zoom.CurrentZoom) + Location.X,
+                (glCoordinate.Y / Zoom.CurrentZoom) + Location.Y);
         }
     }
 

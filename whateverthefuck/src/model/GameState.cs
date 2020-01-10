@@ -487,7 +487,6 @@
         }
     }
 
-
     public class EntityDrawingInfo
     {
         public EntityDrawingInfo(Camera camera, List<EntityDrawable> entityDrawables)
@@ -497,8 +496,6 @@
         }
 
         public Camera Camera { get; }
-
-        public Guid id { get; }
 
         public List<EntityDrawable> EntityDrawables { get; }
     }

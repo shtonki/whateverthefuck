@@ -36,8 +36,6 @@
 
         public PlayerCharacter Hero { get; private set; }
 
-        private GUIComponent FocusedGUIComponent { get; set; }
-
         private Timer TickTimer { get; } // can't be removed or we stop moving after ~3 seconds
 
         private Lootable Looting { get; set; }
@@ -45,8 +43,6 @@
         private HeroMovementStruct HeroMovements { get; } = new HeroMovementStruct();
 
         private GameEntity TargetedEntity { get; set; }
-
-        private List<GUIComponent> ClickedDownGuiComponents { get; set; } = new List<GUIComponent>();
 
         private Inventory Inventory { get; set; } = new Inventory();
 
@@ -141,35 +137,43 @@
 
         public void HandleInput(InputUnion input)
         {
-            GUIComponent interactedGUIComponent = null;
-
-            if (input.Location != null)
+            if (GUI.HandleGUIInput(input))
             {
-                throw new NotImplementedException();
+                return;
+            }
+
+            if (input.IsMouseInput || input.IsMouseMove)
+            {
+                var gameLocation = this.GameState.CurrentCamera.GLToGameCoordinate(input.Location);
+
+                var entityIdentifier = GUI.EntityAt(gameLocation);
+
+                if (entityIdentifier != null)
+                {
+                    var entity = this.GameState.GetEntityById(entityIdentifier);
+
+                    if (entity != null)
+                    {
+                        this.TargetedEntity = entity;
+                    }
+                }
+            }
+            else if (input.IsKeyboardInput)
+            {
+                var action = Hotkeys.LookupHotkey(input);
+
+                if (action != GameAction.Undefined)
+                {
+                    this.ActivateAction(action);
+                }
+            }
+
 #if false
-              //interactedGUIComponent = this.FirstVisibleGUIComponentAt(input.Location.ToGLCoordinate());
-#endif
-            }
-
-            if (input.IsMouseInput && input.Direction == InputUnion.Directions.Down)
-            {
-                this.Focus(interactedGUIComponent);
-            }
-
-            if (interactedGUIComponent != null && !input.IsKeyboardInput)
-            {
-                interactedGUIComponent.HandleInput(input);
-            }
-            else if (this.FocusedGUIComponent != null)
-            {
-                this.FocusedGUIComponent.HandleInput(input);
-            }
             else
             {
                 if (input.IsMouseInput)
                 {
                     throw new NotImplementedException();
-#if false
                     var clickedEntity = this.GetEntityAtLocation(GUI.GLToGameCoordinate(input.Location));
 
                     if (clickedEntity != null)
@@ -185,18 +189,9 @@
                             interactWithMe.Interact();
                         }
                     }
-#endif
-                }
-                else if (input.IsKeyboardInput)
-                {
-                    var action = Hotkeys.LookupHotkey(input);
-
-                    if (action != GameAction.Undefined)
-                    {
-                        this.ActivateAction(action);
-                    }
-                }
             }
+        }
+#endif
         }
 
         public void Loot(Lootable lootee)
@@ -315,11 +310,6 @@
         private void AddLoot(Loot e, Item item)
         {
             e.Items.Add(item);
-        }
-
-        private void Focus(GUIComponent focused)
-        {
-            this.FocusedGUIComponent = focused;
         }
 
         private void BeginCastAbility(Ability ability)
@@ -453,19 +443,6 @@
             var picked = this.GameState.Intersects(mp);
             if (picked.Count() == 0) { return null; }
             return picked.First();
-        }
-
-        private GUIComponent FirstVisibleGUIComponentAt(GLCoordinate location)
-        {
-            foreach (var c in GUI.GUIComponents)
-            {
-                if (c.Contains(location) && c.Visible)
-                {
-                    return c;
-                }
-            }
-
-            return null;
         }
     }
 

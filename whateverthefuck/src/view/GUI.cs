@@ -5,6 +5,7 @@
     using System.Drawing;
     using System.Linq;
     using System.Threading;
+    using whateverthefuck.src.control;
     using whateverthefuck.src.model;
     using whateverthefuck.src.model.entities;
     using whateverthefuck.src.util;
@@ -12,13 +13,13 @@
 
     public static class GUI
     {
-        //public static Camera Camera { get; set; }
-
         public static GameState ForceToDrawGameState { get; set; }
 
         public static List<Drawable> DebugInfo { get; set; } = new List<Drawable>();
 
         public static List<GUIComponent> GUIComponents { get; set; } = new List<GUIComponent>();
+
+        private static GUIComponent FocusedComponent { get; set; }
 
         private static GibbWindow Frame { get; set; }
 
@@ -62,6 +63,33 @@
                 .Concat(DebugInfo)
                 ;
 #endif
+        }
+
+        public static bool HandleGUIInput(InputUnion input)
+        {
+            if (input.IsMouseMove || input.IsMouseInput)
+            {
+                var interactedGUIComponent = FirstVisibleGUIComponentAt(input.Location);
+
+                if (interactedGUIComponent != null)
+                {
+                    if (input.IsMouseInput && input.Direction == InputUnion.Directions.Down)
+                    {
+                        Focus(interactedGUIComponent);
+                    }
+
+                    interactedGUIComponent.HandleInput(input);
+                    return true;
+                }
+            }
+
+            if (FocusedComponent != null)
+            {
+                FocusedComponent.HandleInput(input);
+                return true;
+            }
+
+            return false;
         }
 
         public static void LoadGUI()
@@ -150,21 +178,20 @@
 
             GUIComponents.Add(textPanel);
         }
-#if false
-        public static GLCoordinate GameToGLCoordinate(GameCoordinate gameCoordinate)
+
+        public static EntityIdentifier EntityAt(GameCoordinate location)
         {
-            var x = gameCoordinate.X - Camera.Location.X;
-            var y = gameCoordinate.Y - Camera.Location.Y;
-            return new GLCoordinate(x, y);
+            foreach (var ed in Frame.EntityDrawingInfoCache.EntityDrawables)
+            {
+                if (ed.Contains(location))
+                {
+                    return ed.Identifier;
+                }
+            }
+
+            return null;
         }
 
-        public static GameCoordinate GLToGameCoordinate(GLCoordinate glCoordinate)
-        {
-            return new GameCoordinate(
-                (glCoordinate.X / Camera.Zoom.CurrentZoom) + Camera.Location.X,
-                (glCoordinate.Y / Camera.Zoom.CurrentZoom) + Camera.Location.Y);
-        }
-#endif
         private static void StepAllComponents()
         {
             foreach (var component in GUIComponents)
@@ -178,6 +205,25 @@
             ManualResetEventSlim loadre = (ManualResetEventSlim)o;
             Frame = new GibbWindow(loadre);
             Frame.Run(0, 0);
+        }
+
+        private static GUIComponent FirstVisibleGUIComponentAt(GLCoordinate location)
+        {
+            foreach (var c in GUIComponents)
+            {
+                if (c.Contains(location) && c.Visible)
+                {
+                    return c;
+                }
+            }
+
+            return null;
+        }
+
+        private static void Focus(GUIComponent focused)
+        {
+            // @add GainFocus and LostFocus events?
+            FocusedComponent = focused;
         }
     }
 }
