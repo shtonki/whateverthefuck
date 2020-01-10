@@ -3,6 +3,7 @@
     using System;
     using System.Drawing;
 
+    // @dubious entire class
     internal static class Coloring
     {
         // https://xkcd.com/221/

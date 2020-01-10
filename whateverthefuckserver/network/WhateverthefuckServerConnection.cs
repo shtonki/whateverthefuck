@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using whateverthefuck.src.network;
 using whateverthefuck.src.network.messages;
+using whateverthefuck.src.util;
 using whateverthefuckserver.users;
 
 namespace whateverthefuckserver.network
@@ -23,16 +24,10 @@ namespace whateverthefuckserver.network
         {
             switch (message.MessageType)
             {
-                case MessageType.LoginCredentialsMessage:
+                case MessageType.LoginMessage:
                 {
                     LoginMessage loginMessage = (LoginMessage)message;
                     LoginServer.Login(new User(this), new LoginCredentials(loginMessage.LoginCredentials.Username));         
-                } break;
-
-                case MessageType.UpdateGameStateMessage:
-                {
-                        UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
-                        Program.GameServer.HandleEventRequests(updateMessage.Events);
                 } break;
 
                 case MessageType.SyncMessage:
@@ -41,7 +36,10 @@ namespace whateverthefuckserver.network
                     Program.GameServer.InSync(syncMessage.SyncRecord.Tick, syncMessage.SyncRecord.Hash);
                 } break;
 
-                default: throw new NotImplementedException("Unhandled MessageType");
+                default:
+                {
+                    Logging.Log("Unhandled message of type " + message.MessageType, Logging.LoggingLevel.Warning);
+                } break;
             }
         }
     }

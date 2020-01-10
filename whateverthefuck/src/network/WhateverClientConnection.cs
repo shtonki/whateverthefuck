@@ -20,25 +20,10 @@
         {
             switch (message.MessageType)
             {
-                case MessageType.UpdateGameStateMessage:
+                default:
                 {
-                    UpdateGameStateMessage updateMessage = (UpdateGameStateMessage)message;
-                    Program.GameStateManager.UpdateGameState(updateMessage.Tick, updateMessage.Events);
+                    Logging.Log("Unhandled message of type " + message.MessageType, Logging.LoggingLevel.Warning);
                 } break;
-
-                case MessageType.GrantControlMessage:
-                {
-                    GrantControlMessage controlMessage = (GrantControlMessage)message;
-                    Program.GameStateManager.TakeControl(controlMessage.Id);
-                } break;
-
-                case MessageType.CreateLootMessage:
-                {
-                    CreateLootMessage loot = (CreateLootMessage)message;
-                    Program.GameStateManager.SpawnLoot(loot);
-                } break;
-
-                default: throw new NotImplementedException();
             }
         }
 

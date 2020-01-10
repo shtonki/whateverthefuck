@@ -75,17 +75,7 @@
                     return new ExampleMessage();
                 }
 
-                case MessageType.GrantControlMessage:
-                {
-                    return new GrantControlMessage();
-                }
-
-                case MessageType.UpdateGameStateMessage:
-                {
-                    return new UpdateGameStateMessage();
-                }
-
-                case MessageType.LoginCredentialsMessage:
+                case MessageType.LoginMessage:
                 {
                     return new LoginMessage();
                 }
@@ -93,11 +83,6 @@
                 case MessageType.SyncMessage:
                 {
                     return new SyncMessage();
-                }
-
-                case MessageType.CreateLootMessage:
-                {
-                    return new CreateLootMessage();
                 }
 
                 default: throw new NotImplementedException();
@@ -224,13 +209,16 @@
     {
         ExampleMessage,
 
-        UpdateGameStateMessage,
-        GrantControlMessage,
-        LoginCredentialsMessage,
+        LoginMessage,
+
         SyncMessage,
 
+        GrantControlMessage,
         CreateLootMessage,
+
+        GameEventMessage,
     }
+
 #if true
     public struct EntityLocationInfo
     {

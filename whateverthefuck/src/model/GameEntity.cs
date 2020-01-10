@@ -441,7 +441,7 @@
         /// <param name="gameState">Used to look up the GameEntity that killed this GameEntity.</param>
         protected virtual void Die(GameState gameState)
         {
-            this.OnDeath?.Invoke(this, gameState.GetEntityById(this.LastDamageTaken.AttackerId));
+            this.OnDeath?.Invoke(this, gameState.GetEntityById(this.LastDamageTaken.AttackerIdentifier));
             this.State = GameEntityState.Dead;
 
             this.ShowHealth = false;
@@ -526,6 +526,7 @@
         /// </summary>
         public float Direction { get; set; }
 
+        // @fix this should be an EntityIdentifier
         /// <summary>
         /// Gets or sets the id of the followed entity, or null if not following anything.
         /// </summary>

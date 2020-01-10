@@ -10,120 +10,68 @@
     /// </summary>
     public abstract class GameEvent
     {
+        protected GameEvent(GameEventType type)
+        {
+            this.Type = type;
+        }
+
         public GameEventType Type { get; protected set; }
-
-        public static GameEvent DecodeWithEventType(GameEventType type, byte[] body)
-        {
-            switch (type)
-            {
-                case GameEventType.Create:
-                {
-                    return new CreateEntityEvent(body);
-                }
-
-                case GameEventType.Destroy:
-                {
-                    return new DestroyEntityEvent(body);
-                }
-
-                case GameEventType.Control:
-                {
-                    return new UpdateMovementEvent(body);
-                }
-
-                case GameEventType.UseAbility:
-                {
-                    return new BeginCastAbilityEvent(body);
-                }
-
-                default: throw new Exception();
-            }
-        }
-
-        public virtual byte[] ToBytes()
-        {
-            throw new NotImplementedException("You shouldn't be sending this over the network.");
-        }
     }
 
     public class ApplyStatusEvent : GameEvent
     {
         public ApplyStatusEvent(GameEntity entity, Status appliedStatus)
+            : base(GameEventType.ApplyStatus)
         {
-            Entity = entity;
-            AppliedStatus = appliedStatus;
+            this.EntityIdentifier = entity.Identifier;
+            this.Status = appliedStatus;
         }
 
-        public GameEntity Entity { get; }
+        public EntityIdentifier EntityIdentifier { get; }
 
-        public Status AppliedStatus { get; }
-
+        public Status Status { get; }
     }
 
     public class BeginCastAbilityEvent : GameEvent
     {
         public BeginCastAbilityEvent(GameEntity caster, GameEntity target, Ability ability)
+            : base(GameEventType.UseAbility)
         {
-            this.Type = GameEventType.UseAbility;
-
-            this.CasterId = caster.Identifier.Id;
+            this.CasterIdentifier = caster.Identifier;
             this.AbilityType = ability.AbilityType;
-            this.TargetId = target.Identifier.Id;
+            this.TargetIdentifier = target.Identifier;
         }
 
-        public BeginCastAbilityEvent(IEnumerable<byte> bs)
-        {
-            this.Type = GameEventType.UseAbility;
-
-            this.CasterId = BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
-
-            this.AbilityType = (AbilityType)BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
-
-            this.TargetId = BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
-        }
-
-        public int CasterId { get; private set; }
-
+        // @consider changing this to the index of the ability within the casters ability array
         public AbilityType AbilityType { get; private set; }
 
-        public int TargetId { get; private set; }
+        public EntityIdentifier CasterIdentifier { get; private set; }
 
-        public override byte[] ToBytes()
-        {
-            return BitConverter.GetBytes(this.CasterId).Concat(
-                BitConverter.GetBytes((int)this.AbilityType).Concat(
-                BitConverter.GetBytes(this.TargetId)))
-                .ToArray();
-        }
+        public EntityIdentifier TargetIdentifier { get; private set; }
     }
 
     public class EndCastAbility : GameEvent
     {
         public EndCastAbility(GameEntity caster, GameEntity target, Ability ability)
+            : base(GameEventType.UseAbility)
         {
-            this.Type = GameEventType.UseAbility;
-
-            this.CasterId = caster.Identifier.Id;
+            this.CasterIdentifier = caster.Identifier;
             this.AbilityType = ability.AbilityType;
-            this.TargetId = target.Identifier.Id;
+            this.TargetIdentifier = target.Identifier;
         }
-
-        public int CasterId { get; private set; }
 
         public AbilityType AbilityType { get; private set; }
 
-        public int TargetId { get; private set; }
+        public EntityIdentifier CasterIdentifier { get; private set; }
+
+        public EntityIdentifier TargetIdentifier { get; private set; }
     }
 
     public class CreateEntityEvent : GameEvent
     {
         public CreateEntityEvent(GameEntity e)
+            : base(GameEventType.Create)
         {
-            this.Type = GameEventType.Create;
-
             this.Id = e.Identifier.Id;
             this.EntityType = e.EntityType;
             this.X = e.GameLocation.X;
@@ -141,33 +89,8 @@
             }
         }
 
-        public CreateEntityEvent(IEnumerable<byte> bs)
-        {
-            this.Type = GameEventType.Create;
-
-            this.Id = BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
-
-            this.EntityType = (EntityType)BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
-
-            this.X = BitConverter.ToSingle(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(float));
-
-            this.Y = BitConverter.ToSingle(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(float));
-
-            this.CurrentHealth = BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
-
-            this.MaxHealth = BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int));
-
-            this.CreationArgs = new CreationArgs(BitConverter.ToUInt64(bs.ToArray(), 0));
-            bs = bs.Skip(sizeof(long));
-        }
-
         public CreateEntityEvent(EntityIdentifier id, EntityType entityType, float x, float y, int currentHealth, int maxHealth, CreationArgs creationArgs)
+            : base(GameEventType.Create)
         {
             this.Id = id.Id;
             this.EntityType = entityType;
@@ -197,124 +120,56 @@
         public Action<GameEntity, GameEntity> OnDeathCallback { get; set; }
 
         public Action<GameEntity, GameState> OnStepCallback { get; set; }
-
-        public override byte[] ToBytes()
-        {
-            return BitConverter.GetBytes(this.Id).Concat(
-                BitConverter.GetBytes((int)this.EntityType).Concat(
-                BitConverter.GetBytes(this.X).Concat(
-                BitConverter.GetBytes(this.Y).Concat(
-                BitConverter.GetBytes(this.CurrentHealth).Concat(
-                BitConverter.GetBytes(this.MaxHealth).Concat(
-                BitConverter.GetBytes(this.CreationArgs.Value))))))).ToArray();
-        }
     }
 
     public class DealDamageEvent : GameEvent
     {
-        public DealDamageEvent(int attackerId, int defenderId, int damage)
-        {
-            this.AttackerId = attackerId;
-            this.DefenderId = defenderId;
-            this.Damage = damage;
-        }
-
         public DealDamageEvent(GameEntity attacker, GameEntity defender, int damage)
+            : base(GameEventType.Damage)
         {
             this.Type = GameEventType.Damage;
 
-            this.AttackerId = attacker.Identifier.Id;
-            this.DefenderId = defender.Identifier.Id;
+            this.AttackerIdentifier = attacker.Identifier;
+            this.DefenderIdentifier = defender.Identifier;
             this.Damage = damage;
         }
 
-        public DealDamageEvent(IEnumerable<byte> bs)
-        {
-            this.Type = GameEventType.Damage;
-            int bytec = 0;
+        public EntityIdentifier AttackerIdentifier { get; private set; }
 
-            this.AttackerId = BitConverter.ToInt32(bs.ToArray(), bytec);
-            bytec += sizeof(int);
-
-            this.DefenderId = BitConverter.ToInt32(bs.ToArray(), bytec);
-            bytec += sizeof(int);
-
-            this.Damage = BitConverter.ToInt32(bs.ToArray(), bytec);
-            bytec += sizeof(int);
-        }
-
-        public int AttackerId { get; private set; }
-
-        public int DefenderId { get; private set; }
+        public EntityIdentifier DefenderIdentifier { get; private set; }
 
         public int Damage { get; private set; }
 
-        public override byte[] ToBytes()
-        {
-            return BitConverter.GetBytes(this.AttackerId).Concat(
-                BitConverter.GetBytes(this.DefenderId).Concat(
-                BitConverter.GetBytes(this.Damage))).ToArray();
-        }
     }
 
     public class DestroyEntityEvent : GameEvent
     {
         public DestroyEntityEvent(GameEntity e)
+            : base(GameEventType.Destroy)
         {
-            this.Type = GameEventType.Destroy;
-
-            this.Id = e.Identifier.Id;
+            this.Identifier = e.Identifier;
         }
 
-        public DestroyEntityEvent(IEnumerable<byte> bs)
-        {
-            this.Type = GameEventType.Destroy;
-
-            this.Id = BitConverter.ToInt32(bs.ToArray(), 0);
-        }
-
-        public int Id { get; private set; }
-
-        public override byte[] ToBytes()
-        {
-            return BitConverter.GetBytes(this.Id).ToArray();
-        }
+        public EntityIdentifier Identifier { get; private set; }
     }
 
     public class UpdateMovementEvent : GameEvent
     {
         public UpdateMovementEvent(GameEntity entity)
-            : this(entity.Identifier.Id, entity.Movements)
+            : this(entity.Identifier, entity.Movements)
         {
         }
 
-        public UpdateMovementEvent(int id, MovementStruct movements)
+        public UpdateMovementEvent(EntityIdentifier id, MovementStruct movements)
+            : base(GameEventType.UpdateMovement)
         {
-            this.Type = GameEventType.Control;
-
-            this.Id = id;
+            this.Identifier = id;
             this.Movements = movements;
         }
 
-        public UpdateMovementEvent(IEnumerable<byte> bs)
-        {
-            this.Type = GameEventType.Control;
-
-            this.Id = BitConverter.ToInt32(bs.ToArray(), 0);
-            bs = bs.Skip(sizeof(int)).ToArray();
-            this.Movements = MovementStruct.Decode(bs.ToArray());
-        }
-
-        public int Id { get; private set; }
+        public EntityIdentifier Identifier { get; private set; }
 
         public MovementStruct Movements { get; private set; }
-
-        public override byte[] ToBytes()
-        {
-            return BitConverter.GetBytes(this.Id).Concat(
-                this.Movements.Encode())
-                .ToArray();
-        }
     }
 
     public enum GameEventType
@@ -323,7 +178,7 @@
 
         Create,
         Destroy,
-        Control,
+        UpdateMovement,
         Damage,
         ApplyStatus,
 

@@ -21,10 +21,11 @@ namespace whateverthefuckserver.gameserver
         private List<User> PlayingUsers = new List<User>();
         object PlayersLock = new object();
 
-        private List<GameEvent> PendingEvents = new List<GameEvent>();
         object EventsLock = new object();
 
         private SyncRecord SyncCity;
+
+        private List<GameEvent> PendingEvents { get; } = new List<GameEvent>();
 
         private SpawnCity SpawnCity { get; }
 
@@ -60,8 +61,9 @@ namespace whateverthefuckserver.gameserver
                 // broken?
                 GameState.HandleGameEvents(PendingEvents);
                 sendEvents = new List<GameEvent>(PendingEvents);
-                var message = new UpdateGameStateMessage(GameState.StepCounter, sendEvents);
-                SendMessageToAllPlayers(message);
+                throw new NotImplementedException();
+                // var message = new UpdateGameStateMessage(GameState.StepCounter, sendEvents);
+                // SendMessageToAllPlayers(message);
                 PendingEvents.Clear();
             }
 
@@ -74,11 +76,6 @@ namespace whateverthefuckserver.gameserver
             {
                 SyncCity = syncRecord;
             }
-        }
-
-        internal void HandleEventRequests(List<GameEvent> events)
-        {
-            PendEvents(events);
         }
 
         public void AddUser(User user)
@@ -97,7 +94,8 @@ namespace whateverthefuckserver.gameserver
 
             lock (PlayersLock)
             {
-                user.PlayerConnection.SendMessage(new UpdateGameStateMessage(0, events));
+                throw new NotImplementedException();
+                // user.PlayerConnection.SendMessage(new UpdateGameStateMessage(0, events));
                 PlayingUsers.Add(user);
             }
 
@@ -178,12 +176,15 @@ namespace whateverthefuckserver.gameserver
 
         private void SpawnPlayerCharacter(User user)
         {
+            throw new NotImplementedException();
+#if false
             var createEvent = SpawnCity.SpawnHero();
 
             user.HeroIdentifier = new EntityIdentifier(createEvent.Id);
             
             // send message to user granting control to created character
             user.PlayerConnection.SendMessage(new GrantControlMessage(createEvent.Id));
+#endif
         }
 
         private void SendMessageToAllPlayers(WhateverthefuckMessage message)

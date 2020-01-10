@@ -90,12 +90,12 @@
     <Compile Include="src\model\Item.cs" />
     <Compile Include="src\model\LineOfSight.cs" />
     <Compile Include="src\model\Status.cs" />
+    <Compile Include="src\network\messages\CreateLootMessage.cs" />
     <Compile Include="src\network\messages\ExampleMessage.cs" />
+    <Compile Include="src\network\messages\GameEventMessage.cs" />
     <Compile Include="src\network\messages\GrantControlMessage.cs" />
-    <Compile Include="src\network\messages\ItemMessages.cs" />
     <Compile Include="src\network\messages\LoginMessage.cs" />
     <Compile Include="src\network\messages\SyncMessage.cs" />
-    <Compile Include="src\network\messages\UpdateGameStateMessage.cs" />
     <Compile Include="src\network\messages\WhateverthefuckMessage.cs" />
     <Compile Include="src\network\LoginCredentials.cs" />
     <Compile Include="src\network\UserLogin.cs" />
@@ -187,6 +187,7 @@
   <ItemGroup>
     <None Include="Resources\item_banana.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

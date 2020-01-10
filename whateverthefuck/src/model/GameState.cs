@@ -90,7 +90,7 @@
             this.EntityDrawingInfo = new EntityDrawingInfo(cameraClone, visibleEntities);
         }
 
-        public GameEntity GetEntity(EntityIdentifier id)
+        public GameEntity GetEntityById(EntityIdentifier id)
         {
             return this.EntityList.Find(e => e.Identifier.Id == id.Id);
         }
@@ -256,22 +256,38 @@
 
         private void HandleEvent(ApplyStatusEvent applyStatusEvent)
         {
-            applyStatusEvent.Entity.ApplyStatus(applyStatusEvent.AppliedStatus);
+            var entity = this.GetEntityById(applyStatusEvent.EntityIdentifier);
+
+            if (entity != null)
+            {
+                entity.ApplyStatus(applyStatusEvent.Status);
+            }
+            else
+            {
+                Logging.Log("Tried to apply status to non-existant entity");
+            }
         }
 
         private void HandleEvent(BeginCastAbilityEvent beginCastAbility)
         {
-            var caster = this.GetEntityById(beginCastAbility.CasterId);
-            var target = this.GetEntityById(beginCastAbility.TargetId);
+            var caster = this.GetEntityById(beginCastAbility.CasterIdentifier);
+            var target = this.GetEntityById(beginCastAbility.TargetIdentifier);
             var ability = caster.Ability(beginCastAbility.AbilityType);
 
-            caster.CastAbility(ability, target);
+            if (caster != null && target != null)
+            {
+                caster.CastAbility(ability, target);
+            }
+            else
+            {
+                Logging.Log("Tried to cast from or on non-existant entity");
+            }
         }
 
         private void HandleEvent(EndCastAbility endCastAbilityEvent)
         {
-            var caster = this.GetEntityById(endCastAbilityEvent.CasterId);
-            var castee = this.GetEntityById(endCastAbilityEvent.TargetId);
+            var caster = this.GetEntityById(endCastAbilityEvent.CasterIdentifier);
+            var castee = this.GetEntityById(endCastAbilityEvent.TargetIdentifier);
 
             if (caster == null || castee == null)
             {
@@ -299,7 +315,7 @@
 
         private void HandleEvent(UpdateMovementEvent updateMovementEvent)
         {
-            var entity = this.GetEntityById(updateMovementEvent.Id);
+            var entity = this.GetEntityById(updateMovementEvent.Identifier);
 
             if (entity == null)
             {
@@ -312,7 +328,7 @@
 
         private void HandleEvent(DealDamageEvent dealDamageEvent)
         {
-            var defender = this.GetEntityById(dealDamageEvent.DefenderId);
+            var defender = this.GetEntityById(dealDamageEvent.DefenderIdentifier);
 
             defender.CurrentHealth -= dealDamageEvent.Damage;
             if (defender.CurrentHealth < 0)
@@ -323,11 +339,11 @@
 
             if (Program.GameStateManager.Hero != null)
             {
-                if (dealDamageEvent.AttackerId == Program.GameStateManager.Hero.Identifier.Id)
+                if (dealDamageEvent.AttackerIdentifier.Id == Program.GameStateManager.Hero.Identifier.Id)
                 {
                     GUI.AddDamageText(defender.Center, dealDamageEvent.Damage.ToString(), Color.Orange);
                 }
-                else if (dealDamageEvent.DefenderId == Program.GameStateManager.Hero.Identifier.Id)
+                else if (dealDamageEvent.DefenderIdentifier.Id == Program.GameStateManager.Hero.Identifier.Id)
                 {
                     GUI.AddDamageText(defender.Center, dealDamageEvent.Damage.ToString(), Color.DarkRed);
                 }
@@ -348,8 +364,16 @@
 
         private void HandleEvent(DestroyEntityEvent destroyEntityEvent)
         {
-            var entity = this.GetEntityById(destroyEntityEvent.Id);
-            this.RemoveEntity(entity);
+            var entity = this.GetEntityById(destroyEntityEvent.Identifier);
+
+            if (entity != null)
+            {
+                this.RemoveEntity(entity);
+            }
+            else
+            {
+                Logging.Log("Tried to remove non-existant entity", Logging.LoggingLevel.Error);
+            }
         }
 
         private void AddEntities(params GameEntity[] entities)

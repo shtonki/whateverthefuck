@@ -10,7 +10,7 @@ namespace whateverthefuck.src.model.entities
         {
             if (npc.LastDamageTaken != null)
             {
-                var target = gameState.GetEntityById(npc.LastDamageTaken.AttackerId);
+                var target = gameState.GetEntityById(npc.LastDamageTaken.AttackerIdentifier);
                 var castableAbilities = npc.CastableAbilities(target, gameState);
 
                 if (castableAbilities.Count() > 0)
@@ -19,8 +19,8 @@ namespace whateverthefuck.src.model.entities
                 }
 
                 MovementStruct ms = new MovementStruct();
-                ms.FollowId = npc.LastDamageTaken.AttackerId;
-                return new UpdateMovementEvent(npc.Identifier.Id, ms);
+                ms.FollowId = npc.LastDamageTaken.AttackerIdentifier.Id;
+                return new UpdateMovementEvent(npc.Identifier, ms);
             }
 
             return null;

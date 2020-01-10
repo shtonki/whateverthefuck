@@ -112,13 +112,20 @@
             this.GameState.CurrentCamera = new FollowCamera(this.Hero);
         }
 
-        public void SpawnLoot(CreateLootMessage message)
+        public void SpawnLoot(EntityIdentifier looteeIdentifier, IEnumerable<Item> items)
           {
-            var lootee = this.GameState.GetEntity(message.LooteeId) as Lootable;
+            var lootee = this.GameState.GetEntityById(looteeIdentifier) as Lootable;
 
-            foreach (var item in message.Items)
+            if (lootee != null)
             {
-                lootee.AddLoot(item);
+                foreach (var item in items)
+                {
+                    lootee.AddLoot(item);
+                }
+            }
+            else
+            {
+                Logging.Log("Tried adding loot to non-existant Lootable");
             }
         }
 
@@ -298,8 +305,10 @@
 
             if (!ms.Direction.Equals(this.PrevDirection))
             {
-                var e = new UpdateMovementEvent(this.Hero.Identifier.Id, ms);
-                Program.ServerConnection.SendMessage(new UpdateGameStateMessage(0, e));
+                var e = new UpdateMovementEvent(this.Hero.Identifier, ms);
+
+                throw new NotImplementedException();
+                //Program.ServerConnection.SendMessage(new UpdateGameStateMessage(0, e));
             }
 
             this.PrevDirection = ms.Direction;
@@ -324,8 +333,9 @@
                 return;
             }
 
-            Program.ServerConnection.SendMessage(
-                new UpdateGameStateMessage(0, new BeginCastAbilityEvent(this.Hero, target, ability)));
+            throw new NotImplementedException();
+
+            // Program.ServerConnection.SendMessage(new UpdateGameStateMessage(0, new BeginCastAbilityEvent(this.Hero, target, ability)));
         }
 
         private void ActivateAction(GameAction gameAction)

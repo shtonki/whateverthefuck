@@ -6,12 +6,12 @@
     public class LoginMessage : WhateverthefuckMessage
     {
         public LoginMessage()
-            : base(MessageType.LoginCredentialsMessage)
+            : base(MessageType.LoginMessage)
         {
         }
 
         public LoginMessage(LoginCredentials loginCredentials)
-            : base(MessageType.LoginCredentialsMessage)
+            : base(MessageType.LoginMessage)
         {
             this.LoginCredentials = loginCredentials;
         }
