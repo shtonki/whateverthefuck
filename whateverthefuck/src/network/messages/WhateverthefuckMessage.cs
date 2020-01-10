@@ -70,6 +70,11 @@
         {
             switch (type)
             {
+                case MessageType.GameEventMessage:
+                {
+                    return new GameEventsMessage();
+                }
+
                 case MessageType.ExampleMessage:
                 {
                     return new ExampleMessage();
@@ -83,6 +88,11 @@
                 case MessageType.SyncMessage:
                 {
                     return new SyncMessage();
+                }
+
+                case MessageType.GrantControlMessage:
+                {
+                    return new GrantControlMessage();
                 }
 
                 default: throw new NotImplementedException();

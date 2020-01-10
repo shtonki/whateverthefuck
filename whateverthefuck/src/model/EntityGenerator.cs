@@ -58,7 +58,7 @@
 
         public GameEntity GenerateEntity(CreateEntityEvent e)
         {
-            var rt = this.GenerateEntity(e.EntityType, new EntityIdentifier(e.Id), e.CreationArgs);
+            var rt = this.GenerateEntity(e.EntityType, e.Id, e.CreationArgs);
             rt.GameLocation = new GameCoordinate(e.X, e.Y);
             rt.CurrentHealth = e.CurrentHealth;
             rt.MaxHealth = e.MaxHealth;

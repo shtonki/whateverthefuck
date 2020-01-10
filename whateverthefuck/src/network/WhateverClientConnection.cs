@@ -20,6 +20,12 @@
         {
             switch (message.MessageType)
             {
+                case MessageType.GameEventMessage:
+                {
+                    GameEventsMessage gem = (GameEventsMessage)message;
+                    Program.GameStateManager.UpdateGameState(gem.Tick, gem.Events);
+                } break;
+
                 default:
                 {
                     Logging.Log("Unhandled message of type " + message.MessageType, Logging.LoggingLevel.Warning);

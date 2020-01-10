@@ -25,8 +25,9 @@
 
         public override void Decode(WhateverDecoder decoder)
         {
-            this.SyncRecord = new SyncRecord();
-            this.SyncRecord.Decode(decoder);
+            var record = new SyncRecord();
+            record.Decode(decoder);
+            this.SyncRecord = record;
         }
     }
 

@@ -1,14 +1,12 @@
 ﻿namespace whateverthefuck.src.model
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using whateverthefuck.src.util;
 
     /// <summary>
     /// Represents an event which alters a GameState.
     /// </summary>
-    public abstract class GameEvent
+    public abstract class GameEvent : IEncodable
     {
         protected GameEvent(GameEventType type)
         {
@@ -16,6 +14,32 @@
         }
 
         public GameEventType Type { get; protected set; }
+
+        public static GameEvent FromType(GameEventType type)
+        {
+            switch (type)
+            {
+                case GameEventType.Create:
+                {
+                    return new CreateEntityEvent();
+                } break;
+
+                default:
+                {
+                    throw new Exception();
+                } break;
+            }
+        }
+
+        public virtual void Encode(WhateverEncoder encoder)
+        {
+            Logging.Log(this.Type + " doesn't encode", Logging.LoggingLevel.Error);
+        }
+
+        public virtual void Decode(WhateverDecoder decoder)
+        {
+            Logging.Log(this.Type + "doesn't decode", Logging.LoggingLevel.Error);
+        }
     }
 
     public class ApplyStatusEvent : GameEvent
@@ -72,7 +96,7 @@
         public CreateEntityEvent(GameEntity e)
             : base(GameEventType.Create)
         {
-            this.Id = e.Identifier.Id;
+            this.Id = e.Identifier;
             this.EntityType = e.EntityType;
             this.X = e.GameLocation.X;
             this.Y = e.GameLocation.Y;
@@ -92,7 +116,7 @@
         public CreateEntityEvent(EntityIdentifier id, EntityType entityType, float x, float y, int currentHealth, int maxHealth, CreationArgs creationArgs)
             : base(GameEventType.Create)
         {
-            this.Id = id.Id;
+            this.Id = id;
             this.EntityType = entityType;
             this.X = x;
             this.Y = y;
@@ -101,7 +125,12 @@
             this.CreationArgs = creationArgs;
         }
 
-        public int Id { get; private set; }
+        public CreateEntityEvent()
+            : base(GameEventType.Create)
+        {
+        }
+
+        public EntityIdentifier Id { get; private set; }
 
         public EntityType EntityType { get; private set; }
 
@@ -120,6 +149,28 @@
         public Action<GameEntity, GameEntity> OnDeathCallback { get; set; }
 
         public Action<GameEntity, GameState> OnStepCallback { get; set; }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode(this.Id.Id);
+            encoder.Encode((int)this.EntityType);
+            encoder.Encode(this.X);
+            encoder.Encode(this.Y);
+            encoder.Encode(this.MaxHealth);
+            encoder.Encode(this.CurrentHealth);
+            encoder.Encode(this.CreationArgs.Value);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.Id = new EntityIdentifier(decoder.DecodeInt());
+            this.EntityType = (EntityType)decoder.DecodeInt();
+            this.X = decoder.DecodeFloat();
+            this.Y = decoder.DecodeFloat();
+            this.MaxHealth = decoder.DecodeInt();
+            this.CurrentHealth = decoder.DecodeInt();
+            this.CreationArgs = new CreationArgs(decoder.DecodeULong());
+        }
     }
 
     public class DealDamageEvent : GameEvent

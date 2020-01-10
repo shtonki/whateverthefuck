@@ -12,16 +12,21 @@ namespace whateverthefuck.src.network.messages
             this.ControlledIdentifier = controlledIdentifier;
         }
 
-        public EntityIdentifier ControlledIdentifier { get; private set; }
-
-        public override void Decode(WhateverDecoder decoder)
+        public GrantControlMessage()
+            : base(MessageType.GrantControlMessage)
         {
-            throw new NotImplementedException();
         }
+
+        public EntityIdentifier ControlledIdentifier { get; private set; }
 
         public override void Encode(WhateverEncoder encoder)
         {
-            throw new NotImplementedException();
+            encoder.Encode(this.ControlledIdentifier.Id);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.ControlledIdentifier = new EntityIdentifier(decoder.DecodeInt());
         }
     }
 }

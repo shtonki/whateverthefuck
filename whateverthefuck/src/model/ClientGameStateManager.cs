@@ -97,7 +97,6 @@
             }
         }
 
-
         /// <summary>
         /// Grants the player control of a GameEntity.
         /// </summary>

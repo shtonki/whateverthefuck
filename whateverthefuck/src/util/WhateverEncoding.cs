@@ -39,6 +39,11 @@
             this.AppendBytes(BitConverter.GetBytes(value));
         }
 
+        public void Encode(ulong value)
+        {
+            this.AppendBytes(BitConverter.GetBytes(value));
+        }
+
         public void Encode(string value)
         {
             this.AppendBytes(System.Text.Encoding.UTF8.GetBytes(value));
@@ -95,6 +100,14 @@
         {
             long returnVal = BitConverter.ToInt64(this.bytes, this.position);
             this.position += sizeof(long);
+
+            return returnVal;
+        }
+
+        public ulong DecodeULong()
+        {
+            ulong returnVal = BitConverter.ToUInt64(this.bytes, this.position);
+            this.position += sizeof(ulong);
 
             return returnVal;
         }

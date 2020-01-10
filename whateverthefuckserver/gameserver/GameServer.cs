@@ -61,9 +61,8 @@ namespace whateverthefuckserver.gameserver
                 // broken?
                 GameState.HandleGameEvents(PendingEvents);
                 sendEvents = new List<GameEvent>(PendingEvents);
-                throw new NotImplementedException();
-                // var message = new UpdateGameStateMessage(GameState.StepCounter, sendEvents);
-                // SendMessageToAllPlayers(message);
+                var message = new GameEventsMessage(GameState.StepCounter, sendEvents);
+                SendMessageToAllPlayers(message);
                 PendingEvents.Clear();
             }
 
@@ -94,8 +93,7 @@ namespace whateverthefuckserver.gameserver
 
             lock (PlayersLock)
             {
-                throw new NotImplementedException();
-                // user.PlayerConnection.SendMessage(new UpdateGameStateMessage(0, events));
+                user.PlayerConnection.SendMessage(new GameEventsMessage(0, events));
                 PlayingUsers.Add(user);
             }
 
@@ -176,15 +174,12 @@ namespace whateverthefuckserver.gameserver
 
         private void SpawnPlayerCharacter(User user)
         {
-            throw new NotImplementedException();
-#if false
             var createEvent = SpawnCity.SpawnHero();
 
-            user.HeroIdentifier = new EntityIdentifier(createEvent.Id);
+            user.HeroIdentifier = createEvent.Id;
             
             // send message to user granting control to created character
             user.PlayerConnection.SendMessage(new GrantControlMessage(createEvent.Id));
-#endif
         }
 
         private void SendMessageToAllPlayers(WhateverthefuckMessage message)
