@@ -24,6 +24,11 @@
                     return new UpdateMovementEvent();
                 }
 
+                case GameEventType.UseAbility:
+                {
+                    return new BeginCastAbilityEvent();
+                }
+
                 case GameEventType.Create:
                 {
                     return new CreateEntityEvent();
@@ -63,6 +68,11 @@
 
     public class BeginCastAbilityEvent : GameEvent
     {
+        public BeginCastAbilityEvent()
+            : base(GameEventType.UseAbility)
+        {
+        }
+
         public BeginCastAbilityEvent(GameEntity caster, GameEntity target, Ability ability)
             : base(GameEventType.UseAbility)
         {
@@ -77,6 +87,20 @@
         public EntityIdentifier CasterIdentifier { get; private set; }
 
         public EntityIdentifier TargetIdentifier { get; private set; }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode((int)this.AbilityType);
+            encoder.Encode(this.CasterIdentifier.Id);
+            encoder.Encode(this.TargetIdentifier.Id);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.AbilityType = (AbilityType)decoder.DecodeInt();
+            this.CasterIdentifier = new EntityIdentifier(decoder.DecodeInt());
+            this.TargetIdentifier = new EntityIdentifier(decoder.DecodeInt());
+        }
     }
 
     public class EndCastAbility : GameEvent

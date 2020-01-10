@@ -321,9 +321,7 @@
                 return;
             }
 
-            throw new NotImplementedException();
-
-            // Program.ServerConnection.SendMessage(new UpdateGameStateMessage(0, new BeginCastAbilityEvent(this.Hero, target, ability)));
+            Program.ServerConnection.SendMessage(new GameEventsMessage(new BeginCastAbilityEvent(this.Hero, target, ability)));
         }
 
         private void ActivateAction(GameAction gameAction)
