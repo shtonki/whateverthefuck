@@ -303,7 +303,7 @@
                 CreateEntityEvent projectileCreationEvent = ability.Cast(caster);
                 var projectile = (Projectile)this.EntityGenerator.GenerateEntity(projectileCreationEvent);
                 projectile.Center = caster.Center;
-                projectile.Movements.FollowId = castee.Identifier.Id;
+                projectile.Movements.FollowId = castee.Identifier;
                 projectile.ResolveEvents = ability.Resolve(caster, castee);
                 this.AddEntities(projectile);
             }

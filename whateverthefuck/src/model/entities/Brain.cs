@@ -19,7 +19,7 @@ namespace whateverthefuck.src.model.entities
                 }
 
                 MovementStruct ms = new MovementStruct();
-                ms.FollowId = npc.LastDamageTaken.AttackerIdentifier.Id;
+                ms.FollowId = npc.LastDamageTaken.AttackerIdentifier;
                 return new UpdateMovementEvent(npc.Identifier, ms);
             }
 

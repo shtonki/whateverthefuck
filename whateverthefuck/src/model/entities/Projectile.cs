@@ -38,7 +38,7 @@
 
             if (this.Movements.IsFollowing)
             {
-                var followed = gameState.GetEntityById(this.Movements.FollowId.Value);
+                var followed = gameState.GetEntityById(this.Movements.FollowId);
 
                 if (followed == null)
                 {

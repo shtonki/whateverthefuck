@@ -383,9 +383,9 @@
                 return new GameCoordinate(0, 0);
             }
 
-            if (this.Movements.FollowId.HasValue)
+            if (this.Movements.IsFollowing)
             {
-                var followed = gameState.GetEntityById(this.Movements.FollowId.Value);
+                var followed = gameState.GetEntityById(this.Movements.FollowId);
 
                 if (followed != null)
                 {
@@ -454,7 +454,7 @@
         /// <summary>
         /// Gets or sets the id of the followed entity, or null if not following anything.
         /// </summary>
-        public int? FollowId { get; set; }
+        public EntityIdentifier FollowId { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the GameEntity is moving in a direction.
@@ -464,7 +464,7 @@
         /// <summary>
         /// Gets a value indicating whether the GameEntity is following another GameEntity.
         /// </summary>
-        public bool IsFollowing => this.FollowId.HasValue;
+        public bool IsFollowing => this.FollowId != null;
 
         /// <summary>
         /// Gets a value indicating whether the GameEntity is moving at all.
@@ -474,17 +474,14 @@
         public void Encode(WhateverEncoder encoder)
         {
             encoder.Encode(this.Direction);
-            encoder.Encode(this.FollowId.HasValue ? this.FollowId.Value : 0);
+            encoder.Encode(this.FollowId != null ? this.FollowId.Id : 0);
         }
 
         public void Decode(WhateverDecoder decoder)
         {
             this.Direction = decoder.DecodeFloat();
             var val = decoder.DecodeInt();
-            if (val != 0)
-            {
-                this.FollowId = val;
-            }
+            this.FollowId = val == 0 ? null : new EntityIdentifier(val);
         }
     }
 
