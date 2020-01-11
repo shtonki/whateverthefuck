@@ -36,7 +36,7 @@
 
                 default:
                 {
-                    throw new Exception();
+                    throw new Exception("Unexpectedly received a " + type);
                 }
             }
         }

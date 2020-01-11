@@ -81,6 +81,11 @@
                     interactedGUIComponent.HandleInput(input);
                     return true;
                 }
+                else
+                {
+                    Focus(null);
+                    return false;
+                }
             }
 
             if (FocusedComponent != null)

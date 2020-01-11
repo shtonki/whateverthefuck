@@ -80,6 +80,11 @@
                     return new ExampleMessage();
                 }
 
+                case MessageType.CreateLootMessage:
+                {
+                    return new CreateLootMessage();
+                }
+
                 case MessageType.LoginMessage:
                 {
                     return new LoginMessage();

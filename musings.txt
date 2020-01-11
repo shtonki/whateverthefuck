@@ -10,6 +10,7 @@ Known bug: We sometimes don't realize we sync on the same tick since either the 
 
 Known bug: We can begin casting an ability when we're dead but it makes no progress.
 
+Known bug: We get weird af disagreements on syncs because A: we send the wrong tick, and B: we think that two SyncRecords which actually agree disagree
 
 
 T O D O

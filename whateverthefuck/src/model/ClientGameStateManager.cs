@@ -156,6 +156,11 @@
                     {
                         this.TargetedEntity = entity;
                     }
+
+                    if (entity is IInteractable)
+                    {
+                        (entity as IInteractable).Interact();
+                    }
                 }
             }
             else if (input.IsKeyboardInput)
@@ -418,7 +423,7 @@
 
         private void UpdateLOS()
         {
-#if false
+#if true
             var inLOS = LineOfSight.CheckLOS(this.Hero, this.GameState.AllEntities);
 
             foreach (var e in inLOS)

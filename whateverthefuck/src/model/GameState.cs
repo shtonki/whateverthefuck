@@ -84,7 +84,7 @@
                 return;
             }
 
-            var visibleEntities = this.AllEntities.Select(e => new EntityDrawable(e)).ToList();
+            var visibleEntities = this.AllEntities.Where(e => e.Visible).Select(e => new EntityDrawable(e)).ToList();
             var cameraClone = new StaticCamera(new GameCoordinate(this.CurrentCamera.Location.X, this.CurrentCamera.Location.Y));
 
             this.EntityDrawingInfo = new EntityDrawingInfo(cameraClone, visibleEntities);

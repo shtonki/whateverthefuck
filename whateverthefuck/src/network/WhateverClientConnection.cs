@@ -26,6 +26,12 @@
                     Program.GameStateManager.UpdateGameState(gem.Tick, gem.Events);
                 } break;
 
+                case MessageType.CreateLootMessage:
+                {
+                    CreateLootMessage clm = (CreateLootMessage)message;
+                    Program.GameStateManager.SpawnLoot(clm.LooteeId, clm.Items);
+                } break;
+
                 case MessageType.GrantControlMessage:
                 {
                     GrantControlMessage gcm = (GrantControlMessage)message;

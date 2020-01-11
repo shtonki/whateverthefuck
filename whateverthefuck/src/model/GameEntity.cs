@@ -169,6 +169,10 @@
 
         public GameEntityState State { get; protected set; }
 
+        public bool Visible { get; set; } = true;
+
+        public Sprite Sprite { get; protected set; } = new Sprite(SpriteID.testSprite1);
+
         public Color HighlightColor { get; set; } = Color.Transparent;
 
         protected CastingInfo CastingInfo { get; set; }

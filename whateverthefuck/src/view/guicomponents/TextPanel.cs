@@ -55,10 +55,7 @@
                 this.Visible = false;
             }
 
-            throw new NotImplementedException();
-#if false
-            this.Location = GUI.GameToGLCoordinate(this.entityLocation) + new GLCoordinate(0, 0.005f * this.counter);
-#endif
+            this.Location = Program.GameStateManager.GameState.CurrentCamera.GameToGLCoordinate(this.entityLocation) + new GLCoordinate(0, 0.005f * this.counter);
         }
     }
 }
