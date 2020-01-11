@@ -245,7 +245,7 @@
         {
         }
 
-        public UpdateMovementEvent(EntityIdentifier id, MovementStruct movements)
+        public UpdateMovementEvent(EntityIdentifier id, MovementContainer movements)
             : base(GameEventType.UpdateMovement)
         {
             this.Identifier = id;
@@ -254,7 +254,7 @@
 
         public EntityIdentifier Identifier { get; private set; }
 
-        public MovementStruct Movements { get; private set; }
+        public MovementContainer Movements { get; private set; }
 
         public override void Encode(WhateverEncoder encoder)
         {
@@ -265,7 +265,7 @@
         public override void Decode(WhateverDecoder decoder)
         {
             this.Identifier = new EntityIdentifier(decoder.DecodeInt());
-            var movements = new MovementStruct();
+            var movements = new MovementContainer();
             movements.Decode(decoder);
             this.Movements = movements;
         }

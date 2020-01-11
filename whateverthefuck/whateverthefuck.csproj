@@ -89,6 +89,7 @@
     <Compile Include="src\model\Inventory.cs" />
     <Compile Include="src\model\Item.cs" />
     <Compile Include="src\model\LineOfSight.cs" />
+    <Compile Include="src\model\MovementContainer.cs" />
     <Compile Include="src\model\Status.cs" />
     <Compile Include="src\network\messages\CreateLootMessage.cs" />
     <Compile Include="src\network\messages\ExampleMessage.cs" />

@@ -231,7 +231,7 @@
 
         private void HandleHeroMovement()
         {
-            MovementStruct ms = new MovementStruct();
+            MovementContainer newMovements = new MovementContainer();
 
             double direction = 0;
 
@@ -270,21 +270,21 @@
 
             if (direction == 0)
             {
-                ms.Direction = float.NaN;
+                newMovements.Direction = float.NaN;
             }
             else
             {
-                ms.Direction = (float)direction;
+                newMovements.Direction = (float)direction;
             }
 
-            if (!ms.Direction.Equals(this.PrevDirection))
+            if (!newMovements.Direction.Equals(this.PrevDirection))
             {
-                var e = new UpdateMovementEvent(this.Hero.Identifier, ms);
+                var e = new UpdateMovementEvent(this.Hero.Identifier, newMovements);
 
                 Program.ServerConnection.SendMessage(new GameEventsMessage(e));
             }
 
-            this.PrevDirection = ms.Direction;
+            this.PrevDirection = newMovements.Direction;
         }
 
         private void AddLoot(Loot e, Item item)

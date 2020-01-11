@@ -317,36 +317,6 @@
             <param name="gameState">The GameState in which to calculate movement.</param>
             <returns>The Coordinate of the next movement to be made.</returns>
         </member>
-        <member name="T:whateverthefuck.src.model.MovementStruct">
-            <summary>
-            Contains the movement info of a GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.MovementStruct.Direction">
-            <summary>
-            Gets or sets the direction of movement in radians, or NaN if not moving directionally.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.MovementStruct.FollowId">
-            <summary>
-            Gets or sets the id of the followed entity, or null if not following anything.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.MovementStruct.IsDirectional">
-            <summary>
-            Gets a value indicating whether the GameEntity is moving in a direction.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.MovementStruct.IsFollowing">
-            <summary>
-            Gets a value indicating whether the GameEntity is following another GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.MovementStruct.IsMoving">
-            <summary>
-            Gets a value indicating whether the GameEntity is moving at all.
-            </summary>
-        </member>
         <member name="T:whateverthefuck.src.model.EntityIdentifier">
             <summary>
             Uniquely identifies a GameEntity within a GameState.
@@ -387,6 +357,21 @@
         <member name="T:whateverthefuck.src.model.IdentifierGenerator">
             <summary>
             Uniquely identifies a GameEntity within a GameState.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.model.MovementContainer.Direction">
+            <summary>
+            Gets or sets the direction of movement in radians, or NaN if not moving directionally.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.model.MovementContainer.FollowId">
+            <summary>
+            Gets or sets the id of the followed entity, or null if not following anything.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.model.MovementContainer.IsMoving">
+            <summary>
+            Gets a value indicating whether the GameEntity is moving at all.
             </summary>
         </member>
         <member name="M:whateverthefuck.src.util.ImageLoader.GetBinding(whateverthefuck.src.util.SpriteID)">
