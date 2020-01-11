@@ -184,86 +184,6 @@
         /// </summary>
         protected bool ShowHealth { get; set; } = false;
 
-#if false
-        /// <summary>
-        /// The function used to draw the GameEntity.
-        /// </summary>
-        /// <param name="drawAdapter">The DrawAdapter used to draw the GameEntity.</param>
-        public override void DrawMe(DrawAdapter drawAdapter)
-        {
-            float x1 = 0;
-            float y1 = 0;
-            float x2 = x1 + this.Size.X;
-            float y2 = y1 + this.Size.Y;
-
-            if (this.Sprite != null)
-            {
-                drawAdapter.DrawSprite(x1, y1, x2, y2, this.Sprite);
-            }
-            else
-            {
-                drawAdapter.FillRectangle(x1, y1, x2, y2, this.DrawColor);
-            }
-
-            if (this.HighlightColor != Color.Transparent)
-            {
-                Rectangle r = new view.Rectangle(x1, y1, this.Size.X, this.Size.Y, this.HighlightColor);
-                r.DrawMe(drawAdapter);
-            }
-
-            if (this.CastingInfo != null)
-            {
-                float castingPercentage = this.CastingInfo.PercentageDone;
-
-                var xorg = HealthbarWidth / 2;
-                var xoffset = this.Size.X / 2;
-
-                var currentHealthBar = new view.Rectangle(
-                    -xorg + xoffset,
-                    0,
-                    HealthbarWidth * castingPercentage,
-                    HealthbarHeight,
-                    Color.Gold);
-
-                var maxHealthBar = new view.Rectangle(
-                    -xorg + xoffset,
-                    0,
-                    HealthbarWidth,
-                    HealthbarHeight,
-                    Color.DarkGray);
-
-                maxHealthBar.DrawMe(drawAdapter);
-                currentHealthBar.DrawMe(drawAdapter);
-            }
-
-            if (this.ShowHealth)
-            {
-                float healthPercentage = (float)this.CurrentHealth / this.MaxHealth;
-
-                var xorg = HealthbarWidth / 2;
-                var xoffset = this.Size.X / 2;
-
-                var currentHealthBar = new view.Rectangle(
-                    -xorg + xoffset,
-                    this.Size.Y,
-                    HealthbarWidth * healthPercentage,
-                    HealthbarHeight,
-                    Color.Green);
-
-                var maxHealthBar = new view.Rectangle(
-                    -xorg + xoffset,
-                    this.Size.Y,
-                    HealthbarWidth,
-                    HealthbarHeight,
-                    Color.Red);
-
-                maxHealthBar.DrawMe(drawAdapter);
-                currentHealthBar.DrawMe(drawAdapter);
-            }
-        }
-
-#endif
-
         /// <summary>
         /// Steps the GameEntity advancing its state by one (1) tick.
         /// </summary>
@@ -566,49 +486,6 @@
                 this.FollowId = val;
             }
         }
-
-#if false
-        /// <summary>
-        /// Decodes an array of bytes into a MovementStruct.
-        /// </summary>
-        /// <param name="bs">The bytes to decode.</param>
-        /// <returns>The decoded MovementStruct.</returns>
-        public static MovementStruct Decode(byte[] bs)
-        {
-            IEnumerable<byte> bytes = bs;
-            bool isFollow = BitConverter.ToBoolean(bytes.ToArray(), 0);
-            bytes = bytes.Skip(sizeof(bool));
-
-            var ms = new MovementStruct();
-
-            if (isFollow)
-            {
-                ms.FollowId = BitConverter.ToInt32(bytes.ToArray(), 0);
-            }
-            else
-            {
-                ms.Direction = BitConverter.ToSingle(bytes.ToArray(), 0);
-            }
-
-            return ms;
-        }
-
-        /// <summary>
-        /// Encodes a MovementStruct into a byte[].
-        /// </summary>
-        /// <returns>The bytes representing the MovementStruct.</returns>
-        public byte[] Encode()
-        {
-            if (this.FollowId.HasValue)
-            {
-                return BitConverter.GetBytes(true).Concat(BitConverter.GetBytes(this.FollowId.Value)).ToArray();
-            }
-            else
-            {
-                return BitConverter.GetBytes(false).Concat(BitConverter.GetBytes(this.Direction)).ToArray();
-            }
-        }
-#endif
     }
 
     /// <summary>

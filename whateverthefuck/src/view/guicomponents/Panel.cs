@@ -44,12 +44,7 @@
             {
                 this.closeButton = new Button(new GLCoordinate(width - this.buttonSize.X, 0), this.buttonSize);
                 this.closeButton.BackColor = Color.Red;
-#if false
-                CloseButton.OnLeftMouseDown += coordinate =>
-                {
-                    CloseButton.BackColor = Color.Black;
-                };
-#endif
+
                 this.AddChild(this.closeButton);
 
                 this.BackColor = Color.Blue;
@@ -70,13 +65,6 @@
         public DraggablePanel()
             : base()
         {
-#if false
-            this.draggedPanel = new Panel();
-            this.draggedPanel.Size = new GLCoordinate(1, 1);
-            this.draggedPanel.BackColor = Color.AntiqueWhite;
-            base.Add(this.draggedPanel);
-
-#endif
             this.BackColor = Color.Black;
 
             this.OnMouseButtonDown += (c, i) =>
@@ -117,12 +105,5 @@
             base.DrawMe(drawAdapter);
             drawAdapter.DeactivateScissor();
         }
-#if false
-        public override void Add(GUIComponent toAdd)
-
-        {
-            this.draggedPanel.Add(toAdd);
-        }
-#endif
     }
 }

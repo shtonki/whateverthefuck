@@ -45,26 +45,6 @@
             loadre.Wait();
         }
 
-        public static IEnumerable<Drawable> GetAllDrawables()
-        {
-            throw new NotImplementedException();
-#if false
-            IEnumerable<Drawable> entities;
-            if (ForceToDrawGameState != null)
-            {
-                entities = ForceToDrawGameState.AllEntities;
-            }
-            else
-            {
-                entities = Program.GameStateManager.GameState.AllEntities;
-            }
-
-            return entities
-                .Concat(DebugInfo)
-                ;
-#endif
-        }
-
         public static bool HandleGUIInput(InputUnion input)
         {
             if (input.IsMouseMove || input.IsMouseInput)

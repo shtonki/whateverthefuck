@@ -172,31 +172,6 @@
                     this.ActivateAction(action);
                 }
             }
-
-#if false
-            else
-            {
-                if (input.IsMouseInput)
-                {
-                    throw new NotImplementedException();
-                    var clickedEntity = this.GetEntityAtLocation(GUI.GLToGameCoordinate(input.Location));
-
-                    if (clickedEntity != null)
-                    {
-                        if (clickedEntity.Targetable)
-                        {
-                            this.Target(clickedEntity);
-                        }
-
-                        if (clickedEntity is IInteractable interactWithMe &&
-                            input.Direction == InputUnion.Directions.Up)
-                        {
-                            interactWithMe.Interact();
-                        }
-                    }
-            }
-        }
-#endif
         }
 
         public void Loot(Lootable lootee)

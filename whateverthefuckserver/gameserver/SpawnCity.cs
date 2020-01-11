@@ -53,14 +53,6 @@ namespace whateverthefuckserver.gameserver
             {
                 PublishArray(action);
             }
-#if false
-            if (c++ % 100 == 0)
-            {
-                var ms = new MovementStruct();
-                ms.Direction = (float)(RNG.BetweenZeroAndOne() * Math.PI * 2);
-                PublishArray(new UpdateMovementEvent(entity.Identifier.Id, ms));
-            }
-#endif
         }
 
         public void SpawnWorld()
