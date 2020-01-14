@@ -31,6 +31,10 @@
 
         private static InventoryPanel InventoryPanel { get; set; } = new InventoryPanel();
 
+        private static TargetPanel HeroPanel { get; set; }
+
+        private static TargetPanel TargetPanel { get; set; }
+
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
         /// of said window to be called. Roughly speaking.
@@ -82,40 +86,10 @@
             GUIComponents.Add(InventoryPanel);
         }
 
-        public static void LoadAbilityBar(PlayerCharacter hero)
+        public static void LoadHUD(PlayerCharacter hero)
         {
-            Panel abilityBar = new Panel();
-            abilityBar.Location = new GLCoordinate(-0.9f, -0.9f);
-            abilityBar.Size = new GLCoordinate(1.8f, 0.4f);
-
-            GridLayoutManager glm = new GridLayoutManager();
-            glm.Height = 0.3f;
-            glm.Width = 0.3f;
-            glm.XPadding = 0.05f;
-            glm.YPadding = 0.05f;
-            glm.Rows = 1;
-            abilityBar.LayoutManager = glm;
-
-            var a0 = hero.Abilities.Abilities[0];
-            AbilityButton b0 = new AbilityButton(a0);
-            abilityBar.AddChild(b0);
-
-            var a1 = hero.Abilities.Abilities[1];
-            AbilityButton b1 = new AbilityButton(a1);
-            abilityBar.AddChild(b1);
-
-            var a2 = hero.Abilities.Abilities[2];
-            AbilityButton b2 = new AbilityButton(a2);
-            abilityBar.AddChild(b2);
-
-            hero.OnStep += (entity, gameState) =>
-            {
-                b0.CooldownPercentage = entity.Abilities.CooldownPercentage(a0);
-                b1.CooldownPercentage = entity.Abilities.CooldownPercentage(a1);
-                b2.CooldownPercentage = entity.Abilities.CooldownPercentage(a2);
-            };
-
-            GUIComponents.Add(abilityBar);
+            LoadAbilityBar(hero);
+            SetHeroPanel(hero);
         }
 
         public static void ShowLoot(Lootable lootee)
@@ -155,6 +129,42 @@
         public static void ToggleInventoryPanel()
         {
             InventoryPanel.Visible = !InventoryPanel.Visible;
+        }
+
+        public static void SetHeroPanel(PlayerCharacter hero)
+        {
+            if (HeroPanel != null)
+            {
+                GUIComponents.Remove(HeroPanel);
+                HeroPanel = null;
+            }
+
+            TargetPanel heroPanel = new TargetPanel(hero);
+            heroPanel.Size = new GLCoordinate(0.6f, 0.25f);
+            heroPanel.Location = new GLCoordinate(-0.9f, 0.65f);
+
+            HeroPanel = heroPanel;
+            GUIComponents.Add(HeroPanel);
+        }
+
+        public static void SetTargetPanel(GameEntity target)
+        {
+            if (TargetPanel != null)
+            {
+                GUIComponents.Remove(TargetPanel);
+                TargetPanel = null;
+                if (target == null)
+                {
+                    return;
+                }
+            }
+
+            TargetPanel targetpanel = new TargetPanel(target);
+            targetpanel.Size = new GLCoordinate(0.6f, 0.25f);
+            targetpanel.Location = new GLCoordinate(-0.2f, 0.65f);
+
+            TargetPanel = targetpanel;
+            GUIComponents.Add(TargetPanel);
         }
 
         public static void AddDamageText(GameCoordinate location, string text, Color color)
@@ -203,6 +213,42 @@
             }
 
             return null;
+        }
+
+        private static void LoadAbilityBar(PlayerCharacter hero)
+        {
+            Panel abilityBar = new Panel();
+            abilityBar.Location = new GLCoordinate(-0.9f, -0.9f);
+            abilityBar.Size = new GLCoordinate(1.8f, 0.4f);
+
+            GridLayoutManager glm = new GridLayoutManager();
+            glm.Height = 0.3f;
+            glm.Width = 0.3f;
+            glm.XPadding = 0.05f;
+            glm.YPadding = 0.05f;
+            glm.Rows = 1;
+            abilityBar.LayoutManager = glm;
+
+            var a0 = hero.Abilities.Abilities[0];
+            AbilityButton b0 = new AbilityButton(a0);
+            abilityBar.AddChild(b0);
+
+            var a1 = hero.Abilities.Abilities[1];
+            AbilityButton b1 = new AbilityButton(a1);
+            abilityBar.AddChild(b1);
+
+            var a2 = hero.Abilities.Abilities[2];
+            AbilityButton b2 = new AbilityButton(a2);
+            abilityBar.AddChild(b2);
+
+            hero.OnStep += (entity, gameState) =>
+            {
+                b0.CooldownPercentage = entity.Abilities.CooldownPercentage(a0);
+                b1.CooldownPercentage = entity.Abilities.CooldownPercentage(a1);
+                b2.CooldownPercentage = entity.Abilities.CooldownPercentage(a2);
+            };
+
+            GUIComponents.Add(abilityBar);
         }
 
         private static void Focus(GUIComponent focused)

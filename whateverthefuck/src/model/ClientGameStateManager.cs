@@ -86,7 +86,7 @@
                 if (this.Hero != null)
                 {
                     this.CenterCameraOn(this.Hero);
-                    GUI.LoadAbilityBar(this.Hero);
+                    GUI.LoadHUD(this.Hero);
                 }
 
                 this.TakeControlId = null;
@@ -154,7 +154,7 @@
 
                     if (entity != null)
                     {
-                        this.TargetedEntity = entity;
+                        this.Target(entity);
                     }
 
                     if (entity is IInteractable)
@@ -203,6 +203,8 @@
 
         private void Target(GameEntity target)
         {
+            GUI.SetTargetPanel(target);
+
             if (this.TargetedEntity != null)
             {
                 this.TargetedEntity.HighlightColor = Color.Transparent;

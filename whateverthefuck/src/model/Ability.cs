@@ -80,7 +80,7 @@
         public Bite()
             : base(AbilityType.Bite)
         {
-            this.CastTime = 10;
+            this.CastTime = 0;
             this.BaseCooldown = 0;
             this.Range = MeleeRange;
             this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
@@ -112,6 +112,7 @@
             return new GameEvent[]
             {
                 new ApplyStatusEvent(caster, new SanicStatus(300, 1)),
+                new DealDamageEvent(caster, caster, 10),
             };
         }
 
