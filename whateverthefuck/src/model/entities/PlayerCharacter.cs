@@ -13,9 +13,9 @@
 
             this.Status.BaseStats.MoveSpeed = 0.01f;
 
-            this.Abilities.Abilities.Add(new Ability(AbilityType.Fireburst));
-            this.Abilities.Abilities.Add(new Ability(AbilityType.Fireball));
-            this.Abilities.Abilities.Add(new Ability(AbilityType.Sanic));
+            this.Abilities.Abilities.Add(new Sanic());
+            this.Abilities.Abilities.Add(new Fireball());
+            this.Abilities.Abilities.Add(new Fireburst());
 
             this.Sprite = new Sprite(SpriteID.player_Player0);
         }

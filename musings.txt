@@ -12,6 +12,9 @@ Known bug: We can begin casting an ability when we're dead but it makes no progr
 
 Known bug: We get weird af disagreements on syncs because A: we send the wrong tick, and B: we think that two SyncRecords which actually agree disagree
 
+Known bug: We sometime crash on startup getting a bungled GameEvent of type NotSet. This is especially common when debugging.
+
+Known bug: Ability cooldowns reset to full duration of the player casts another spell.
 
 T O D O
 

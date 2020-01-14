@@ -20,7 +20,22 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="P:whateverthefuck.Properties.Resources.ability_bite">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:whateverthefuck.Properties.Resources.ability_fireball">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.ability_fireburst">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.ability_sanic">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
@@ -66,6 +81,11 @@
             </summary>
         </member>
         <member name="P:whateverthefuck.Properties.Resources.player_player0">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.projectile_fireball">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>

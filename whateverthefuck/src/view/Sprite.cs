@@ -23,6 +23,21 @@
                     id = SpriteID.ability_Fireball;
                 } break;
 
+                case AbilityType.Bite:
+                {
+                    id = SpriteID.ability_Bite;
+                } break;
+
+                case AbilityType.Sanic:
+                {
+                    id = SpriteID.ability_Sanic;
+                } break;
+
+                case AbilityType.Fireburst:
+                {
+                    id = SpriteID.ability_Fireburst;
+                } break;
+
                 default:
                 {
                     id = SpriteID.testSprite1;

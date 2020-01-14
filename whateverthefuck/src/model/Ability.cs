@@ -15,64 +15,32 @@
         Bite,
     }
 
-    public class Ability
+    public abstract class Ability
     {
-        private const float MeleeRange = 0.2f;
+        protected const float MeleeRange = 0.2f;
 
         public Ability(AbilityType abilityType)
         {
             this.AbilityType = abilityType;
-
-            this.LoadBaseStats(this.AbilityType);
         }
 
-        public int CastTime { get; private set; }
+        public int CastTime { get; protected set; }
 
-        public int BaseCooldown { get; private set; }
+        public int BaseCooldown { get; protected set; }
 
         public int CurrentCooldown { get; set; }
 
-        public AbilityType AbilityType { get; private set; }
+        public AbilityType AbilityType { get; protected set; }
 
-        public float Range { get; private set; }
+        public float Range { get; protected set; }
 
-        public bool CreateProjectile { get; private set; }
+        public bool CreateProjectile { get; protected set; }
 
-        public TargetingRule TargetingRule { get; private set; }
+        public TargetingRule TargetingRule { get; protected set; }
 
         public float CooldownPercentage => this.BaseCooldown == 0 ? 0 : (float)this.CurrentCooldown / this.BaseCooldown;
 
-        public IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target)
-        {
-            List<GameEvent> events = new List<GameEvent>();
-
-            switch (this.AbilityType)
-            {
-                case AbilityType.Fireball:
-                {
-                    events.Add(new DealDamageEvent(caster, target, 15));
-                } break;
-
-                case AbilityType.Fireburst:
-                {
-                    events.Add(new DealDamageEvent(caster, target, 420));
-                } break;
-
-                case AbilityType.Bite:
-                {
-                    events.Add(new DealDamageEvent(caster, target, 20));
-                } break;
-
-                case AbilityType.Sanic:
-                {
-                    events.Add(new ApplyStatusEvent(caster, new SanicStatus(300, 1)));
-                } break;
-
-                default: throw new NotImplementedException();
-            }
-
-            return events;
-        }
+        public abstract IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState);
 
         /// <summary>
         /// Used when a Character finishes the casting time of an Ability and the effect of the spell is to take place.
@@ -84,47 +52,88 @@
             CreationArgs ca = new ProjectileArgs(caster, this.AbilityType);
             return new CreateEntityEvent(EntityIdentifier.RandomReserved(), EntityType.Projectile, caster.Center.X, caster.Center.Y, 1, 1, ca);
         }
+    }
 
-        private void LoadBaseStats(AbilityType abilityType)
+    public class Fireball : Ability
+    {
+        public Fireball()
+            : base(AbilityType.Fireball)
         {
-            switch (abilityType)
+            this.CastTime = 50;
+            this.BaseCooldown = 0;
+            this.Range = 1.5f;
+            this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
+            this.CreateProjectile = true;
+        }
+
+        public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
+        {
+            return new GameEvent[]
             {
-                case AbilityType.Sanic:
-                {
-                    this.CastTime = 0;
-                    this.BaseCooldown = 0;
-                    this.Range = 0;
-                    this.TargetingRule = TargetingRule.Any;
-                } break;
+                new DealDamageEvent(caster, target, 15),
+            };
+        }
+    }
 
-                case AbilityType.Fireball:
-                {
-                    this.CastTime = 50;
-                    this.BaseCooldown = 0;
-                    this.Range = 1.5f;
-                    this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
-                    this.CreateProjectile = true;
-                } break;
+    public class Bite : Ability
+    {
+        public Bite()
+            : base(AbilityType.Bite)
+        {
+            this.CastTime = 10;
+            this.BaseCooldown = 0;
+            this.Range = MeleeRange;
+            this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
+            this.CreateProjectile = false;
+        }
 
-                case AbilityType.Fireburst:
-                {
-                    this.CastTime = 0;
-                    this.BaseCooldown = 400;
-                    this.Range = 0.9f;
-                    this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
-                    this.CreateProjectile = true;
-                } break;
+        public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
+        {
+            return new GameEvent[]
+            {
+                new DealDamageEvent(caster, target, 20),
+            };
+        }
+    }
 
-                case AbilityType.Bite:
-                {
-                    this.CastTime = 0;
-                    this.BaseCooldown = 0;
-                    this.Range = MeleeRange;
-                    this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
-                } break;
+    public class Sanic : Ability
+    {
+        public Sanic()
+            : base(AbilityType.Sanic)
+        {
+            this.CastTime = 0;
+            this.BaseCooldown = 1000;
+            this.Range = 0;
+            this.TargetingRule = TargetingRule.Any;
+        }
 
-                default: throw new NotImplementedException();
-            }
+        public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
+        {
+            return new GameEvent[]
+            {
+                new ApplyStatusEvent(caster, new SanicStatus(300, 1)),
+            };
+        }
+
+    }
+
+    public class Fireburst : Ability
+    {
+        public Fireburst()
+               : base(AbilityType.Fireburst)
+        {
+            this.CastTime = 0;
+            this.BaseCooldown = 500;
+            this.Range = 1.5f;
+            this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;
+        }
+
+        public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
+        {
+            return new GameEvent[]
+            {
+                new DealDamageEvent(caster, target, 15),
+            };
         }
     }
 

@@ -17,6 +17,7 @@
             }
 
             ProjectileArgs pa = new ProjectileArgs(args);
+            this.Sprite = new Sprite(pa.GetSpriteID());
 
             this.Size = new GameCoordinate(0.1f, 0.1f);
             this.DrawColor = Color.Black;
@@ -88,9 +89,18 @@
             set { this.SecondInt = value; }
         }
 
-        public Sprite GetSprite()
+        public SpriteID GetSpriteID()
         {
-            return Sprite.GetAbilitySprite(this.AbilityType);
+            switch (this.AbilityType)
+            {
+                case AbilityType.Fireball:
+                {
+                    return SpriteID.projectile_Fireball;
+                }
+
+                default: return SpriteID.testSprite1;
+            }
+
         }
     }
 }

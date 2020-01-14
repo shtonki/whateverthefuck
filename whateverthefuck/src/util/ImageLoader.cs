@@ -11,7 +11,10 @@
     {
         testSprite1,
 
+        ability_Bite,
         ability_Fireball,
+        ability_Sanic,
+        ability_Fireburst,
 
         item_Bronze_Dagger,
         item_Banana,
@@ -23,6 +26,8 @@
         wall_Stone0,
 
         player_Player0,
+
+        projectile_Fireball,
     }
 
     public static class ImageLoader
@@ -34,7 +39,10 @@
         {
             images[SpriteID.testSprite1] = new Bitmap(Properties.Resources.kappa);
 
+            images[SpriteID.ability_Bite] = new Bitmap(Properties.Resources.ability_fireball);
             images[SpriteID.ability_Fireball] = new Bitmap(Properties.Resources.ability_fireball);
+            images[SpriteID.ability_Sanic] = new Bitmap(Properties.Resources.ability_sanic);
+            images[SpriteID.ability_Fireburst] = new Bitmap(Properties.Resources.ability_fireburst);
 
             images[SpriteID.item_Banana] = new Bitmap(Properties.Resources.item_banana);
             images[SpriteID.item_Bronze_Dagger] = new Bitmap(Properties.Resources.item_bronze_dagger);
@@ -46,6 +54,8 @@
             images[SpriteID.wall_Stone0] = new Bitmap(Properties.Resources.wall_stone0);
 
             images[SpriteID.player_Player0] = new Bitmap(Properties.Resources.player_player0);
+
+            images[SpriteID.projectile_Fireball] = new Bitmap(Properties.Resources.projectile_fireball);
 
             foreach (var img in images)
             {

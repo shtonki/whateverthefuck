@@ -63,9 +63,39 @@ namespace whateverthefuck.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ability_bite {
+            get {
+                object obj = ResourceManager.GetObject("ability_bite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ability_fireball {
             get {
                 object obj = ResourceManager.GetObject("ability_fireball", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ability_fireburst {
+            get {
+                object obj = ResourceManager.GetObject("ability_fireburst", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ability_sanic {
+            get {
+                object obj = ResourceManager.GetObject("ability_sanic", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -154,6 +184,16 @@ namespace whateverthefuck.Properties {
         internal static System.Drawing.Bitmap player_player0 {
             get {
                 object obj = ResourceManager.GetObject("player_player0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap projectile_fireball {
+            get {
+                object obj = ResourceManager.GetObject("projectile_fireball", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

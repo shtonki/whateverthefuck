@@ -201,6 +201,21 @@
   <ItemGroup>
     <None Include="Resources\player_player0.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ability_bite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ability_sanic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ability_fireball.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\projectile_fireball.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ability_fireburst.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

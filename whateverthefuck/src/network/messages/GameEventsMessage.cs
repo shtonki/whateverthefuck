@@ -37,6 +37,10 @@
 
             foreach (var e in this.Events)
             {
+                if (e.Type == GameEventType.NotSet)
+                {
+                    throw new Exception();
+                }
                 encoder.Encode((int)e.Type);
                 e.Encode(encoder);
             }

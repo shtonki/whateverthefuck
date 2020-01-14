@@ -13,7 +13,7 @@
             this.Status.BaseStats.MaxHealth = 100;
             this.Status.BaseStats.MoveSpeed = 0.001f;
 
-            this.Abilities.Abilities.Add(new Ability(AbilityType.Bite));
+            this.Abilities.Abilities.Add(new Bite());
         }
     }
 }
