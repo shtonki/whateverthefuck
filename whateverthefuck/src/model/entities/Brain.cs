@@ -11,7 +11,7 @@ namespace whateverthefuck.src.model.entities
             if (npc.LastDamageTaken != null)
             {
                 var target = gameState.GetEntityById(npc.LastDamageTaken.AttackerIdentifier);
-                var castableAbilities = npc.CastableAbilities(target, gameState);
+                var castableAbilities = npc.Abilities.CastableAbilities(target, gameState);
 
                 if (castableAbilities.Count() > 0)
                 {

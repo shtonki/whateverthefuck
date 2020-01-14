@@ -68,8 +68,10 @@ namespace whateverthefuck.src.model
 
         public int MaxHealth { get; set; }
 
-        public int Health { get; set; }
+        public int Health { get; set; } = 1;
 
         public float MoveSpeed { get; set; }
+
+        public int GlobalCooldown { get; set; }
     }
 }

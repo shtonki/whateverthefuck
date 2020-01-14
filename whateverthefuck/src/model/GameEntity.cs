@@ -41,8 +41,6 @@
         private const float HealthbarWidth = 0.1f;
         private const float HealthbarHeight = 0.02f;
 
-        protected List<Ability> abilities = new List<Ability>();
-
         private int globalCooldownTicks = 100;
         private int currentGlobalCooldown = 0;
 
@@ -58,6 +56,8 @@
             this.GameLocation = new GameCoordinate(0, 0);
 
             this.Status.BaseStats.MaxHealth = 1;
+
+            this.Abilities = new EntityAbilities(this);
         }
 
         /// <summary>
@@ -69,6 +69,8 @@
         /// Event for when the GameEntity is stepped.
         /// </summary>
         public event Action<GameEntity, GameState> OnStep;
+
+        public EntityAbilities Abilities { get; }
 
         public int Height { get; protected set; } = 1;
 
@@ -164,8 +166,6 @@
 
         public Color HighlightColor { get; set; } = Color.Transparent;
 
-        protected CastingInfo CastingInfo { get; set; }
-
         protected Color DrawColor { get; set; } = Color.Black;
 
         /// <summary>
@@ -199,25 +199,25 @@
                 Boombox.SetListenerPosition(this.GameLocation.X, this.GameLocation.Y);
             }
 
-            if (this.CastingInfo != null)
+            if (this.Abilities.Casting != null)
             {
-                if (this.Movements.IsMoving && !this.CanMoveWhileCasting(this.CastingInfo.CastingAbility))
+                if (this.Movements.IsMoving && !this.Abilities.CanMoveWhileCasting(this.Abilities.Casting.CastingAbility))
                 {
                     // cancel the cast
-                    this.CastingInfo = null;
+                    this.Abilities.Casting = null;
                     this.currentGlobalCooldown = 0;
                 }
                 else
                 {
-                    this.CastingInfo.Step();
-                    if (this.CastingInfo.DoneCasting)
+                    this.Abilities.Casting.Step();
+                    if (this.Abilities.Casting.DoneCasting)
                     {
                         gameState.HandleGameEvents(new EndCastAbility(
                             this,
-                            this.CastingInfo.Target,
-                            this.CastingInfo.CastingAbility));
+                            this.Abilities.Casting.Target,
+                            this.Abilities.Casting.CastingAbility));
 
-                        this.CastingInfo = null;
+                        this.Abilities.Casting = null;
                     }
                 }
             }
@@ -227,7 +227,7 @@
                 this.currentGlobalCooldown--;
             }
 
-            foreach (var a in this.abilities)
+            foreach (var a in this.Abilities.Abilities)
             {
                 if (a.CurrentCooldown > 0)
                 {
@@ -236,79 +236,6 @@
             }
 
             this.OnStep?.Invoke(this, gameState);
-        }
-
-        public Ability Ability(int index)
-        {
-            return this.abilities[index];
-        }
-
-        public Ability Ability(AbilityType abilityType)
-        {
-            return this.abilities.First(a => a.AbilityType == abilityType);
-        }
-
-        public IEnumerable<Ability> CastableAbilities(GameEntity target, GameState gameState)
-        {
-            return this.abilities.Where(a => this.CanCastAbility(a, target, gameState));
-        }
-
-        public bool CanCastAbility(Ability ability, GameEntity target, GameState gameState)
-        {
-            if (this.currentGlobalCooldown > 0)
-            {
-                return false;
-            }
-
-            if (ability.CurrentCooldown > 0)
-            {
-                return false;
-            }
-
-            if (!ability.TargetingRule.ApplyRule(this, target, gameState))
-            {
-                return false;
-            }
-
-            if (ability.Range < this.DistanceTo(target))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public void CastAbility(Ability ability, GameEntity target)
-        {
-            if (this.CastingInfo != null)
-            {
-                return;
-            }
-
-            if (!this.CanMoveWhileCasting(ability) && this.Movements.IsMoving)
-            {
-                return;
-            }
-
-            this.currentGlobalCooldown = this.globalCooldownTicks;
-
-            ability.CurrentCooldown = ability.BaseCooldown;
-            this.CastingInfo = new CastingInfo(ability, target);
-        }
-
-        public float CooldownPercentage(Ability ability)
-        {
-            var globalCooldownPercentage = (float)this.currentGlobalCooldown / this.globalCooldownTicks;
-            var abilityCooldownPercentage = ability.CooldownPercentage;
-
-            if (this.currentGlobalCooldown > ability.CurrentCooldown)
-            {
-                return globalCooldownPercentage;
-            }
-            else
-            {
-                return abilityCooldownPercentage;
-            }
         }
 
         public float DistanceTo(GameEntity other)
@@ -382,15 +309,6 @@
             this.Status.Step();
         }
 
-        private bool CanMoveWhileCasting(Ability ability)
-        {
-            if (ability.CastTime == 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
     }
 
     /// <summary>

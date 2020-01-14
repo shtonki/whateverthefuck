@@ -272,11 +272,11 @@
         {
             var caster = this.GetEntityById(beginCastAbility.CasterIdentifier);
             var target = this.GetEntityById(beginCastAbility.TargetIdentifier);
-            var ability = caster.Ability(beginCastAbility.AbilityType);
+            var ability = caster.Abilities.Ability(beginCastAbility.AbilityType);
 
             if (caster != null && target != null)
             {
-                caster.CastAbility(ability, target);
+                caster.Abilities.CastAbility(ability, target);
             }
             else
             {
@@ -295,7 +295,7 @@
                 return;
             }
 
-            Ability ability = caster.Ability(endCastAbilityEvent.AbilityType);
+            Ability ability = caster.Abilities.Ability(endCastAbilityEvent.AbilityType);
 
             if (ability.CreateProjectile)
             {

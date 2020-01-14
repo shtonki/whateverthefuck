@@ -296,7 +296,7 @@
         {
             var target = this.TargetedEntity ?? this.Hero;
 
-            if (!this.Hero.CanCastAbility(ability, target, this.GameState))
+            if (!this.Hero.Abilities.CanCastAbility(ability, target, this.GameState))
             {
                 return;
             }
@@ -310,17 +310,17 @@
             {
                 case GameAction.CastAbility0:
                 {
-                    this.BeginCastAbility(this.Hero.Ability(0));
+                    this.BeginCastAbility(this.Hero.Abilities.Abilities[0]);
                 } break;
 
                 case GameAction.CastAbility1:
                 {
-                    this.BeginCastAbility(this.Hero.Ability(1));
+                    this.BeginCastAbility(this.Hero.Abilities.Abilities[1]);
                 } break;
 
                 case GameAction.CastAbility2:
                 {
-                    this.BeginCastAbility(this.Hero.Ability(2));
+                    this.BeginCastAbility(this.Hero.Abilities.Abilities[2]);
                 } break;
 
                 case GameAction.HeroWalkUpwards:

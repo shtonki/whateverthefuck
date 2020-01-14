@@ -13,9 +13,9 @@
 
             this.Status.BaseStats.MoveSpeed = 0.01f;
 
-            this.abilities.Add(new Ability(AbilityType.Fireburst));
-            this.abilities.Add(new Ability(AbilityType.Fireball));
-            this.abilities.Add(new Ability(AbilityType.Sanic));
+            this.Abilities.Abilities.Add(new Ability(AbilityType.Fireburst));
+            this.Abilities.Abilities.Add(new Ability(AbilityType.Fireball));
+            this.Abilities.Abilities.Add(new Ability(AbilityType.Sanic));
         }
     }
 }

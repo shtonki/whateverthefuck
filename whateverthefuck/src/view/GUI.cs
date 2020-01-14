@@ -96,23 +96,23 @@
             glm.Rows = 1;
             abilityBar.LayoutManager = glm;
 
-            var a0 = hero.Ability(0);
+            var a0 = hero.Abilities.Abilities[0];
             AbilityButton b0 = new AbilityButton(a0);
             abilityBar.AddChild(b0);
 
-            var a1 = hero.Ability(1);
+            var a1 = hero.Abilities.Abilities[1];
             AbilityButton b1 = new AbilityButton(a1);
             abilityBar.AddChild(b1);
 
-            var a2 = hero.Ability(1);
+            var a2 = hero.Abilities.Abilities[2];
             AbilityButton b2 = new AbilityButton(a2);
             abilityBar.AddChild(b2);
 
             hero.OnStep += (entity, gameState) =>
             {
-                b0.CooldownPercentage = entity.CooldownPercentage(a0);
-                b1.CooldownPercentage = entity.CooldownPercentage(a1);
-                b2.CooldownPercentage = entity.CooldownPercentage(a2);
+                b0.CooldownPercentage = entity.Abilities.CooldownPercentage(a0);
+                b1.CooldownPercentage = entity.Abilities.CooldownPercentage(a1);
+                b2.CooldownPercentage = entity.Abilities.CooldownPercentage(a2);
             };
 
             GUIComponents.Add(abilityBar);
