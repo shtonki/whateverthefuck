@@ -1,23 +1,31 @@
 ﻿namespace whateverthefuck.src.model
 {
-    public enum Statuses
+    public abstract class Status
     {
-        Sanic,
-    }
-
-    public class Status
-    {
-        public Status(Statuses type, int duration, int stacks)
+        public Status(int duration, int stacks)
         {
-            this.Type = type;
             this.Duration = duration;
             this.Stacks = stacks;
         }
 
-        public Statuses Type { get; }
-
         public int Duration { get; set; }
 
         public int Stacks { get; set; }
+
+        public abstract void ApplyTo(StatStruct status);
     }
+
+    public class SanicStatus : Status
+    {
+        public SanicStatus(int duration, int stacks)
+            : base(duration, stacks)
+        {
+        }
+
+        public override void ApplyTo(StatStruct status)
+        {
+            status.MoveSpeed *= 2;
+        }
+    }
+
 }

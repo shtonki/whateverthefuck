@@ -228,11 +228,6 @@
             Gets the CreationArgs used to create the GameEntity.
             </summary>
         </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.MovementCache">
-            <summary>
-            Gets or sets the last movement the GameEntity made.
-            </summary>
-        </member>
         <member name="P:whateverthefuck.src.model.GameEntity.Movable">
             <summary>
             Gets or sets a value indicating whether the GameEntity can move.
@@ -359,17 +354,17 @@
             Uniquely identifies a GameEntity within a GameState.
             </summary>
         </member>
-        <member name="P:whateverthefuck.src.model.MovementContainer.Direction">
+        <member name="P:whateverthefuck.src.model.EntityMovement.Direction">
             <summary>
             Gets or sets the direction of movement in radians, or NaN if not moving directionally.
             </summary>
         </member>
-        <member name="P:whateverthefuck.src.model.MovementContainer.FollowId">
+        <member name="P:whateverthefuck.src.model.EntityMovement.FollowId">
             <summary>
             Gets or sets the id of the followed entity, or null if not following anything.
             </summary>
         </member>
-        <member name="P:whateverthefuck.src.model.MovementContainer.IsMoving">
+        <member name="P:whateverthefuck.src.model.EntityMovement.IsMoving">
             <summary>
             Gets a value indicating whether the GameEntity is moving at all.
             </summary>

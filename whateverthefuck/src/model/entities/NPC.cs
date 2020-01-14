@@ -10,7 +10,8 @@
             this.DrawColor = Color.Red;
             this.Movable = true;
 
-            this.BaseStats.MoveSpeed = 0.001f;
+            this.Status.BaseStats.MaxHealth = 100;
+            this.Status.BaseStats.MoveSpeed = 0.001f;
 
             this.abilities.Add(new Ability(AbilityType.Bite));
         }

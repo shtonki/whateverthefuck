@@ -260,7 +260,7 @@
 
             if (entity != null)
             {
-                entity.ApplyStatus(applyStatusEvent.Status);
+                entity.Status.ApplyStatus(applyStatusEvent.Status);
             }
             else
             {
@@ -299,12 +299,12 @@
 
             if (ability.CreateProjectile)
             {
-
                 CreateEntityEvent projectileCreationEvent = ability.Cast(caster);
                 var projectile = (Projectile)this.EntityGenerator.GenerateEntity(projectileCreationEvent);
                 projectile.Center = caster.Center;
                 projectile.Movements.FollowId = castee.Identifier;
                 projectile.ResolveEvents = ability.Resolve(caster, castee);
+                projectile.Status.ResetToBaseStats();
                 this.AddEntities(projectile);
             }
             else
@@ -330,10 +330,10 @@
         {
             var defender = this.GetEntityById(dealDamageEvent.DefenderIdentifier);
 
-            defender.CurrentHealth -= dealDamageEvent.Damage;
-            if (defender.CurrentHealth < 0)
+            defender.Status.WriteCurrentStats.Health -= dealDamageEvent.Damage;
+            if (defender.Status.ReadCurrentStats.Health < 0)
             {
-                defender.CurrentHealth = 0;
+                defender.Status.WriteCurrentStats.Health = 0;
             }
             defender.LastDamageTaken = dealDamageEvent;
 
@@ -355,6 +355,8 @@
             var entity = this.EntityGenerator.GenerateEntity(createEntityEvent);
             entity.OnDeath += createEntityEvent.OnDeathCallback;
             entity.OnStep += createEntityEvent.OnStepCallback;
+
+            entity.Status.ResetToBaseStats();
 
             // it has to be like this
             createEntityEvent.OnCreationCallback?.Invoke(entity);

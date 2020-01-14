@@ -129,8 +129,8 @@
             this.EntityType = e.EntityType;
             this.X = e.GameLocation.X;
             this.Y = e.GameLocation.Y;
-            this.CurrentHealth = e.CurrentHealth;
-            this.MaxHealth = e.MaxHealth;
+            this.CurrentHealth = e.Status.BaseStats.Health;
+            this.MaxHealth = e.Status.BaseStats.MaxHealth;
 
             if (e.CreationArgs == null)
             {
@@ -245,7 +245,7 @@
         {
         }
 
-        public UpdateMovementEvent(EntityIdentifier id, MovementContainer movements)
+        public UpdateMovementEvent(EntityIdentifier id, EntityMovement movements)
             : base(GameEventType.UpdateMovement)
         {
             this.Identifier = id;
@@ -254,7 +254,7 @@
 
         public EntityIdentifier Identifier { get; private set; }
 
-        public MovementContainer Movements { get; private set; }
+        public EntityMovement Movements { get; private set; }
 
         public override void Encode(WhateverEncoder encoder)
         {
@@ -265,7 +265,7 @@
         public override void Decode(WhateverDecoder decoder)
         {
             this.Identifier = new EntityIdentifier(decoder.DecodeInt());
-            var movements = new MovementContainer();
+            var movements = new EntityMovement();
             movements.Decode(decoder);
             this.Movements = movements;
         }

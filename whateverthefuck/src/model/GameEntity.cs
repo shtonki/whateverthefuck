@@ -57,8 +57,7 @@
 
             this.GameLocation = new GameCoordinate(0, 0);
 
-            this.BaseStats = new EntityStats();
-            this.CurrentStats = new EntityStats();
+            this.Status.BaseStats.MaxHealth = 1;
         }
 
         /// <summary>
@@ -75,15 +74,7 @@
 
         public GameCoordinate GameLocation { get; set; }
 
-        public EntityStats BaseStats { get; }
-
-        public EntityStats CurrentStats { get; }
-
-        public List<Status> ActiveStatuses { get; } = new List<Status>();
-
-        public int MaxHealth { get; set; } = 100;
-
-        public int CurrentHealth { get; set; } = 100;
+        public EntityStatus Status { get; } = new EntityStatus();
 
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
@@ -94,9 +85,7 @@
         /// </summary>
         public CreationArgs CreationArgs { get; private set; } = null;
 
-        /// <summary>
-        /// Gets or sets the last movement the GameEntity made.
-        /// </summary>
+        // @move to EntityMovements
         public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
 
         /// <summary>
@@ -126,7 +115,7 @@
         /// <summary>
         /// Gets or sets current movement being made by the GameEntity.
         /// </summary>
-        public MovementContainer Movements { get; set; } = new MovementContainer();
+        public EntityMovement Movements { get; set; } = new EntityMovement();
 
         /// <summary>
         /// Gets or sets the last DealDamageEvent to deal damage to the GameEntity.
@@ -190,16 +179,9 @@
         /// <param name="gameState">The GameState in which the GameEntity is ticked.</param>
         public virtual void Step(GameState gameState)
         {
-            foreach (var status in this.ActiveStatuses)
-            {
-                status.Duration--;
-            }
-
-            this.ActiveStatuses.RemoveAll(s => s.Duration <= 0);
-
             this.UpdateCurrentStats();
 
-            if (this.CurrentHealth <= 0 && this.State != GameEntityState.Dead)  
+            if (this.Status.ReadCurrentStats.Health <= 0 && this.State != GameEntityState.Dead)
             {
                 this.Die(gameState);
             }
@@ -254,21 +236,6 @@
             }
 
             this.OnStep?.Invoke(this, gameState);
-        }
-
-        public void ApplyStatus(Status status)
-        {
-            var activeStatus = this.ActiveStatuses.FirstOrDefault(s => s.Type == status.Type);
-
-            if (activeStatus != null)
-            {
-                activeStatus.Stacks += status.Stacks;
-                activeStatus.Duration = Math.Max(activeStatus.Duration, status.Duration);
-            }
-            else
-            {
-                this.ActiveStatuses.Add(status);
-            }
         }
 
         public Ability Ability(int index)
@@ -391,7 +358,7 @@
                 {
                     var followingToLocation = followed.Center;
 
-                    if (Coordinate.DistanceBetweenCoordinates(this.Center, followingToLocation) < this.CurrentStats.MoveSpeed)
+                    if (Coordinate.DistanceBetweenCoordinates(this.Center, followingToLocation) < this.Status.ReadCurrentStats.MoveSpeed)
                     {
                         return followingToLocation - this.Center;
                     }
@@ -406,19 +373,13 @@
             }
             else
             {
-                return new GameCoordinate((float)Math.Sin(this.Movements.Direction) * this.CurrentStats.MoveSpeed, (float)Math.Cos(this.Movements.Direction) * this.CurrentStats.MoveSpeed);
+                return new GameCoordinate((float)Math.Sin(this.Movements.Direction) * this.Status.ReadCurrentStats.MoveSpeed, (float)Math.Cos(this.Movements.Direction) * this.Status.ReadCurrentStats.MoveSpeed);
             }
         }
 
         private void UpdateCurrentStats()
         {
-            this.CurrentStats.MoveSpeed = this.BaseStats.MoveSpeed;
-
-            var sanic = this.ActiveStatuses.FirstOrDefault(s => s.Type == Statuses.Sanic);
-            if (sanic != null)
-            {
-                this.CurrentStats.MoveSpeed *= 3;
-            }
+            this.Status.Step();
         }
 
         private bool CanMoveWhileCasting(Ability ability)

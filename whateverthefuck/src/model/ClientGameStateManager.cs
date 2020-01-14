@@ -231,7 +231,7 @@
 
         private void HandleHeroMovement()
         {
-            MovementContainer newMovements = new MovementContainer();
+            EntityMovement newMovements = new EntityMovement();
 
             double direction = 0;
 

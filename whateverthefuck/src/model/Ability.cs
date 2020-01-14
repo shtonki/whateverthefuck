@@ -65,7 +65,7 @@
 
                 case AbilityType.Sanic:
                 {
-                    events.Add(new ApplyStatusEvent(caster, new Status(Statuses.Sanic, 100, 1)));
+                    events.Add(new ApplyStatusEvent(caster, new SanicStatus(300, 1)));
                 } break;
 
                 default: throw new NotImplementedException();

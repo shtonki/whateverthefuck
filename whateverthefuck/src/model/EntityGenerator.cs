@@ -60,8 +60,8 @@
         {
             var rt = this.GenerateEntity(e.EntityType, e.Id, e.CreationArgs);
             rt.GameLocation = new GameCoordinate(e.X, e.Y);
-            rt.CurrentHealth = e.CurrentHealth;
-            rt.MaxHealth = e.MaxHealth;
+            //rt.Status.BaseStats.Health = e.CurrentHealth;
+            //rt.Status.BaseStats.MaxHealth = e.MaxHealth;
             return rt;
         }
 

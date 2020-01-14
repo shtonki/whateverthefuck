@@ -78,7 +78,7 @@
     <Compile Include="src\model\entities\MousePicker.cs" />
     <Compile Include="src\model\entities\NPC.cs" />
     <Compile Include="src\model\entities\Projectile.cs" />
-    <Compile Include="src\model\EntityStats.cs" />
+    <Compile Include="src\model\EntityStatus.cs" />
     <Compile Include="src\model\GameCoordinate.cs" />
     <Compile Include="src\model\GameEntity.cs" />
     <Compile Include="src\model\GameEvent.cs" />
@@ -89,7 +89,7 @@
     <Compile Include="src\model\Inventory.cs" />
     <Compile Include="src\model\Item.cs" />
     <Compile Include="src\model\LineOfSight.cs" />
-    <Compile Include="src\model\MovementContainer.cs" />
+    <Compile Include="src\model\EntityMovement.cs" />
     <Compile Include="src\model\Status.cs" />
     <Compile Include="src\network\messages\CreateLootMessage.cs" />
     <Compile Include="src\network\messages\ExampleMessage.cs" />

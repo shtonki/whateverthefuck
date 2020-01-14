@@ -11,7 +11,7 @@
         {
             this.DrawColor = Coloring.RandomColor();
 
-            this.BaseStats.MoveSpeed = 0.01f;
+            this.Status.BaseStats.MoveSpeed = 0.01f;
 
             this.abilities.Add(new Ability(AbilityType.Fireburst));
             this.abilities.Add(new Ability(AbilityType.Fireball));

@@ -2,11 +2,11 @@
 {
     using whateverthefuck.src.util;
 
-    public class MovementContainer : IEncodable
+    public class EntityMovement : IEncodable
     {
         private const float NoDirection = float.NaN;
 
-        public MovementContainer()
+        public EntityMovement()
         {
             this.Direction = float.NaN;
             this.FollowId = null;

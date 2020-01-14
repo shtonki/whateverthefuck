@@ -18,7 +18,7 @@ namespace whateverthefuck.src.model.entities
                     return new BeginCastAbilityEvent(npc, target, castableAbilities.ElementAt(RNG.IntegerBetween(0, castableAbilities.Count())));
                 }
 
-                MovementContainer movementContainer = new MovementContainer();
+                EntityMovement movementContainer = new EntityMovement();
                 movementContainer.FollowId = npc.LastDamageTaken.AttackerIdentifier;
                 return new UpdateMovementEvent(npc.Identifier, movementContainer);
             }

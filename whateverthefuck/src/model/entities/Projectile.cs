@@ -23,14 +23,14 @@
             this.Collidable = false;
             this.Movable = true;
 
-            this.BaseStats.MoveSpeed = 0.02f;
+            this.Status.BaseStats.MoveSpeed = 0.02f;
         }
 
         public IEnumerable<GameEvent> ResolveEvents { get; set; }
 
         private int Controller { get; }
 
-        private float AsplodeCutoff => this.CurrentStats.MoveSpeed * 2;
+        private float AsplodeCutoff => this.Status.ReadCurrentStats.MoveSpeed * 2;
 
         public override void Step(GameState gameState)
         {
