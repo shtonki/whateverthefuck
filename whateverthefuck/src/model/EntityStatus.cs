@@ -17,7 +17,6 @@ namespace whateverthefuck.src.model
 
         public void ResetToBaseStats()
         {
-            Logging.Log(this.BaseStats.MaxHealth);
             this.BaseStats.Health = this.BaseStats.MaxHealth;
             this.WriteCurrentStats = new StatStruct(this.BaseStats);
         }
@@ -72,6 +71,6 @@ namespace whateverthefuck.src.model
 
         public float MoveSpeed { get; set; }
 
-        public int GlobalCooldown { get; set; }
+        public int GlobalCooldown { get; set; } = 150;
     }
 }

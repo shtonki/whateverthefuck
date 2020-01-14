@@ -199,41 +199,7 @@
                 Boombox.SetListenerPosition(this.GameLocation.X, this.GameLocation.Y);
             }
 
-            if (this.Abilities.Casting != null)
-            {
-                if (this.Movements.IsMoving && !this.Abilities.CanMoveWhileCasting(this.Abilities.Casting.CastingAbility))
-                {
-                    // cancel the cast
-                    this.Abilities.Casting = null;
-                    this.currentGlobalCooldown = 0;
-                }
-                else
-                {
-                    this.Abilities.Casting.Step();
-                    if (this.Abilities.Casting.DoneCasting)
-                    {
-                        gameState.HandleGameEvents(new EndCastAbility(
-                            this,
-                            this.Abilities.Casting.Target,
-                            this.Abilities.Casting.CastingAbility));
-
-                        this.Abilities.Casting = null;
-                    }
-                }
-            }
-
-            if (this.currentGlobalCooldown > 0)
-            {
-                this.currentGlobalCooldown--;
-            }
-
-            foreach (var a in this.Abilities.Abilities)
-            {
-                if (a.CurrentCooldown > 0)
-                {
-                    a.CurrentCooldown--;
-                }
-            }
+            this.Abilities.Step(gameState);
 
             this.OnStep?.Invoke(this, gameState);
         }
