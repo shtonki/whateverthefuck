@@ -151,9 +151,6 @@
   <data name="door_stone0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\door_stone0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="player_player0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\player_player0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="wall_stone0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wall_stone0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -168,6 +165,12 @@
   </data>
   <data name="ability_sanic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ability_sanic.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="npc_dog" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\npc_dog.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="player_player0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\player_player0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="projectile_fireball" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\projectile_fireball.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

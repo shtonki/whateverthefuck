@@ -27,6 +27,8 @@
 
         player_Player0,
 
+        npc_dog,
+
         projectile_Fireball,
     }
 
@@ -54,6 +56,8 @@
             images[SpriteID.wall_Stone0] = new Bitmap(Properties.Resources.wall_stone0);
 
             images[SpriteID.player_Player0] = new Bitmap(Properties.Resources.player_player0);
+
+            images[SpriteID.npc_dog] = new Bitmap(Properties.Resources.npc_dog);
 
             images[SpriteID.projectile_Fireball] = new Bitmap(Properties.Resources.projectile_fireball);
 
