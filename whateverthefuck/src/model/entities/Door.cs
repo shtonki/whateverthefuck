@@ -1,6 +1,8 @@
 ﻿namespace whateverthefuck.src.model.entities
 {
     using System.Drawing;
+    using whateverthefuck.src.util;
+    using whateverthefuck.src.view;
 
     /// <summary>
     /// Doors are like Blocks but you can run through them.
@@ -14,7 +16,7 @@
             this.Height = 15;
 
             DoorCreationArgs dca = new DoorCreationArgs(args);
-            this.DrawColor = dca.Color;
+            this.Sprite = new Sprite(dca.GetSpriteID());
         }
     }
 
@@ -33,11 +35,8 @@
 
         public enum Types
         {
-            Wood,
             Stone,
         }
-
-        public Color Color => this.Colorx();
 
         public Types Type
         {
@@ -45,22 +44,17 @@
             set { this.FirstInt = (int)value; }
         }
 
-        private Color Colorx()
+        public SpriteID GetSpriteID()
         {
             switch (this.Type)
             {
                 case Types.Stone:
                 {
-                    return Color.Gray;
+                    return SpriteID.door_Stone0;
                 }
 
-                case Types.Wood:
-                {
-                    return Color.Khaki;
-                }
+                default: return SpriteID.testSprite1;
             }
-
-            return Color.Black;
         }
     }
 }

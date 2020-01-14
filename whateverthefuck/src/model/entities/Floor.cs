@@ -1,6 +1,8 @@
 ﻿namespace whateverthefuck.src.model.entities
 {
     using System.Drawing;
+    using whateverthefuck.src.util;
+    using whateverthefuck.src.view;
 
     /// <summary>
     /// Represents a floor tile.
@@ -15,7 +17,8 @@
             this.Height = 0;
 
             var fca = new FloorCreationArgs(args);
-            this.DrawColor = fca.Color;
+
+            this.Sprite = new Sprite(fca.GetSpriteID());
         }
     }
 
@@ -34,11 +37,8 @@
 
         public enum Types
         {
-            Grass,
-            Stone,
+            Wood,
         }
-
-        public Color Color => this.Colorx();
 
         public Types Type
         {
@@ -46,22 +46,17 @@
             set { this.FirstInt = (int)value; }
         }
 
-        private Color Colorx()
+        public SpriteID GetSpriteID()
         {
             switch (this.Type)
             {
-                case Types.Stone:
-                    {
-                        return Color.Silver;
-                    }
+                case Types.Wood:
+                {
+                    return SpriteID.floor_Wood0;
+                }
 
-                case Types.Grass:
-                    {
-                        return Color.Green;
-                    }
+                default: return SpriteID.testSprite1;
             }
-
-            return Color.Black;
         }
     }
 }

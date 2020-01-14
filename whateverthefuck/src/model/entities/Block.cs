@@ -1,6 +1,8 @@
 ﻿namespace whateverthefuck.src.model.entities
 {
     using System.Drawing;
+    using whateverthefuck.src.util;
+    using whateverthefuck.src.view;
 
     /// <summary>
     /// Represents a basic block in the game.
@@ -13,7 +15,7 @@
             this.Height = 100;
 
             var bca = new BlockCreationArgs(args);
-            this.DrawColor = bca.Color;
+            this.Sprite = new Sprite(bca.GetSpriteID());
         }
     }
 
@@ -41,19 +43,17 @@
             set { this.FirstInt = (int)value; }
         }
 
-        public Color Color => this.Colorx();
-
-        private Color Colorx()
+        public SpriteID GetSpriteID()
         {
             switch (this.Type)
             {
                 case Types.Stone:
                 {
-                    return Color.Gray;
+                    return SpriteID.wall_Stone0;
                 }
-            }
 
-            return Color.Black;
+                default: return SpriteID.testSprite1;
+            }
         }
     }
 }

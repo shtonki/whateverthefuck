@@ -82,6 +82,26 @@ namespace whateverthefuck.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap door_stone0 {
+            get {
+                object obj = ResourceManager.GetObject("door_stone0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap floor_wood0 {
+            get {
+                object obj = ResourceManager.GetObject("floor_wood0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap item_banana {
             get {
                 object obj = ResourceManager.GetObject("item_banana", resourceCulture);
@@ -129,6 +149,16 @@ namespace whateverthefuck.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap player_player0 {
+            get {
+                object obj = ResourceManager.GetObject("player_player0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream soundeffect1 {
@@ -152,6 +182,16 @@ namespace whateverthefuck.Properties {
         internal static System.IO.UnmanagedMemoryStream soundeffect3 {
             get {
                 return ResourceManager.GetStream("soundeffect3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap wall_stone0 {
+            get {
+                object obj = ResourceManager.GetObject("wall_stone0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

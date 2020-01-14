@@ -148,4 +148,16 @@
   <data name="soundeffect3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\soundeffect3.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="floor_wood0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\floor_wood0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="door_stone0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\door_stone0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="player_player0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\player_player0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wall_stone0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\wall_stone0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

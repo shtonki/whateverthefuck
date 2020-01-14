@@ -72,8 +72,8 @@
 
         public IEnumerable<GameEntity> GenerateHouse(int xorg, int yorg)
         {
-            var dca = new DoorCreationArgs(DoorCreationArgs.Types.Wood);
-            var fca = new FloorCreationArgs(FloorCreationArgs.Types.Stone);
+            var dca = new DoorCreationArgs(DoorCreationArgs.Types.Stone);
+            var fca = new FloorCreationArgs(FloorCreationArgs.Types.Wood);
             var bca = new BlockCreationArgs(BlockCreationArgs.Types.Stone);
 
             List<GameEntity> rt = new List<GameEntity>();

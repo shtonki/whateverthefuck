@@ -16,6 +16,8 @@
             this.Abilities.Abilities.Add(new Ability(AbilityType.Fireburst));
             this.Abilities.Abilities.Add(new Ability(AbilityType.Fireball));
             this.Abilities.Abilities.Add(new Ability(AbilityType.Sanic));
+
+            this.Sprite = new Sprite(SpriteID.player_Player0);
         }
     }
 }

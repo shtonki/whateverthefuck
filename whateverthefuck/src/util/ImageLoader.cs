@@ -10,10 +10,19 @@
     public enum SpriteID
     {
         testSprite1,
+
         ability_Fireball,
 
         item_Bronze_Dagger,
         item_Banana,
+
+        floor_Wood0,
+
+        door_Stone0,
+
+        wall_Stone0,
+
+        player_Player0,
     }
 
     public static class ImageLoader
@@ -24,9 +33,19 @@
         public static void Init()
         {
             images[SpriteID.testSprite1] = new Bitmap(Properties.Resources.kappa);
+
             images[SpriteID.ability_Fireball] = new Bitmap(Properties.Resources.ability_fireball);
+
             images[SpriteID.item_Banana] = new Bitmap(Properties.Resources.item_banana);
             images[SpriteID.item_Bronze_Dagger] = new Bitmap(Properties.Resources.item_bronze_dagger);
+
+            images[SpriteID.floor_Wood0] = new Bitmap(Properties.Resources.floor_wood0);
+
+            images[SpriteID.door_Stone0] = new Bitmap(Properties.Resources.door_stone0);
+
+            images[SpriteID.wall_Stone0] = new Bitmap(Properties.Resources.wall_stone0);
+
+            images[SpriteID.player_Player0] = new Bitmap(Properties.Resources.player_player0);
 
             foreach (var img in images)
             {

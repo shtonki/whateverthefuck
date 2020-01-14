@@ -30,6 +30,16 @@
               Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
             </summary>
         </member>
+        <member name="P:whateverthefuck.Properties.Resources.door_stone0">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.floor_wood0">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:whateverthefuck.Properties.Resources.item_banana">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.
@@ -55,6 +65,11 @@
               Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
             </summary>
         </member>
+        <member name="P:whateverthefuck.Properties.Resources.player_player0">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:whateverthefuck.Properties.Resources.soundeffect1">
             <summary>
               Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
@@ -68,6 +83,11 @@
         <member name="P:whateverthefuck.Properties.Resources.soundeffect3">
             <summary>
               Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.wall_stone0">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
         <member name="T:whateverthefuck.src.control.Hotkeys">
