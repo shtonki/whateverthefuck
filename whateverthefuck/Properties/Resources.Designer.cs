@@ -93,6 +93,16 @@ namespace whateverthefuck.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ability_mend {
+            get {
+                object obj = ResourceManager.GetObject("ability_mend", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ability_sanic {
             get {
                 object obj = ResourceManager.GetObject("ability_sanic", resourceCulture);

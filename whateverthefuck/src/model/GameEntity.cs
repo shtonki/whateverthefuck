@@ -115,15 +115,22 @@
 
         public void ReceiveDamage(DealDamageEvent e, GameState gs)
         {
-            var damage = e.Damage;
+            this.Status.WriteCurrentStats.Health -= e.Damage;
 
-            this.Status.WriteCurrentStats.Health -= damage;
             if (this.Status.ReadCurrentStats.Health < 0)
             {
                 this.Status.WriteCurrentStats.Health = 0;
             }
 
             this.OnDamaged?.Invoke(e, gs);
+        }
+
+        public void ReceiveHealing(HealEvent e, GameState gs)
+        {
+            var headRoom = this.Status.ReadCurrentStats.MaxHealth - this.Status.ReadCurrentStats.Health;
+            var healing = Math.Min(e.Healing, headRoom);
+
+            this.Status.WriteCurrentStats.Health += healing;
         }
 
         public float DistanceTo(GameEntity other)

@@ -38,6 +38,11 @@
                     id = SpriteID.ability_Fireburst;
                 } break;
 
+                case AbilityType.Mend:
+                {
+                    id = SpriteID.ability_Mend;
+                } break;
+
                 default:
                 {
                     id = SpriteID.testSprite1;

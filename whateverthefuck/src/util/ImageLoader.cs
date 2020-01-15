@@ -15,6 +15,7 @@
         ability_Fireball,
         ability_Sanic,
         ability_Fireburst,
+        ability_Mend,
 
         item_Bronze_Dagger,
         item_Banana,
@@ -49,6 +50,7 @@
             images[SpriteID.ability_Fireball] = new Bitmap(Properties.Resources.ability_fireball);
             images[SpriteID.ability_Sanic] = new Bitmap(Properties.Resources.ability_sanic);
             images[SpriteID.ability_Fireburst] = new Bitmap(Properties.Resources.ability_fireburst);
+            images[SpriteID.ability_Mend] = new Bitmap(Properties.Resources.ability_mend);
 
             images[SpriteID.item_Banana] = new Bitmap(Properties.Resources.item_banana);
             images[SpriteID.item_Bronze_Dagger] = new Bitmap(Properties.Resources.item_bronze_dagger);

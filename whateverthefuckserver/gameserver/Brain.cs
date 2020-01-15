@@ -45,29 +45,142 @@ namespace whateverthefuck.src.model.entities
 
         public EntityIdentifier Tagger { get; private set; }
 
-        private Dictionary<EntityIdentifier, int> ThreatTable = new Dictionary<EntityIdentifier, int>();
+        private BrainState State { get; set; } = BrainState.Idle;
+        
+        private Dictionary<EntityIdentifier, int> ThreatTable { get; } = new Dictionary<EntityIdentifier, int>();
 
-        public GameEvent Use(GameEntity entity, GameState gameState)
+        private float HealthPercentageIntoDefensiveCutoff { get; set; } = 0.35f;
+
+        public GameEvent[] Use(GameEntity entity, GameState gameState)
         {
-            if (TopThreat != null)
-            {
-                var target = gameState.GetEntityById(TopThreat);
-                var castableAbilities = entity.Abilities.CastableAbilities(target, gameState);
+            this.UpdateState(entity, gameState);
 
-                if (castableAbilities.Count() > 0)
+            switch (State)
+            {
+                case BrainState.Offensive:
                 {
-                    return new BeginCastAbilityEvent(entity, target, castableAbilities.ElementAt(RNG.IntegerBetween(0, castableAbilities.Count())));
+                    if (TopThreat != null)
+                    {
+                        var target = gameState.GetEntityById(TopThreat);
+
+                        if (target == null)
+                        {
+                            TopThreat = null;
+                            return null;
+                        }
+
+                        var ability = GetRandomStateAppropriateAbility(entity, target, gameState);
+
+                        if (ability != null)
+                        {
+                            EntityMovement movementContainer = new EntityMovement();
+                            return new GameEvent[]
+                            {
+                                new UpdateMovementEvent(entity.Info.Identifier, movementContainer),
+                                new BeginCastAbilityEvent(entity, target, ability),
+                            };
+                        }
+
+                        if (entity.Movements.FollowId?.Id != TopThreat.Id)
+                        {
+                            EntityMovement movementContainer = new EntityMovement();
+                            movementContainer.FollowId = TopThreat;
+                            return new GameEvent[] 
+                            {
+                                new UpdateMovementEvent(entity.Info.Identifier, movementContainer)
+                            };
+                        }
+                    }
+                } break;
+
+                case BrainState.Defensive:
+                {
+                    var ability = GetRandomStateAppropriateAbility(entity, entity, gameState);
+
+                    if (ability != null)
+                    {
+                        EntityMovement movementContainer = new EntityMovement();
+                        return new GameEvent[]
+                        {
+                        new UpdateMovementEvent(entity.Info.Identifier, movementContainer),
+                        new BeginCastAbilityEvent(entity, entity, ability),
+                        };
+                    }
+                } break;
+            }
+
+            return null;
+        }
+
+        private Ability GetRandomStateAppropriateAbility(GameEntity entity, GameEntity target, GameState gameState)
+        {
+            var castableAbilities = GetStateAppropriateSpells(entity, target, gameState);
+
+            if (castableAbilities != null && castableAbilities.Count() > 0)
+            {
+                return castableAbilities.ElementAt(RNG.IntegerBetween(0, castableAbilities.Count()));
+            }
+
+            return null;
+        }
+
+        private IEnumerable<Ability> GetStateAppropriateSpells(GameEntity entity, GameEntity target, GameState gameState)
+        {
+            var castableAbilities = entity.Abilities.CastableAbilities(target, gameState);
+
+            switch (State)
+            {
+                case BrainState.Offensive:
+                {
+                    return castableAbilities.Where(a => a.HasTag(NPCBrainAbilityTags.Offensive));
                 }
 
-                if (entity.Movements.FollowId?.Id != TopThreat.Id)
+                case BrainState.Defensive:
                 {
-                    EntityMovement movementContainer = new EntityMovement();
-                    movementContainer.FollowId = TopThreat;
-                    return new UpdateMovementEvent(entity.Info.Identifier, movementContainer);
+                    return castableAbilities.Where(a => a.HasTag(NPCBrainAbilityTags.Defensive));
                 }
             }
 
             return null;
+        }
+
+        private void UpdateState(GameEntity entity, GameState gameState)
+        {
+            switch (State)
+            {
+                case BrainState.Idle:
+                {
+                    if (TopThreat != null)
+                    {
+                        State = BrainState.Offensive;
+                    }
+                } break;
+
+                case BrainState.Offensive:
+                {
+                    var healthPercentage = (float)entity.Status.ReadCurrentStats.Health / entity.Status.ReadCurrentStats.MaxHealth;
+                    if (healthPercentage < HealthPercentageIntoDefensiveCutoff)
+                    {
+                        State = BrainState.Defensive;
+                    }
+                } break;
+
+                case BrainState.Defensive:
+                {
+                    var healthPercentage = (float)entity.Status.ReadCurrentStats.Health / entity.Status.ReadCurrentStats.MaxHealth;
+                    if (healthPercentage > HealthPercentageIntoDefensiveCutoff)
+                    {
+                        State = BrainState.Offensive;
+                    }
+                } break;
+            }
+        }
+
+        enum BrainState
+        {
+            Idle,
+            Offensive,
+            Defensive,
         }
     }
 }

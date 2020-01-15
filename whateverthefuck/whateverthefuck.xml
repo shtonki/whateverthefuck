@@ -35,6 +35,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:whateverthefuck.Properties.Resources.ability_mend">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:whateverthefuck.Properties.Resources.ability_sanic">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.

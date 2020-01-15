@@ -240,6 +240,10 @@
             {
                 this.HandleEvent(dde);
             }
+            else if (e is HealEvent he)
+            {
+                this.HandleEvent(he);
+            }
             else if (e is EndCastAbility eca)
             {
                 this.HandleEvent(eca);
@@ -345,6 +349,26 @@
                 else if (dealDamageEvent.DefenderIdentifier.Id == Program.GameStateManager.Hero.Info.Identifier.Id)
                 {
                     GUI.AddDamageText(defender.Info.Center, damage.ToString(), Color.DarkRed);
+                }
+            }
+        }
+
+        private void HandleEvent(HealEvent healEvent)
+        {
+            var healer = this.GetEntityById(healEvent.HealerIdentifier);
+            var healee = this.GetEntityById(healEvent.HealeeIdentifier);
+
+            healee.ReceiveHealing(healEvent, this);
+
+            var healing = healEvent.Healing;
+
+            // @fix make these callbacks
+            if (Program.GameStateManager.Hero != null)
+            {
+                if (healEvent.HealerIdentifier.Id == Program.GameStateManager.Hero.Info.Identifier.Id ||
+                    healEvent.HealeeIdentifier.Id == Program.GameStateManager.Hero.Info.Identifier.Id)
+                {
+                    GUI.AddDamageText(healee.Info.Center, healing.ToString(), Color.Green);
                 }
             }
         }

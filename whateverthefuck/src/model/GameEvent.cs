@@ -208,7 +208,25 @@
         public EntityIdentifier DefenderIdentifier { get; private set; }
 
         public int Damage { get; private set; }
+    }
 
+    public class HealEvent : GameEvent
+    {
+        public HealEvent(GameEntity healer, GameEntity healee, int healing)
+            : base(GameEventType.Damage)
+        {
+            this.Type = GameEventType.Damage;
+
+            this.HealerIdentifier = healer.Info.Identifier;
+            this.HealeeIdentifier = healee.Info.Identifier;
+            this.Healing = healing;
+        }
+
+        public EntityIdentifier HealerIdentifier { get; private set; }
+
+        public EntityIdentifier HealeeIdentifier { get; private set; }
+
+        public int Healing { get; private set; }
     }
 
     public class DestroyEntityEvent : GameEvent

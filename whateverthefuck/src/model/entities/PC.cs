@@ -14,7 +14,7 @@
             this.Status.BaseStats.MoveSpeed = 0.01f;
             this.Status.BaseStats.MaxHealth = 100;
 
-            this.Abilities.Abilities.Add(new Sanic());
+            this.Abilities.Abilities.Add(new Mend());
             this.Abilities.Abilities.Add(new Fireball());
             this.Abilities.Abilities.Add(new Fireburst());
 

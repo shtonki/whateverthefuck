@@ -21,6 +21,7 @@
             this.Status.BaseStats.MoveSpeed = 0.015f;
 
             this.Abilities.Abilities.Add(new Bite());
+            this.Abilities.Abilities.Add(new Mend());
 
             this.Sprite = new Sprite(args.GetSpriteID());
         }

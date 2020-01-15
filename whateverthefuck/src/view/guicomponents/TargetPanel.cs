@@ -13,7 +13,7 @@ namespace whateverthefuck.src.view.guicomponents
     internal class TargetPanel : Panel
     {
         private const int StatusRows = 3;
-        private const int StatusColumns = 6;
+        private const int StatusColumns = 4;
         private const float StatusPadding = 0.01f;
 
         private const float EntityPortraitPadding = 0.05f;
@@ -66,6 +66,8 @@ namespace whateverthefuck.src.view.guicomponents
                 drawAdapter.FillRectangle(healthXMiddle, healthY0, healthX1, healthY1, Color.Red);
             }
 
+            var castingX1 = this.Size.Y + this.Size.Y - HealthThickness;
+
             if (this.entity.Abilities.Casting != null)
             {
                 var casting = this.entity.Abilities.Casting;
@@ -73,7 +75,6 @@ namespace whateverthefuck.src.view.guicomponents
                 var sprite = Sprite.GetAbilitySprite(casting.CastingAbility.AbilityType);
                 var castingX0 = this.Size.Y;
                 var castingY0 = 0;
-                var castingX1 = this.Size.Y + this.Size.Y - HealthThickness;
                 var castingY1 = this.Size.Y - HealthThickness;
 
                 drawAdapter.DrawSprite(castingX0, castingY0, castingX1, castingY1, sprite);
@@ -81,7 +82,7 @@ namespace whateverthefuck.src.view.guicomponents
 
             drawAdapter.DrawText(FontLoader.DefaultFont, "Entity Name", new GLCoordinate(this.Location.X + this.Size.Y, this.Location.Y + this.Size.Y), QuickFont.QFontAlignment.Centre, this.nameRenderOptions);
 
-            var statusX0 = this.Size.Y;
+            var statusX0 = castingX1;
             var statusY0 = 0;
             var statusX1 = this.Size.X;
             var statusY1 = healthY0;

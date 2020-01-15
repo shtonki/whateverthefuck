@@ -141,4 +141,31 @@ namespace whateverthefuck.src.model
             return false;
         }
     }
+
+    public class CastingInfo
+    {
+        public CastingInfo(Ability castingAbility, GameEntity target)
+        {
+            this.CastingAbility = castingAbility;
+            this.Target = target.Info.Identifier;
+            this.MaxTicks = castingAbility.CastTime;
+        }
+
+        public bool DoneCasting => this.ElapsedTicks >= this.MaxTicks;
+
+        public float PercentageDone => (float)this.ElapsedTicks / this.MaxTicks;
+
+        public Ability CastingAbility { get; }
+
+        public EntityIdentifier Target { get; }
+
+        private int ElapsedTicks { get; set; }
+
+        private int MaxTicks { get; }
+
+        public void Step()
+        {
+            this.ElapsedTicks++;
+        }
+    }
 }

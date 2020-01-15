@@ -9,14 +9,20 @@
     {
         Fireball,
         Fireburst,
-
         Sanic,
-
         Bite,
+        Mend,
+    }
+
+    public enum NPCBrainAbilityTags
+    {
+        Offensive,
+        Defensive,
     }
 
     public abstract class Ability
     {
+
         protected const float MeleeRange = 0.2f;
 
         public Ability(AbilityType abilityType)
@@ -38,6 +44,8 @@
 
         public float CooldownPercentage => this.BaseCooldown == 0 ? 0 : (float)this.CurrentCooldown / this.BaseCooldown;
 
+        private bool[] NPCBrainTags { get; } = new bool[Enum.GetValues(typeof(NPCBrainAbilityTags)).Length];
+
         public abstract IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState);
 
         /// <summary>
@@ -52,6 +60,16 @@
         }
 
         public abstract bool CanTarget(GameEntity caster, GameEntity target, GameState gameState);
+
+        public bool HasTag(NPCBrainAbilityTags tag)
+        {
+            return this.NPCBrainTags[(int)tag];
+        }
+
+        protected void AddTag(NPCBrainAbilityTags tag)
+        {
+            this.NPCBrainTags[(int)tag] = true;
+        }
     }
 
     public class Fireball : Ability
@@ -71,34 +89,6 @@
             {
                 new DealDamageEvent(caster, target, 15),
                 new ApplyStatusEvent(target, new BurnStatus(caster.Info.Identifier, 10)),
-            };
-        }
-
-        public override bool CanTarget(GameEntity caster, GameEntity target, GameState gameState)
-        {
-            return
-                target != caster &&
-                target.Info.State == GameEntityState.Alive &&
-                target is Character;
-        }
-    }
-
-    public class Bite : Ability
-    {
-        public Bite()
-            : base(AbilityType.Bite)
-        {
-            this.CastTime = 0;
-            this.BaseCooldown = 0;
-            this.Range = MeleeRange;
-            this.CreateProjectile = false;
-        }
-
-        public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
-        {
-            return new GameEvent[]
-            {
-                new DealDamageEvent(caster, target, 1),
             };
         }
 
@@ -165,30 +155,56 @@
         }
     }
 
-    public class CastingInfo
+    public class Mend : Ability
     {
-        public CastingInfo(Ability castingAbility, GameEntity target)
+        public Mend()
+            : base(AbilityType.Mend)
         {
-            this.CastingAbility = castingAbility;
-            this.Target = target.Info.Identifier;
-            this.MaxTicks = castingAbility.CastTime;
+            this.CastTime = 200;
+            this.BaseCooldown = 0;
+            this.Range = 1.5f;
+
+            this.AddTag(NPCBrainAbilityTags.Defensive);
         }
 
-        public bool DoneCasting => this.ElapsedTicks >= this.MaxTicks;
-
-        public float PercentageDone => (float)this.ElapsedTicks / this.MaxTicks;
-
-        public Ability CastingAbility { get; }
-
-        public EntityIdentifier Target { get; }
-
-        private int ElapsedTicks { get; set; }
-
-        private int MaxTicks { get; }
-
-        public void Step()
+        public override bool CanTarget(GameEntity caster, GameEntity target, GameState gameState)
         {
-            this.ElapsedTicks++;
+            return target is Character;
+        }
+
+        public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
+        {
+            return new GameEvent[] { new HealEvent(caster, target, 20) };
+        }
+    }
+
+    public class Bite : Ability
+    {
+        public Bite()
+            : base(AbilityType.Bite)
+        {
+            this.CastTime = 0;
+            this.BaseCooldown = 0;
+            this.Range = MeleeRange;
+            this.CreateProjectile = false;
+
+            this.AddTag(NPCBrainAbilityTags.Offensive);
+        }
+
+        public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
+        {
+            return new GameEvent[]
+            {
+                new DealDamageEvent(caster, target, 1),
+            };
+        }
+
+        public override bool CanTarget(GameEntity caster, GameEntity target, GameState gameState)
+        {
+            return
+                target != caster &&
+                target.Info.State == GameEntityState.Alive &&
+                target is Character;
         }
     }
 }
