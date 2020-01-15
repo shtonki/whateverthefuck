@@ -110,6 +110,21 @@
               Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
             </summary>
         </member>
+        <member name="P:whateverthefuck.Properties.Resources.status_burning">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.status_slow">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.status_vulnerable">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:whateverthefuck.Properties.Resources.wall_stone0">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.

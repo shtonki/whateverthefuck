@@ -51,7 +51,7 @@
             {
                 case Types.Dog:
                 {
-                    return SpriteID.npc_dog;
+                    return SpriteID.npc_Dog;
                 }
 
                 default: return SpriteID.testSprite1;

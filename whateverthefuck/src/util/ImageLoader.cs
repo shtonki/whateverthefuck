@@ -27,9 +27,13 @@
 
         player_Player0,
 
-        npc_dog,
+        npc_Dog,
 
         projectile_Fireball,
+
+        status_Slow,
+        status_Vulnerable,
+        status_Burning,
     }
 
     public static class ImageLoader
@@ -57,9 +61,13 @@
 
             images[SpriteID.player_Player0] = new Bitmap(Properties.Resources.player_player0);
 
-            images[SpriteID.npc_dog] = new Bitmap(Properties.Resources.npc_dog);
+            images[SpriteID.npc_Dog] = new Bitmap(Properties.Resources.npc_dog);
 
             images[SpriteID.projectile_Fireball] = new Bitmap(Properties.Resources.projectile_fireball);
+
+            images[SpriteID.status_Slow] = new Bitmap(Properties.Resources.status_slow);
+            images[SpriteID.status_Vulnerable] = new Bitmap(Properties.Resources.status_vulnerable);
+            images[SpriteID.status_Burning] = new Bitmap(Properties.Resources.status_burning);
 
             foreach (var img in images)
             {

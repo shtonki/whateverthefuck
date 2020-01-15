@@ -66,10 +66,10 @@ namespace whateverthefuck.src.view
             GL.Disable(EnableCap.ScissorTest);
         }
 
-        public void DrawText(QFont defaultFont, string text, GLCoordinate gLCoordinate, QFontAlignment left, QFontRenderOptions renderOptions)
+        public void DrawText(QFont font, string text, GLCoordinate glLocation, QFontAlignment alignment, QFontRenderOptions renderOptions)
         {
-            var location = GUI.GLToScreenCoordinates(gLCoordinate);
-            this.FontDrawing.Print(defaultFont, text, new OpenTK.Vector3(location.X, location.Y, 0), QFontAlignment.Left, renderOptions);
+            var location = GUI.GLToScreenCoordinates(glLocation);
+            this.FontDrawing.Print(font, text, new OpenTK.Vector3(location.X, location.Y, 0), QFontAlignment.Left, renderOptions);
         }
 
         public void FillRectangle(float x1, float y1, float x2, float y2, Color c)

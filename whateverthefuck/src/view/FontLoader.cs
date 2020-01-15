@@ -9,6 +9,7 @@ namespace whateverthefuck.src.view
     {
         public static QFont DefaultFont { get; private set; }
 
+        public static QFont BigFont { get; private set; }
 
         public static void LoadFonts()
         {
@@ -26,18 +27,13 @@ namespace whateverthefuck.src.view
 
             // loop through some installed fonts and load them
             var ifc = new InstalledFontCollection();
-            var installedFonts = new List<QFont>();
 
             foreach (var fontFamily in ifc.Families)
             {
-                // Don't load too many fonts
-                if (installedFonts.Count > 15)
-                    break;
-
-                installedFonts.Add(new QFont(fontFamily.Name, 14, new QFontBuilderConfiguration()));
+                DefaultFont = new QFont(fontFamily.Name, 14, new QFontBuilderConfiguration());
+                BigFont = new QFont(fontFamily.Name, 20, new QFontBuilderConfiguration(), System.Drawing.FontStyle.Bold);
+                break;
             }
-
-            DefaultFont = installedFonts[0];
         }
     }
 }

@@ -13,7 +13,7 @@ namespace whateverthefuck.src.model
 
         public StatStruct ReadCurrentStats { get; private set; }
 
-        private List<Status> ActiveStatuses { get; } = new List<Status>();
+        public List<Status> ActiveStatuses { get; } = new List<Status>();
 
         public void ResetToBaseStats()
         {
@@ -21,7 +21,7 @@ namespace whateverthefuck.src.model
             this.WriteCurrentStats = new StatStruct(this.BaseStats);
         }
 
-        public void Step()
+        public void Step(GameEntity entity, GameState gameState)
         {
             var newCurrentStats = new StatStruct(this.WriteCurrentStats);
 
@@ -29,6 +29,12 @@ namespace whateverthefuck.src.model
             {
                 status.Duration--;
                 status.ApplyTo(newCurrentStats);
+
+                var tickEffects = status.Tick(entity, gameState);
+                if (tickEffects != null)
+                {
+                    gameState.HandleGameEvents(tickEffects);
+                }
             }
 
             this.ActiveStatuses.RemoveAll(s => s.Duration <= 0);
@@ -63,6 +69,7 @@ namespace whateverthefuck.src.model
             this.MaxHealth = copyFrom.MaxHealth;
             this.Health = copyFrom.Health;
             this.MoveSpeed = copyFrom.MoveSpeed;
+            this.DamageTaken = copyFrom.DamageTaken;
         }
 
         public int MaxHealth { get; set; }
@@ -72,5 +79,7 @@ namespace whateverthefuck.src.model
         public float MoveSpeed { get; set; }
 
         public int GlobalCooldown { get; set; } = 150;
+
+        public float DamageTaken { get; set; } = 1;
     }
 }

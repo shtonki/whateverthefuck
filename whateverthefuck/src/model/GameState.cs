@@ -329,8 +329,10 @@
         private void HandleEvent(DealDamageEvent dealDamageEvent)
         {
             var defender = this.GetEntityById(dealDamageEvent.DefenderIdentifier);
+            var baseDamage = dealDamageEvent.Damage;
+            var damage = (int)(baseDamage * defender.Status.ReadCurrentStats.DamageTaken);
 
-            defender.Status.WriteCurrentStats.Health -= dealDamageEvent.Damage;
+            defender.Status.WriteCurrentStats.Health -= damage;
             if (defender.Status.ReadCurrentStats.Health < 0)
             {
                 defender.Status.WriteCurrentStats.Health = 0;
@@ -341,11 +343,11 @@
             {
                 if (dealDamageEvent.AttackerIdentifier.Id == Program.GameStateManager.Hero.Info.Identifier.Id)
                 {
-                    GUI.AddDamageText(defender.Info.Center, dealDamageEvent.Damage.ToString(), Color.Orange);
+                    GUI.AddDamageText(defender.Info.Center, damage.ToString(), Color.Orange);
                 }
                 else if (dealDamageEvent.DefenderIdentifier.Id == Program.GameStateManager.Hero.Info.Identifier.Id)
                 {
-                    GUI.AddDamageText(defender.Info.Center, dealDamageEvent.Damage.ToString(), Color.DarkRed);
+                    GUI.AddDamageText(defender.Info.Center, damage.ToString(), Color.DarkRed);
                 }
             }
         }

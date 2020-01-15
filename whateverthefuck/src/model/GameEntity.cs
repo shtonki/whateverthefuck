@@ -102,7 +102,7 @@
         /// <param name="gameState">The GameState in which the GameEntity is ticked.</param>
         public virtual void Step(GameState gameState)
         {
-            this.UpdateCurrentStats();
+            this.UpdateCurrentStats(gameState);
 
             if (this.Status.ReadCurrentStats.Health <= 0 && this.Info.State != GameEntityState.Dead)
             {
@@ -193,9 +193,9 @@
             }
         }
 
-        private void UpdateCurrentStats()
+        private void UpdateCurrentStats(GameState gameState)
         {
-            this.Status.Step();
+            this.Status.Step(this, gameState);
         }
 
     }

@@ -12,16 +12,22 @@ namespace whateverthefuck.src.view.guicomponents
 {
     internal class TargetPanel : Panel
     {
+        private const int StatusRows = 3;
+        private const int StatusColumns = 6;
+        private const float StatusPadding = 0.01f;
+
         private const float EntityPortraitPadding = 0.05f;
         private const float HealthThickness = 0.1f;
 
         private GameEntity entity;
-        private QFontRenderOptions renderOptions;
+        private QFontRenderOptions nameRenderOptions;
+        private QFontRenderOptions statusStackCountRenderOptions;
 
         public TargetPanel(GameEntity entity)
         {
             this.entity = entity;
-            this.renderOptions = new QFontRenderOptions { Colour = Color.Black, DropShadowActive = true };
+            this.nameRenderOptions = new QFontRenderOptions { Colour = Color.Black, DropShadowActive = true };
+            this.statusStackCountRenderOptions = new QFontRenderOptions { Colour = Color.Orange, DropShadowActive = true };
 
         }
 
@@ -29,11 +35,16 @@ namespace whateverthefuck.src.view.guicomponents
         {
             base.DrawMe(drawAdapter);
 
+            var portraitX0 = EntityPortraitPadding;
+            var portraitY0 = EntityPortraitPadding;
+            var portraitX1 = this.Size.Y - (2 * EntityPortraitPadding);
+            var portraitY1 = this.Size.Y - (2 * EntityPortraitPadding);
+
             drawAdapter.DrawSprite(
-                EntityPortraitPadding,
-                EntityPortraitPadding,
-                this.Size.Y - (2 * EntityPortraitPadding),
-                this.Size.Y - (2 * EntityPortraitPadding),
+                portraitX0,
+                portraitY0,
+                portraitX1,
+                portraitY1,
                 this.entity.Sprite);
 
             var healthX0 = this.Size.Y;
@@ -68,7 +79,34 @@ namespace whateverthefuck.src.view.guicomponents
                 drawAdapter.DrawSprite(castingX0, castingY0, castingX1, castingY1, sprite);
             }
 
-            drawAdapter.DrawText(FontLoader.DefaultFont, "Entity Name", new GLCoordinate(this.Location.X + this.Size.Y, this.Location.Y + this.Size.Y), QuickFont.QFontAlignment.Centre, this.renderOptions);
+            drawAdapter.DrawText(FontLoader.DefaultFont, "Entity Name", new GLCoordinate(this.Location.X + this.Size.Y, this.Location.Y + this.Size.Y), QuickFont.QFontAlignment.Centre, this.nameRenderOptions);
+
+            var statusX0 = this.Size.Y;
+            var statusY0 = 0;
+            var statusX1 = this.Size.X;
+            var statusY1 = healthY0;
+            var statusTotalWidth = statusX1 - statusX0;
+            var statusTotalHeight = statusY1 - statusY0;
+            var statusWidth = statusTotalWidth / StatusColumns;
+            var statusHeight = statusTotalHeight / StatusRows;
+
+            var statuses = this.entity.Status.ActiveStatuses;
+
+            for (int i = 0; i < statuses.Count; i++)
+            {
+                var status = statuses[i];
+
+                int row = i / StatusColumns;
+                int column = i % StatusColumns;
+                var X0 = statusX0 + (column * statusWidth);
+                var Y0 = statusY0 + (row * statusHeight);
+                var X1 = X0 + statusWidth;
+                var Y1 = Y0 + statusHeight;
+                var sprite = status.Sprite;
+
+                drawAdapter.DrawSprite(X0, Y0, X1, Y1, sprite);
+                drawAdapter.DrawText(FontLoader.BigFont, status.Stacks.ToString(), new GLCoordinate(this.Location.X + X0, this.Location.Y + Y1 + (statusHeight / 3)), QFontAlignment.Left, this.statusStackCountRenderOptions);
+            }
         }
     }
 }

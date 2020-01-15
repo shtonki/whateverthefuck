@@ -70,6 +70,7 @@
             return new GameEvent[]
             {
                 new DealDamageEvent(caster, target, 15),
+                new ApplyStatusEvent(target, new BurnStatus(caster.Info.Identifier, 10)),
             };
         }
 
@@ -97,7 +98,7 @@
         {
             return new GameEvent[]
             {
-                new DealDamageEvent(caster, target, 20),
+                new DealDamageEvent(caster, target, 1),
             };
         }
 
@@ -124,7 +125,7 @@
         {
             return new GameEvent[]
             {
-                new ApplyStatusEvent(caster, new SanicStatus(300, 1)),
+                new ApplyStatusEvent(caster, new SanicStatus(caster.Info.Identifier, 300, 1)),
                 new DealDamageEvent(caster, caster, 10),
             };
         }
@@ -150,6 +151,8 @@
             return new GameEvent[]
             {
                 new DealDamageEvent(caster, target, 15),
+                new ApplyStatusEvent(target, new SlowStatus(caster.Info.Identifier, 800, 1)),
+                new ApplyStatusEvent(target, new VulnerableStatus(caster.Info.Identifier, 800, 1)),
             };
         }
 
