@@ -9,30 +9,31 @@
     /// </summary>
     public class Floor : GameEntity
     {
-        public Floor(EntityIdentifier id, CreationArgs args)
+        public Floor(EntityIdentifier id, CreationArguments args)
+            : this(id, args as FloorCreationArguments)
+        {
+        }
+
+        public Floor(EntityIdentifier id, FloorCreationArguments args)
             : base(id, EntityType.Floor, args)
         {
             this.Collidable = false;
             this.BlocksLOS = false;
             this.Height = 0;
 
-            var fca = new FloorCreationArgs(args);
-
-            this.Sprite = new Sprite(fca.GetSpriteID());
+            this.Sprite = new Sprite(args.GetSpriteID());
         }
     }
 
-    public class FloorCreationArgs : CreationArgs
+    public class FloorCreationArguments : CreationArguments
     {
-        public FloorCreationArgs(CreationArgs args)
-            : base(args.Value)
-        {
-        }
-
-        public FloorCreationArgs(Types type)
-            : base(0)
+        public FloorCreationArguments(Types type)
         {
             this.Type = type;
+        }
+
+        public FloorCreationArguments()
+        {
         }
 
         public enum Types
@@ -40,11 +41,7 @@
             Wood,
         }
 
-        public Types Type
-        {
-            get { return (Types)this.FirstInt; }
-            set { this.FirstInt = (int)value; }
-        }
+        public Types Type { get; private set; }
 
         public SpriteID GetSpriteID()
         {
@@ -57,6 +54,16 @@
 
                 default: return SpriteID.testSprite1;
             }
+        }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode((int)this.Type);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.Type = (Types)decoder.DecodeInt();
         }
     }
 }

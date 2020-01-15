@@ -131,18 +131,10 @@
             this.Y = e.GameLocation.Y;
             this.CurrentHealth = e.Status.BaseStats.Health;
             this.MaxHealth = e.Status.BaseStats.MaxHealth;
-
-            if (e.CreationArgs == null)
-            {
-                this.CreationArgs = new CreationArgs(0);
-            }
-            else
-            {
-                this.CreationArgs = e.CreationArgs;
-            }
+            this.CreationArgs = e.CreationArgs;
         }
 
-        public CreateEntityEvent(EntityIdentifier id, EntityType entityType, float x, float y, int currentHealth, int maxHealth, CreationArgs creationArgs)
+        public CreateEntityEvent(EntityIdentifier id, EntityType entityType, float x, float y, int currentHealth, int maxHealth, CreationArguments creationArgs)
             : base(GameEventType.Create)
         {
             this.Id = id;
@@ -171,7 +163,7 @@
 
         public int MaxHealth { get; private set; }
 
-        public CreationArgs CreationArgs { get; private set; }
+        public CreationArguments CreationArgs { get; private set; }
 
         public Action<GameEntity> OnCreationCallback { get; set; }
 
@@ -187,7 +179,7 @@
             encoder.Encode(this.Y);
             encoder.Encode(this.MaxHealth);
             encoder.Encode(this.CurrentHealth);
-            encoder.Encode(this.CreationArgs.Value);
+            this.CreationArgs.Encode(encoder);
         }
 
         public override void Decode(WhateverDecoder decoder)
@@ -198,7 +190,8 @@
             this.Y = decoder.DecodeFloat();
             this.MaxHealth = decoder.DecodeInt();
             this.CurrentHealth = decoder.DecodeInt();
-            this.CreationArgs = new CreationArgs(decoder.DecodeULong());
+            this.CreationArgs = CreationArguments.FromEntityType(this.EntityType);
+            this.CreationArgs.Decode(decoder);
         }
     }
 

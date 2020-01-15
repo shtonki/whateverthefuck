@@ -9,28 +9,32 @@
     /// </summary>
     public class Door : GameEntity
     {
-        public Door(EntityIdentifier identifier, CreationArgs args)
+        public Door(EntityIdentifier id, CreationArguments args)
+            : this(id, args as DoorCreationArguments)
+        {
+        }
+
+        public Door(EntityIdentifier identifier, DoorCreationArguments args)
             : base(identifier, EntityType.Door, args)
         {
             this.Collidable = false;
             this.Height = 15;
 
-            DoorCreationArgs dca = new DoorCreationArgs(args);
-            this.Sprite = new Sprite(dca.GetSpriteID());
+            this.Sprite = new Sprite(args.GetSpriteID());
         }
     }
 
-    public class DoorCreationArgs : CreationArgs
+    public class DoorCreationArguments : CreationArguments
     {
-        public DoorCreationArgs(CreationArgs args)
-            : base(args.Value)
-        {
-        }
 
-        public DoorCreationArgs(Types type)
-            : base(0)
+
+        public DoorCreationArguments(Types type)
         {
             this.Type = type;
+        }
+
+        public DoorCreationArguments()
+        {
         }
 
         public enum Types
@@ -38,11 +42,7 @@
             Stone,
         }
 
-        public Types Type
-        {
-            get { return (Types)this.FirstInt; }
-            set { this.FirstInt = (int)value; }
-        }
+        public Types Type { get; private set; }
 
         public SpriteID GetSpriteID()
         {
@@ -55,6 +55,16 @@
 
                 default: return SpriteID.testSprite1;
             }
+        }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode((int)this.Type);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.Type = (Types)decoder.DecodeInt();
         }
     }
 }

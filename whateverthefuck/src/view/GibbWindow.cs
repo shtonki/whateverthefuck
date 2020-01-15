@@ -81,11 +81,6 @@
             GL.UseProgram(0);
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
-            // Draw GUI components
-            foreach (var guiComponent in GUI.GUIComponents.ToList())
-            {
-                guiComponent.Draw(drawAdapter);
-            }
 #if false
             // Take account of Camera zoom
             if (GUI.Camera != null)
@@ -94,26 +89,13 @@
             }
 #endif
 
-            var entityDrawing = Program.GameStateManager.GameState.EntityDrawingInfo;
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            GL.DepthMask(true);
 
-            if (entityDrawing != null)
-            {
-                drawAdapter.PushMatrix();
-
-                drawAdapter.Translate(-entityDrawing.Camera.Location.X, -entityDrawing.Camera.Location.Y);
-
-                foreach (var ed in entityDrawing.EntityDrawables)
-                {
-                    ed.Draw(drawAdapter);
-                }
-
-                drawAdapter.PopMatrix();
-            }
-
-            this.EntityDrawingInfoCache = entityDrawing;
-
-            FontDrawing.RefreshBuffers();
-            FontDrawing.Draw();
+            this.DrawGameEntities(drawAdapter);
+            this.DrawGUIComponents(drawAdapter);
+            this.DrawText(drawAdapter);
 
             this.SwapBuffers();
             drawAdapter.PopMatrix();
@@ -169,6 +151,42 @@
         {
             InputUnion keyboardInput = InputUnion.MakeKeyboardInput(InputUnion.Directions.Up, e.Key);
             Program.GameStateManager.HandleInput(keyboardInput);
+        }
+
+        private void DrawGameEntities(DrawAdapter drawAdapter)
+        {
+            var entityDrawing = Program.GameStateManager.GameState.EntityDrawingInfo;
+
+            if (entityDrawing != null)
+            {
+                drawAdapter.PushMatrix();
+
+                drawAdapter.Translate(-entityDrawing.Camera.Location.X, -entityDrawing.Camera.Location.Y);
+
+                foreach (var ed in entityDrawing.EntityDrawables)
+                {
+                    ed.Draw(drawAdapter);
+                }
+
+                drawAdapter.PopMatrix();
+            }
+
+            this.EntityDrawingInfoCache = entityDrawing;
+        }
+
+        private void DrawGUIComponents(DrawAdapter drawAdapter)
+        {
+            // Draw GUI components
+            foreach (var guiComponent in GUI.GUIComponents.ToList())
+            {
+                guiComponent.Draw(drawAdapter);
+            }
+        }
+
+        private void DrawText(DrawAdapter drawAdapter)
+        {
+            FontDrawing.RefreshBuffers();
+            FontDrawing.Draw();
         }
 
         private void UpdateFPSCounter()

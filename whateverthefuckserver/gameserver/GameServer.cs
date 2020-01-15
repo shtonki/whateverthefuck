@@ -122,7 +122,7 @@ namespace whateverthefuckserver.gameserver
 
         public void SpawnLootForPlayer(GameEntity dead, GameEntity killer)
         {
-            if (killer is PlayerCharacter)
+            if (killer is PC)
             {
                 // @fix for christ sake just store the PlayerCharacter in the user so we don't end up looping through the entire server every
                 // time someone kills something and also this has a very real risk of breaking regardless of what the error message says

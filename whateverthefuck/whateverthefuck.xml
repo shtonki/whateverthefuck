@@ -208,7 +208,7 @@
             Represents a Character in the game.
             </summary>
         </member>
-        <member name="M:whateverthefuck.src.model.entities.Character.#ctor(whateverthefuck.src.model.EntityIdentifier,whateverthefuck.src.model.EntityType,whateverthefuck.src.model.CreationArgs)">
+        <member name="M:whateverthefuck.src.model.entities.Character.#ctor(whateverthefuck.src.model.EntityIdentifier,whateverthefuck.src.model.EntityType,whateverthefuck.src.model.CreationArguments)">
             <summary>
             Initializes a new instance of the <see cref="T:whateverthefuck.src.model.entities.Character"/> class.
             </summary>
@@ -224,21 +224,6 @@
         <member name="T:whateverthefuck.src.model.entities.Floor">
             <summary>
             Represents a floor tile.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.CreationArgs.Value">
-            <summary>
-            Gets or sets the unencoded value of the CreationArgs.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.CreationArgs.FirstInt">
-            <summary>
-            Gets or sets the most significant int.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.CreationArgs.SecondInt">
-            <summary>
-            Gets or sets the least significant int.
             </summary>
         </member>
         <member name="T:whateverthefuck.src.model.GameCoordinate">

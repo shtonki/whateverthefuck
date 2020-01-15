@@ -86,7 +86,7 @@
             GUIComponents.Add(InventoryPanel);
         }
 
-        public static void LoadHUD(PlayerCharacter hero)
+        public static void LoadHUD(PC hero)
         {
             LoadAbilityBar(hero);
             SetHeroPanel(hero);
@@ -131,7 +131,7 @@
             InventoryPanel.Visible = !InventoryPanel.Visible;
         }
 
-        public static void SetHeroPanel(PlayerCharacter hero)
+        public static void SetHeroPanel(PC hero)
         {
             if (HeroPanel != null)
             {
@@ -215,7 +215,7 @@
             return null;
         }
 
-        private static void LoadAbilityBar(PlayerCharacter hero)
+        private static void LoadAbilityBar(PC hero)
         {
             Panel abilityBar = new Panel();
             abilityBar.Location = new GLCoordinate(-0.9f, -0.9f);

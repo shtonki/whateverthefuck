@@ -9,25 +9,28 @@
     /// </summary>
     public class Block : GameEntity
     {
-        public Block(EntityIdentifier id, CreationArgs args)
+        public Block(EntityIdentifier id, CreationArguments args)
+            : this(id, args as BlockCreationArguments)
+        {
+        }
+
+        public Block(EntityIdentifier id, BlockCreationArguments args)
             : base(id, EntityType.Block, args)
         {
             this.Height = 100;
 
-            var bca = new BlockCreationArgs(args);
-            this.Sprite = new Sprite(bca.GetSpriteID());
+            this.Sprite = new Sprite(args.GetSpriteID());
         }
     }
 
-    public class BlockCreationArgs : CreationArgs
+    public class BlockCreationArguments : CreationArguments
     {
-        public BlockCreationArgs(CreationArgs args)
-            : base(args.Value)
+        public BlockCreationArguments()
         {
+
         }
 
-        public BlockCreationArgs(Types type)
-            : base(0)
+        public BlockCreationArguments(Types type)
         {
             this.Type = type;
         }
@@ -37,10 +40,16 @@
             Stone,
         }
 
-        public Types Type
+        public Types Type { get; private set; }
+
+        public override void Encode(WhateverEncoder encoder)
         {
-            get { return (Types)this.FirstInt; }
-            set { this.FirstInt = (int)value; }
+            encoder.Encode((int)this.Type);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.Type = (Types)decoder.DecodeInt();
         }
 
         public SpriteID GetSpriteID()

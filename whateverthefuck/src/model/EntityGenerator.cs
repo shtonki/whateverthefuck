@@ -18,7 +18,7 @@
 
         private IdentifierGenerator IdGenerator { get; }
 
-        public GameEntity GenerateEntity(EntityType type, EntityIdentifier identifier, CreationArgs args)
+        public GameEntity GenerateEntity(EntityType type, EntityIdentifier identifier, CreationArguments args)
         {
             switch (type)
             {
@@ -32,9 +32,9 @@
                         return new NPC(identifier, args);
                     }
 
-                case EntityType.PlayerCharacter:
+                case EntityType.PC:
                     {
-                        return new PlayerCharacter(identifier, args);
+                        return new PC(identifier, args);
                     }
 
                 case EntityType.Door:
@@ -65,16 +65,16 @@
             return rt;
         }
 
-        public GameEntity GenerateEntity(EntityType e, CreationArgs a)
+        public GameEntity GenerateEntity(EntityType e, CreationArguments a)
         {
             return this.GenerateEntity(e, this.IdGenerator.GenerateNextIdentifier(), a);
         }
 
         public IEnumerable<GameEntity> GenerateHouse(int xorg, int yorg)
         {
-            var dca = new DoorCreationArgs(DoorCreationArgs.Types.Stone);
-            var fca = new FloorCreationArgs(FloorCreationArgs.Types.Wood);
-            var bca = new BlockCreationArgs(BlockCreationArgs.Types.Stone);
+            var dca = new DoorCreationArguments(DoorCreationArguments.Types.Stone);
+            var fca = new FloorCreationArguments(FloorCreationArguments.Types.Wood);
+            var bca = new BlockCreationArguments(BlockCreationArguments.Types.Stone);
 
             List<GameEntity> rt = new List<GameEntity>();
 

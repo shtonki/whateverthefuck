@@ -71,11 +71,10 @@
     <Compile Include="src\model\entities\Block.cs" />
     <Compile Include="src\model\entities\Brain.cs" />
     <Compile Include="src\model\entities\Character.cs" />
-    <Compile Include="src\model\CreationArgs.cs" />
+    <Compile Include="src\model\CreationArguments.cs" />
     <Compile Include="src\model\entities\Door.cs" />
     <Compile Include="src\model\entities\Floor.cs" />
     <Compile Include="src\model\entities\Lootable.cs" />
-    <Compile Include="src\model\entities\MousePicker.cs" />
     <Compile Include="src\model\entities\NPC.cs" />
     <Compile Include="src\model\entities\Projectile.cs" />
     <Compile Include="src\model\EntityAbilities.cs" />
@@ -84,7 +83,7 @@
     <Compile Include="src\model\GameEntity.cs" />
     <Compile Include="src\model\GameEvent.cs" />
     <Compile Include="src\model\GameState.cs" />
-    <Compile Include="src\model\entities\PlayerCharacter.cs" />
+    <Compile Include="src\model\entities\PC.cs" />
     <Compile Include="src\model\EntityGenerator.cs" />
     <Compile Include="src\model\IInteractable.cs" />
     <Compile Include="src\model\Inventory.cs" />

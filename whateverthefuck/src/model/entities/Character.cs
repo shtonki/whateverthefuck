@@ -11,7 +11,7 @@
         /// <param name="identifier">The EntityIdentifier of the created Character.</param>
         /// <param name="entityType">The EntityType of the created Character.</param>
         /// <param name="args">The CreationArgs used to create the Character.</param>
-        public Character(EntityIdentifier identifier, EntityType entityType, CreationArgs args)
+        public Character(EntityIdentifier identifier, EntityType entityType, CreationArguments args)
             : base(identifier, entityType, args)
         {
             this.Movable = true;

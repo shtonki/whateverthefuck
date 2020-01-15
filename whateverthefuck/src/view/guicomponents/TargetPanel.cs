@@ -18,7 +18,6 @@ namespace whateverthefuck.src.view.guicomponents
         private GameEntity entity;
         private QFontRenderOptions renderOptions;
 
-              
         public TargetPanel(GameEntity entity)
         {
             this.entity = entity;
@@ -63,10 +62,10 @@ namespace whateverthefuck.src.view.guicomponents
                 var sprite = Sprite.GetAbilitySprite(casting.CastingAbility.AbilityType);
                 var castingX0 = this.Size.Y;
                 var castingY0 = 0;
-                var castingWidth = this.Size.Y - HealthThickness;
-                var castingHeight = this.Size.Y - HealthThickness;
+                var castingX1 = this.Size.Y + this.Size.Y - HealthThickness;
+                var castingY1 = this.Size.Y - HealthThickness;
 
-                drawAdapter.DrawSprite(castingX0, castingY0, castingWidth, castingHeight, sprite);
+                drawAdapter.DrawSprite(castingX0, castingY0, castingX1, castingY1, sprite);
             }
 
             drawAdapter.DrawText(FontLoader.DefaultFont, "Entity Name", new GLCoordinate(this.Location.X + this.Size.Y, this.Location.Y + this.Size.Y), QuickFont.QFontAlignment.Centre, this.renderOptions);

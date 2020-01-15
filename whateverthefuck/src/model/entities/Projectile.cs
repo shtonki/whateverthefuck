@@ -8,16 +8,17 @@
 
     public class Projectile : GameEntity
     {
-        public Projectile(EntityIdentifier id, CreationArgs args)
+        public Projectile(EntityIdentifier id, CreationArguments args)
+            : this(id, args as ProjectileCreationArguments)
+        {
+        }
+
+        public Projectile(EntityIdentifier id, ProjectileCreationArguments args)
             : base(id, EntityType.Projectile, args)
         {
-            if (args.Value != 0)
-            {
-                this.Controller = new ProjectileArgs(args).ControllerId;
-            }
+            this.Controller = args.ControllerId;
 
-            ProjectileArgs pa = new ProjectileArgs(args);
-            this.Sprite = new Sprite(pa.GetSpriteID());
+            this.Sprite = new Sprite(args.GetSpriteID());
 
             this.Size = new GameCoordinate(0.1f, 0.1f);
             this.DrawColor = Color.Black;
@@ -29,7 +30,7 @@
 
         public IEnumerable<GameEvent> ResolveEvents { get; set; }
 
-        private int Controller { get; }
+        private EntityIdentifier Controller { get; }
 
         private float AsplodeCutoff => this.Status.ReadCurrentStats.MoveSpeed * 2;
 
@@ -63,31 +64,17 @@
         }
     }
 
-    public class ProjectileArgs : CreationArgs
+    public class ProjectileCreationArguments : CreationArguments
     {
-        public ProjectileArgs(GameEntity controller, AbilityType abilityType)
-            : base(0)
+        public ProjectileCreationArguments(GameEntity controller, AbilityType abilityType)
         {
-            this.ControllerId = controller.Identifier.Id;
+            this.ControllerId = controller.Identifier;
             this.AbilityType = abilityType;
         }
 
-        public ProjectileArgs(CreationArgs a)
-            : base(a.Value)
-        {
-        }
+        public AbilityType AbilityType { get; private set; }
 
-        public AbilityType AbilityType
-        {
-            get { return (AbilityType)this.FirstInt; }
-            set { this.FirstInt = (int)value; }
-        }
-
-        public int ControllerId
-        {
-            get { return this.SecondInt; }
-            set { this.SecondInt = value; }
-        }
+        public EntityIdentifier ControllerId { get; private set; }
 
         public SpriteID GetSpriteID()
         {
@@ -101,6 +88,18 @@
                 default: return SpriteID.testSprite1;
             }
 
+        }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode((int)this.AbilityType);
+            encoder.Encode(this.ControllerId.Id);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            this.AbilityType = (AbilityType)decoder.DecodeInt();
+            this.ControllerId = new EntityIdentifier(decoder.DecodeInt());
         }
     }
 }

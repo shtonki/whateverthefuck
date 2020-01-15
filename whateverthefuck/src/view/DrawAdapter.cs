@@ -74,9 +74,9 @@ namespace whateverthefuck.src.view
 
         public void FillRectangle(float x1, float y1, float x2, float y2, Color c)
         {
-            GL.Color4(c);
-
             GL.Begin(PrimitiveType.Quads);
+
+            GL.Color4(c);
 
             GL.Vertex2(x1, y1);
             GL.Vertex2(x1, y2);
@@ -116,12 +116,11 @@ namespace whateverthefuck.src.view
             GL.PopAttrib();
         }
 
-        public void DrawSprite(float x, float y, float w, float h, Sprite sprite)
+        public void DrawSprite(float x0, float y0, float x1, float y1, Sprite sprite)
         {
             GL.PushMatrix();
 
             GL.Enable(EnableCap.Texture2D);
-            GL.Enable(EnableCap.Blend);
 
             GL.Color4(Color.White);
 
@@ -129,20 +128,19 @@ namespace whateverthefuck.src.view
             GL.Begin(PrimitiveType.Quads);
 
             GL.TexCoord2(0, 1);
-            GL.Vertex2(x, y);
+            GL.Vertex2(x0, y0);
 
             GL.TexCoord2(0, 0);
-            GL.Vertex2(x, y + h);
+            GL.Vertex2(x0, y1);
 
             GL.TexCoord2(1, 0);
-            GL.Vertex2(x + w, y + h);
+            GL.Vertex2(x1, y1);
 
             GL.TexCoord2(1, 1);
-            GL.Vertex2(x + w, y);
+            GL.Vertex2(x1, y0);
 
             GL.End();
             GL.Disable(EnableCap.Texture2D);
-            GL.Disable(EnableCap.Blend);
 
             GL.PopMatrix();
         }

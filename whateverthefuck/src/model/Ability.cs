@@ -49,7 +49,7 @@
         /// <returns>The event which creates the Projectile if there should be one, null otherwise.</returns>
         public CreateEntityEvent Cast(GameEntity caster)
         {
-            CreationArgs ca = new ProjectileArgs(caster, this.AbilityType);
+            CreationArguments ca = new ProjectileCreationArguments(caster, this.AbilityType);
             return new CreateEntityEvent(EntityIdentifier.RandomReserved(), EntityType.Projectile, caster.Center.X, caster.Center.Y, 1, 1, ca);
         }
     }
@@ -59,7 +59,7 @@
         public Fireball()
             : base(AbilityType.Fireball)
         {
-            this.CastTime = 50;
+            this.CastTime = 200;
             this.BaseCooldown = 0;
             this.Range = 1.5f;
             this.TargetingRule = TargetingRule.IsAliveEnemyCharacter;

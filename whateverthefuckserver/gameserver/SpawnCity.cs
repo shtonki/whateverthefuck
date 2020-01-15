@@ -27,14 +27,14 @@ namespace whateverthefuckserver.gameserver
 
         public CreateEntityEvent SpawnHero()
         {
-            var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.PlayerCharacter, new CreationArgs(0)));
+            var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.PC, new PCCreationArguments()));
             PublishArray(rt);
             return rt;
         }
 
         public void SpawnMob()
         {
-            var mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new CreationArgs(0));
+            var mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new NPCCreationArguments(NPCCreationArguments.Types.Dog));
             mob.GameLocation = new GameCoordinate(-0.5f, RNG.BetweenZeroAndOne());
             var rt = new CreateEntityEvent(mob);
             rt.OnDeathCallback = (idiot, killer) => Program.GameServer.SpawnLootForPlayer(idiot, killer);

@@ -13,18 +13,13 @@
     {
         None,
 
-        GameMechanic,
-
         Projectile,
 
-        PlayerCharacter,
+        PC,
         Block,
         NPC,
         Door,
         Floor,
-        Mankey,
-
-        Loot,
     }
 
     public enum GameEntityState
@@ -44,7 +39,7 @@
         private int globalCooldownTicks = 100;
         private int currentGlobalCooldown = 0;
 
-        protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArgs args)
+        protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArguments args)
         {
             this.Identifier = identifier;
             this.EntityType = type;
@@ -85,7 +80,7 @@
         /// <summary>
         /// Gets the CreationArgs used to create the GameEntity.
         /// </summary>
-        public CreationArgs CreationArgs { get; private set; } = null;
+        public CreationArguments CreationArgs { get; private set; } = null;
 
         // @move to EntityMovements
         public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
@@ -194,7 +189,7 @@
             this.MovementCache = this.CalculateMovement(gameState);
             this.GameLocation += this.MovementCache;
 
-            if (this is PlayerCharacter)
+            if (this is PC)
             {
                 Boombox.SetListenerPosition(this.GameLocation.X, this.GameLocation.Y);
             }

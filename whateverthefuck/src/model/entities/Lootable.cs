@@ -6,7 +6,7 @@
 
     public class Lootable : GameEntity, IInteractable
     {
-        public Lootable(EntityIdentifier identifier, EntityType type, CreationArgs args)
+        public Lootable(EntityIdentifier identifier, EntityType type, CreationArguments args)
             : base(identifier, type, args)
         {
         }

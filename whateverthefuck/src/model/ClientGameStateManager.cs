@@ -34,7 +34,7 @@
 
         public GameState GameState { get; private set; }
 
-        public PlayerCharacter Hero { get; private set; }
+        public PC Hero { get; private set; }
 
         private Timer TickTimer { get; } // can't be removed or we stop moving after ~3 seconds
 
@@ -82,7 +82,7 @@
             // @fix me t. ribbe
             if (this.TakeControlId.HasValue)
             {
-                this.Hero = (PlayerCharacter)this.GameState.GetEntityById(this.TakeControlId.Value);
+                this.Hero = (PC)this.GameState.GetEntityById(this.TakeControlId.Value);
                 if (this.Hero != null)
                 {
                     this.CenterCameraOn(this.Hero);
@@ -414,15 +414,6 @@
                 e.Visible = e.LOSGraceTicks > 0;
             }
 #endif
-        }
-
-        private GameEntity GetEntityAtLocation(GameCoordinate location)
-        {
-            var mp = new MousePicker();
-            mp.Center = location;
-            var picked = this.GameState.Intersects(mp);
-            if (picked.Count() == 0) { return null; }
-            return picked.First();
         }
     }
 
