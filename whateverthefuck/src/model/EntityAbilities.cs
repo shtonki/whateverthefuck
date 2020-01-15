@@ -44,7 +44,7 @@ namespace whateverthefuck.src.model
                 return false;
             }
 
-            if (!ability.TargetingRule.ApplyRule(this.Entity, target, gameState))
+            if (!ability.CanTarget(this.Entity, target, gameState))
             {
                 return false;
             }
@@ -93,7 +93,7 @@ namespace whateverthefuck.src.model
                     if (this.Casting.DoneCasting)
                     {
                         gameState.HandleGameEvents(new EndCastAbility(
-                            this.Entity,
+                            this.Entity.Identifier,
                             this.Casting.Target,
                             this.Casting.CastingAbility));
 

@@ -18,7 +18,7 @@
             this.Movable = true;
 
             this.Status.BaseStats.MaxHealth = 100;
-            this.Status.BaseStats.MoveSpeed = 0.001f;
+            this.Status.BaseStats.MoveSpeed = 0.015f;
 
             this.Abilities.Abilities.Add(new Bite());
 

@@ -105,12 +105,12 @@
 
     public class EndCastAbility : GameEvent
     {
-        public EndCastAbility(GameEntity caster, GameEntity target, Ability ability)
+        public EndCastAbility(EntityIdentifier caster, EntityIdentifier target, Ability ability)
             : base(GameEventType.UseAbility)
         {
-            this.CasterIdentifier = caster.Identifier;
             this.AbilityType = ability.AbilityType;
-            this.TargetIdentifier = target.Identifier;
+            this.CasterIdentifier = caster;
+            this.TargetIdentifier = target;
         }
 
         public AbilityType AbilityType { get; private set; }
