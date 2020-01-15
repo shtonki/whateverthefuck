@@ -77,12 +77,12 @@
         {
             get
             {
-                if (this.following?.GameLocation == null)
+                if (this.following?.Info.GameLocation == null)
                 {
                     return new GameCoordinate(0, 0);
                 }
 
-                return this.following.Center;
+                return this.following.Info.Center;
             }
         }
     }

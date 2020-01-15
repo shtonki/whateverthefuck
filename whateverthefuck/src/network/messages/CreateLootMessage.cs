@@ -13,7 +13,7 @@
         public CreateLootMessage(GameEntity lootee, params Item[] items)
             : base(MessageType.CreateLootMessage)
         {
-            this.LooteeId = lootee.Identifier;
+            this.LooteeId = lootee.Info.Identifier;
             this.Items = items;
         }
 

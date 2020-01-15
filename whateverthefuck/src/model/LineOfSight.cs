@@ -25,9 +25,9 @@
 
             rt.Add(looker);
 
-            var blockers = looked.Where(e => e.BlocksLOS);
+            var blockers = looked.Where(e => e.Info.BlocksLOS);
 
-            PointF lookerPOV = new PointF(looker.Center.X, looker.Center.Y);
+            PointF lookerPOV = new PointF(looker.Info.Center.X, looker.Info.Center.Y);
 
             foreach (var target in looked)
             {
@@ -38,10 +38,10 @@
 
                 if (target == looker) { continue; }
 
-                PointF p1 = new PointF(target.Left, target.Top);
-                PointF p2 = new PointF(target.Right, target.Top);
-                PointF p3 = new PointF(target.Right, target.Bottom);
-                PointF p4 = new PointF(target.Left, target.Bottom);
+                PointF p1 = new PointF(target.Info.Left, target.Info.Top);
+                PointF p2 = new PointF(target.Info.Right, target.Info.Top);
+                PointF p3 = new PointF(target.Info.Right, target.Info.Bottom);
+                PointF p4 = new PointF(target.Info.Left, target.Info.Bottom);
 
                 bool visionBlockedP1 = false;
                 bool visionBlockedP2 = false;
@@ -51,7 +51,7 @@
                 foreach (var blocker in blockers)
                 {
                     if (blocker == target || blocker == looker
-                        || target.Height >= blocker.Height || blocker.Height < 2)
+                        || target.Info.Height >= blocker.Info.Height || blocker.Info.Height < 2)
                     {
                         continue;
                     }
@@ -77,7 +77,7 @@
 
         private static bool LineIntersectsRect(PointF p1, PointF p2, GameEntity ge)
         {
-            RectangleF r = new RectangleF(ge.GameLocation.X + Spacing, ge.GameLocation.Y + Spacing, ge.Size.X - Spacing, ge.Size.Y - Spacing);
+            RectangleF r = new RectangleF(ge.Info.GameLocation.X + Spacing, ge.Info.GameLocation.Y + Spacing, ge.Info.Size.X - Spacing, ge.Info.Size.Y - Spacing);
             return LineIntersectsLine(p1, p2, new PointF(r.X, r.Y), new PointF(r.X + r.Width, r.Y)) ||
                    LineIntersectsLine(p1, p2, new PointF(r.X + r.Width, r.Y), new PointF(r.X + r.Width, r.Y + r.Height)) ||
                    LineIntersectsLine(p1, p2, new PointF(r.X + r.Width, r.Y + r.Height), new PointF(r.X, r.Y + r.Height)) ||

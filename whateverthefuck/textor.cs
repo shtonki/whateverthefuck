@@ -263,18 +263,6 @@ namespace whateverthefuck
             _monoSpaced = new QFont("Fonts/Anonymous.ttf", 10, new QFontBuilderConfiguration());
             _monoSpacedOptions = new QFontRenderOptions { Colour = Color.FromArgb(new Color4(0.1f, 0.1f, 0.1f, 1.0f).ToArgb()), DropShadowActive = true };
 
-            // loop through some installed fonts and load them
-            var ifc = new InstalledFontCollection();
-            _installedFonts = new List<QFont>();
-
-            foreach (var fontFamily in ifc.Families)
-            {
-                // Don't load too many fonts
-                if (_installedFonts.Count > 15)
-                    break;
-
-                _installedFonts.Add(new QFont(fontFamily.Name, 14, new QFontBuilderConfiguration()));
-            }
 
             GL.ClearColor(Color4.CornflowerBlue);
         }

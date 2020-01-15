@@ -17,9 +17,7 @@
         public Floor(EntityIdentifier id, FloorCreationArguments args)
             : base(id, EntityType.Floor, args)
         {
-            this.Collidable = false;
-            this.BlocksLOS = false;
-            this.Height = 0;
+            this.Info.Height = 0;
 
             this.Sprite = new Sprite(args.GetSpriteID());
         }

@@ -17,8 +17,7 @@
         public Door(EntityIdentifier identifier, DoorCreationArguments args)
             : base(identifier, EntityType.Door, args)
         {
-            this.Collidable = false;
-            this.Height = 15;
+            this.Info.Height = 15;
 
             this.Sprite = new Sprite(args.GetSpriteID());
         }

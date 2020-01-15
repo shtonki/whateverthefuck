@@ -78,6 +78,7 @@
     <Compile Include="src\model\entities\NPC.cs" />
     <Compile Include="src\model\entities\Projectile.cs" />
     <Compile Include="src\model\EntityAbilities.cs" />
+    <Compile Include="src\model\EntityInfo.cs" />
     <Compile Include="src\model\EntityStatus.cs" />
     <Compile Include="src\model\GameCoordinate.cs" />
     <Compile Include="src\model\GameEntity.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="src\view\GUI.cs" />
     <Compile Include="src\view\guicomponents\AbilityButton.cs" />
     <Compile Include="src\view\guicomponents\Button.cs" />
+    <Compile Include="src\view\guicomponents\CastBar.cs" />
     <Compile Include="src\view\guicomponents\InventoryPanel.cs" />
     <Compile Include="src\view\guicomponents\ItemContainer.cs" />
     <Compile Include="src\view\guicomponents\LootPanel.cs" />

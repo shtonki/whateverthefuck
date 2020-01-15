@@ -17,7 +17,8 @@
         public Block(EntityIdentifier id, BlockCreationArguments args)
             : base(id, EntityType.Block, args)
         {
-            this.Height = 100;
+            this.Info.Height = 100;
+            this.Info.Collidable = true;
 
             this.Sprite = new Sprite(args.GetSpriteID());
         }

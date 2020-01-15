@@ -20,10 +20,10 @@
 
             this.Sprite = new Sprite(args.GetSpriteID());
 
-            this.Size = new GameCoordinate(0.1f, 0.1f);
+            this.Info.Size = new GameCoordinate(0.1f, 0.1f);
             this.DrawColor = Color.Black;
-            this.Collidable = false;
-            this.Movable = true;
+            this.Info.Collidable = false;
+            this.Info.Movable = true;
 
             this.Status.BaseStats.MoveSpeed = 0.02f;
         }
@@ -46,7 +46,7 @@
                 {
                     gameState.HandleGameEvents(this.Fizzle());
                 }
-                else if (this.DistanceTo(followed.Center) < this.AsplodeCutoff)
+                else if (this.DistanceTo(followed.Info.Center) < this.AsplodeCutoff)
                 {
                     gameState.HandleGameEvents(this.Boom(followed));
                 }
@@ -68,7 +68,7 @@
     {
         public ProjectileCreationArguments(GameEntity controller, AbilityType abilityType)
         {
-            this.ControllerId = controller.Identifier;
+            this.ControllerId = controller.Info.Identifier;
             this.AbilityType = abilityType;
         }
 

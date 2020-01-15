@@ -41,7 +41,7 @@ namespace whateverthefuck.src.view.guicomponents
             var healthY0 = this.Size.Y - HealthThickness;
             var healthY1 = this.Size.Y;
 
-            if (this.entity.State == GameEntityState.Dead)
+            if (this.entity.Info.State == GameEntityState.Dead)
             {
                 drawAdapter.FillRectangle(healthX0, healthY0, healthX1, healthY1, Color.Gray);
             }

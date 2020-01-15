@@ -59,7 +59,7 @@
         public GameEntity GenerateEntity(CreateEntityEvent e)
         {
             var rt = this.GenerateEntity(e.EntityType, e.Id, e.CreationArgs);
-            rt.GameLocation = new GameCoordinate(e.X, e.Y);
+            rt.Info.GameLocation = new GameCoordinate(e.X, e.Y);
             //rt.Status.BaseStats.Health = e.CurrentHealth;
             //rt.Status.BaseStats.MaxHealth = e.MaxHealth;
             return rt;
@@ -103,7 +103,7 @@
                         e = this.GenerateEntity(EntityType.Floor, fca);
                     }
 
-                    e.GameLocation = new GameCoordinate(x * GridSize.X, y * GridSize.Y);
+                    e.Info.GameLocation = new GameCoordinate(x * GridSize.X, y * GridSize.Y);
 
                     rt.Add(e);
                 }

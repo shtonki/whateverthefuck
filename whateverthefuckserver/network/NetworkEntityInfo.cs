@@ -15,8 +15,8 @@ namespace whateverthefuckserver.network
 
         public NetworkEntityInfo(GameEntity entity)
         {
-            Location = entity.GameLocation;
-            Identifier = entity.Identifier;
+            Location = entity.Info.GameLocation;
+            Identifier = entity.Info.Identifier;
         }
     }
 }

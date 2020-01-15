@@ -41,18 +41,14 @@
 
         protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArguments args)
         {
-            this.Identifier = identifier;
-            this.EntityType = type;
+            this.Abilities = new EntityAbilities(this);
+            this.Info = new EntityInfo(type, args, identifier);
 
-            this.CreationArgs = args;
+            this.Info.State = GameEntityState.Alive;
 
-            this.State = GameEntityState.Alive;
-
-            this.GameLocation = new GameCoordinate(0, 0);
+            this.Info.GameLocation = new GameCoordinate(0, 0);
 
             this.Status.BaseStats.MaxHealth = 1;
-
-            this.Abilities = new EntityAbilities(this);
         }
 
         /// <summary>
@@ -65,97 +61,29 @@
         /// </summary>
         public event Action<GameEntity, GameState> OnStep;
 
-        public EntityAbilities Abilities { get; }
-
-        public int Height { get; protected set; } = 1;
-
-        public GameCoordinate GameLocation { get; set; }
-
         public EntityStatus Status { get; } = new EntityStatus();
 
-        public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
+        public EntityAbilities Abilities { get; }
 
-        public EntityType EntityType { get; }
+        public EntityInfo Info { get; }
 
-        /// <summary>
-        /// Gets the CreationArgs used to create the GameEntity.
-        /// </summary>
-        public CreationArguments CreationArgs { get; private set; } = null;
+        public EntityMovement Movements { get; set; } = new EntityMovement();
 
-        // @move to EntityMovements
-        public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the GameEntity can move.
-        /// </summary>
-        public bool Movable { get; protected set; } = false;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the GameEntity can be collided with.
-        /// </summary>
-        public bool Collidable { get; protected set; } = true;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the GameEntity can be targeted.
-        /// </summary>
-        public bool Targetable { get; protected set; } = false;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the GameEntity blocks line of sight.
-        /// </summary>
-        public bool BlocksLOS { get; protected set; } = true;
-
-        public bool Destroy { get; set; }
+        // @fix every property below probably belongs somewhere else
 
         public int LOSGraceTicks { get; set; } = 0;
 
         /// <summary>
         /// Gets or sets current movement being made by the GameEntity.
         /// </summary>
-        public EntityMovement Movements { get; set; } = new EntityMovement();
+
+        // @move to EntityMovements
+        public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
 
         /// <summary>
         /// Gets or sets the last DealDamageEvent to deal damage to the GameEntity.
         /// </summary>
         public DealDamageEvent LastDamageTaken { get; set; }
-
-        /// <summary>
-        /// Gets or sets the EntityIdentifier which uniquely identifies a GameEntity in a GameState.
-        /// </summary>
-        public EntityIdentifier Identifier { get; protected set; }
-
-        /// <summary>
-        /// Gets the X value of the left edge of the GameEntity.
-        /// </summary>
-        public float Left => this.GameLocation.X;
-
-        /// <summary>
-        /// Gets the X value of the right edge of the GameEntity.
-        /// </summary>
-        public float Right => this.GameLocation.X + this.Size.X;
-
-        /// <summary>
-        /// Gets the Y value of the bottom edge of the GameEntity.
-        /// </summary>
-        public float Bottom => this.GameLocation.Y;
-
-        /// <summary>
-        /// Gets the Y value of the top edge of the GameEntity.
-        /// </summary>
-        public float Top => this.GameLocation.Y + this.Size.Y;
-
-        /// <summary>
-        /// Gets or sets the GameCoordinate in the center of the GameEntity.
-        /// </summary>
-        public GameCoordinate Center
-        {
-            get { return new GameCoordinate(this.GameLocation.X + (this.Size.X / 2), this.GameLocation.Y + (this.Size.Y / 2)); }
-            set { this.GameLocation = new GameCoordinate(value.X - (this.Size.X / 2), value.Y - (this.Size.Y / 2)); }
-        }
-
-        public GameEntityState State { get; protected set; }
-
-        public bool Visible { get; set; } = true;
 
         public Sprite Sprite { get; protected set; } = new Sprite(SpriteID.testSprite1);
 
@@ -176,22 +104,22 @@
         {
             this.UpdateCurrentStats();
 
-            if (this.Status.ReadCurrentStats.Health <= 0 && this.State != GameEntityState.Dead)
+            if (this.Status.ReadCurrentStats.Health <= 0 && this.Info.State != GameEntityState.Dead)
             {
                 this.Die(gameState);
             }
 
-            if (this.State == GameEntityState.Dead)
+            if (this.Info.State == GameEntityState.Dead)
             {
                 return;
             }
 
             this.MovementCache = this.CalculateMovement(gameState);
-            this.GameLocation += this.MovementCache;
+            this.Info.GameLocation += this.MovementCache;
 
             if (this is PC)
             {
-                Boombox.SetListenerPosition(this.GameLocation.X, this.GameLocation.Y);
+                Boombox.SetListenerPosition(this.Info.GameLocation.X, this.Info.GameLocation.Y);
             }
 
             this.Abilities.Step(gameState);
@@ -201,17 +129,17 @@
 
         public float DistanceTo(GameEntity other)
         {
-            return this.DistanceTo(other.Center);
+            return this.DistanceTo(other.Info.Center);
         }
 
         public float DistanceTo(GameCoordinate location)
         {
-            return Coordinate.DistanceBetweenCoordinates(this.Center, location);
+            return Coordinate.DistanceBetweenCoordinates(this.Info.Center, location);
         }
 
         public override string ToString()
         {
-            return string.Format("{0} at {1}:{2}", this.EntityType.ToString(), this.GameLocation.X.ToString(), this.GameLocation.Y.ToString());
+            return string.Format("{0} at {1}:{2}", this.Info.EntityType.ToString(), this.Info.GameLocation.X.ToString(), this.Info.GameLocation.Y.ToString());
         }
 
         /// <summary>
@@ -221,7 +149,7 @@
         protected virtual void Die(GameState gameState)
         {
             this.OnDeath?.Invoke(this, gameState.GetEntityById(this.LastDamageTaken.AttackerIdentifier));
-            this.State = GameEntityState.Dead;
+            this.Info.State = GameEntityState.Dead;
 
             this.ShowHealth = false;
         }
@@ -233,7 +161,7 @@
         /// <returns>The Coordinate of the next movement to be made.</returns>
         protected virtual GameCoordinate CalculateMovement(GameState gameState)
         {
-            if (!this.Movable)
+            if (!this.Info.Movable)
             {
                 return new GameCoordinate(0, 0);
             }
@@ -244,14 +172,14 @@
 
                 if (followed != null)
                 {
-                    var followingToLocation = followed.Center;
+                    var followingToLocation = followed.Info.Center;
 
-                    if (Coordinate.DistanceBetweenCoordinates(this.Center, followingToLocation) < this.Status.ReadCurrentStats.MoveSpeed)
+                    if (Coordinate.DistanceBetweenCoordinates(this.Info.Center, followingToLocation) < this.Status.ReadCurrentStats.MoveSpeed)
                     {
-                        return followingToLocation - this.Center;
+                        return followingToLocation - this.Info.Center;
                     }
 
-                    this.Movements.Direction = Coordinate.AngleBetweenCoordinates(this.Center, followingToLocation);
+                    this.Movements.Direction = Coordinate.AngleBetweenCoordinates(this.Info.Center, followingToLocation);
                 }
             }
 

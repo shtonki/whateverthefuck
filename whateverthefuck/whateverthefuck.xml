@@ -226,6 +226,31 @@
             Represents a floor tile.
             </summary>
         </member>
+        <member name="P:whateverthefuck.src.model.EntityInfo.Left">
+            <summary>
+            Gets the X value of the left edge of the GameEntity.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.model.EntityInfo.Right">
+            <summary>
+            Gets the X value of the right edge of the GameEntity.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.model.EntityInfo.Bottom">
+            <summary>
+            Gets the Y value of the bottom edge of the GameEntity.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.model.EntityInfo.Top">
+            <summary>
+            Gets the Y value of the top edge of the GameEntity.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.model.EntityInfo.Center">
+            <summary>
+            Gets or sets the GameCoordinate in the center of the GameEntity.
+            </summary>
+        </member>
         <member name="T:whateverthefuck.src.model.GameCoordinate">
             <summary>
             A class representing carthesian coordinate in game.
@@ -253,32 +278,7 @@
             Event for when the GameEntity is stepped.
             </summary>
         </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.CreationArgs">
-            <summary>
-            Gets the CreationArgs used to create the GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Movable">
-            <summary>
-            Gets or sets a value indicating whether the GameEntity can move.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Collidable">
-            <summary>
-            Gets or sets a value indicating whether the GameEntity can be collided with.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Targetable">
-            <summary>
-            Gets or sets a value indicating whether the GameEntity can be targeted.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.BlocksLOS">
-            <summary>
-            Gets or sets a value indicating whether the GameEntity blocks line of sight.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Movements">
+        <member name="P:whateverthefuck.src.model.GameEntity.MovementCache">
             <summary>
             Gets or sets current movement being made by the GameEntity.
             </summary>
@@ -286,36 +286,6 @@
         <member name="P:whateverthefuck.src.model.GameEntity.LastDamageTaken">
             <summary>
             Gets or sets the last DealDamageEvent to deal damage to the GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Identifier">
-            <summary>
-            Gets or sets the EntityIdentifier which uniquely identifies a GameEntity in a GameState.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Left">
-            <summary>
-            Gets the X value of the left edge of the GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Right">
-            <summary>
-            Gets the X value of the right edge of the GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Bottom">
-            <summary>
-            Gets the Y value of the bottom edge of the GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Top">
-            <summary>
-            Gets the Y value of the top edge of the GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.Center">
-            <summary>
-            Gets or sets the GameCoordinate in the center of the GameEntity.
             </summary>
         </member>
         <member name="P:whateverthefuck.src.model.GameEntity.ShowHealth">

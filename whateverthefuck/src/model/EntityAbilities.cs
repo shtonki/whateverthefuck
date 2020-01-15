@@ -93,7 +93,7 @@ namespace whateverthefuck.src.model
                     if (this.Casting.DoneCasting)
                     {
                         gameState.HandleGameEvents(new EndCastAbility(
-                            this.Entity.Identifier,
+                            this.Entity.Info.Identifier,
                             this.Casting.Target,
                             this.Casting.CastingAbility));
 

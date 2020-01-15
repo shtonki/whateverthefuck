@@ -14,10 +14,10 @@
         public Character(EntityIdentifier identifier, EntityType entityType, CreationArguments args)
             : base(identifier, entityType, args)
         {
-            this.Movable = true;
-            this.Targetable = true;
-            this.ShowHealth = true;
-            this.Height = 1;
+            this.Info.Collidable = true;
+            this.Info.Movable = true;
+            this.Info.Targetable = true;
+            this.Info.Height = 1;
         }
     }
 }

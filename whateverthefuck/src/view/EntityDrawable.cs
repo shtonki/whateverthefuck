@@ -12,9 +12,9 @@ namespace whateverthefuck.src.view
 
         public EntityDrawable(GameEntity entity)
         {
-            this.size = new GLCoordinate(entity.Size.X, entity.Size.Y);
-            this.Location = new GLCoordinate(entity.Center.X, entity.Center.Y);
-            this.Identifier = entity.Identifier;
+            this.size = new GLCoordinate(entity.Info.Size.X, entity.Info.Size.Y);
+            this.Location = new GLCoordinate(entity.Info.Center.X, entity.Info.Center.Y);
+            this.Identifier = entity.Info.Identifier;
             this.sprite = entity.Sprite;
         }
 

@@ -67,10 +67,10 @@
 
         public Line(GameEntity o, GameEntity e)
         {
-            this.x1 = o.Center.X;
-            this.y1 = o.Center.Y;
-            this.x2 = e.Center.X;
-            this.y2 = e.Center.Y;
+            this.x1 = o.Info.Center.X;
+            this.y1 = o.Info.Center.Y;
+            this.x2 = e.Info.Center.X;
+            this.y2 = e.Info.Center.Y;
         }
 
         public override void DrawMe(DrawAdapter drawAdapter)
@@ -90,10 +90,10 @@
 
         public Rectangle(GameEntity o, Color drawColor)
         {
-            this.x1 = o.Left;
-            this.y1 = o.Bottom;
-            this.x2 = o.Right;
-            this.y2 = o.Top;
+            this.x1 = o.Info.Left;
+            this.y1 = o.Info.Bottom;
+            this.x2 = o.Info.Right;
+            this.y2 = o.Info.Top;
             this.drawColor = drawColor;
         }
 

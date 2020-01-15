@@ -20,7 +20,7 @@ namespace whateverthefuck.src.model.entities
 
                 EntityMovement movementContainer = new EntityMovement();
                 movementContainer.FollowId = npc.LastDamageTaken.AttackerIdentifier;
-                return new UpdateMovementEvent(npc.Identifier, movementContainer);
+                return new UpdateMovementEvent(npc.Info.Identifier, movementContainer);
             }
 
             return null;

@@ -35,7 +35,7 @@ namespace whateverthefuckserver.gameserver
         public void SpawnMob()
         {
             var mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new NPCCreationArguments(NPCCreationArguments.Types.Dog));
-            mob.GameLocation = new GameCoordinate(-0.5f, RNG.BetweenZeroAndOne());
+            mob.Info.GameLocation = new GameCoordinate(-0.5f, RNG.BetweenZeroAndOne());
             var rt = new CreateEntityEvent(mob);
             rt.OnDeathCallback = (idiot, killer) => Program.GameServer.SpawnLootForPlayer(idiot, killer);
 

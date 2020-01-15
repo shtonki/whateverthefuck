@@ -42,7 +42,7 @@
             {
                 foreach (var entity in this.AllEntities)
                 {
-                    if (entity.Destroy)
+                    if (entity.Info.Destroy)
                     {
                         this.removeUs.Add(entity);
                     }
@@ -84,7 +84,7 @@
                 return;
             }
 
-            var visibleEntities = this.AllEntities.Where(e => e.Visible).Select(e => new EntityDrawable(e)).ToList();
+            var visibleEntities = this.AllEntities.Where(e => e.Info.Visible).Select(e => new EntityDrawable(e)).ToList();
             var cameraClone = new StaticCamera(new GameCoordinate(this.CurrentCamera.Location.X, this.CurrentCamera.Location.Y));
 
             this.EntityDrawingInfo = new EntityDrawingInfo(cameraClone, visibleEntities);
@@ -92,13 +92,13 @@
 
         public GameEntity GetEntityById(EntityIdentifier id)
         {
-            return this.EntityList.Find(e => e.Identifier.Id == id.Id);
+            return this.EntityList.Find(e => e.Info.Identifier.Id == id.Id);
         }
 
         // @deprecatered
         public GameEntity GetEntityById(int id)
         {
-            return this.EntityList.Find(e => e.Identifier.Id == id);
+            return this.EntityList.Find(e => e.Info.Identifier.Id == id);
         }
 
         public void HandleGameEvents(params GameEvent[] es)
@@ -127,14 +127,14 @@
 
             foreach (var e in this.AllEntities)
             {
-                if (e.Identifier.Id < 0)
+                if (e.Info.Identifier.Id < 0)
                 {
                     continue;
                 }
 
-                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.GameLocation.X), 0);
-                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.GameLocation.Y), 0);
-                hash ^= (int)e.EntityType;
+                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.Info.GameLocation.X), 0);
+                hash ^= BitConverter.ToInt32(BitConverter.GetBytes(e.Info.GameLocation.Y), 0);
+                hash ^= (int)e.Info.EntityType;
             }
 
             return hash;
@@ -178,8 +178,8 @@
                     var jshare = 1 - ishare;
                     if (!float.IsNaN(ishare))
                     {
-                        collision.EntityI.GameLocation.X -= ishare * collision.Overlap;
-                        collision.EntityJ.GameLocation.X += jshare * collision.Overlap;
+                        collision.EntityI.Info.GameLocation.X -= ishare * collision.Overlap;
+                        collision.EntityJ.Info.GameLocation.X += jshare * collision.Overlap;
                     }
                 }
                 else if (collision.Direction == CollisionRecord.CollisionDirection.Right)
@@ -189,8 +189,8 @@
 
                     if (!float.IsNaN(ishare))
                     {
-                        collision.EntityI.GameLocation.X += ishare * collision.Overlap;
-                        collision.EntityJ.GameLocation.X -= jshare * collision.Overlap;
+                        collision.EntityI.Info.GameLocation.X += ishare * collision.Overlap;
+                        collision.EntityJ.Info.GameLocation.X -= jshare * collision.Overlap;
                     }
                 }
                 else if (collision.Direction == CollisionRecord.CollisionDirection.Top)
@@ -200,8 +200,8 @@
 
                     if (!float.IsNaN(ishare))
                     {
-                        collision.EntityI.GameLocation.Y += ishare * collision.Overlap;
-                        collision.EntityJ.GameLocation.Y -= jshare * collision.Overlap;
+                        collision.EntityI.Info.GameLocation.Y += ishare * collision.Overlap;
+                        collision.EntityJ.Info.GameLocation.Y -= jshare * collision.Overlap;
                     }
                 }
                 else if (collision.Direction == CollisionRecord.CollisionDirection.Bottom)
@@ -211,8 +211,8 @@
 
                     if (!float.IsNaN(ishare))
                     {
-                        collision.EntityI.GameLocation.Y -= ishare * collision.Overlap;
-                        collision.EntityJ.GameLocation.Y += jshare * collision.Overlap;
+                        collision.EntityI.Info.GameLocation.Y -= ishare * collision.Overlap;
+                        collision.EntityJ.Info.GameLocation.Y += jshare * collision.Overlap;
                     }
                 }
             }
@@ -301,8 +301,8 @@
             {
                 CreateEntityEvent projectileCreationEvent = ability.Cast(caster);
                 var projectile = (Projectile)this.EntityGenerator.GenerateEntity(projectileCreationEvent);
-                projectile.Center = caster.Center;
-                projectile.Movements.FollowId = castee.Identifier;
+                projectile.Info.Center = caster.Info.Center;
+                projectile.Movements.FollowId = castee.Info.Identifier;
                 projectile.ResolveEvents = ability.Resolve(caster, castee, this);
                 projectile.Status.ResetToBaseStats();
                 this.AddEntities(projectile);
@@ -339,13 +339,13 @@
 
             if (Program.GameStateManager.Hero != null)
             {
-                if (dealDamageEvent.AttackerIdentifier.Id == Program.GameStateManager.Hero.Identifier.Id)
+                if (dealDamageEvent.AttackerIdentifier.Id == Program.GameStateManager.Hero.Info.Identifier.Id)
                 {
-                    GUI.AddDamageText(defender.Center, dealDamageEvent.Damage.ToString(), Color.Orange);
+                    GUI.AddDamageText(defender.Info.Center, dealDamageEvent.Damage.ToString(), Color.Orange);
                 }
-                else if (dealDamageEvent.DefenderIdentifier.Id == Program.GameStateManager.Hero.Identifier.Id)
+                else if (dealDamageEvent.DefenderIdentifier.Id == Program.GameStateManager.Hero.Info.Identifier.Id)
                 {
-                    GUI.AddDamageText(defender.Center, dealDamageEvent.Damage.ToString(), Color.DarkRed);
+                    GUI.AddDamageText(defender.Info.Center, dealDamageEvent.Damage.ToString(), Color.DarkRed);
                 }
             }
         }
@@ -401,19 +401,19 @@
 
         private CollisionRecord? DetectCollisions(GameEntity entityI, GameEntity entityJ)
         {
-            var check1 = entityI.Left < entityJ.Right;
-            var check2 = entityI.Right > entityJ.Left;
-            var check3 = entityI.Top > entityJ.Bottom;
-            var check4 = entityI.Bottom < entityJ.Top;
+            var check1 = entityI.Info.Left < entityJ.Info.Right;
+            var check2 = entityI.Info.Right > entityJ.Info.Left;
+            var check3 = entityI.Info.Top > entityJ.Info.Bottom;
+            var check4 = entityI.Info.Bottom < entityJ.Info.Top;
 
             var collision = check1 && check2 && check3 && check4;
 
             if (collision)
             {
-                var x1 = entityI.Right - entityJ.Left;
-                var x2 = entityJ.Right - entityI.Left;
-                var y1 = entityI.Top - entityJ.Bottom;
-                var y2 = entityJ.Top - entityI.Bottom;
+                var x1 = entityI.Info.Right - entityJ.Info.Left;
+                var x2 = entityJ.Info.Right - entityI.Info.Left;
+                var y1 = entityI.Info.Top - entityJ.Info.Bottom;
+                var y2 = entityJ.Info.Top - entityI.Info.Bottom;
 
                 var d = Math.Min(Math.Min(Math.Min(x1, x2), y1), y2);
 
@@ -439,13 +439,13 @@
             for (int i = 0; i < this.EntityList.Count; i++)
             {
                 var entityI = this.EntityList[i];
-                if (!entityI.Collidable) { continue; }
+                if (!entityI.Info.Collidable) { continue; }
 
                 for (int j = i + 1; j < this.EntityList.Count; j++)
                 {
                     var entityJ = this.EntityList[j];
 
-                    if (!entityJ.Collidable || (!entityI.Movable && !entityJ.Movable)) { continue; }
+                    if (!entityJ.Info.Collidable || (!entityI.Info.Movable && !entityJ.Info.Movable)) { continue; }
 
                     var collision = this.DetectCollisions(entityI, entityJ);
                     if (collision.HasValue)

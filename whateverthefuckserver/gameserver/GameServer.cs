@@ -133,7 +133,7 @@ namespace whateverthefuckserver.gameserver
                 {
                     foreach (var player in PlayingUsers)
                     {
-                        if (player.HeroIdentifier.Id == killer.Identifier.Id)
+                        if (player.HeroIdentifier.Id == killer.Info.Identifier.Id)
                         {
                             killerx = player;
                             break;

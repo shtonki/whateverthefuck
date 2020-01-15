@@ -15,7 +15,7 @@
             : base(identifier, EntityType.NPC, args)
         {
             this.DrawColor = Color.Red;
-            this.Movable = true;
+            this.Info.Movable = true;
 
             this.Status.BaseStats.MaxHealth = 100;
             this.Status.BaseStats.MoveSpeed = 0.015f;

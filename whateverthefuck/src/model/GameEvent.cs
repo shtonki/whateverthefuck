@@ -57,7 +57,7 @@
         public ApplyStatusEvent(GameEntity entity, Status appliedStatus)
             : base(GameEventType.ApplyStatus)
         {
-            this.EntityIdentifier = entity.Identifier;
+            this.EntityIdentifier = entity.Info.Identifier;
             this.Status = appliedStatus;
         }
 
@@ -76,9 +76,9 @@
         public BeginCastAbilityEvent(GameEntity caster, GameEntity target, Ability ability)
             : base(GameEventType.UseAbility)
         {
-            this.CasterIdentifier = caster.Identifier;
+            this.CasterIdentifier = caster.Info.Identifier;
             this.AbilityType = ability.AbilityType;
-            this.TargetIdentifier = target.Identifier;
+            this.TargetIdentifier = target.Info.Identifier;
         }
 
         // @consider changing this to the index of the ability within the casters ability array
@@ -125,13 +125,13 @@
         public CreateEntityEvent(GameEntity e)
             : base(GameEventType.Create)
         {
-            this.Id = e.Identifier;
-            this.EntityType = e.EntityType;
-            this.X = e.GameLocation.X;
-            this.Y = e.GameLocation.Y;
+            this.Id = e.Info.Identifier;
+            this.EntityType = e.Info.EntityType;
+            this.X = e.Info.GameLocation.X;
+            this.Y = e.Info.GameLocation.Y;
             this.CurrentHealth = e.Status.BaseStats.Health;
             this.MaxHealth = e.Status.BaseStats.MaxHealth;
-            this.CreationArgs = e.CreationArgs;
+            this.CreationArgs = e.Info.CreationArgs;
         }
 
         public CreateEntityEvent(EntityIdentifier id, EntityType entityType, float x, float y, int currentHealth, int maxHealth, CreationArguments creationArgs)
@@ -202,8 +202,8 @@
         {
             this.Type = GameEventType.Damage;
 
-            this.AttackerIdentifier = attacker.Identifier;
-            this.DefenderIdentifier = defender.Identifier;
+            this.AttackerIdentifier = attacker.Info.Identifier;
+            this.DefenderIdentifier = defender.Info.Identifier;
             this.Damage = damage;
         }
 
@@ -220,7 +220,7 @@
         public DestroyEntityEvent(GameEntity e)
             : base(GameEventType.Destroy)
         {
-            this.Identifier = e.Identifier;
+            this.Identifier = e.Info.Identifier;
         }
 
         public EntityIdentifier Identifier { get; private set; }
@@ -234,7 +234,7 @@
         }
 
         public UpdateMovementEvent(GameEntity entity)
-            : this(entity.Identifier, entity.Movements)
+            : this(entity.Info.Identifier, entity.Movements)
         {
         }
 

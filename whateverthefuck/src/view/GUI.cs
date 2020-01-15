@@ -35,6 +35,8 @@
 
         private static TargetPanel TargetPanel { get; set; }
 
+        private static CastBar CastBar { get; set; }
+
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
         /// of said window to be called. Roughly speaking.
@@ -90,6 +92,7 @@
         {
             LoadAbilityBar(hero);
             SetHeroPanel(hero);
+            SetCastBar(hero);
         }
 
         public static void ShowLoot(Lootable lootee)
@@ -129,6 +132,23 @@
         public static void ToggleInventoryPanel()
         {
             InventoryPanel.Visible = !InventoryPanel.Visible;
+        }
+
+        public static void SetCastBar(PC hero)
+        {
+            if (CastBar != null)
+            {
+                Logging.Log("Adding CastBar with one already there.", Logging.LoggingLevel.Error);
+                GUIComponents.Remove(CastBar);
+                CastBar = null;
+            }
+
+            CastBar castBar = new CastBar(hero);
+            castBar.Size = new GLCoordinate(0.9f, 0.2f);
+            castBar.Location = new GLCoordinate(-0.4f, -0.5f);
+
+            CastBar = castBar;
+            GUIComponents.Add(CastBar);
         }
 
         public static void SetHeroPanel(PC hero)

@@ -42,8 +42,6 @@
 
         private HeroMovementStruct HeroMovements { get; } = new HeroMovementStruct();
 
-        private GameEntity TargetedEntity { get; set; }
-
         private Inventory Inventory { get; set; } = new Inventory();
 
         private float PrevDirection { get; set; }
@@ -203,15 +201,9 @@
 
         private void Target(GameEntity target)
         {
+            this.Hero.Info.Target = target.Info.Identifier;
+
             GUI.SetTargetPanel(target);
-
-            if (this.TargetedEntity != null)
-            {
-                this.TargetedEntity.HighlightColor = Color.Transparent;
-            }
-
-            this.TargetedEntity = target;
-            this.TargetedEntity.HighlightColor = Color.Coral;
         }
 
         private void Tick()
@@ -281,7 +273,7 @@
 
             if (!newMovements.Direction.Equals(this.PrevDirection))
             {
-                var e = new UpdateMovementEvent(this.Hero.Identifier, newMovements);
+                var e = new UpdateMovementEvent(this.Hero.Info.Identifier, newMovements);
 
                 Program.ServerConnection.SendMessage(new GameEventsMessage(e));
             }
@@ -296,7 +288,15 @@
 
         private void BeginCastAbility(Ability ability)
         {
-            var target = this.TargetedEntity ?? this.Hero;
+            // if Hero has no target, try to cast spell on the Hero
+            var targetIdentifier = this.Hero.Info.Target ?? this.Hero.Info.Identifier;
+
+            var target = this.GameState.GetEntityById(targetIdentifier);
+
+            if (target == null)
+            {
+                return;
+            }
 
             if (!this.Hero.Abilities.CanCastAbility(ability, target, this.GameState))
             {
@@ -411,7 +411,7 @@
             foreach (var e in this.GameState.AllEntities)
             {
                 e.LOSGraceTicks--;
-                e.Visible = e.LOSGraceTicks > 0;
+                e.Info.Visible = e.LOSGraceTicks > 0;
             }
 #endif
         }

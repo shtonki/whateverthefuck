@@ -48,7 +48,7 @@
         public CreateEntityEvent Cast(GameEntity caster)
         {
             CreationArguments ca = new ProjectileCreationArguments(caster, this.AbilityType);
-            return new CreateEntityEvent(EntityIdentifier.RandomReserved(), EntityType.Projectile, caster.Center.X, caster.Center.Y, 1, 1, ca);
+            return new CreateEntityEvent(EntityIdentifier.RandomReserved(), EntityType.Projectile, caster.Info.Center.X, caster.Info.Center.Y, 1, 1, ca);
         }
 
         public abstract bool CanTarget(GameEntity caster, GameEntity target, GameState gameState);
@@ -77,7 +77,7 @@
         {
             return
                 target != caster &&
-                target.State == GameEntityState.Alive &&
+                target.Info.State == GameEntityState.Alive &&
                 target is Character;
         }
     }
@@ -105,7 +105,7 @@
         {
             return
                 target != caster &&
-                target.State == GameEntityState.Alive &&
+                target.Info.State == GameEntityState.Alive &&
                 target is Character;
         }
     }
@@ -157,7 +157,7 @@
         {
             return
                 target != caster &&
-                target.State == GameEntityState.Alive &&
+                target.Info.State == GameEntityState.Alive &&
                 target is Character;
         }
     }
@@ -167,7 +167,7 @@
         public CastingInfo(Ability castingAbility, GameEntity target)
         {
             this.CastingAbility = castingAbility;
-            this.Target = target.Identifier;
+            this.Target = target.Info.Identifier;
             this.MaxTicks = castingAbility.CastTime;
         }
 
