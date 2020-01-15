@@ -283,29 +283,9 @@
             Represents an entity in the game.
             </summary>
         </member>
-        <member name="E:whateverthefuck.src.model.GameEntity.OnDeath">
-            <summary>
-            Event for when the GameEntity dies.
-            </summary>
-        </member>
-        <member name="E:whateverthefuck.src.model.GameEntity.OnStep">
-            <summary>
-            Event for when the GameEntity is stepped.
-            </summary>
-        </member>
         <member name="P:whateverthefuck.src.model.GameEntity.MovementCache">
             <summary>
             Gets or sets current movement being made by the GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.LastDamageTaken">
-            <summary>
-            Gets or sets the last DealDamageEvent to deal damage to the GameEntity.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.model.GameEntity.ShowHealth">
-            <summary>
-            Gets or sets a value indicating whether or not to show the health bar of the GameEntity.
             </summary>
         </member>
         <member name="M:whateverthefuck.src.model.GameEntity.Step(whateverthefuck.src.model.GameState)">

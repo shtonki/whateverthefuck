@@ -51,15 +51,11 @@
             this.Status.BaseStats.MaxHealth = 1;
         }
 
-        /// <summary>
-        /// Event for when the GameEntity dies.
-        /// </summary>
-        public event Action<GameEntity, GameEntity> OnDeath;
+        public event Action<GameEntity, GameState> OnDeath;
 
-        /// <summary>
-        /// Event for when the GameEntity is stepped.
-        /// </summary>
         public event Action<GameEntity, GameState> OnStep;
+
+        public event Action<DealDamageEvent, GameState> OnDamaged;
 
         public EntityStatus Status { get; } = new EntityStatus();
 
@@ -80,21 +76,11 @@
         // @move to EntityMovements
         public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
 
-        /// <summary>
-        /// Gets or sets the last DealDamageEvent to deal damage to the GameEntity.
-        /// </summary>
-        public DealDamageEvent LastDamageTaken { get; set; }
-
         public Sprite Sprite { get; protected set; } = new Sprite(SpriteID.testSprite1);
 
         public Color HighlightColor { get; set; } = Color.Transparent;
 
         protected Color DrawColor { get; set; } = Color.Black;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether or not to show the health bar of the GameEntity.
-        /// </summary>
-        protected bool ShowHealth { get; set; } = false;
 
         /// <summary>
         /// Steps the GameEntity advancing its state by one (1) tick.
@@ -127,6 +113,19 @@
             this.OnStep?.Invoke(this, gameState);
         }
 
+        public void ReceiveDamage(DealDamageEvent e, GameState gs)
+        {
+            var damage = e.Damage;
+
+            this.Status.WriteCurrentStats.Health -= damage;
+            if (this.Status.ReadCurrentStats.Health < 0)
+            {
+                this.Status.WriteCurrentStats.Health = 0;
+            }
+
+            this.OnDamaged?.Invoke(e, gs);
+        }
+
         public float DistanceTo(GameEntity other)
         {
             return this.DistanceTo(other.Info.Center);
@@ -148,10 +147,8 @@
         /// <param name="gameState">Used to look up the GameEntity that killed this GameEntity.</param>
         protected virtual void Die(GameState gameState)
         {
-            this.OnDeath?.Invoke(this, gameState.GetEntityById(this.LastDamageTaken.AttackerIdentifier));
+            this.OnDeath?.Invoke(this, gameState);
             this.Info.State = GameEntityState.Dead;
-
-            this.ShowHealth = false;
         }
 
         /// <summary>

@@ -165,11 +165,7 @@
 
         public CreationArguments CreationArgs { get; private set; }
 
-        public Action<GameEntity> OnCreationCallback { get; set; }
-
-        public Action<GameEntity, GameEntity> OnDeathCallback { get; set; }
-
-        public Action<GameEntity, GameState> OnStepCallback { get; set; }
+        public Action<GameEntity, GameState> OnEntityCreatedCallback { get; set; }
 
         public override void Encode(WhateverEncoder encoder)
         {

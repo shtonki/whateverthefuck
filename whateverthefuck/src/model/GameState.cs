@@ -328,17 +328,14 @@
 
         private void HandleEvent(DealDamageEvent dealDamageEvent)
         {
+            var attacker = this.GetEntityById(dealDamageEvent.AttackerIdentifier);
             var defender = this.GetEntityById(dealDamageEvent.DefenderIdentifier);
-            var baseDamage = dealDamageEvent.Damage;
-            var damage = (int)(baseDamage * defender.Status.ReadCurrentStats.DamageTaken);
 
-            defender.Status.WriteCurrentStats.Health -= damage;
-            if (defender.Status.ReadCurrentStats.Health < 0)
-            {
-                defender.Status.WriteCurrentStats.Health = 0;
-            }
-            defender.LastDamageTaken = dealDamageEvent;
+            defender.ReceiveDamage(dealDamageEvent, this);
 
+            var damage = dealDamageEvent.Damage;
+
+            // @fix make these callbacks
             if (Program.GameStateManager.Hero != null)
             {
                 if (dealDamageEvent.AttackerIdentifier.Id == Program.GameStateManager.Hero.Info.Identifier.Id)
@@ -355,13 +352,9 @@
         private void HandleEvent(CreateEntityEvent createEntityEvent)
         {
             var entity = this.EntityGenerator.GenerateEntity(createEntityEvent);
-            entity.OnDeath += createEntityEvent.OnDeathCallback;
-            entity.OnStep += createEntityEvent.OnStepCallback;
-
             entity.Status.ResetToBaseStats();
 
-            // it has to be like this
-            createEntityEvent.OnCreationCallback?.Invoke(entity);
+            createEntityEvent.OnEntityCreatedCallback?.Invoke(entity, this);
 
             this.AddEntities(entity);
         }

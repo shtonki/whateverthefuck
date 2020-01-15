@@ -48,8 +48,8 @@ namespace whateverthefuckserver.gameserver
 
             SpawnCity = new SpawnCity(GameState, es => PendEvents(es));
             SpawnCity.SpawnWorld();
-            SpawnCity.SpawnMob();
-            SpawnCity.SpawnMob();
+            SpawnCity.SpawnNPC();
+            SpawnCity.SpawnNPC();
         }
 
         private void Tick()
@@ -120,30 +120,40 @@ namespace whateverthefuckserver.gameserver
             }
         }
 
-        public void SpawnLootForPlayer(GameEntity dead, GameEntity killer)
+        public void SpawnLootForPlayer(EntityIdentifier looteeId, EntityIdentifier looterId)
         {
-            if (killer is PC)
+            var looter = GameState.GetEntityById(looterId);
+            var lootee = GameState.GetEntityById(looteeId);
+
+            if (looter == null || lootee == null || !(looter is PC))
+            {
+                Logging.Log("Something was null when trying to spawn loot", Logging.LoggingLevel.Error);
+                return;
+            }
+
+            if (looter is PC)
             {
                 // @fix for christ sake just store the PlayerCharacter in the user so we don't end up looping through the entire server every
                 // time someone kills something and also this has a very real risk of breaking regardless of what the error message says
                 // t ribbe
-                User killerx = null;
+                User lootingPlayer = null;
 
                 lock (PlayersLock)
                 {
                     foreach (var player in PlayingUsers)
                     {
-                        if (player.HeroIdentifier.Id == killer.Info.Identifier.Id)
+                        if (player.HeroIdentifier.Id == looter.Info.Identifier.Id)
                         {
-                            killerx = player;
+                            lootingPlayer = player;
                             break;
                         }
                     }
                 }
 
-                if (killerx == null)
+                if (lootingPlayer == null)
                 {
                     Logging.Log("this will never happen so you will never see this.", Logging.LoggingLevel.Error);
+                    return;
                 }
 
                 Item item1 = new Item(ItemType.BronzeDagger, 20, Rarity.Epic,
@@ -153,8 +163,8 @@ namespace whateverthefuckserver.gameserver
 
                 var item2 = new Item(ItemType.Banana, 20, Rarity.Epic);
 
-                var message = new CreateLootMessage(dead, item1, item2);
-                killerx.PlayerConnection.SendMessage(message);
+                var message = new CreateLootMessage(lootee, item1, item2);
+                lootingPlayer.PlayerConnection.SendMessage(message);
             }
         }
 

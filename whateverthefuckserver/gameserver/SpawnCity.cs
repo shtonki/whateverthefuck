@@ -32,22 +32,33 @@ namespace whateverthefuckserver.gameserver
             return rt;
         }
 
-        public void SpawnMob()
+        public void SpawnNPC()
         {
+            // @fix this creates a GameEntity then clones it into a createEntityEvent then recreates it from there
             var mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new NPCCreationArguments(NPCCreationArguments.Types.Dog));
             mob.Info.GameLocation = new GameCoordinate(-0.5f, RNG.BetweenZeroAndOne());
-            var rt = new CreateEntityEvent(mob);
-            rt.OnDeathCallback = (idiot, killer) => Program.GameServer.SpawnLootForPlayer(idiot, killer);
+            var createEntityEvent = new CreateEntityEvent(mob);
 
-            Brain brain = new Brain();
-            rt.OnStepCallback = (entity, gameState) => UseBrain(brain, entity as NPC, gameState);
 
-            PublishArray(rt);
+            createEntityEvent.OnEntityCreatedCallback = (entity, gameState) =>
+            {
+                Brain brain = new Brain(entity);
+                entity.OnDeath += (e, gs) => OnDeath(entity, brain);
+                entity.OnStep += (e, gs) => UseBrain(brain, e, gs);
+            };
+
+            PublishArray(createEntityEvent);
         }
 
-        private void UseBrain(Brain brain, NPC npc, GameState gameState)
+
+        private void OnDeath(GameEntity entity, Brain brain)
         {
-            var action = brain.Use(npc, gameState);
+            Program.GameServer.SpawnLootForPlayer(entity.Info.Identifier, brain.Tagger);
+        }
+
+        private void UseBrain(Brain brain, GameEntity entity, GameState gameState)
+        {
+            var action = brain.Use(entity, gameState);
 
             if (action != null)
             {
@@ -61,6 +72,5 @@ namespace whateverthefuckserver.gameserver
 
             Publish(house);
         }
-
     }
 }

@@ -150,7 +150,7 @@
         {
             return new GameEvent[]
             {
-                new DealDamageEvent(caster, target, 15),
+                new DealDamageEvent(caster, target, 150),
                 new ApplyStatusEvent(target, new SlowStatus(caster.Info.Identifier, 800, 80)),
                 new ApplyStatusEvent(target, new VulnerableStatus(caster.Info.Identifier, 800, 15)),
             };
