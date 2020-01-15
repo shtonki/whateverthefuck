@@ -44,12 +44,11 @@ namespace whateverthefuck.src.model
 
         public void ApplyStatus(Status status)
         {
-            var activeStatus = this.ActiveStatuses.FirstOrDefault(s => s.GetType() == status.GetType());
+            var activeStatus = this.ActiveStatuses.FirstOrDefault(s => s.GetType() == status.GetType() && s.Applyor.Id == status.Applyor.Id);
 
             if (activeStatus != null)
             {
-                activeStatus.Stacks += status.Stacks;
-                activeStatus.Duration = Math.Max(activeStatus.Duration, status.Duration);
+                activeStatus.Stack(status);
             }
             else
             {
