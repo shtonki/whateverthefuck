@@ -10,6 +10,7 @@ using System;
 using whateverthefuck.src.network;
 using whateverthefuckserver.storage;
 using whateverthefuckserver.users;
+using System.Diagnostics;
 
 namespace whateverthefuckserver.gameserver
 {
@@ -17,7 +18,6 @@ namespace whateverthefuckserver.gameserver
     {
         public GameState GameState { get; private set; }
         public IStorage Storage { get; private set; }
-        private Timer TickTimer;
         private List<User> PlayingUsers = new List<User>();
         object PlayersLock = new object();
 
@@ -29,10 +29,13 @@ namespace whateverthefuckserver.gameserver
 
         private SpawnCity SpawnCity { get; }
 
+        private TimeSpan TickInterval = new TimeSpan(0, 0, 0, 0, 10);
+
+
         public GameServer()
         {
             GameState = new GameState();
-            TickTimer = new Timer((_) => Tick(), null, 0, 10);
+
 
             new Thread((ob) =>
             {
@@ -50,6 +53,9 @@ namespace whateverthefuckserver.gameserver
             SpawnCity.SpawnWorld();
             SpawnCity.SpawnNPC();
             SpawnCity.SpawnNPC();
+
+            Thread TickThread = new Thread(TickLoopThread);
+            TickThread.Start();
         }
 
         private void Tick()
@@ -76,6 +82,7 @@ namespace whateverthefuckserver.gameserver
                 SyncCity = syncRecord;
             }
         }
+
 
         public void HandleRequests(IEnumerable<GameEvent> requests)
         {
@@ -221,6 +228,24 @@ namespace whateverthefuckserver.gameserver
             }
         }
 
-        
+        private void TickLoopThread()
+        {
+            var nextTick = DateTime.Now + TickInterval;
+            while (true)
+            {
+                while (DateTime.Now < nextTick)
+                {
+                    var sleep = nextTick - DateTime.Now;
+                    if (sleep.Ticks > 0)
+                    {
+                        Thread.Sleep(sleep);
+                    }
+
+                }
+                nextTick += TickInterval; // Notice we're adding onto when the last tick was supposed to be, not when it is now
+                                      // Insert tick() code here
+                Tick();
+            }
+        }
     }
 }

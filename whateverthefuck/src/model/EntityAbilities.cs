@@ -75,6 +75,15 @@ namespace whateverthefuck.src.model
             this.Casting = new CastingInfo(ability, target);
         }
 
+        public void StopCasting()
+        {
+            // cancel the cast
+            this.Casting = null;
+
+            // reset global cooldown
+            this.GlobalCooldown = 0;
+        }
+
         public void Step(GameState gameState)
         {
 
@@ -82,10 +91,7 @@ namespace whateverthefuck.src.model
             {
                 if (this.Entity.Movements.IsMoving && !this.CanMoveWhileCasting(this.Casting.CastingAbility))
                 {
-                    // cancel the cast
-                    this.Casting = null;
-                    // reset global cooldown
-                    this.GlobalCooldown = 0;
+                    this.StopCasting();
                 }
                 else
                 {

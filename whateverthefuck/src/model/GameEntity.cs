@@ -156,6 +156,8 @@
         {
             this.OnDeath?.Invoke(this, gameState);
             this.Info.State = GameEntityState.Dead;
+            this.Abilities.StopCasting();
+            this.Status.ActiveStatuses.Clear();
         }
 
         /// <summary>
