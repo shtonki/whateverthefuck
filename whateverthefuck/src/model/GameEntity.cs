@@ -82,6 +82,8 @@
 
         protected Color DrawColor { get; set; } = Color.Black;
 
+        private int CorpseCounter { get; set; }
+
         /// <summary>
         /// Steps the GameEntity advancing its state by one (1) tick.
         /// </summary>
@@ -97,12 +99,18 @@
 
             if (this.Info.State == GameEntityState.Dead)
             {
+                if (this.CorpseCounter++ > 500)
+                {
+                    this.Info.Destroy = true;
+                }
+
                 return;
             }
 
             this.MovementCache = this.CalculateMovement(gameState);
             this.Info.GameLocation += this.MovementCache;
 
+            // @pls
             if (this is PC)
             {
                 Boombox.SetListenerPosition(this.Info.GameLocation.X, this.Info.GameLocation.Y);

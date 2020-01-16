@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="gameserver\Brain.cs" />
     <Compile Include="gameserver\GameServer.cs" />
+    <Compile Include="gameserver\NPCSpawnLocation.cs" />
     <Compile Include="gameserver\SpawnCity.cs" />
     <Compile Include="network\LoginServer.cs" />
     <Compile Include="network\NetworkEntityInfo.cs" />

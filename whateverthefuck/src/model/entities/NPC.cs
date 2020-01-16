@@ -29,14 +29,15 @@
 
     public class NPCCreationArguments : CreationArguments
     {
-        public NPCCreationArguments(Types type)
-        {
-            this.Type = type;
-        }
-
         public NPCCreationArguments()
         {
 
+        }
+
+        public NPCCreationArguments(Types type, int level)
+        {
+            this.Type = type;
+            this.Level = level;
         }
 
         public enum Types
@@ -45,6 +46,8 @@
         }
 
         public Types Type { get; private set; }
+
+        public int Level { get; private set; }
 
         public SpriteID GetSpriteID()
         {
@@ -62,11 +65,13 @@
         public override void Encode(WhateverEncoder encoder)
         {
             encoder.Encode((int)this.Type);
+            encoder.Encode(this.Level);
         }
 
         public override void Decode(WhateverDecoder decoder)
         {
             this.Type = (Types)decoder.DecodeInt();
+            this.Level = decoder.DecodeInt();
         }
     }
 }

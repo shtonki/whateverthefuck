@@ -18,7 +18,11 @@ namespace whateverthefuckserver.gameserver
         {
             GameState = gameState;
             Publish = publish;
+
+            SpawnLocation1 = new NPCSpawnLocation(new GameCoordinate(-1, -1), NPCCreationArguments.Types.Dog);
         }
+
+        private NPCSpawnLocation SpawnLocation1 { get; }
 
         private void PublishArray(params GameEvent[] es)
         {
@@ -34,16 +38,17 @@ namespace whateverthefuckserver.gameserver
 
         public void SpawnNPC()
         {
-            // @fix this creates a GameEntity then clones it into a createEntityEvent then recreates it from there
-            var mob = (NPC)GameState.EntityGenerator.GenerateEntity(EntityType.NPC, new NPCCreationArguments(NPCCreationArguments.Types.Dog));
-            mob.Info.GameLocation = new GameCoordinate(-0.5f, RNG.BetweenZeroAndOne());
-            var createEntityEvent = new CreateEntityEvent(mob);
+            SpawnNPC(SpawnLocation1);
+        }
 
+        private void SpawnNPC(NPCSpawnLocation spawnLocation)
+        {
+            var createEntityEvent = spawnLocation.SpawnNPC(GameState);
 
             createEntityEvent.OnEntityCreatedCallback = (entity, gameState) =>
             {
                 Brain brain = new Brain(entity);
-                entity.OnDeath += (e, gs) => OnDeath(entity, brain);
+                entity.OnDeath += (e, gs) => OnDeath(entity, brain, spawnLocation);
                 entity.OnStep += (e, gs) => UseBrain(brain, e, gs);
             };
 
@@ -51,9 +56,10 @@ namespace whateverthefuckserver.gameserver
         }
 
 
-        private void OnDeath(GameEntity entity, Brain brain)
+        private void OnDeath(GameEntity entity, Brain brain, NPCSpawnLocation spawnLocation)
         {
             Program.GameServer.SpawnLootForPlayer(entity.Info.Identifier, brain.Tagger);
+            SpawnNPC(spawnLocation);
         }
 
         private void UseBrain(Brain brain, GameEntity entity, GameState gameState)

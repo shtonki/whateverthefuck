@@ -52,7 +52,6 @@ namespace whateverthefuckserver.gameserver
             SpawnCity = new SpawnCity(GameState, es => PendEvents(es));
             SpawnCity.SpawnWorld();
             SpawnCity.SpawnNPC();
-            SpawnCity.SpawnNPC();
 
             Thread TickThread = new Thread(TickLoopThread);
             TickThread.Start();

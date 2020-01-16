@@ -13,6 +13,11 @@
         {
         }
 
+        public GameCoordinate(GameCoordinate clonee)
+            : this(clonee.X, clonee.Y)
+        {
+        }
+
         public static GameCoordinate operator +(GameCoordinate a, GameCoordinate b)
         {
             return new GameCoordinate(a.X + b.X, a.Y + b.Y);
