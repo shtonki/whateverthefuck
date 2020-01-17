@@ -172,6 +172,21 @@
             }
         }
 
+        public void UseItem(Item item)
+        {
+            Program.ServerConnection.SendMessage(new GameEventsMessage(new UseItemEvent(Hero.Info.Identifier, item)));
+
+            if (item.DepletesOnUse)
+            {
+                item.StackSize--;
+
+                if (item.StackSize <= 0)
+                {
+                    Inventory.RemoveItem(item);
+                }
+            }
+        }
+
         public void Loot(Lootable lootee)
         {
             if (this.Hero.DistanceTo(lootee) > LootingMaxDistance)

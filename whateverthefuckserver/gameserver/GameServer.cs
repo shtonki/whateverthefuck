@@ -162,12 +162,10 @@ namespace whateverthefuckserver.gameserver
                     return;
                 }
 
-                Item item1 = new Item(ItemType.BronzeDagger, 20, Rarity.Epic,
-                    new ItemBonus(ItemBonus.BonusType.Test4, 20),
-                    new ItemBonus(ItemBonus.BonusType.Test1, -4)
-                    );
+                var item1 = new BronzeDagger();
 
-                var item2 = new Item(ItemType.Banana, 20, Rarity.Epic);
+                var item2 = new Banana();
+                item2.StackSize = 4;
 
                 var message = new CreateLootMessage(lootee, item1, item2);
                 lootingPlayer.PlayerConnection.SendMessage(message);

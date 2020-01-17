@@ -14,9 +14,12 @@
             this.RenderOptions = new QFontRenderOptions { Colour = color, DropShadowActive = true };
             this.Size = this.CalculateSize(this.Text);
             this.BackColor = Color.Transparent;
+            Font = FontLoader.DefaultFont;
         }
 
         public string Text { get; set; }
+
+        public QFont Font { get; set; }
 
         private QFontRenderOptions RenderOptions { get; }
 
@@ -24,7 +27,7 @@
         {
             base.DrawMe(drawAdapter);
 
-            drawAdapter.DrawText(FontLoader.DefaultFont, this.Text, this.Location as GLCoordinate, QFontAlignment.Left, this.RenderOptions);
+            drawAdapter.DrawText(this.Font, this.Text, this.Location as GLCoordinate, QFontAlignment.Left, this.RenderOptions);
         }
 
         private GLCoordinate CalculateSize(string text)

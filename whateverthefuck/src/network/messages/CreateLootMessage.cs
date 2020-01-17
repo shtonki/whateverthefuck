@@ -28,14 +28,7 @@
             encoder.Encode(this.Items.Length);
             foreach (var item in this.Items)
             {
-                encoder.Encode((int)item.Type);
-                encoder.Encode((int)item.Rarity);
-                encoder.Encode(item.StackSize);
-                encoder.Encode(item.Bonuses.Length);
-                foreach (var bonus in item.Bonuses)
-                {
-                    encoder.Encode(bonus.ToInt());
-                }
+                item.Encode(encoder);
             }
         }
 
@@ -49,19 +42,7 @@
 
             for (int i = 0; i < itemCount; i++)
             {
-                var type = (ItemType)decoder.DecodeInt();
-                var rarity = (Rarity)decoder.DecodeInt();
-                var stackSize = decoder.DecodeInt();
-
-                var bonusCount = decoder.DecodeInt();
-                var bonuses = new ItemBonus[bonusCount];
-
-                for (int j = 0; j < bonusCount; j++)
-                {
-                    bonuses[j] = new ItemBonus(decoder.DecodeInt());
-                }
-
-                this.Items[i] = new Item(type, stackSize, rarity, bonuses);
+                this.Items[i] = Item.FromDecoder(decoder);
             }
         }
     }

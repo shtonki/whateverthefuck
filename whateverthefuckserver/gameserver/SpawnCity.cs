@@ -22,7 +22,7 @@ namespace whateverthefuckserver.gameserver
             Publish = publish;
 
 
-            SpawnLocations.Add(new NPCSpawnLocation(new GameCoordinate(-1, -1), 1, 5, NPCCreationArguments.Types.Dog));
+            SpawnLocations.Add(new NPCSpawnLocation(new GameCoordinate(-1, -1), 1, 1, NPCCreationArguments.Types.Dog));
             SpawnLocations.Add(new NPCSpawnLocation(new GameCoordinate(-1, -2), 5, 10, NPCCreationArguments.Types.Dog));
             SpawnLocations.Add(new NPCSpawnLocation(new GameCoordinate(-1, -3), 10, 15, NPCCreationArguments.Types.Dog));
             SpawnLocations.Add(new NPCSpawnLocation(new GameCoordinate(-1, -4), 15, 20, NPCCreationArguments.Types.Dog));

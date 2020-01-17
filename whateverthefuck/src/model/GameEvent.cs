@@ -34,6 +34,11 @@
                     return new CreateEntityEvent();
                 }
 
+                case GameEventType.UseItem:
+                {
+                    return new UseItemEvent();
+                }
+
                 default:
                 {
                     throw new Exception("Unexpectedly received a " + type);
@@ -49,6 +54,37 @@
         public virtual void Decode(WhateverDecoder decoder)
         {
             Logging.Log(this.Type + "doesn't decode", Logging.LoggingLevel.Error);
+        }
+    }
+
+    public class UseItemEvent : GameEvent
+    {
+        public UseItemEvent()
+            : base(GameEventType.UseItem)
+        {
+        }
+
+        public UseItemEvent(EntityIdentifier user, Item item)
+            : base(GameEventType.UseItem)
+        {
+            User = user;
+            Item = item;
+        }
+
+        public EntityIdentifier User { get; private set; }
+
+        public Item Item { get; private set; }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode(User.Id);
+            Item.Encode(encoder);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            User = new EntityIdentifier(decoder.DecodeInt());
+            Item = Item.FromDecoder(decoder);
         }
     }
 
@@ -286,5 +322,6 @@
         ApplyStatus,
 
         UseAbility,
+        UseItem,
     }
 }

@@ -11,6 +11,8 @@ namespace whateverthefuck.src.view
 
         public static QFont BigFont { get; private set; }
 
+        public static QFont HugeFont { get; private set; }
+
         public static void LoadFonts()
         {
             var builderConfig = new QFontBuilderConfiguration(true)
@@ -32,6 +34,7 @@ namespace whateverthefuck.src.view
             {
                 DefaultFont = new QFont(fontFamily.Name, 14, new QFontBuilderConfiguration());
                 BigFont = new QFont(fontFamily.Name, 20, new QFontBuilderConfiguration(), System.Drawing.FontStyle.Bold);
+                HugeFont = new QFont(fontFamily.Name, 40, new QFontBuilderConfiguration(), System.Drawing.FontStyle.Bold);
                 break;
             }
         }

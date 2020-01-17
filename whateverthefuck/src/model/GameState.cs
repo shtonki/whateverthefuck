@@ -252,9 +252,28 @@
             {
                 this.HandleEvent(ase);
             }
+            else if (e is UseItemEvent uie)
+            {
+                this.HandleEvent(uie);
+            }
             else
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        private void HandleEvent(UseItemEvent useItemEvent)
+        {
+            var user = this.GetEntityById(useItemEvent.User);
+
+            if (user != null)
+            {
+                var events = useItemEvent.Item.OnUse(user);
+
+                if (events != null)
+                {
+                    this.HandleGameEvents(events);
+                }
             }
         }
 
