@@ -19,10 +19,6 @@
 
             this.Status = new EntityStatus(args.GetBaseStats());
 
-            this.Status.BaseStats.MaxHealth = 100;
-            this.Status.BaseStats.MoveSpeed = 0.015f;
-            this.Status.BaseStats.Strength = args.Level;
-
             this.Abilities.Abilities.Add(new Bite());
             this.Abilities.Abilities.Add(new Mend());
 
@@ -75,6 +71,8 @@
 
             baseStats.MaxHealth = 100 * this.Level;
             baseStats.MoveSpeed = Character.SpeedFast;
+
+            baseStats.Strength = this.Level;
 
             return baseStats;
         }

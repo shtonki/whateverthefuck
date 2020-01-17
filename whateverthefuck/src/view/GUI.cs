@@ -196,6 +196,11 @@
 
         public static EntityIdentifier EntityAt(GameCoordinate location)
         {
+            if (Frame.EntityDrawingInfoCache == null)
+            {
+                return null;
+            }
+
             foreach (var ed in Frame.EntityDrawingInfoCache.EntityDrawables)
             {
                 if (ed.Contains(location))
@@ -209,10 +214,22 @@
 
         private static void StepAllComponents()
         {
-            foreach (var component in GUIComponents)
+            for (int i = 0; i < GUIComponents.Count; i++)
             {
+                if (GUIComponents.Count <= i)
+                {
+                    break;
+                }
+                var component = GUIComponents[i];
+
+                if (component == null)
+                {
+                    break;
+                }
+
                 component.Step();
             }
+
         }
 
         private static void LaunchGameWindow(object o)

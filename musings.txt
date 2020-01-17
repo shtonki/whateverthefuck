@@ -18,15 +18,17 @@ Known bug: Ability cooldowns reset to full duration of the player casts another 
 
 T O D O
 
-Fix messages so that game logic makes sense and messages handle the translation instead of meeting in the middle and everything being fucked
-
 ECS sorta
 
 GameStates internal lists are fucked
 
 Move collision handling out of GameState
 
-Make everything use EntityIdentifier properly
-
 why the fuck is private GUIComponent FocusedGUIComponent { get; set; } in ClientGameStateManager
+think this might be fixed
 
+aggro range
+
+cry for help
+
+crits
