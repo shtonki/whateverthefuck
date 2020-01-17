@@ -24,7 +24,7 @@
                     return new UpdateMovementEvent();
                 }
 
-                case GameEventType.UseAbility:
+                case GameEventType.BeginCastAbility:
                 {
                     return new BeginCastAbilityEvent();
                 }
@@ -105,12 +105,12 @@
     public class BeginCastAbilityEvent : GameEvent
     {
         public BeginCastAbilityEvent()
-            : base(GameEventType.UseAbility)
+            : base(GameEventType.BeginCastAbility)
         {
         }
 
         public BeginCastAbilityEvent(GameEntity caster, GameEntity target, Ability ability)
-            : base(GameEventType.UseAbility)
+            : base(GameEventType.BeginCastAbility)
         {
             this.CasterIdentifier = caster.Info.Identifier;
             this.AbilityType = ability.AbilityType;
@@ -142,7 +142,7 @@
     public class EndCastAbility : GameEvent
     {
         public EndCastAbility(EntityIdentifier caster, EntityIdentifier target, Ability ability)
-            : base(GameEventType.UseAbility)
+            : base(GameEventType.BeginCastAbility)
         {
             this.AbilityType = ability.AbilityType;
             this.CasterIdentifier = caster;
@@ -321,7 +321,7 @@
         Damage,
         ApplyStatus,
 
-        UseAbility,
+        BeginCastAbility,
         UseItem,
     }
 }

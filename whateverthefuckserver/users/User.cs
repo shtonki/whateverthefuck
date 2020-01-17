@@ -15,6 +15,8 @@ namespace whateverthefuckserver.users
 
         public EntityIdentifier HeroIdentifier { get; set; }
 
+        public Inventory Inventory { get; } = new Inventory();
+
         public User(WhateverthefuckServerConnection playerConnection)
         {
             PlayerConnection = playerConnection;

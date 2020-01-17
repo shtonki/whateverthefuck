@@ -95,6 +95,11 @@
                     return new SyncMessage();
                 }
 
+                case MessageType.AddItemToInventoryMessage:
+                {
+                    return new AddItemToInventoryMessage();
+                }
+
                 case MessageType.GrantControlMessage:
                 {
                     return new GrantControlMessage();
@@ -119,5 +124,6 @@
         GameEventMessage,
 
         UseItemMessage,
+        AddItemToInventoryMessage,
     }
 }

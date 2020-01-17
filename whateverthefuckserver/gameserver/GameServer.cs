@@ -83,9 +83,12 @@ namespace whateverthefuckserver.gameserver
         }
 
 
-        public void HandleRequests(IEnumerable<GameEvent> requests)
+        public void HandleRequests(User user, IEnumerable<GameEvent> requests)
         {
-            PendEvents(requests);
+            if (CheckRequests(user, requests))
+            {
+                PendEvents(requests);
+            }
         }
 
         public void AddUser(User user)
@@ -189,6 +192,54 @@ namespace whateverthefuckserver.gameserver
 
             return rt;
         }
+
+        private bool CheckRequests(User requester, IEnumerable<GameEvent> requests)
+        {
+            foreach (var request in requests)
+            {
+                switch (request.Type)
+                {
+                    case GameEventType.UpdateMovement:
+                    {
+                        var ume = (UpdateMovementEvent)request;
+                        if (ume.Identifier.Id == requester.HeroIdentifier.Id)
+                        {
+                            return true;
+                        }
+                    } break;
+
+                    case GameEventType.BeginCastAbility:
+                    {
+                        var bcae = (BeginCastAbilityEvent)request;
+                        if (bcae.CasterIdentifier.Id == requester.HeroIdentifier.Id)
+                        {
+                            return true;
+                        }
+                    } break;
+
+                    case GameEventType.UseItem:
+                    {
+                        var uie = (UseItemEvent)request;
+
+                        // @problem might use wrong item if duplicates exist
+                        var item = requester.Inventory.GetByType(uie.Item.Type);
+
+                        if (item != null)
+                        {
+                            if (item.DepletesOnUse)
+                            {
+                                item.StackSize--;
+                            }
+
+                            return true;
+                        }
+                    } break;
+                }
+            }
+
+            return false;
+        }
+
 
         private void SpawnPlayerCharacter(User user)
         {

@@ -91,6 +91,7 @@
     <Compile Include="src\model\LineOfSight.cs" />
     <Compile Include="src\model\EntityMovement.cs" />
     <Compile Include="src\model\Status.cs" />
+    <Compile Include="src\network\messages\AddItemToInventoryMessage.cs" />
     <Compile Include="src\network\messages\CreateLootMessage.cs" />
     <Compile Include="src\network\messages\ExampleMessage.cs" />
     <Compile Include="src\network\messages\GameEventsMessage.cs" />

@@ -15,6 +15,8 @@ namespace whateverthefuckserver.network
 
         }
 
+        private User User { get; set; }
+
         protected override void HandleConnectionDeath()
         {
             LoginServer.Logout(this);
@@ -27,19 +29,29 @@ namespace whateverthefuckserver.network
                 case MessageType.GameEventMessage:
                 {
                     GameEventsMessage gem = (GameEventsMessage)message;
-                    Program.GameServer.HandleRequests(gem.Events);
+                    Program.GameServer.HandleRequests(this.User, gem.Events);
                 } break;
 
                 case MessageType.LoginMessage:
                 {
                     LoginMessage loginMessage = (LoginMessage)message;
-                    LoginServer.Login(new User(this), new LoginCredentials(loginMessage.LoginCredentials.Username));         
+                    var user = new User(this);
+                    if (LoginServer.Login(user, new LoginCredentials(loginMessage.LoginCredentials.Username)))
+                    {
+                        this.User = user;
+                    };         
                 } break;
 
                 case MessageType.SyncMessage:
                 {
                     SyncMessage syncMessage = (SyncMessage)message;
                     Program.GameServer.InSync(syncMessage.SyncRecord.Tick, syncMessage.SyncRecord.Hash);
+                } break;
+
+                case MessageType.AddItemToInventoryMessage:
+                {
+                    AddItemToInventoryMessage aitim = (AddItemToInventoryMessage)message;
+                    User.Inventory.AddItem(aitim.Item);
                 } break;
 
                 default:

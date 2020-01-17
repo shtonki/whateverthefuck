@@ -124,6 +124,8 @@
 
         public void LootItem(Lootable lootee, Item item)
         {
+            Program.ServerConnection.SendMessage(new AddItemToInventoryMessage(item));
+
             this.Inventory.AddItem(item);
             lootee.RemoveItem(item);
 

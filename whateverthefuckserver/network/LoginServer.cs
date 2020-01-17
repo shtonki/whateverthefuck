@@ -13,12 +13,14 @@ namespace whateverthefuckserver.network
     {
         private static List<User> LoggedInUsers = new List<User>();
 
-        public static void Login(User user, LoginCredentials loginCredentials)
+        public static bool Login(User user, LoginCredentials loginCredentials)
         {
             user.Username = loginCredentials.Username;
             LoggedInUsers.Add(user);
 
             Program.GameServer.AddUser(user);
+
+            return true;
         }
 
         public static void Logout(WhateverthefuckServerConnection playerConnection)

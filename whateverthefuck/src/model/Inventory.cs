@@ -36,5 +36,10 @@
             this.Items.Remove(item);
             this.OnInventoryChanged?.Invoke();
         }
+
+        public Item GetByType(ItemType type)
+        {
+            return AllItems.FirstOrDefault(i => i.Type == type);
+        }
     }
 }
