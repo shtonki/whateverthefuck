@@ -37,9 +37,10 @@
             this.OnInventoryChanged?.Invoke();
         }
 
-        public Item GetByType(ItemType type)
+        public Item GetIdentical(Item item)
         {
-            return AllItems.FirstOrDefault(i => i.Type == type);
+            // @incomplete not actually identical
+            return AllItems.FirstOrDefault(i => i.Type == item.Type);
         }
     }
 }

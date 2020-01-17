@@ -256,9 +256,27 @@
             {
                 this.HandleEvent(uie);
             }
+            else if (e is EquipItemEvent eie)
+            {
+                this.HandleEvent(eie);
+            }
             else
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        private void HandleEvent(EquipItemEvent equipItemEvent)
+        {
+            var equipper = GetEntityById(equipItemEvent.Equipper);
+
+            if (equipper != null && equipper.Equipment != null)
+            {
+                equipper.Equipment.Equip(equipItemEvent.Item);
+            }
+            else
+            {
+                Logging.Log("Equipping to non existant entity.", Logging.LoggingLevel.Error);
             }
         }
 

@@ -52,6 +52,8 @@
 
         public EntityStatus Status { get; protected set; }
 
+        public Equipment Equipment { get; protected set; }
+
         public EntityAbilities Abilities { get; protected set; }
 
         public EntityInfo Info { get; }
@@ -215,6 +217,7 @@
         private void UpdateCurrentStats(GameState gameState)
         {
             this.Status?.Step(this, gameState);
+            this.Equipment?.ApplyStaticEffects(this.Status.ReadCurrentStats);
         }
 
     }

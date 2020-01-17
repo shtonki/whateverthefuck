@@ -221,8 +221,7 @@ namespace whateverthefuckserver.gameserver
                     {
                         var uie = (UseItemEvent)request;
 
-                        // @problem might use wrong item if duplicates exist
-                        var item = requester.Inventory.GetByType(uie.Item.Type);
+                        var item = requester.Inventory.GetIdentical(uie.Item);
 
                         if (item != null)
                         {
@@ -231,6 +230,18 @@ namespace whateverthefuckserver.gameserver
                                 item.StackSize--;
                             }
 
+                            return true;
+                        }
+                    } break;
+
+                    case GameEventType.EquipItem:
+                    {
+                        var eie = (EquipItemEvent)request;
+
+                        var item = requester.Inventory.GetIdentical(eie.Item);
+
+                        if (item != null && eie.Equipper.Id == requester.HeroIdentifier.Id)
+                        {
                             return true;
                         }
                     } break;

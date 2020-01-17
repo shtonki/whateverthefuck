@@ -39,6 +39,11 @@
                     return new UseItemEvent();
                 }
 
+                case GameEventType.EquipItem:
+                {
+                    return new EquipItemEvent();
+                }
+
                 default:
                 {
                     throw new Exception("Unexpectedly received a " + type);
@@ -54,6 +59,37 @@
         public virtual void Decode(WhateverDecoder decoder)
         {
             Logging.Log(this.Type + "doesn't decode", Logging.LoggingLevel.Error);
+        }
+    }
+
+    public class EquipItemEvent : GameEvent
+    {
+        public EquipItemEvent()
+            : base(GameEventType.EquipItem)
+        {
+        }
+
+        public EquipItemEvent(EntityIdentifier equipper, Item item)
+            : base(GameEventType.EquipItem)
+        {
+            Item = item;
+            Equipper = equipper;
+        }
+
+        public Item Item { get; private set; }
+
+        public EntityIdentifier Equipper { get; private set; }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            Item.Encode(encoder);
+            encoder.Encode(Equipper.Id);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            Item = Item.FromDecoder(decoder);
+            Equipper = new EntityIdentifier(decoder.DecodeInt());
         }
     }
 
@@ -323,5 +359,6 @@
 
         BeginCastAbility,
         UseItem,
+        EquipItem,
     }
 }

@@ -176,6 +176,12 @@
 
         public void UseItem(Item item)
         {
+            if (item.Equipable)
+            {
+                Program.ServerConnection.SendMessage(new GameEventsMessage(new EquipItemEvent(Hero.Info.Identifier, item)));
+                return;
+            }
+
             Program.ServerConnection.SendMessage(new GameEventsMessage(new UseItemEvent(Hero.Info.Identifier, item)));
 
             if (item.DepletesOnUse)

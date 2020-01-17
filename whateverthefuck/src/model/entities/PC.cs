@@ -23,6 +23,8 @@
             this.Abilities.Abilities.Add(new Fireburst());
 
             this.Sprite = new Sprite(SpriteID.player_Player0);
+
+            this.Equipment = new Equipment();
         }
     }
 

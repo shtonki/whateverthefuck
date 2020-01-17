@@ -48,15 +48,23 @@
 
         public Rarity Rarity { get; set; }
 
+        public EquipmentSlots EquipmentSlot { get; protected set; }
+
         public ItemBonus[] Bonuses { get; set; } = new ItemBonus[0];
 
         public bool DepletesOnUse { get; protected set; }
 
         public Sprite Sprite => Sprite.GetItemSprite(this);
 
+        public bool Equipable => EquipmentSlot != EquipmentSlots.None;
+
         public virtual IEnumerable<GameEvent> OnUse(GameEntity target)
         {
             return null;
+        }
+
+        public virtual void OnEquip(StatStruct stats)
+        {
         }
 
         public void Encode(WhateverEncoder encoder)
@@ -93,6 +101,12 @@
             : base(ItemType.BronzeDagger)
         {
             StackSize = 1;
+            EquipmentSlot = EquipmentSlots.MainHand;
+        }
+
+        public override void OnEquip(StatStruct stats)
+        {
+            stats.MoveSpeed *= 2;
         }
     }
 
