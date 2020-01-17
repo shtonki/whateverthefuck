@@ -107,6 +107,22 @@ namespace whateverthefuck.src.model.entities
                         };
                     }
                 } break;
+
+                case BrainState.Wander:
+                {
+                    if (gameState.StepCounter % 300 == 0)
+                    {
+                        EntityMovement movements = new EntityMovement();
+                        movements.Direction = RNG.BetweenZeroAndOne() * 6.28f;
+                        return new GameEvent[] { new UpdateMovementEvent(entity.Info.Identifier, movements) };
+                    }
+
+                    if (gameState.StepCounter % 300 == 50)
+                    {
+                        EntityMovement movements = new EntityMovement();
+                        return new GameEvent[] { new UpdateMovementEvent(entity.Info.Identifier, movements) };
+                    }
+                } break;
             }
 
             return null;
@@ -150,6 +166,11 @@ namespace whateverthefuck.src.model.entities
             {
                 case BrainState.Idle:
                 {
+                    State = BrainState.Wander;
+                } break;
+
+                case BrainState.Wander:
+                {
                     if (TopThreat != null)
                     {
                         State = BrainState.Offensive;
@@ -179,6 +200,9 @@ namespace whateverthefuck.src.model.entities
         enum BrainState
         {
             Idle,
+
+            Wander,
+
             Offensive,
             Defensive,
         }

@@ -62,7 +62,7 @@
                 return;
             }
 
-            if (this.GameState.StepCounter <= 1)
+            if (this.GameState.StepCounter == 1)
             {
                 this.GameState.StepCounter = tick;
             }
