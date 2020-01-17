@@ -83,7 +83,7 @@
 
         public override void ApplyTo(StatStruct status)
         {
-            status.DamageTaken *= 1 + (this.Stacks * 0.01f);
+            status.DamageTakenMultiplier *= 1 + (this.Stacks * 0.01f);
         }
 
         public override IEnumerable<GameEvent> Tick(GameEntity appliedTo, GameState state)

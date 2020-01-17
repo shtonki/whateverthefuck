@@ -20,10 +20,12 @@ namespace whateverthefuckserver.gameserver
 
         private NPCCreationArguments.Types[] SpawnableTypes { get; }
 
+        private int level = 1;
+
         public CreateEntityEvent SpawnNPC(GameState gameState)
         {
             // @fix this creates a GameEntity then clones it into a createEntityEvent then recreates it from there
-            var mob = (NPC)gameState.EntityGenerator.GenerateEntity(EntityType.NPC, new NPCCreationArguments(NPCCreationArguments.Types.Dog, 1));
+            var mob = (NPC)gameState.EntityGenerator.GenerateEntity(EntityType.NPC, new NPCCreationArguments(NPCCreationArguments.Types.Dog, level++, 0));
             mob.Info.GameLocation = new GameCoordinate(Location);
             var createEntityEvent = new CreateEntityEvent(mob);
             return createEntityEvent;

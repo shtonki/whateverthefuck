@@ -45,7 +45,7 @@ namespace whateverthefuckserver.gameserver
         {
             var createEntityEvent = spawnLocation.SpawnNPC(GameState);
 
-            createEntityEvent.OnEntityCreatedCallback = (entity, gameState) =>
+            createEntityEvent.OnEntityCreated += (entity, gameState) =>
             {
                 Brain brain = new Brain(entity);
                 entity.OnDeath += (e, gs) => OnDeath(entity, brain, spawnLocation);

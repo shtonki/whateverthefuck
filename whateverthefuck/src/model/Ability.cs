@@ -195,7 +195,7 @@
         {
             return new GameEvent[]
             {
-                new DealDamageEvent(caster, target, 1),
+                new DealDamageEvent(caster, target, caster.Status.ReadCurrentStats.Strength),
             };
         }
 

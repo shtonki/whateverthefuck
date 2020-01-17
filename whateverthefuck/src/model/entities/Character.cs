@@ -5,6 +5,9 @@
     /// </summary>
     public abstract class Character : Lootable
     {
+        public const float SpeedFast = 0.015f;
+        public const float SpeedSlow = 0.01f;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Character"/> class.
         /// </summary>

@@ -25,7 +25,10 @@
             this.Info.Collidable = false;
             this.Info.Movable = true;
 
-            this.Status.BaseStats.MoveSpeed = 0.02f;
+            var baseStats = new StatStruct();
+            baseStats.MoveSpeed = 0.02f;
+            baseStats.MaxHealth = 1;
+            this.Status = new EntityStatus(baseStats);
         }
 
         public IEnumerable<GameEvent> ResolveEvents { get; set; }

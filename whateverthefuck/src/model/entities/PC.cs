@@ -11,8 +11,12 @@
         {
             this.DrawColor = Coloring.RandomColor();
 
-            this.Status.BaseStats.MoveSpeed = 0.01f;
-            this.Status.BaseStats.MaxHealth = 100;
+            StatStruct baseStats = new StatStruct();
+            baseStats.MaxHealth = 100;
+            baseStats.GlobalCooldown = 100;
+            baseStats.MoveSpeed = Character.SpeedSlow;
+
+            this.Status = new EntityStatus(baseStats);
 
             this.Abilities.Abilities.Add(new Mend());
             this.Abilities.Abilities.Add(new Fireball());

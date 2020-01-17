@@ -7,7 +7,12 @@ namespace whateverthefuck.src.model
 {
     public class EntityStatus
     {
-        public StatStruct BaseStats { get; } = new StatStruct();
+        public EntityStatus(StatStruct baseStats)
+        {
+            this.BaseStats = baseStats;
+        }
+
+        public StatStruct BaseStats { get; }
 
         public StatStruct WriteCurrentStats { get; private set; }
 
@@ -68,7 +73,8 @@ namespace whateverthefuck.src.model
             this.MaxHealth = copyFrom.MaxHealth;
             this.Health = copyFrom.Health;
             this.MoveSpeed = copyFrom.MoveSpeed;
-            this.DamageTaken = copyFrom.DamageTaken;
+            this.DamageTakenMultiplier = copyFrom.DamageTakenMultiplier;
+            this.Strength = copyFrom.Strength;
         }
 
         public int MaxHealth { get; set; }
@@ -79,6 +85,8 @@ namespace whateverthefuck.src.model
 
         public int GlobalCooldown { get; set; } = 150;
 
-        public float DamageTaken { get; set; } = 1;
+        public float DamageTakenMultiplier { get; set; } = 1;
+
+        public int Strength { get; set; } = 1;
     }
 }

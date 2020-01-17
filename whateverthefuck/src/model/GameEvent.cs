@@ -129,8 +129,6 @@
             this.EntityType = e.Info.EntityType;
             this.X = e.Info.GameLocation.X;
             this.Y = e.Info.GameLocation.Y;
-            this.CurrentHealth = e.Status.BaseStats.Health;
-            this.MaxHealth = e.Status.BaseStats.MaxHealth;
             this.CreationArgs = e.Info.CreationArgs;
         }
 
@@ -141,8 +139,6 @@
             this.EntityType = entityType;
             this.X = x;
             this.Y = y;
-            this.CurrentHealth = currentHealth;
-            this.MaxHealth = maxHealth;
             this.CreationArgs = creationArgs;
         }
 
@@ -150,6 +146,12 @@
             : base(GameEventType.Create)
         {
         }
+
+        /// <summary>
+        /// Called when the CreateEntityEvent is handled and creates the Entity.
+        /// Not perserved when sent through message.
+        /// </summary>
+        public event Action<GameEntity, GameState> OnEntityCreated;
 
         public EntityIdentifier Id { get; private set; }
 
@@ -159,13 +161,12 @@
 
         public float Y { get; private set; }
 
-        public int CurrentHealth { get; private set; }
-
-        public int MaxHealth { get; private set; }
-
         public CreationArguments CreationArgs { get; private set; }
 
-        public Action<GameEntity, GameState> OnEntityCreatedCallback { get; set; }
+        public void OnCreated(GameEntity entity, GameState gameState)
+        {
+            this.OnEntityCreated?.Invoke(entity, gameState);
+        }
 
         public override void Encode(WhateverEncoder encoder)
         {
@@ -173,8 +174,6 @@
             encoder.Encode((int)this.EntityType);
             encoder.Encode(this.X);
             encoder.Encode(this.Y);
-            encoder.Encode(this.MaxHealth);
-            encoder.Encode(this.CurrentHealth);
             this.CreationArgs.Encode(encoder);
         }
 
@@ -184,8 +183,6 @@
             this.EntityType = (EntityType)decoder.DecodeInt();
             this.X = decoder.DecodeFloat();
             this.Y = decoder.DecodeFloat();
-            this.MaxHealth = decoder.DecodeInt();
-            this.CurrentHealth = decoder.DecodeInt();
             this.CreationArgs = CreationArguments.FromEntityType(this.EntityType);
             this.CreationArgs.Decode(decoder);
         }

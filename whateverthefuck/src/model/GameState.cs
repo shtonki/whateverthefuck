@@ -376,9 +376,9 @@
         private void HandleEvent(CreateEntityEvent createEntityEvent)
         {
             var entity = this.EntityGenerator.GenerateEntity(createEntityEvent);
-            entity.Status.ResetToBaseStats();
+            entity.Reset();
 
-            createEntityEvent.OnEntityCreatedCallback?.Invoke(entity, this);
+            createEntityEvent.OnCreated(entity, this);
 
             this.AddEntities(entity);
         }

@@ -344,6 +344,12 @@
             Represents an event which alters a GameState.
             </summary>
         </member>
+        <member name="E:whateverthefuck.src.model.CreateEntityEvent.OnEntityCreated">
+            <summary>
+            Called when the CreateEntityEvent is handled and creates the Entity.
+            Not perserved when sent through message.
+            </summary>
+        </member>
         <member name="T:whateverthefuck.src.model.EntityGenerator">
             <summary>
             Responsible for generating GameEntities from a given EntityType and CreationArgs.

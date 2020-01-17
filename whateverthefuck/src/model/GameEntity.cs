@@ -24,6 +24,7 @@
 
     public enum GameEntityState
     {
+        Created,
         Alive,
         Dead,
     }
@@ -33,22 +34,14 @@
     /// </summary>
     public abstract class GameEntity
     {
-        private const float HealthbarWidth = 0.1f;
-        private const float HealthbarHeight = 0.02f;
-
-        private int globalCooldownTicks = 100;
-        private int currentGlobalCooldown = 0;
-
         protected GameEntity(EntityIdentifier identifier, EntityType type, CreationArguments args)
         {
             this.Abilities = new EntityAbilities(this);
             this.Info = new EntityInfo(type, args, identifier);
 
-            this.Info.State = GameEntityState.Alive;
+            this.Info.State = GameEntityState.Created;
 
             this.Info.GameLocation = new GameCoordinate(0, 0);
-
-            this.Status.BaseStats.MaxHealth = 1;
         }
 
         public event Action<GameEntity, GameState> OnDeath;
@@ -57,9 +50,9 @@
 
         public event Action<DealDamageEvent, GameState> OnDamaged;
 
-        public EntityStatus Status { get; } = new EntityStatus();
+        public EntityStatus Status { get; protected set; }
 
-        public EntityAbilities Abilities { get; }
+        public EntityAbilities Abilities { get; protected set; }
 
         public EntityInfo Info { get; }
 
@@ -92,19 +85,24 @@
         {
             this.UpdateCurrentStats(gameState);
 
-            if (this.Status.ReadCurrentStats.Health <= 0 && this.Info.State != GameEntityState.Dead)
+            if (this.Status != null)
             {
-                this.Die(gameState);
-            }
+                // handle status
 
-            if (this.Info.State == GameEntityState.Dead)
-            {
-                if (this.CorpseCounter++ > 500)
+                if (this.Status.ReadCurrentStats.Health <= 0 && this.Info.State != GameEntityState.Dead)
                 {
-                    this.Info.Destroy = true;
+                    this.Die(gameState);
                 }
 
-                return;
+                if (this.Info.State == GameEntityState.Dead)
+                {
+                    if (this.CorpseCounter++ > 500)
+                    {
+                        this.Info.Destroy = true;
+                    }
+
+                    return;
+                }
             }
 
             this.MovementCache = this.CalculateMovement(gameState);
@@ -116,9 +114,16 @@
                 Boombox.SetListenerPosition(this.Info.GameLocation.X, this.Info.GameLocation.Y);
             }
 
-            this.Abilities.Step(gameState);
+            this.Abilities?.Step(gameState);
 
             this.OnStep?.Invoke(this, gameState);
+        }
+
+        public void Reset()
+        {
+            // @incomplete reset everything
+            this.Status?.ResetToBaseStats();
+            this.Info.State = GameEntityState.Alive;
         }
 
         public void ReceiveDamage(DealDamageEvent e, GameState gs)
@@ -209,7 +214,7 @@
 
         private void UpdateCurrentStats(GameState gameState)
         {
-            this.Status.Step(this, gameState);
+            this.Status?.Step(this, gameState);
         }
 
     }
