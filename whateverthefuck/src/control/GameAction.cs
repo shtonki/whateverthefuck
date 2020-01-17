@@ -22,5 +22,6 @@
 
         TogglePanel,
         ToggleInventory,
+        ToggleEquipmentPanel,
     }
 }

@@ -70,6 +70,11 @@
               Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
+        <member name="P:whateverthefuck.Properties.Resources.item_bronze_helmet">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
         <member name="P:whateverthefuck.Properties.Resources.kappa">
             <summary>
               Looks up a localized resource of type System.Drawing.Bitmap.

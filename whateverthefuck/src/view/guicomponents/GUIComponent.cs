@@ -60,6 +60,11 @@
             this.Children.Add(child);
         }
 
+        public void RemoveChild(GUIComponent child)
+        {
+            this.Children.Remove(child);
+        }
+
         public void ClearChildren()
         {
             this.Children.Clear();

@@ -417,6 +417,11 @@
                     GUI.ToggleInventoryPanel();
                 } break;
 
+                case GameAction.ToggleEquipmentPanel:
+                {
+                    GUI.ToggleEquipmentPanel();
+                } break;
+
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
             }
         }

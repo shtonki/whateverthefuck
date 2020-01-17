@@ -127,6 +127,7 @@
     <Compile Include="src\view\guicomponents\AbilityButton.cs" />
     <Compile Include="src\view\guicomponents\Button.cs" />
     <Compile Include="src\view\guicomponents\CastBar.cs" />
+    <Compile Include="src\view\guicomponents\EquipmentPanel.cs" />
     <Compile Include="src\view\guicomponents\InventoryPanel.cs" />
     <Compile Include="src\view\guicomponents\ItemContainer.cs" />
     <Compile Include="src\view\guicomponents\LootPanel.cs" />
@@ -187,12 +188,6 @@
     <None Include="Resources\pngfind.com-flame-emoji-png-169553.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\bronze_dagger.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\item_banana.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\floor_wood0.png" />
   </ItemGroup>
   <ItemGroup>
@@ -233,6 +228,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\ability_mend.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\item_helmet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bronze_dagger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\item_banana.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

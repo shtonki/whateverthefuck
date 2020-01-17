@@ -31,6 +31,8 @@
 
         private static InventoryPanel InventoryPanel { get; set; } = new InventoryPanel();
 
+        private static EquipmentPanel EquipmentPanel { get; set; }
+
         private static TargetPanel HeroPanel { get; set; }
 
         private static TargetPanel TargetPanel { get; set; }
@@ -93,6 +95,7 @@
             LoadAbilityBar(hero);
             SetHeroPanel(hero);
             SetCastBar(hero);
+            LoadEquipmentPanel(hero);
         }
 
         public static void ShowLoot(Lootable lootee)
@@ -132,6 +135,11 @@
         public static void ToggleInventoryPanel()
         {
             InventoryPanel.Visible = !InventoryPanel.Visible;
+        }
+
+        public static void ToggleEquipmentPanel()
+        {
+            EquipmentPanel.Visible = !EquipmentPanel.Visible;
         }
 
         public static void SetCastBar(PC hero)
@@ -286,6 +294,13 @@
             };
 
             GUIComponents.Add(abilityBar);
+        }
+
+        private static void LoadEquipmentPanel(PC hero)
+        {
+            EquipmentPanel = new EquipmentPanel(hero.Equipment, new GLCoordinate(0.6f, 0.6f));
+            EquipmentPanel.Location = new GLCoordinate(-0.5f, -0.5f);
+            GUIComponents.Add(EquipmentPanel);
         }
 
         private static void Focus(GUIComponent focused)

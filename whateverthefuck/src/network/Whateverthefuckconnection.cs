@@ -83,7 +83,7 @@
 
                 while (true)
                 {
-                    bytesRead += this.networkStream.Read(bodyBuffer, bytesRead, bodyBuffer.Length);
+                    bytesRead += this.networkStream.Read(bodyBuffer, bytesRead, bodyBuffer.Length - bytesRead);
 
                     if (bytesRead == bodyBuffer.Length)
                     {

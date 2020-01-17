@@ -169,6 +169,8 @@ namespace whateverthefuckserver.gameserver
                     lootee,
                     new BronzeDagger(Rarity.Legendary),
                     new BronzeDagger(Rarity.Common),
+                    new BronzeHelmet(Rarity.Legendary),
+                    new BronzeHelmet(Rarity.Common),
                     new Banana(Rarity.Uncommon, 4));
                 lootingPlayer.PlayerConnection.SendMessage(message);
             }

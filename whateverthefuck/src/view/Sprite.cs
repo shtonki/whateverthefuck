@@ -62,6 +62,11 @@
                     id = SpriteID.item_Bronze_Dagger;
                 } break;
 
+                case ItemType.BronzeHelmet:
+                {
+                    id = SpriteID.item_Bronze_Helmet;
+                } break;
+
                 case ItemType.Banana:
                 {
                     id = SpriteID.item_Banana;

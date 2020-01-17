@@ -37,13 +37,18 @@
                     return new BronzeDagger();
                 }
 
+                case ItemType.BronzeHelmet:
+                {
+                    return new BronzeHelmet();
+                }
+
                 default: throw new Exception(type.ToString());
             }
         }
 
         public ItemType Type { get; private set; }
 
-        public int StackSize { get; set; }
+        public int StackSize { get; set; } = 1;
 
         public bool Stackable { get; protected set; }
 
@@ -99,7 +104,7 @@
             }
         }
 
-        protected int ValueFromRarity(Rarity rarity, int common, int uncommon, int rare, int epic, int legendary)
+        protected static int ValueFromRarity(Rarity rarity, int common, int uncommon, int rare, int epic, int legendary)
         {
             switch (rarity)
             {
@@ -114,6 +119,26 @@
         }
     }
 
+    public class BronzeHelmet : Item
+    {
+        public BronzeHelmet()
+            : this(Rarity.None)
+        {
+        }
+
+        public BronzeHelmet(Rarity rarity)
+            : base(ItemType.BronzeHelmet, rarity)
+        {
+            EquipmentSlot = EquipmentSlots.Head;
+
+            Bonuses = new ItemBonus[]
+            {
+                new ItemBonus(ItemBonus.BonusType.BonusIntelligence, ValueFromRarity(rarity, 5, 10, 15, 20, 25)),
+            };
+        }
+
+    }
+
     public class BronzeDagger : Item
     {
         public BronzeDagger()
@@ -124,7 +149,6 @@
         public BronzeDagger(Rarity rarity)
             : base(ItemType.BronzeDagger, rarity)
         {
-            StackSize = 1;
             EquipmentSlot = EquipmentSlots.MainHand;
 
             Bonuses = new ItemBonus[]
@@ -172,6 +196,8 @@
         None,
 
         BronzeDagger,
+
+        BronzeHelmet,
 
         Banana,
     }

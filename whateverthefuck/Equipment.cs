@@ -6,6 +6,8 @@ namespace whateverthefuck
 {
     public class Equipment
     {
+        public event Action<EquipmentSlots, Item> OnEquipmentChanged;
+
         private Item[] Equipped { get; } = new Item[Enum.GetValues(typeof(EquipmentSlots)).Length];
 
         public void ApplyStaticEffects(StatStruct stats)
@@ -31,6 +33,12 @@ namespace whateverthefuck
             }
 
             Equipped[(int)item.EquipmentSlot] = item;
+            OnEquipmentChanged?.Invoke(item.EquipmentSlot, item);
+        }
+
+        public Item GetItem(EquipmentSlots slot)
+        {
+            return Equipped[(int)slot];
         }
     }
 
@@ -38,6 +46,7 @@ namespace whateverthefuck
     {
         None,
 
+        Head,
         MainHand,
     }
 }

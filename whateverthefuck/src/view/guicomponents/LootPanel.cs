@@ -19,8 +19,7 @@
 
             foreach (var item in lootee.Items)
             {
-                Button lootButton = new Button();
-                lootButton.Sprite = item.Sprite;
+                ItemContainer lootButton = new ItemContainer(item);
                 lootButton.OnMouseButtonDown += (c, i) =>
                 {
                     lootButton.Visible = false;

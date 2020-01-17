@@ -31,15 +31,22 @@
 
         private static int InventorySize => NumberOfRows * NumberOfColumns;
 
-        public bool AddItem(Item i)
+        public bool AddItem(Item item)
         {
             if (this.Children.Count >= InventorySize)
             {
                 return false;
             }
 
-            ItemContainer ic = new ItemContainer(i);
-            this.AddChild(ic);
+            ItemContainer itemContainer = new ItemContainer(item);
+
+            itemContainer.OnMouseButtonDown += (component, union) =>
+            {
+                Program.GameStateManager.UseItem(item);
+                itemContainer.UpdateStackText();
+            };
+
+            this.AddChild(itemContainer);
 
             return true;
         }

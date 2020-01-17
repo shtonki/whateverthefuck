@@ -18,6 +18,7 @@
         ability_Mend,
 
         item_Bronze_Dagger,
+        item_Bronze_Helmet,
         item_Banana,
 
         floor_Wood0,
@@ -54,6 +55,7 @@
 
             images[SpriteID.item_Banana] = new Bitmap(Properties.Resources.item_banana);
             images[SpriteID.item_Bronze_Dagger] = new Bitmap(Properties.Resources.item_bronze_dagger);
+            images[SpriteID.item_Bronze_Helmet] = new Bitmap(Properties.Resources.item_bronze_helmet);
 
             images[SpriteID.floor_Wood0] = new Bitmap(Properties.Resources.floor_wood0);
 
