@@ -11,7 +11,7 @@
             this.Sprite = item.Sprite;
             this.Item = item;
 
-            this.AddBorder();
+            this.AddBorder(RarityColor(item.Rarity));
             this.BackColor = RNG.RandomColor();
 
             this.OnMouseButtonDown += (component, union) =>
@@ -38,6 +38,20 @@
             // @hack
             this.StacksText.Location = new GLCoordinate(this.Location.X, this.Location.Y + this.Size.Y);
             base.DrawMe(drawAdapter);
+        }
+
+        private static Color RarityColor(Rarity rarity)
+        {
+            switch (rarity)
+            {
+                case Rarity.None: return Color.Black;
+                case Rarity.Common: return Color.Gray;
+                case Rarity.Uncommon: return Color.Green;
+                case Rarity.Rare: return Color.Blue;
+                case Rarity.Epic: return Color.Purple;
+                case Rarity.Legendary: return Color.Orange;
+                default: return Color.White;
+            }
         }
     }
 }

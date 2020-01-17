@@ -1,5 +1,6 @@
 ﻿namespace whateverthefuck.src.view.guicomponents
 {
+    using System.Drawing;
     using whateverthefuck.src.model;
 
     internal class InventoryPanel : Panel
@@ -23,7 +24,7 @@
             glm.Height = (Size.Y - (Padding.Y * (glm.Rows + 1))) / glm.Rows;
             this.LayoutManager = glm;
 
-            this.AddBorder();
+            this.AddBorder(Color.Black);
 
             this.Visible = false;
         }

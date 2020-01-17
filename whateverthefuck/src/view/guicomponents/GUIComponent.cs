@@ -45,9 +45,9 @@
 
         }
 
-        public void AddBorder()
+        public void AddBorder(Color color)
         {
-            this.Border = new Border(Color.Black);
+            this.Border = new Border(color);
         }
 
         public void AddChild(GUIComponent child)

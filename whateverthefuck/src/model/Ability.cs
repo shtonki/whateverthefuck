@@ -85,10 +85,13 @@
 
         public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
         {
+            int initialDamage = caster.Status.ReadCurrentStats.Intelligence;
+            int burnStacks = caster.Status.ReadCurrentStats.Intelligence;
+
             return new GameEvent[]
             {
-                new DealDamageEvent(caster, target, 15),
-                new ApplyStatusEvent(target, new BurnStatus(caster.Info.Identifier, 10)),
+                new DealDamageEvent(caster, target, initialDamage),
+                new ApplyStatusEvent(target, new BurnStatus(caster.Info.Identifier, burnStacks)),
             };
         }
 
@@ -138,11 +141,15 @@
 
         public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
         {
+            int initialDamage = (int)(caster.Status.ReadCurrentStats.Intelligence * 2.5f);
+            int slowPercentage = 80;
+            int vulnerableStacks = 15;
+
             return new GameEvent[]
             {
-                new DealDamageEvent(caster, target, 150),
-                new ApplyStatusEvent(target, new SlowStatus(caster.Info.Identifier, 800, 80)),
-                new ApplyStatusEvent(target, new VulnerableStatus(caster.Info.Identifier, 800, 15)),
+                new DealDamageEvent(caster, target, initialDamage),
+                new ApplyStatusEvent(target, new SlowStatus(caster.Info.Identifier, 800, slowPercentage)),
+                new ApplyStatusEvent(target, new VulnerableStatus(caster.Info.Identifier, 800, vulnerableStacks)),
             };
         }
 

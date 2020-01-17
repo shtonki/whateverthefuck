@@ -165,12 +165,11 @@ namespace whateverthefuckserver.gameserver
                     return;
                 }
 
-                var item1 = new BronzeDagger();
-
-                var item2 = new Banana();
-                item2.StackSize = 4;
-
-                var message = new CreateLootMessage(lootee, item1, item2);
+                var message = new CreateLootMessage(
+                    lootee,
+                    new BronzeDagger(Rarity.Legendary),
+                    new BronzeDagger(Rarity.Common),
+                    new Banana(Rarity.Uncommon, 4));
                 lootingPlayer.PlayerConnection.SendMessage(message);
             }
         }

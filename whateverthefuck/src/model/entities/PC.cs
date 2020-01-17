@@ -15,6 +15,8 @@
             baseStats.MaxHealth = 100;
             baseStats.GlobalCooldown = 100;
             baseStats.MoveSpeed = Character.SpeedSlow;
+            baseStats.Strength = 10;
+            baseStats.Intelligence = 10;
 
             this.Status = new EntityStatus(baseStats);
 

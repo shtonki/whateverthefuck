@@ -8,9 +8,10 @@
 
     public abstract class Item : IEncodable
     {
-        protected Item(ItemType type)
+        protected Item(ItemType type, Rarity rarity)
         {
             Type = type;
+            Rarity = rarity;
         }
 
         public static Item FromDecoder(WhateverDecoder decoder)
@@ -44,13 +45,13 @@
 
         public int StackSize { get; set; }
 
-        public bool Stackable { get; set; }
+        public bool Stackable { get; protected set; }
 
-        public Rarity Rarity { get; set; }
+        public Rarity Rarity { get; private set; }
 
         public EquipmentSlots EquipmentSlot { get; protected set; }
 
-        public ItemBonus[] Bonuses { get; set; } = new ItemBonus[0];
+        public ItemBonus[] Bonuses { get; protected set; } = new ItemBonus[0];
 
         public bool DepletesOnUse { get; protected set; }
 
@@ -63,8 +64,12 @@
             return null;
         }
 
-        public virtual void OnEquip(StatStruct stats)
+        public void OnEquip(StatStruct stats)
         {
+            foreach (var bonus in Bonuses)
+            {
+                bonus.Apply(stats);
+            }
         }
 
         public void Encode(WhateverEncoder encoder)
@@ -93,30 +98,56 @@
                 this.Bonuses[i] = bonus;
             }
         }
+
+        protected int ValueFromRarity(Rarity rarity, int common, int uncommon, int rare, int epic, int legendary)
+        {
+            switch (rarity)
+            {
+                case Rarity.Common: return common;
+                case Rarity.Uncommon: return uncommon;
+                case Rarity.Rare: return rare;
+                case Rarity.Epic: return epic;
+                case Rarity.Legendary: return legendary;
+
+                default: return 0;
+            }
+        }
     }
 
     public class BronzeDagger : Item
     {
         public BronzeDagger()
-            : base(ItemType.BronzeDagger)
+            : this(Rarity.None)
+        {
+        }
+
+        public BronzeDagger(Rarity rarity)
+            : base(ItemType.BronzeDagger, rarity)
         {
             StackSize = 1;
             EquipmentSlot = EquipmentSlots.MainHand;
-        }
 
-        public override void OnEquip(StatStruct stats)
-        {
-            stats.MoveSpeed *= 2;
+            Bonuses = new ItemBonus[]
+            {
+                new ItemBonus(ItemBonus.BonusType.BonusIntelligence, ValueFromRarity(rarity, 5, 10, 15, 20, 25)),
+            };
         }
     }
 
     public class Banana : Item
     {
         public Banana()
-            : base(ItemType.Banana)
+            : this(Rarity.None, 0)
+        {
+        }
+
+        public Banana(Rarity rarity, int stackSize)
+            : base(ItemType.Banana, rarity)
         {
             Stackable = true;
             DepletesOnUse = true;
+
+            StackSize = stackSize;
         }
 
         public override IEnumerable<GameEvent> OnUse(GameEntity target)
@@ -147,7 +178,7 @@
 
     public class ItemBonus : IEncodable
     {
-        public ItemBonus(BonusType type, short value)
+        public ItemBonus(BonusType type, int value)
         {
             this.Type = type;
             this.Modifier = value;
@@ -161,15 +192,35 @@
         {
             None,
 
-            Test1,
-            Test2,
-            Test3,
-            Test4,
+            MoveSpeed,
+
+            BonusIntelligence,
         }
 
         public BonusType Type { get; private set; }
 
         public int Modifier { get; private set; }
+
+        public void Apply(StatStruct stats)
+        {
+            switch (Type)
+            {
+                case BonusType.MoveSpeed:
+                {
+                    stats.MoveSpeed *= 1 + (0.01f * Modifier);
+                } break;
+
+                case BonusType.BonusIntelligence:
+                {
+                    stats.Intelligence += Modifier;
+                } break;
+
+                default:
+                {
+                    Logging.Log("Can't apply ItemBonus type: " + Type);
+                } break;
+            }
+        }
 
         public void Encode(WhateverEncoder encoder)
         {

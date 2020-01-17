@@ -75,6 +75,7 @@ namespace whateverthefuck.src.model
             this.MoveSpeed = copyFrom.MoveSpeed;
             this.DamageTakenMultiplier = copyFrom.DamageTakenMultiplier;
             this.Strength = copyFrom.Strength;
+            this.Intelligence = copyFrom.Intelligence;
         }
 
         public int MaxHealth { get; set; }
@@ -88,5 +89,7 @@ namespace whateverthefuck.src.model
         public float DamageTakenMultiplier { get; set; } = 1;
 
         public int Strength { get; set; } = 1;
+
+        public int Intelligence { get; set; } = 1;
     }
 }
