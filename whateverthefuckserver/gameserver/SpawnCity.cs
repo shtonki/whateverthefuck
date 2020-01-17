@@ -14,15 +14,19 @@ namespace whateverthefuckserver.gameserver
         private GameState GameState { get; set; }
         private Action<IEnumerable<GameEvent>> Publish { get; }
 
+        private List<NPCSpawnLocation> SpawnLocations { get; } = new List<NPCSpawnLocation>();
+
         public SpawnCity(GameState gameState, Action<IEnumerable<GameEvent>> publish)
         {
             GameState = gameState;
             Publish = publish;
 
-            SpawnLocation1 = new NPCSpawnLocation(new GameCoordinate(-1, -1), NPCCreationArguments.Types.Dog);
-        }
 
-        private NPCSpawnLocation SpawnLocation1 { get; }
+            SpawnLocations.Add(new NPCSpawnLocation(new GameCoordinate(-1, -1), 1, 5, NPCCreationArguments.Types.Dog));
+            SpawnLocations.Add(new NPCSpawnLocation(new GameCoordinate(-1, -2), 5, 10, NPCCreationArguments.Types.Dog));
+            SpawnLocations.Add(new NPCSpawnLocation(new GameCoordinate(-1, -3), 10, 15, NPCCreationArguments.Types.Dog));
+            SpawnLocations.Add(new NPCSpawnLocation(new GameCoordinate(-1, -4), 15, 20, NPCCreationArguments.Types.Dog));
+        }
 
         private void PublishArray(params GameEvent[] es)
         {
@@ -36,9 +40,12 @@ namespace whateverthefuckserver.gameserver
             return rt;
         }
 
-        public void SpawnNPC()
+        public void SpawnNPCs()
         {
-            SpawnNPC(SpawnLocation1);
+            foreach (var spawnLocation in SpawnLocations)
+            {
+                SpawnNPC(spawnLocation);
+            }
         }
 
         private void SpawnNPC(NPCSpawnLocation spawnLocation)

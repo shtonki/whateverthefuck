@@ -16,6 +16,7 @@
         {
             this.DrawColor = Color.Red;
             this.Info.Movable = true;
+            this.Info.Level = args.Level;
 
             this.Status = new EntityStatus(args.GetBaseStats());
 

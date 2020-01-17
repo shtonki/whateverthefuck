@@ -15,6 +15,8 @@
 
         public CreationArguments CreationArgs { get; }
 
+        public int Level { get; set; }
+
         public int Height { get; set; } = 1;
 
         public GameCoordinate GameLocation { get; set; }
