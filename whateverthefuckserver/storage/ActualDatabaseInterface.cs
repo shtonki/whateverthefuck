@@ -89,7 +89,7 @@ namespace whateverthefuckserver.storage
         {
             encoder.Encode(info.Username);
             info.Inventory.Encode(encoder);
-            encoder.Encode(info.Equipment.Items);
+            info.Equipment.Encode(encoder);
         }
 
         private UserInfo DecodeUserInfo(WhateverDecoder decoder)

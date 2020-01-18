@@ -91,7 +91,7 @@
             return new GameEvent[]
             {
                 new DealDamageEvent(caster, target, initialDamage),
-                new ApplyStatusEvent(target, new BurnStatus(caster.Info.Identifier, burnStacks)),
+                new ApplyStatusEvent(target, new BurningStatus(caster.Info.Identifier, burnStacks)),
             };
         }
 
@@ -148,7 +148,7 @@
             return new GameEvent[]
             {
                 new DealDamageEvent(caster, target, initialDamage),
-                new ApplyStatusEvent(target, new SlowStatus(caster.Info.Identifier, 800, slowPercentage)),
+                new ApplyStatusEvent(target, new SlowedStatus(caster.Info.Identifier, 800, slowPercentage)),
                 new ApplyStatusEvent(target, new VulnerableStatus(caster.Info.Identifier, 800, vulnerableStacks)),
             };
         }

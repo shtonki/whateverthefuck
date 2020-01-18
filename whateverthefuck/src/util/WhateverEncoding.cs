@@ -52,6 +52,12 @@
             this.AppendBytes(0);
         }
 
+        public void Encode(byte[] bytes)
+        {
+            Encode(bytes.Length);
+            AppendBytes(bytes);
+        }
+
         public void Encode(IEnumerable<Item> items)
         {
             Encode(items.Count());
@@ -153,6 +159,18 @@
             this.position++;
 
             return System.Text.Encoding.UTF8.GetString(stringBytes);
+        }
+
+        public byte[] DecodeBytes()
+        {
+            var bytes = new byte[DecodeInt()];
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                bytes[i] = DecodeByte();
+            }
+
+            return bytes;
         }
 
         public Item[] DecodeItems()

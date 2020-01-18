@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using whateverthefuck.src.model;
 using whateverthefuck.src.util;
 
@@ -9,15 +10,15 @@ namespace whateverthefuck.src.model
     {
         public event Action<EquipmentSlots, Item> OnEquipmentChanged;
 
-        public IEnumerable<Item> Items => this.Equipped;
+        public IEnumerable<Item> Equipped => this.ItemArray.Where(item => item != null);
 
-        private Item[] Equipped { get; } = new Item[Enum.GetValues(typeof(EquipmentSlots)).Length];
+        private Item[] ItemArray { get; } = new Item[Enum.GetValues(typeof(EquipmentSlots)).Length];
 
         public void ApplyStaticEffects(StatStruct stats)
         {
-            for (int i = 0; i < Equipped.Length; i++)
+            for (int i = 0; i < ItemArray.Length; i++)
             {
-                var item = Equipped[i];
+                var item = ItemArray[i];
 
                 if (item == null)
                 {
@@ -35,40 +36,27 @@ namespace whateverthefuck.src.model
                 Logging.Log("Tried to equip unequipable item.", Logging.LoggingLevel.Error);
             }
 
-            Equipped[(int)item.EquipmentSlot] = item;
+            ItemArray[(int)item.EquipmentSlot] = item;
             OnEquipmentChanged?.Invoke(item.EquipmentSlot, item);
         }
 
         public Item GetItem(EquipmentSlots slot)
         {
-            return Equipped[(int)slot];
+            return ItemArray[(int)slot];
         }
 
         public void Encode(WhateverEncoder encoder)
         {
-            for (int i = 0; i < Equipped.Length; i++)
-            {
-                var item = Equipped[i];
-
-                if (item == null)
-                {
-                    encoder.Encode((int)EquipmentSlots.None);
-                }
-                else
-                {
-                    item.Encode(encoder);
-                }
-            }
-            throw new NotImplementedException();
+            encoder.Encode(ItemArray);
         }
 
         public void Decode(WhateverDecoder decoder)
         {
             var items = decoder.DecodeItems();
 
-            for (int i = 0; i < Equipped.Length; i++)
+            for (int i = 0; i < ItemArray.Length; i++)
             {
-                Equipped[i] = items[i];
+                ItemArray[i] = items[i];
             }
         }
     }

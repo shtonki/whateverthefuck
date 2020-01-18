@@ -44,10 +44,10 @@ namespace whateverthefuckserver.network
                     Program.GameServer.InSync(syncMessage.SyncRecord.Tick, syncMessage.SyncRecord.Hash);
                 } break;
 
-                case MessageType.AddItemToInventoryMessage:
+                case MessageType.AddItemsToInventoryMessage:
                 {
-                    AddItemToInventoryMessage aitim = (AddItemToInventoryMessage)message;
-                    User.Inventory.AddItem(aitim.Item);
+                    AddItemsToInventoryMessage aitim = (AddItemsToInventoryMessage)message;
+                    User.Inventory.AddItems(aitim.Items);
                 } break;
 
                 default:

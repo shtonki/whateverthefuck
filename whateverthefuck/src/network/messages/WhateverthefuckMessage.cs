@@ -95,14 +95,19 @@
                     return new SyncMessage();
                 }
 
-                case MessageType.AddItemToInventoryMessage:
+                case MessageType.AddItemsToInventoryMessage:
                 {
-                    return new AddItemToInventoryMessage();
+                    return new AddItemsToInventoryMessage();
                 }
 
                 case MessageType.GrantControlMessage:
                 {
                     return new GrantControlMessage();
+                }
+
+                case MessageType.CompoundMessage:
+                {
+                    return new CompoundMessage();
                 }
 
                 default: throw new NotImplementedException();
@@ -114,11 +119,11 @@
     {
         ExampleMessage,
 
+        CompoundMessage,
+
         LoginMessage,
 
         SyncMessage,
-
-        CreateGameStateMessage,
 
         GrantControlMessage,
         CreateLootMessage,
@@ -126,6 +131,6 @@
         GameEventMessage,
 
         UseItemMessage,
-        AddItemToInventoryMessage,
+        AddItemsToInventoryMessage,
     }
 }

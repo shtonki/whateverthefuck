@@ -7,13 +7,16 @@
 
     public abstract class Status
     {
-        public Status(EntityIdentifier applyor, int duration, int stacks, SpriteID spriteID)
+        public Status(StatusType type, EntityIdentifier applyor, int duration, int stacks)
         {
+            this.Type = type;
             this.Duration = duration;
             this.Stacks = stacks;
-            this.Sprite = new Sprite(spriteID);
             this.Applyor = applyor;
+            this.Sprite = new Sprite(SpriteID.testSprite1);
         }
+
+        public StatusType Type { get; }
 
         public int Duration { get; set; }
 
@@ -21,7 +24,7 @@
 
         public EntityIdentifier Applyor { get; }
 
-        public Sprite Sprite { get; }
+        public Sprite Sprite { get; protected set; }
 
         protected StackingModes DurationStacking { get; set; } = StackingModes.Max;
 
@@ -72,13 +75,22 @@
         }
     }
 
+    public enum StatusType
+    {
+        Vulnerable,
+        Sanic,
+        Slowed,
+        Burning,
+    }
+
     public class VulnerableStatus : Status
     {
         public VulnerableStatus(EntityIdentifier applyor, int duration, int stacks)
-            : base(applyor, duration, stacks, SpriteID.status_Vulnerable)
+            : base(StatusType.Vulnerable, applyor, duration, stacks)
         {
             this.DurationStacking = StackingModes.None;
             this.StackCountStacking = StackingModes.Additive;
+            this.Sprite = new Sprite(SpriteID.status_Vulnerable);
         }
 
         public override void ApplyTo(StatStruct status)
@@ -95,7 +107,7 @@
     public class SanicStatus : Status
     {
         public SanicStatus(EntityIdentifier applyor, int duration, int stacks)
-            : base(applyor, duration, stacks, SpriteID.ability_Sanic)
+            : base(StatusType.Sanic, applyor, duration, stacks)
         {
         }
 
@@ -110,10 +122,10 @@
         }
     }
 
-    public class SlowStatus : Status
+    public class SlowedStatus : Status
     {
-        public SlowStatus(EntityIdentifier applyor, int duration, int stacks)
-            : base(applyor, duration, stacks, SpriteID.status_Slow)
+        public SlowedStatus(EntityIdentifier applyor, int duration, int stacks)
+            : base(StatusType.Slowed, applyor, duration, stacks)
         {
         }
 
@@ -128,15 +140,16 @@
         }
     }
 
-    public class BurnStatus : Status
+    public class BurningStatus : Status
     {
         private const int BurnInterval = 100;
 
-        public BurnStatus(EntityIdentifier applyor, int stacks)
-            : base(applyor, BurnInterval, stacks, SpriteID.status_Burning)
+        public BurningStatus(EntityIdentifier applyor, int stacks)
+            : base(StatusType.Burning, applyor, BurnInterval, stacks)
         {
             this.DurationStacking = StackingModes.None;
             this.StackCountStacking = StackingModes.Additive;
+            this.Sprite = new Sprite(SpriteID.status_Burning);
         }
 
         public override void ApplyTo(StatStruct status)
@@ -157,7 +170,9 @@
                 }
 
                 var applyorEntity = state.GetEntityById(this.Applyor);
-                return new GameEvent[] { new DealDamageEvent(applyorEntity, appliedTo, damage) };
+                
+                // if applying entity has disappeared, it does self damage.
+                return new GameEvent[] { new DealDamageEvent(applyorEntity ?? appliedTo, appliedTo, damage) };
             }
             else
             {

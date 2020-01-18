@@ -38,6 +38,21 @@
                     Program.GameStateManager.TakeControl(gcm.ControlledIdentifier);
                 } break;
 
+                case MessageType.AddItemsToInventoryMessage:
+                {
+                    AddItemsToInventoryMessage aitim = (AddItemsToInventoryMessage)message;
+                    Program.GameStateManager.Inventory.AddItems(aitim.Items);
+                } break;
+
+                case MessageType.CompoundMessage:
+                {
+                    CompoundMessage cm = (CompoundMessage)message;
+                    foreach (var m in cm.Messages)
+                    {
+                        this.HandleMessage(m);
+                    }
+                } break;
+
                 default:
                 {
                     Logging.Log("Unhandled message of type " + message.MessageType, Logging.LoggingLevel.Warning);

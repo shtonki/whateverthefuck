@@ -13,6 +13,14 @@
 
         private List<Item> Items { get; } = new List<Item>();
 
+        public void AddItems(IEnumerable<Item> items)
+        {
+            foreach (var item in items)
+            {
+                AddItem(item);
+            }
+        }
+
         public void AddItem(Item item)
         {
             if (item.Stackable)

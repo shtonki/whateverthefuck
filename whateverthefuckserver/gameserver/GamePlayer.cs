@@ -19,13 +19,14 @@ namespace whateverthefuckserver.gameserver
 
         public Inventory Inventory { get; } = new Inventory();
 
-        public int Experience { get; set; }
+        public Equipment EquippedToHero { get; }
 
         public GamePlayer(WhateverthefuckServerConnection playerConnection, UserInfo info)
         {
             PlayerConnection = playerConnection;
 
             this.Inventory = info.Inventory;
+            this.EquippedToHero = info.Equipment;
             this.Username = info.Username;
         }
     }

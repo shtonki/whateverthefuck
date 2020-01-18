@@ -42,7 +42,7 @@
 
         private HeroMovementStruct HeroMovements { get; } = new HeroMovementStruct();
 
-        private Inventory Inventory { get; set; } = new Inventory();
+        public Inventory Inventory { get; private set; } = new Inventory();
 
         private float PrevDirection { get; set; }
 
@@ -124,7 +124,7 @@
 
         public void LootItem(Lootable lootee, Item item)
         {
-            Program.ServerConnection.SendMessage(new AddItemToInventoryMessage(item));
+            Program.ServerConnection.SendMessage(new AddItemsToInventoryMessage(item));
 
             this.Inventory.AddItem(item);
             lootee.RemoveItem(item);

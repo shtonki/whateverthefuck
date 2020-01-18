@@ -6,6 +6,8 @@ namespace whateverthefuck.src.model.entities
 {
     public class Brain
     {
+        private const bool EnableLogging = true;
+
         public Brain(GameEntity head)
         {
             head.OnDamaged += (dde, gs) =>
@@ -166,6 +168,7 @@ namespace whateverthefuck.src.model.entities
             {
                 case BrainState.Idle:
                 {
+                    if (EnableLogging) { Logging.Log(entity.Info.Identifier.Id + ": Idle -> Wander"); }
                     State = BrainState.Wander;
                 } break;
 
@@ -173,8 +176,9 @@ namespace whateverthefuck.src.model.entities
                 {
                     if (TopThreat != null)
                     {
+                        if (EnableLogging) { Logging.Log(entity.Info.Identifier.Id + ": Wander -> Offensive because TopThread is something."); }
                         State = BrainState.Offensive;
-                    }
+                        }
                 } break;
 
                 case BrainState.Offensive:
@@ -182,8 +186,9 @@ namespace whateverthefuck.src.model.entities
                     var healthPercentage = (float)entity.Status.ReadCurrentStats.Health / entity.Status.ReadCurrentStats.MaxHealth;
                     if (healthPercentage < HealthPercentageIntoDefensiveCutoff)
                     {
+                        if (EnableLogging) { Logging.Log(entity.Info.Identifier.Id + ": Offensive -> Defensive because health < 50%."); }
                         State = BrainState.Defensive;
-                    }
+                        }
                 } break;
 
                 case BrainState.Defensive:
@@ -191,6 +196,7 @@ namespace whateverthefuck.src.model.entities
                     var healthPercentage = (float)entity.Status.ReadCurrentStats.Health / entity.Status.ReadCurrentStats.MaxHealth;
                     if (healthPercentage > HealthPercentageIntoDefensiveCutoff)
                     {
+                        if (EnableLogging) { Logging.Log(entity.Info.Identifier.Id + ": Defensive -> Offensive because health > 50%."); }
                         State = BrainState.Offensive;
                     }
                 } break;
