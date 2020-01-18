@@ -416,7 +416,6 @@
             entity.Reset();
 
             createEntityEvent.OnCreated(entity, this);
-
             this.AddEntities(entity);
         }
 

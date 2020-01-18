@@ -54,6 +54,8 @@
 
         public void Encode(WhateverEncoder encoder)
         {
+            this.CleanUp();
+
             encoder.Encode(Items);
         }
 
@@ -61,6 +63,11 @@
         {
             var items = decoder.DecodeItems();
             Items.AddRange(items);
+        }
+
+        private void CleanUp()
+        {
+            Items.RemoveAll(i => i.StackSize == 0);
         }
     }
 }

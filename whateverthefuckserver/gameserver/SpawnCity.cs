@@ -33,11 +33,11 @@ namespace whateverthefuckserver.gameserver
             Publish(es);
         }
 
-        public CreateEntityEvent SpawnHero()
+        public EntityIdentifier SpawnHero()
         {
             var rt = new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(EntityType.PC, new PCCreationArguments()));
             PublishArray(rt);
-            return rt;
+            return rt.Id;
         }
 
         public void SpawnNPCs()

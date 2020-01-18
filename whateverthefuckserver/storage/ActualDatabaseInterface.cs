@@ -24,17 +24,20 @@ namespace whateverthefuckserver.storage
         {
             UserInfos = new Dictionary<string, UserInfo>();
 
-            var bs = File.ReadAllBytes(FilePath);
-            if (bs != null && bs.Length > 0)
+            if (File.Exists(FilePath))
             {
-                try
+                var bs = File.ReadAllBytes(FilePath);
+                if (bs != null && bs.Length > 0)
                 {
-                    Read(bs);
-                    Logging.Log("Dank user database");
-                }
-                catch (Exception e)
-                {
-                    Logging.Log("Corrupt user database");
+                    try
+                    {
+                        Read(bs);
+                        Logging.Log("Dank user database");
+                    }
+                    catch (Exception e)
+                    {
+                        Logging.Log("Corrupt user database");
+                    }
                 }
             }
         }
@@ -65,6 +68,7 @@ namespace whateverthefuckserver.storage
             {
                 EncodeUserInfo(info, encoder);
                 Logging.Log("Writing inventory " + info.Inventory.AllItems.Count());
+                Logging.Log("Writing equipment " + info.Equipment.Equipped.Count());
             }
 
             var bytes = encoder.GetBytes();

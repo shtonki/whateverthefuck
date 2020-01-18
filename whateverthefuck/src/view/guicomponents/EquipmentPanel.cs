@@ -14,6 +14,15 @@ namespace whateverthefuck.src.view.guicomponents
             this.Size = size;
 
             equipment.OnEquipmentChanged += this.UpdateItem;
+
+            foreach (EquipmentSlots slot in Enum.GetValues(typeof(EquipmentSlots)))
+            {
+                var item = equipment.GetItem(slot);
+                if (item != null)
+                {
+                    UpdateItem(slot, item);
+                }
+            }
         }
 
         private void UpdateItem(EquipmentSlots slot, Item item)

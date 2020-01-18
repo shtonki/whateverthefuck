@@ -92,7 +92,6 @@ namespace whateverthefuckserver.gameserver
 
         public void AddUser(GamePlayer player)
         {
-
             var message = GenerateCreateGameStateMessage(player);
 
             lock (PlayersLock)
@@ -299,9 +298,10 @@ namespace whateverthefuckserver.gameserver
             List<GameEvent> events = new List<GameEvent>();
 
             // spawn the hero first
-            var createHeroEvent = SpawnCity.SpawnHero();
-            events.Add(createHeroEvent);
-            var heroIdentifier = createHeroEvent.Id;
+            var heroIdentifier = SpawnCity.SpawnHero();
+
+            var equipEvents = player.EquippedToHero.Equipped.Select(item => new EquipItemEvent(heroIdentifier, item)).ToArray();
+            PendEvents(equipEvents);
 
             player.HeroIdentifier = heroIdentifier;
 
@@ -324,10 +324,6 @@ namespace whateverthefuckserver.gameserver
             }
 
 
-            foreach (var item in player.EquippedToHero.Equipped)
-            {
-                events.Add(new EquipItemEvent(heroIdentifier, item));
-            }
 
             messages.Add(new GameEventsMessage(0, events));
 
