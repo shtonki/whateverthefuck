@@ -68,7 +68,6 @@
 
                 if (interactedGUIComponent != null)
                 {
-                    Logging.Log(interactedGUIComponent.GetType());
                     if (input.MouseButton == OpenTK.Input.MouseButton.Right && input.Direction == InputUnion.Directions.Down)
                     {
                         if (interactedGUIComponent is ToolTipper)

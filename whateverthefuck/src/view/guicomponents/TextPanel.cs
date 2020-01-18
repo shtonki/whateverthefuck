@@ -12,7 +12,7 @@
         {
             this.Text = text;
             this.RenderOptions = new QFontRenderOptions { Colour = color, DropShadowActive = true };
-            this.Size = this.CalculateSize(this.Text);
+            this.Size = this.CalculateSize(this.Text + Environment.NewLine);
             this.BackColor = Color.Transparent;
             Font = FontLoader.DefaultFont;
         }

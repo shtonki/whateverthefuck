@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using whateverthefuck.src.model.entities;
     using System.Linq;
+    using whateverthefuck.src.view.guicomponents;
+    using System.Text;
 
     public enum AbilityType
     {
@@ -20,7 +22,7 @@
         Defensive,
     }
 
-    public abstract class Ability
+    public abstract class Ability : ToolTipper
     {
 
         protected const float MeleeRange = 0.2f;
@@ -39,6 +41,8 @@
         public AbilityType AbilityType { get; protected set; }
 
         public float Range { get; protected set; }
+
+        protected string ToolTip { get; set; }
 
         public bool CreateProjectile { get; protected set; }
 
@@ -66,10 +70,25 @@
             return this.NPCBrainTags[(int)tag];
         }
 
+        public string GetToolTip()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(AbilityType.ToString());
+            sb.Append(Environment.NewLine);
+
+            if (ToolTip == null) { sb.Append("Tooltip missing..."); }
+            else { sb.Append(ToolTip); }
+            sb.Append(Environment.NewLine);
+
+            return sb.ToString();
+        }
+
         protected void AddTag(NPCBrainAbilityTags tag)
         {
             this.NPCBrainTags[(int)tag] = true;
         }
+
     }
 
     public class Fireball : Ability
@@ -81,6 +100,8 @@
             this.BaseCooldown = 0;
             this.Range = 1.5f;
             this.CreateProjectile = true;
+
+            ToolTip = String.Format("Deals big damage and applies Burn");
         }
 
         public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
