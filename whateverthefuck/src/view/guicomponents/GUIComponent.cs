@@ -162,4 +162,9 @@
 
         internal float Width { get; set; }
     }
+
+    public interface ToolTipper
+    {
+        string GetToolTip();
+    }
 }

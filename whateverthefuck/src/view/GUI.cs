@@ -37,6 +37,8 @@
 
         private static TargetPanel TargetPanel { get; set; }
 
+        private static TextPanel ToolTipPanel { get; set; }
+
         private static CastBar CastBar { get; set; }
 
         /// <summary>
@@ -57,10 +59,24 @@
         {
             if (input.IsMouseMove || input.IsMouseInput)
             {
+                if (input.MouseButton.Value == OpenTK.Input.MouseButton.Right && input.Direction == InputUnion.Directions.Up)
+                {
+                    HideToolTip();
+                }
+
                 var interactedGUIComponent = FirstVisibleGUIComponentAt(input.Location);
 
                 if (interactedGUIComponent != null)
                 {
+                    Logging.Log(interactedGUIComponent.GetType());
+                    if (input.MouseButton == OpenTK.Input.MouseButton.Right && input.Direction == InputUnion.Directions.Down)
+                    {
+                        if (interactedGUIComponent is ToolTipper)
+                        {
+                            var tooltip = (interactedGUIComponent as ToolTipper).GetToolTip();
+                            ShowToolTip(tooltip, input.Location);
+                        }
+                    }
                     if (input.IsMouseInput && input.Direction == InputUnion.Directions.Down)
                     {
                         Focus(interactedGUIComponent);
@@ -88,6 +104,7 @@
         public static void LoadGUI()
         {
             GUIComponents.Add(InventoryPanel);
+            InventoryPanel.Location = new GLCoordinate(0.1f, 0.1f);
         }
 
         public static void LoadHUD(PC hero)
@@ -125,6 +142,27 @@
             var y = (glCoordinate.Y + 1) / 2 * Frame.ClientSize.Height;
 
             return new ScreenCoordinate((int)x, (int)y);
+        }
+
+        public static void ShowToolTip(string tooltip, GLCoordinate location)
+        {
+            if (ToolTipPanel != null)
+            {
+                return;
+            }
+            ToolTipPanel = new TextPanel(tooltip, Color.Black);
+            ToolTipPanel.Location = location;
+            ToolTipPanel.BackColor = Color.White;
+            GUIComponents.Add(ToolTipPanel);
+        }
+
+        public static void HideToolTip()
+        {
+            if (ToolTipPanel != null)
+            {
+                bool v = GUIComponents.Remove(ToolTipPanel);
+                ToolTipPanel = null;
+            }
         }
 
         public static void UpdateInventoryPanel(Inventory inventory)
@@ -249,15 +287,37 @@
 
         private static GUIComponent FirstVisibleGUIComponentAt(GLCoordinate location)
         {
+            GUIComponent parent = null;
+
             foreach (var c in GUIComponents)
             {
                 if (c.Contains(location) && c.Visible)
                 {
-                    return c;
+                    parent = c;
+                    break;
                 }
             }
 
-            return null;
+            if (parent == null)
+            {
+                return null;
+            }
+
+            while (true)
+            {
+                location -= parent.Location;
+
+                foreach (var child in parent.Children)
+                {
+                    if (child.Contains(location) && child.Visible)
+                    {
+                        parent = child;
+                        continue;
+                    }
+                }
+
+                return parent;
+            }
         }
 
         private static void LoadAbilityBar(PC hero)

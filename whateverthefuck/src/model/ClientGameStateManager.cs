@@ -142,7 +142,7 @@
                 return;
             }
 
-            if (input.IsMouseInput || input.IsMouseMove)
+            if (input.IsMouseInput)
             {
                 var gameLocation = this.GameState.CurrentCamera.GLToGameCoordinate(input.Location);
 
@@ -154,13 +154,17 @@
 
                     if (entity != null)
                     {
-                        this.Target(entity);
+                        if (input.MouseButton.Value == OpenTK.Input.MouseButton.Left)
+                        {
+                            this.Target(entity);
+
+                            if (entity is IInteractable)
+                            {
+                                (entity as IInteractable).Interact();
+                            }
+                        }
                     }
 
-                    if (entity is IInteractable)
-                    {
-                        (entity as IInteractable).Interact();
-                    }
                 }
             }
             else if (input.IsKeyboardInput)

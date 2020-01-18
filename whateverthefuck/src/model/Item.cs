@@ -3,10 +3,12 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Text;
     using whateverthefuck.src.util;
     using whateverthefuck.src.view;
+    using whateverthefuck.src.view.guicomponents;
 
-    public abstract class Item : IEncodable
+    public abstract class Item : IEncodable, ToolTipper
     {
         protected Item(ItemType type, Rarity rarity)
         {
@@ -120,6 +122,31 @@
                 default: return 0;
             }
         }
+
+        public string GetToolTip()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(Type.ToString());
+            sb.Append(Environment.NewLine);
+
+            if (EquipmentSlot != EquipmentSlots.None)
+            {
+                sb.Append(EquipmentSlot.ToString());
+                sb.Append(Environment.NewLine);
+            }
+
+            sb.Append(Rarity.ToString());
+            sb.Append(Environment.NewLine);
+
+            foreach (var bonus in Bonuses)
+            {
+                sb.Append(bonus.GetToolTip());
+                sb.Append(Environment.NewLine);
+            }
+
+            return sb.ToString();
+        }
     }
 
     public class BronzeHelmet : Item
@@ -205,7 +232,7 @@
         Banana,
     }
 
-    public class ItemBonus : IEncodable
+    public class ItemBonus : IEncodable, ToolTipper
     {
         public ItemBonus(BonusType type, int value)
         {
@@ -261,6 +288,17 @@
         {
             this.Type = (BonusType)decoder.DecodeInt();
             this.Modifier = decoder.DecodeInt();
+        }
+
+        public string GetToolTip()
+        {
+            switch (Type)
+            {
+                case BonusType.BonusIntelligence: return String.Format("+{0} Intelligence", Modifier);
+                case BonusType.MoveSpeed: return String.Format("+{0}% Move Speed", Modifier);
+
+                default: return "Tooltip missing...";
+            }
         }
     }
 }

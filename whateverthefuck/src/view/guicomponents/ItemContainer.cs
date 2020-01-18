@@ -1,10 +1,11 @@
 ﻿namespace whateverthefuck.src.view.guicomponents
 {
+    using System;
     using System.Drawing;
     using whateverthefuck.src.model;
     using whateverthefuck.src.util;
 
-    internal class ItemContainer : Button
+    internal class ItemContainer : Button, ToolTipper
     {
         public ItemContainer(Item item)
         {
@@ -51,6 +52,11 @@
                 case Rarity.Legendary: return Color.Orange;
                 default: return Color.White;
             }
+        }
+
+        public string GetToolTip()
+        {
+            return Item.GetToolTip();
         }
     }
 }
