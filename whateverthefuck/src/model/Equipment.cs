@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using whateverthefuck.src.model;
 using whateverthefuck.src.util;
 
-namespace whateverthefuck
+namespace whateverthefuck.src.model
 {
-    public class Equipment
+    public class Equipment : IEncodable
     {
         public event Action<EquipmentSlots, Item> OnEquipmentChanged;
+
+        public IEnumerable<Item> Items => this.Equipped;
 
         private Item[] Equipped { get; } = new Item[Enum.GetValues(typeof(EquipmentSlots)).Length];
 
@@ -39,6 +42,34 @@ namespace whateverthefuck
         public Item GetItem(EquipmentSlots slot)
         {
             return Equipped[(int)slot];
+        }
+
+        public void Encode(WhateverEncoder encoder)
+        {
+            for (int i = 0; i < Equipped.Length; i++)
+            {
+                var item = Equipped[i];
+
+                if (item == null)
+                {
+                    encoder.Encode((int)EquipmentSlots.None);
+                }
+                else
+                {
+                    item.Encode(encoder);
+                }
+            }
+            throw new NotImplementedException();
+        }
+
+        public void Decode(WhateverDecoder decoder)
+        {
+            var items = decoder.DecodeItems();
+
+            for (int i = 0; i < Equipped.Length; i++)
+            {
+                Equipped[i] = items[i];
+            }
         }
     }
 

@@ -118,6 +118,8 @@
 
         SyncMessage,
 
+        CreateGameStateMessage,
+
         GrantControlMessage,
         CreateLootMessage,
 

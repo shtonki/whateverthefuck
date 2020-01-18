@@ -3,8 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using whateverthefuck.src.util;
 
-    public class Inventory
+    public class Inventory : IEncodable
     {
         public event Action OnInventoryChanged;
 
@@ -41,6 +42,17 @@
         {
             // @incomplete not actually identical
             return AllItems.FirstOrDefault(i => i.Type == item.Type);
+        }
+
+        public void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode(Items);
+        }
+
+        public void Decode(WhateverDecoder decoder)
+        {
+            var items = decoder.DecodeItems();
+            Items.AddRange(items);
         }
     }
 }

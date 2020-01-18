@@ -51,10 +51,12 @@
     <Compile Include="network\WhateverthefuckServerConnection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="network\WhateverConnectionListeningServer.cs" />
+    <Compile Include="storage\ActualDatabaseInterface.cs" />
     <Compile Include="storage\DummyStorage.cs" />
     <Compile Include="storage\IStorage.cs" />
     <Compile Include="storage\Mongo.cs" />
-    <Compile Include="users\User.cs" />
+    <Compile Include="gameserver\GamePlayer.cs" />
+    <Compile Include="storage\UserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\whateverthefuck\whateverthefuck.csproj">

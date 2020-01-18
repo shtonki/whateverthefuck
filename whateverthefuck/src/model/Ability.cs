@@ -141,7 +141,7 @@
 
         public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
         {
-            int initialDamage = (int)(caster.Status.ReadCurrentStats.Intelligence * 2.5f);
+            int initialDamage = (int)(caster.Status.ReadCurrentStats.Intelligence * 992.5f);
             int slowPercentage = 80;
             int vulnerableStacks = 15;
 

@@ -17,13 +17,16 @@
         public static Item FromDecoder(WhateverDecoder decoder)
         {
             var type = (ItemType)decoder.DecodeInt();
+
+            if (type == ItemType.None) { return null; }
+
             var item = FromType(type);
             item.Decode(decoder);
 
             return item;
         }
 
-        public static Item FromType(ItemType type)
+        private static Item FromType(ItemType type)
         {
             switch (type)
             {

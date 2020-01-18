@@ -9,7 +9,6 @@ using whateverthefuck.src.model.entities;
 using System;
 using whateverthefuck.src.network;
 using whateverthefuckserver.storage;
-using whateverthefuckserver.users;
 using System.Diagnostics;
 
 namespace whateverthefuckserver.gameserver
@@ -18,7 +17,7 @@ namespace whateverthefuckserver.gameserver
     {
         public GameState GameState { get; private set; }
         public IStorage Storage { get; private set; }
-        private List<User> PlayingUsers = new List<User>();
+        private List<GamePlayer> PlayingUsers = new List<GamePlayer>();
         object PlayersLock = new object();
 
         object EventsLock = new object();
@@ -83,7 +82,7 @@ namespace whateverthefuckserver.gameserver
         }
 
 
-        public void HandleRequests(User user, IEnumerable<GameEvent> requests)
+        public void HandleRequests(GamePlayer user, IEnumerable<GameEvent> requests)
         {
             if (CheckRequests(user, requests))
             {
@@ -91,7 +90,7 @@ namespace whateverthefuckserver.gameserver
             }
         }
 
-        public void AddUser(User user)
+        public void AddUser(GamePlayer user)
         {
             IEnumerable<GameEvent> createEvents;
             IEnumerable<GameEvent> movementEvents;
@@ -115,13 +114,16 @@ namespace whateverthefuckserver.gameserver
             Logging.Log("Added player");
         }
 
-        public void RemoveUser(User user)
+        public void LogoutUser(GamePlayer user)
         {
             lock (PlayersLock)
             {
                 PlayingUsers.Remove(user);
             }
             var hero = GameState.GetEntityById(user.HeroIdentifier.Id);
+
+            SebasLocalDatabase.Instance.StoreUserInfo(new UserInfo(user.Username, user.Inventory, hero.Equipment));
+
             if (hero != null)
             {
                 GameEvent re = new DestroyEntityEvent(hero);
@@ -145,7 +147,7 @@ namespace whateverthefuckserver.gameserver
                 // @fix for christ sake just store the PlayerCharacter in the user so we don't end up looping through the entire server every
                 // time someone kills something and also this has a very real risk of breaking regardless of what the error message says
                 // t ribbe
-                User lootingPlayer = null;
+                GamePlayer lootingPlayer = null;
 
                 lock (PlayersLock)
                 {
@@ -194,7 +196,7 @@ namespace whateverthefuckserver.gameserver
             return rt;
         }
 
-        private bool CheckRequests(User requester, IEnumerable<GameEvent> requests)
+        private bool CheckRequests(GamePlayer requester, IEnumerable<GameEvent> requests)
         {
             foreach (var request in requests)
             {
@@ -253,7 +255,7 @@ namespace whateverthefuckserver.gameserver
         }
 
 
-        private void SpawnPlayerCharacter(User user)
+        private void SpawnPlayerCharacter(GamePlayer user)
         {
             var createEvent = SpawnCity.SpawnHero();
 

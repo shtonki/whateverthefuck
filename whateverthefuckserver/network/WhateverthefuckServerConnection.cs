@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using whateverthefuck.src.network;
 using whateverthefuck.src.network.messages;
 using whateverthefuck.src.util;
-using whateverthefuckserver.users;
+using whateverthefuckserver.gameserver;
 
 namespace whateverthefuckserver.network
 {
@@ -15,7 +15,7 @@ namespace whateverthefuckserver.network
 
         }
 
-        private User User { get; set; }
+        public GamePlayer User { get; private set; }
 
         protected override void HandleConnectionDeath()
         {
@@ -35,11 +35,7 @@ namespace whateverthefuckserver.network
                 case MessageType.LoginMessage:
                 {
                     LoginMessage loginMessage = (LoginMessage)message;
-                    var user = new User(this);
-                    if (LoginServer.Login(user, new LoginCredentials(loginMessage.LoginCredentials.Username)))
-                    {
-                        this.User = user;
-                    };         
+                    this.User = LoginServer.Login(this, new LoginCredentials(loginMessage.LoginCredentials.Username));
                 } break;
 
                 case MessageType.SyncMessage:

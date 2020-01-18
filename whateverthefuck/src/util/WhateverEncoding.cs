@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using whateverthefuck.src.model;
 
     public interface IEncodable
     {
@@ -48,6 +50,23 @@
         {
             this.AppendBytes(System.Text.Encoding.UTF8.GetBytes(value));
             this.AppendBytes(0);
+        }
+
+        public void Encode(IEnumerable<Item> items)
+        {
+            Encode(items.Count());
+
+            foreach (var item in items)
+            {
+                if (item == null)
+                {
+                    Encode((int)ItemType.None);
+                }
+                else
+                {
+                    item.Encode(this);
+                }
+            }
         }
 
         public byte[] GetBytes()
@@ -134,6 +153,19 @@
             this.position++;
 
             return System.Text.Encoding.UTF8.GetString(stringBytes);
+        }
+
+        public Item[] DecodeItems()
+        {
+            var itemCount = DecodeInt();
+            var items = new Item[itemCount];
+
+            for (int i = 0; i < itemCount; i++)
+            {
+                items[i] = Item.FromDecoder(this);
+            }
+
+            return items;
         }
     }
 }

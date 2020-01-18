@@ -57,7 +57,7 @@
     <None Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Equipment.cs" />
+    <Compile Include="src\model\Equipment.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

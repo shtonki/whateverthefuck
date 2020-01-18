@@ -5,22 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.network;
 using whateverthefuck.src.util;
-using whateverthefuckserver.users;
+using whateverthefuckserver.gameserver;
+using whateverthefuckserver.storage;
 
 namespace whateverthefuckserver.network
 {
     static class LoginServer
     {
-        private static List<User> LoggedInUsers = new List<User>();
+        private static List<GamePlayer> LoggedInUsers = new List<GamePlayer>();
 
-        public static bool Login(User user, LoginCredentials loginCredentials)
+        public static GamePlayer Login(WhateverthefuckServerConnection connection, LoginCredentials loginCredentials)
         {
-            user.Username = loginCredentials.Username;
-            LoggedInUsers.Add(user);
+            var username = loginCredentials.Username;
 
+            var info = SebasLocalDatabase.Instance.GetUserInfo(username);
+
+            var user = new GamePlayer(connection, info);
+
+            LoggedInUsers.Add(user);
             Program.GameServer.AddUser(user);
 
-            return true;
+            return user;
         }
 
         public static void Logout(WhateverthefuckServerConnection playerConnection)
@@ -31,7 +36,7 @@ namespace whateverthefuckserver.network
                 Logging.Log("Tried to log out Connection which was not logged in", Logging.LoggingLevel.Warning);
             }
             LoggedInUsers.Remove(userToLogOut);
-            Program.GameServer.RemoveUser(userToLogOut);
+            Program.GameServer.LogoutUser(userToLogOut);
         }
     }
 }

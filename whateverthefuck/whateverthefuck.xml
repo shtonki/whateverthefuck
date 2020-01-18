@@ -4,195 +4,6 @@
         <name>whateverthefuck</name>
     </assembly>
     <members>
-        <member name="T:whateverthefuck.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.ability_bite">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.ability_fireball">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.ability_fireburst">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.ability_mend">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.ability_sanic">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.africatoto">
-            <summary>
-              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.door_stone0">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.floor_wood0">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.item_banana">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.item_bronze_dagger">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.item_bronze_helmet">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.kappa">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.mankey">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.npc_dog">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.piano">
-            <summary>
-              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.player_player0">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.projectile_fireball">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.soundeffect1">
-            <summary>
-              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.soundeffect2">
-            <summary>
-              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.soundeffect3">
-            <summary>
-              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.status_burning">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.status_slow">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.status_vulnerable">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.Properties.Resources.wall_stone0">
-            <summary>
-              Looks up a localized resource of type System.Drawing.Bitmap.
-            </summary>
-        </member>
-        <member name="T:whateverthefuck.src.control.Hotkeys">
-            <summary>
-            A collection of HotkeyMappings.
-            </summary>
-        </member>
-        <member name="M:whateverthefuck.src.control.Hotkeys.LookupHotkey(whateverthefuck.src.control.InputUnion)">
-            <summary>
-            Looks up an input and returns the corresponding GameAction.
-            </summary>
-            <param name="input">The InputUnion to lookup.</param>
-            <returns>The corresponding GameAction if input is mapped, GameAction.Undefined otherwise.</returns>
-        </member>
-        <member name="T:whateverthefuck.src.control.HotkeyMapping">
-            <summary>
-            A class which maps an InputUnion to a GameAction.
-            </summary>
-        </member>
-        <member name="T:whateverthefuck.src.control.InputUnion">
-            <summary>
-            This class is fucked.
-            It is used to represent any possible input action the user may take.
-            This includes mouse moving, buttons being pressed, mouse buttons being pressed, scroll wheel being spinned.
-            It saved everything in one uninherited class for "ease of use".
-            Have fun.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.control.InputUnion.Key">
-            <summary>
-            Gets the Key being pressedor, or null if the InputUnion is not a keyboard input.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.control.InputUnion.MouseButton">
-            <summary>
-            Gets the MouseButton being pressed, or null if the InputUnion is not a mouse input.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.control.InputUnion.Location">
-            <summary>
-            Gets the location of the mouse event.
-            </summary>
-        </member>
-        <member name="P:whateverthefuck.src.control.InputUnion.PreviousLocation">
-            <summary>
-            Gets the location of where the mouse moved from, or null if the InputUnion is not a mouse move event.
-            </summary>
-        </member>
-        <member name="M:whateverthefuck.src.control.InputUnion.Equals(whateverthefuck.src.control.InputUnion)">
-            <summary>
-            Checks the equality of two InputUnions. They are equal if and only if the represent the same keyboard key or mouse button being pressed in the same direction.
-            </summary>
-            <param name="other">The InputUnion with which to check for equality.</param>
-            <returns>True if the compared InputEvent represents the same button or key being pressed, false otherwise.</returns>
-        </member>
         <member name="M:whateverthefuck.src.model.Ability.Cast(whateverthefuck.src.model.GameEntity)">
             <summary>
             Used when a Character finishes the casting time of an Ability and the effect of the spell is to take place.
@@ -380,6 +191,59 @@
             Gets a value indicating whether the GameEntity is moving at all.
             </summary>
         </member>
+        <member name="T:whateverthefuck.src.control.Hotkeys">
+            <summary>
+            A collection of HotkeyMappings.
+            </summary>
+        </member>
+        <member name="M:whateverthefuck.src.control.Hotkeys.LookupHotkey(whateverthefuck.src.control.InputUnion)">
+            <summary>
+            Looks up an input and returns the corresponding GameAction.
+            </summary>
+            <param name="input">The InputUnion to lookup.</param>
+            <returns>The corresponding GameAction if input is mapped, GameAction.Undefined otherwise.</returns>
+        </member>
+        <member name="T:whateverthefuck.src.control.HotkeyMapping">
+            <summary>
+            A class which maps an InputUnion to a GameAction.
+            </summary>
+        </member>
+        <member name="T:whateverthefuck.src.control.InputUnion">
+            <summary>
+            This class is fucked.
+            It is used to represent any possible input action the user may take.
+            This includes mouse moving, buttons being pressed, mouse buttons being pressed, scroll wheel being spinned.
+            It saved everything in one uninherited class for "ease of use".
+            Have fun.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.control.InputUnion.Key">
+            <summary>
+            Gets the Key being pressedor, or null if the InputUnion is not a keyboard input.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.control.InputUnion.MouseButton">
+            <summary>
+            Gets the MouseButton being pressed, or null if the InputUnion is not a mouse input.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.control.InputUnion.Location">
+            <summary>
+            Gets the location of the mouse event.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.src.control.InputUnion.PreviousLocation">
+            <summary>
+            Gets the location of where the mouse moved from, or null if the InputUnion is not a mouse move event.
+            </summary>
+        </member>
+        <member name="M:whateverthefuck.src.control.InputUnion.Equals(whateverthefuck.src.control.InputUnion)">
+            <summary>
+            Checks the equality of two InputUnions. They are equal if and only if the represent the same keyboard key or mouse button being pressed in the same direction.
+            </summary>
+            <param name="other">The InputUnion with which to check for equality.</param>
+            <returns>True if the compared InputEvent represents the same button or key being pressed, false otherwise.</returns>
+        </member>
         <member name="M:whateverthefuck.src.util.ImageLoader.GetBinding(whateverthefuck.src.util.SpriteID)">
             <summary>
             Gets the int Used by OpenGL to identify the texture bound from the given Images.
@@ -480,6 +344,142 @@
             <summary>
             Creates a GibbWindow on a new thread and wait for the OnLoad event
             of said window to be called. Roughly speaking.
+            </summary>
+        </member>
+        <member name="T:whateverthefuck.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.ability_bite">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.ability_fireball">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.ability_fireburst">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.ability_mend">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.ability_sanic">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.africatoto">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.door_stone0">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.floor_wood0">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.item_banana">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.item_bronze_dagger">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.item_bronze_helmet">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.kappa">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.mankey">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.npc_dog">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.piano">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.player_player0">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.projectile_fireball">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.soundeffect1">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.soundeffect2">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.soundeffect3">
+            <summary>
+              Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.status_burning">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.status_slow">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.status_vulnerable">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:whateverthefuck.Properties.Resources.wall_stone0">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
             </summary>
         </member>
         <member name="M:whateverthefuck.Game.#ctor">
