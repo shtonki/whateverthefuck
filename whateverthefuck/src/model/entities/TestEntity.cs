@@ -10,12 +10,25 @@ namespace whateverthefuck.src.model.entities
     public class TestEntity : GameEntity
     {
         private TransactionIdentifier TransactionIdentifier;
+        private Dialogue Dialogue;
 
         public TestEntity(EntityIdentifier id, TestCreationArguments args)
             : base(id, EntityType.Test, args)
         {
             OnInteract += e => Interact();
             TransactionIdentifier = args.Value;
+
+            var rootChoice1 = new DialogueChoice(
+                "Clear my inventory.",
+                () => { Program.GameStateManager.RequestTransaction(Transaction.GetTransaction(TransactionIdentifier.ClearInventory)); },
+                null);
+            var rootChoice2 = new DialogueChoice(
+                "Trade 10 bananas for a dagger.",
+                () => { Program.GameStateManager.RequestTransaction(Transaction.GetTransaction(TransactionIdentifier.TradeBananasForDagger)); },
+                null);
+            var nodeRoot = new DialogueNode("Hello sailor" + Environment.NewLine, rootChoice1, rootChoice2);
+            Dialogue = new Dialogue(nodeRoot);
+
         }
 
         public TestEntity(EntityIdentifier id, CreationArguments args)
@@ -25,7 +38,7 @@ namespace whateverthefuck.src.model.entities
 
         private void Interact()
         {
-            Program.GameStateManager.RequestTransaction(Transaction.GetTransaction(TransactionIdentifier));
+            Program.GameStateManager.StartDialogue(Dialogue);
         }
     }
 

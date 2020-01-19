@@ -87,13 +87,13 @@ namespace whateverthefuckserver.gameserver
             ces.Add(new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(
                 EntityType.Test,
                 new GameCoordinate(0.2f, 0.2f),
-                new TestCreationArguments(TransactionIdentifier.TestTransaction1)
+                new TestCreationArguments(TransactionIdentifier.ClearInventory)
                 )));
 
             ces.Add(new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(
                 EntityType.Test,
                 new GameCoordinate(0.3f, 0.2f),
-                new TestCreationArguments(TransactionIdentifier.TestTransaction2)
+                new TestCreationArguments(TransactionIdentifier.TradeBananasForDagger)
                 )));
 
             Publish(ces);

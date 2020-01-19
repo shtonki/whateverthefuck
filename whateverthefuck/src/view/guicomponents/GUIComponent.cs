@@ -40,6 +40,8 @@
 
         public Border Border { get; set; }
 
+        public bool DestroyMe { get; protected set; }
+
         public virtual void Step()
         {
 
@@ -97,6 +99,12 @@
             this.HandleInput(input, new GLCoordinate(this.Location.X, this.Location.Y));
         }
 
+        public void Destroy()
+        {
+            DestroyMe = true;
+            Visible = false;
+        }
+
         public virtual bool Contains(GLCoordinate clicked)
         {
             return clicked.X >= this.Location.X && clicked.X <= this.Location.X + this.Size.X &&
@@ -148,6 +156,7 @@
                 this.OnMouseMove?.Invoke(this, input);
             }
         }
+
     }
 
     public class Border

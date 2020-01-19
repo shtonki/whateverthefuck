@@ -228,6 +228,11 @@
             Transaction.GetTransaction(transaction.TransactionIdentifier).Execute(Inventory);
         }
 
+        public void StartDialogue(Dialogue dialogue)
+        {
+            GUI.ShowDialogue(dialogue);
+        }
+
         private void StopLooting()
         {
             GUI.CloseLootPanel();

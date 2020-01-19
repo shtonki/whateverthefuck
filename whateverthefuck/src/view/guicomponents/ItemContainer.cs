@@ -36,7 +36,7 @@
         public override void DrawMe(DrawAdapter drawAdapter)
         {
             // @hack
-            this.StacksText.Location = new GLCoordinate(this.Location.X, this.Location.Y + this.Size.Y);
+            this.StacksText.Location = new GLCoordinate(0, this.Size.Y/2);
             base.DrawMe(drawAdapter);
         }
 

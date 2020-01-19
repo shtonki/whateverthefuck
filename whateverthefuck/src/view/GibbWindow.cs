@@ -100,7 +100,9 @@
             this.SwapBuffers();
             drawAdapter.PopMatrix();
 
-            if (drawAdapter.MatrixCount != 0)
+            //GUI.CleanUp();
+
+            if (drawAdapter.MatrixCount != 1)
             {
                 Logging.Log("Unbalanced Push/Pop of GL matricies", Logging.LoggingLevel.Warning);
             }

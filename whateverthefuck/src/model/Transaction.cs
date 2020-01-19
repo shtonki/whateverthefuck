@@ -7,8 +7,8 @@ namespace whateverthefuck.src.model
     {
         None,
 
-        TestTransaction1,
-        TestTransaction2,
+        ClearInventory,
+        TradeBananasForDagger,
     }
 
     public class Transaction
@@ -22,16 +22,19 @@ namespace whateverthefuck.src.model
 
         static Transaction()
         {
-            Transactions[(int)TransactionIdentifier.TestTransaction1] = new Transaction(
-                TransactionIdentifier.TestTransaction1,
+            Transactions[(int)TransactionIdentifier.ClearInventory] = new Transaction(
+                TransactionIdentifier.ClearInventory,
                 i => true,
                 i => { i.Clear(); }
                 );
 
-            Transactions[(int)TransactionIdentifier.TestTransaction2] = new Transaction(
-                TransactionIdentifier.TestTransaction2,
+            Transactions[(int)TransactionIdentifier.TradeBananasForDagger] = new Transaction(
+                TransactionIdentifier.TradeBananasForDagger,
                 i => i.GetByType(ItemType.Banana, Rarity.Common)?.StackSize >= 10,
-                i => { i.RemoveItem(new Banana(Rarity.Common, 10)); }
+                i => { 
+                    i.RemoveItem(new Banana(Rarity.Common, 10));
+                    i.AddItem(new BronzeDagger(Rarity.Rare));
+                }
                 );
         }
 
@@ -57,7 +60,6 @@ namespace whateverthefuck.src.model
 
         public void Execute(Inventory inventory)
         {
-            Logging.Log("Excecuting " + TransactionIdentifier);
             ExecuteFunction(inventory);
         }
     }

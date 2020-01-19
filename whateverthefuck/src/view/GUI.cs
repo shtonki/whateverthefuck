@@ -29,7 +29,7 @@
 
         private static LootPanel LootPanel { get; set; }
 
-        private static InventoryPanel InventoryPanel { get; set; } 
+        private static InventoryPanel InventoryPanel { get; set; }
 
         private static EquipmentPanel EquipmentPanel { get; set; }
 
@@ -38,6 +38,8 @@
         private static TargetPanel TargetPanel { get; set; }
 
         private static TextPanel ToolTipPanel { get; set; }
+
+        private static DialoguePanel DialoguePanel { get; set; }
 
         private static CastBar CastBar { get; set; }
 
@@ -68,6 +70,7 @@
 
                 if (interactedGUIComponent != null)
                 {
+
                     if (input.MouseButton == OpenTK.Input.MouseButton.Right && input.Direction == InputUnion.Directions.Down)
                     {
                         if (interactedGUIComponent is ToolTipper)
@@ -236,6 +239,23 @@
             var textPanel = new DamageTextPanel(text, color, location);
 
             GUIComponents.Add(textPanel);
+        }
+
+        public static void ShowDialogue(Dialogue dialogue)
+        {
+            if (DialoguePanel != null)
+            {
+                GUIComponents.Remove(DialoguePanel);
+                DialoguePanel = null;
+            }
+
+            DialoguePanel = new DialoguePanel(dialogue, new GLCoordinate(0.8f, 0.8f));
+            GUIComponents.Add(DialoguePanel);
+        }
+
+        public static void CleanUp()
+        {
+            GUIComponents.RemoveAll(gc => gc.DestroyMe);
         }
 
         public static EntityIdentifier EntityAt(GameCoordinate location)

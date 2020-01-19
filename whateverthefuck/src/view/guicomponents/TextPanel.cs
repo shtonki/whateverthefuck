@@ -12,7 +12,9 @@
         {
             this.Text = text;
             this.RenderOptions = new QFontRenderOptions { Colour = color, DropShadowActive = true };
-            this.Size = this.CalculateSize(this.Text + Environment.NewLine);
+            this.Size = this.CalculateSize(this.Text + Environment.NewLine + Environment.NewLine);
+            // we get negative height for some reason i don't really wanna find out
+            this.Size.Y = Math.Abs(this.Size.Y);
             this.BackColor = Color.Transparent;
             Font = FontLoader.DefaultFont;
         }
@@ -27,7 +29,7 @@
         {
             base.DrawMe(drawAdapter);
 
-            drawAdapter.DrawText(this.Font, this.Text, this.Location as GLCoordinate, QFontAlignment.Left, this.RenderOptions);
+            drawAdapter.DrawText(this.Font, this.Text, new GLCoordinate(0, this.Size.Y), QFontAlignment.Left, this.RenderOptions);
         }
 
         private GLCoordinate CalculateSize(string text)
@@ -55,7 +57,7 @@
             // @fucked this doesn't actually remove the damn thing so it's going ot be floating around for all eternity
             if (this.counter++ > MaxDuration)
             {
-                this.Visible = false;
+                Destroy();
             }
 
             this.Location = Program.GameStateManager.GameState.CurrentCamera.GameToGLCoordinate(this.entityLocation) + new GLCoordinate(0, 0.005f * this.counter);

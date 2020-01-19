@@ -1,6 +1,7 @@
 namespace whateverthefuck.src.view
 {
     using System;
+    using System.Collections.Generic;
     using System.Drawing;
     using OpenTK.Graphics.OpenGL;
     using QuickFont;
@@ -13,25 +14,30 @@ namespace whateverthefuck.src.view
             this.FontDrawing = fontDrawing;
         }
 
-        public int MatrixCount { get; private set; } = 0;
+        public int MatrixCount => Translations.Count;
 
         private QFontDrawing FontDrawing { get; }
+
+        private Stack<GLCoordinate> Translations { get; } = new Stack<GLCoordinate>(new GLCoordinate[] { new GLCoordinate(0, 0) });
 
         public void PushMatrix()
         {
             GL.PushMatrix();
-            MatrixCount++;
+            Translations.Push(new GLCoordinate(0, 0));
         }
 
         public void PopMatrix()
         {
             GL.PopMatrix();
-            MatrixCount--;
+            Translations.Pop();
         }
 
         public void Translate(float x, float y)
         {
             GL.Translate(x, y, 0);
+            var topTranslation = Translations.Peek();
+            topTranslation.X += x;
+            topTranslation.Y += y;
         }
 
         public void Rotate(float angle)
@@ -68,7 +74,7 @@ namespace whateverthefuck.src.view
 
         public void DrawText(QFont font, string text, GLCoordinate glLocation, QFontAlignment alignment, QFontRenderOptions renderOptions)
         {
-            var location = GUI.GLToScreenCoordinates(glLocation);
+            var location = GUI.GLToScreenCoordinates(glLocation + GetCurrentTranslation());
             this.FontDrawing.Print(font, text, new OpenTK.Vector3(location.X, location.Y, 0), QFontAlignment.Left, renderOptions);
         }
 
@@ -143,6 +149,18 @@ namespace whateverthefuck.src.view
             GL.Disable(EnableCap.Texture2D);
 
             GL.PopMatrix();
+        }
+
+        private GLCoordinate GetCurrentTranslation()
+        {
+            var translation = new GLCoordinate(0, 0);
+
+            foreach (var t in Translations)
+            {
+                translation += t;
+            }
+
+            return translation;
         }
     }
 }

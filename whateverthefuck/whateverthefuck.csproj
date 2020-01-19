@@ -57,6 +57,7 @@
     <None Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\model\Dialogue.cs" />
     <Compile Include="src\model\entities\TestEntity.cs" />
     <Compile Include="src\model\Equipment.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -131,6 +132,7 @@
     <Compile Include="src\view\guicomponents\AbilityButton.cs" />
     <Compile Include="src\view\guicomponents\Button.cs" />
     <Compile Include="src\view\guicomponents\CastBar.cs" />
+    <Compile Include="src\view\guicomponents\DialoguePanel.cs" />
     <Compile Include="src\view\guicomponents\EquipmentPanel.cs" />
     <Compile Include="src\view\guicomponents\InventoryPanel.cs" />
     <Compile Include="src\view\guicomponents\ItemContainer.cs" />
