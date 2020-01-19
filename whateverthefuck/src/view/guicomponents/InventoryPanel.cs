@@ -8,12 +8,10 @@
         private static readonly int NumberOfRows = 3;
         private static readonly int NumberOfColumns = 3;
 
-        private static readonly GLCoordinate Location = new GLCoordinate(0, 0);
-        private static readonly GLCoordinate Size = new GLCoordinate(0.5f, 0.5f);
         private static readonly GLCoordinate Padding = new GLCoordinate(0.02f, 0.02f);
 
-        internal InventoryPanel()
-            : base(Location,  Size)
+        internal InventoryPanel(GLCoordinate size)
+            : base(new GLCoordinate(0, 0),  size)
         {
             var glm = new GridLayoutManager();
             glm.Rows = NumberOfRows;

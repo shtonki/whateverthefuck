@@ -39,6 +39,11 @@ namespace whateverthefuck.src.model
                     return new PCCreationArguments();
                 }
 
+                case EntityType.Test:
+                {
+                    return new TestCreationArguments();
+                }
+
                 default: throw new Exception();
             }
         }

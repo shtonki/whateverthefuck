@@ -4,6 +4,34 @@
         <name>whateverthefuck</name>
     </assembly>
     <members>
+        <member name="T:whateverthefuck.src.model.entities.Block">
+            <summary>
+            Represents a basic block in the game.
+            </summary>
+        </member>
+        <member name="T:whateverthefuck.src.model.entities.Character">
+            <summary>
+            Represents a Character in the game.
+            </summary>
+        </member>
+        <member name="M:whateverthefuck.src.model.entities.Character.#ctor(whateverthefuck.src.model.EntityIdentifier,whateverthefuck.src.model.EntityType,whateverthefuck.src.model.CreationArguments)">
+            <summary>
+            Initializes a new instance of the <see cref="T:whateverthefuck.src.model.entities.Character"/> class.
+            </summary>
+            <param name="identifier">The EntityIdentifier of the created Character.</param>
+            <param name="entityType">The EntityType of the created Character.</param>
+            <param name="args">The CreationArgs used to create the Character.</param>
+        </member>
+        <member name="T:whateverthefuck.src.model.entities.Door">
+            <summary>
+            Doors are like Blocks but you can run through them.
+            </summary>
+        </member>
+        <member name="T:whateverthefuck.src.model.entities.Floor">
+            <summary>
+            Represents a floor tile.
+            </summary>
+        </member>
         <member name="M:whateverthefuck.src.model.Ability.Cast(whateverthefuck.src.model.GameEntity)">
             <summary>
             Used when a Character finishes the casting time of an Ability and the effect of the spell is to take place.
@@ -32,34 +60,6 @@
         <member name="T:whateverthefuck.src.model.HeroMovementStruct">
             <summary>
             A container for the movement info of the Hero.
-            </summary>
-        </member>
-        <member name="T:whateverthefuck.src.model.entities.Block">
-            <summary>
-            Represents a basic block in the game.
-            </summary>
-        </member>
-        <member name="T:whateverthefuck.src.model.entities.Character">
-            <summary>
-            Represents a Character in the game.
-            </summary>
-        </member>
-        <member name="M:whateverthefuck.src.model.entities.Character.#ctor(whateverthefuck.src.model.EntityIdentifier,whateverthefuck.src.model.EntityType,whateverthefuck.src.model.CreationArguments)">
-            <summary>
-            Initializes a new instance of the <see cref="T:whateverthefuck.src.model.entities.Character"/> class.
-            </summary>
-            <param name="identifier">The EntityIdentifier of the created Character.</param>
-            <param name="entityType">The EntityType of the created Character.</param>
-            <param name="args">The CreationArgs used to create the Character.</param>
-        </member>
-        <member name="T:whateverthefuck.src.model.entities.Door">
-            <summary>
-            Doors are like Blocks but you can run through them.
-            </summary>
-        </member>
-        <member name="T:whateverthefuck.src.model.entities.Floor">
-            <summary>
-            Represents a floor tile.
             </summary>
         </member>
         <member name="P:whateverthefuck.src.model.EntityInfo.Left">

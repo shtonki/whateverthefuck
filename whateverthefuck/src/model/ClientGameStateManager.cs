@@ -154,14 +154,11 @@
 
                     if (entity != null)
                     {
-                        if (input.MouseButton.Value == OpenTK.Input.MouseButton.Left)
+                        if (input.MouseButton.Value == OpenTK.Input.MouseButton.Left && input.Direction == InputUnion.Directions.Up)
                         {
-                            this.Target(entity);
+                            this.TryToTarget(entity);
 
-                            if (entity is IInteractable)
-                            {
-                                (entity as IInteractable).Interact();
-                            }
+                            entity.Interact();
                         }
                     }
 
@@ -220,16 +217,28 @@
             GUI.ShowLoot(this.Looting);
         }
 
+        public void RequestTransaction(Transaction transaction)
+        {
+            Logging.Log(transaction.TransactionIdentifier.ToString());
+            Program.ServerConnection.SendMessage(new TransactionMessage(transaction));
+        }
+
+        public void HandleTransaction(Transaction transaction)
+        {
+            Transaction.GetTransaction(transaction.TransactionIdentifier).Execute(Inventory);
+        }
+
         private void StopLooting()
         {
             GUI.CloseLootPanel();
             this.Looting = null;
         }
 
-        private void Target(GameEntity target)
+        private void TryToTarget(GameEntity target)
         {
-            this.Hero.Info.Target = target.Info.Identifier;
+            if (!target.Info.Targetable) { return; }
 
+            this.Hero.Info.Target = target.Info.Identifier;
             GUI.SetTargetPanel(target);
         }
 

@@ -29,7 +29,7 @@
 
         private static LootPanel LootPanel { get; set; }
 
-        private static InventoryPanel InventoryPanel { get; set; } = new InventoryPanel();
+        private static InventoryPanel InventoryPanel { get; set; } 
 
         private static EquipmentPanel EquipmentPanel { get; set; }
 
@@ -102,8 +102,7 @@
 
         public static void LoadGUI()
         {
-            GUIComponents.Add(InventoryPanel);
-            InventoryPanel.Location = new GLCoordinate(0.1f, 0.1f);
+            LoadInventoryPanel();
         }
 
         public static void LoadHUD(PC hero)
@@ -358,7 +357,8 @@
         private static void LoadEquipmentPanel(PC hero)
         {
             EquipmentPanel = new EquipmentPanel(hero.Equipment, new GLCoordinate(0.6f, 0.6f));
-            EquipmentPanel.Location = new GLCoordinate(-0.5f, -0.5f);
+            EquipmentPanel.Location = new GLCoordinate(0.1f, 0.1f);
+            EquipmentPanel.Visible = false;
             GUIComponents.Add(EquipmentPanel);
         }
 
@@ -366,6 +366,13 @@
         {
             // @add GainFocus and LostFocus events?
             FocusedComponent = focused;
+        }
+
+        private static void LoadInventoryPanel()
+        {
+            InventoryPanel = new InventoryPanel(new GLCoordinate(0.6f, 0.6f));
+            InventoryPanel.Location = new GLCoordinate(0.1f, 0.1f);
+            GUIComponents.Add(InventoryPanel);
         }
     }
 }

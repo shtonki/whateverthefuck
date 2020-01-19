@@ -81,9 +81,22 @@ namespace whateverthefuckserver.gameserver
 
         public void SpawnWorld()
         {
-            var house = GameState.EntityGenerator.GenerateHouse(5, 5).Select(e => new CreateEntityEvent(e));
+            List<CreateEntityEvent> ces = new List<CreateEntityEvent>();
+            ces.AddRange(GameState.EntityGenerator.GenerateHouse(5, 5).Select(e => new CreateEntityEvent(e)));
 
-            Publish(house);
+            ces.Add(new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(
+                EntityType.Test,
+                new GameCoordinate(0.2f, 0.2f),
+                new TestCreationArguments(TransactionIdentifier.TestTransaction1)
+                )));
+
+            ces.Add(new CreateEntityEvent(GameState.EntityGenerator.GenerateEntity(
+                EntityType.Test,
+                new GameCoordinate(0.3f, 0.2f),
+                new TestCreationArguments(TransactionIdentifier.TestTransaction2)
+                )));
+
+            Publish(ces);
         }
     }
 }

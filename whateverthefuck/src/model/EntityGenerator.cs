@@ -52,6 +52,11 @@
                         return new Projectile(identifier, args);
                     }
 
+                case EntityType.Test:
+                    {
+                        return new TestEntity(identifier, args);
+                    }
+
                 default: throw new Exception();
             }
         }
@@ -68,6 +73,13 @@
         public GameEntity GenerateEntity(EntityType e, CreationArguments a)
         {
             return this.GenerateEntity(e, this.IdGenerator.GenerateNextIdentifier(), a);
+        }
+
+        public GameEntity GenerateEntity(EntityType entityType, GameCoordinate location, CreationArguments creationArguments)
+        {
+            var entity = this.GenerateEntity(entityType, creationArguments);
+            entity.Info.GameLocation = location;
+            return entity;
         }
 
         public IEnumerable<GameEntity> GenerateHouse(int xorg, int yorg)

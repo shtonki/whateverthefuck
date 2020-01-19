@@ -15,7 +15,7 @@ namespace whateverthefuckserver.network
 
         }
 
-        public GamePlayer User { get; private set; }
+        public GamePlayer Player { get; private set; }
 
         protected override void HandleConnectionDeath()
         {
@@ -29,13 +29,13 @@ namespace whateverthefuckserver.network
                 case MessageType.GameEventMessage:
                 {
                     GameEventsMessage gem = (GameEventsMessage)message;
-                    Program.GameServer.HandleRequests(this.User, gem.Events);
+                    Program.GameServer.HandleRequests(this.Player, gem.Events);
                 } break;
 
                 case MessageType.LoginMessage:
                 {
                     LoginMessage loginMessage = (LoginMessage)message;
-                    this.User = LoginServer.Login(this, new LoginCredentials(loginMessage.LoginCredentials.Username));
+                    this.Player = LoginServer.Login(this, new LoginCredentials(loginMessage.LoginCredentials.Username));
                 } break;
 
                 case MessageType.SyncMessage:
@@ -47,7 +47,13 @@ namespace whateverthefuckserver.network
                 case MessageType.AddItemsToInventoryMessage:
                 {
                     AddItemsToInventoryMessage aitim = (AddItemsToInventoryMessage)message;
-                    User.Inventory.AddItems(aitim.Items);
+                    Player.Inventory.AddItems(aitim.Items);
+                } break;
+
+                case MessageType.TransactionMessage:
+                {
+                    TransactionMessage ta = (TransactionMessage)message;
+                    Program.GameServer.RequestTransaction(ta, Player);
                 } break;
 
                 default:

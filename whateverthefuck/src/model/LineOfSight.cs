@@ -25,7 +25,7 @@
 
             rt.Add(looker);
 
-            var blockers = looked.Where(e => e.Info.BlocksLOS);
+            var blockers = looked;
 
             PointF lookerPOV = new PointF(looker.Info.Center.X, looker.Info.Center.Y);
 

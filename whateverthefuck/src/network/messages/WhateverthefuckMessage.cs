@@ -110,6 +110,11 @@
                     return new CompoundMessage();
                 }
 
+                case MessageType.TransactionMessage:
+                {
+                    return new TransactionMessage();
+                }
+
                 default: throw new NotImplementedException();
             }
         }
@@ -132,5 +137,7 @@
 
         UseItemMessage,
         AddItemsToInventoryMessage,
+
+        TransactionMessage,
     }
 }

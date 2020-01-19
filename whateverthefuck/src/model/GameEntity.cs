@@ -13,6 +13,8 @@
     {
         None,
 
+        Test,
+
         Projectile,
 
         PC,
@@ -49,6 +51,8 @@
         public event Action<GameEntity, GameState> OnStep;
 
         public event Action<DealDamageEvent, GameState> OnDamaged;
+
+        public event Action<GameEntity> OnInteract;
 
         public EntityStatus Status { get; protected set; }
 
@@ -146,6 +150,11 @@
             var healing = Math.Min(e.Healing, headRoom);
 
             this.Status.WriteCurrentStats.Health += healing;
+        }
+
+        public void Interact()
+        {
+            OnInteract?.Invoke(this);
         }
 
         public float DistanceTo(GameEntity other)

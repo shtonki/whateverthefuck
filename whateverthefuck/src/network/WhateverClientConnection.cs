@@ -53,6 +53,12 @@
                     }
                 } break;
 
+                case MessageType.TransactionMessage:
+                {
+                    TransactionMessage tm = (TransactionMessage)message;
+                    Program.GameStateManager.HandleTransaction(tm.Transaction);
+                }break;
+
                 default:
                 {
                     Logging.Log("Unhandled message of type " + message.MessageType, Logging.LoggingLevel.Warning);

@@ -42,14 +42,56 @@
 
         public void RemoveItem(Item item)
         {
-            this.Items.Remove(item);
+            if (Items.Remove(item))
+            {
+            }
+            else
+            {
+                if (item.Stackable)
+                {
+                    var stack = GetByType(item.Type, item.Rarity);
+
+                    if (stack != null && stack.StackSize >= item.StackSize)
+                    {
+                        stack.StackSize -= item.StackSize;
+
+                        if (stack.StackSize == 0)
+                        {
+                            Items.Remove(stack);
+                        }
+
+                        OnInventoryChanged?.Invoke();
+                    }
+                }
+                else
+                {
+                    var identical = GetIdentical(item);
+                    if (identical != null)
+                    {
+                        this.Items.Remove(identical);
+                        this.OnInventoryChanged?.Invoke();
+                    }
+                }
+            }
+
+            CleanUp();
+        }
+
+        public void Clear()
+        {
+            this.Items.Clear();
             this.OnInventoryChanged?.Invoke();
+        }
+
+        public Item GetByType(ItemType type, Rarity rarity)
+        {
+            return Items.FirstOrDefault(item => item.Type == type && item.Rarity == rarity);
         }
 
         public Item GetIdentical(Item item)
         {
             // @incomplete not actually identical
-            return AllItems.FirstOrDefault(i => i.Type == item.Type);
+            return AllItems.FirstOrDefault(i => i.Type == item.Type && i.Rarity == item.Rarity);
         }
 
         public void Encode(WhateverEncoder encoder)

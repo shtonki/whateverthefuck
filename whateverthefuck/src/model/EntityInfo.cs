@@ -23,13 +23,11 @@
 
         public GameCoordinate Size { get; set; } = new GameCoordinate(0.1f, 0.1f);
 
-        public bool Movable { get; set; } = false;
+        public bool Movable { get; set; }
 
-        public bool Collidable { get; set; } = false;
+        public bool Collidable { get; set; }
 
-        public bool Targetable { get; set; } = false;
-
-        public bool BlocksLOS { get; set; } = false;
+        public bool Targetable { get; set; }
 
         public bool Destroy { get; set; }
 

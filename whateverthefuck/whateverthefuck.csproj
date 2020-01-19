@@ -57,6 +57,7 @@
     <None Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\model\entities\TestEntity.cs" />
     <Compile Include="src\model\Equipment.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -92,6 +93,7 @@
     <Compile Include="src\model\LineOfSight.cs" />
     <Compile Include="src\model\EntityMovement.cs" />
     <Compile Include="src\model\Status.cs" />
+    <Compile Include="src\model\Transaction.cs" />
     <Compile Include="src\network\messages\AddItemsToInventoryMessage.cs" />
     <Compile Include="src\network\messages\CompoundMessage.cs" />
     <Compile Include="src\network\messages\CreateLootMessage.cs" />
@@ -100,6 +102,7 @@
     <Compile Include="src\network\messages\GrantControlMessage.cs" />
     <Compile Include="src\network\messages\LoginMessage.cs" />
     <Compile Include="src\network\messages\SyncMessage.cs" />
+    <Compile Include="src\network\messages\TransactionMessage.cs" />
     <Compile Include="src\network\messages\WhateverthefuckMessage.cs" />
     <Compile Include="src\network\LoginCredentials.cs" />
     <Compile Include="src\network\UserLogin.cs" />

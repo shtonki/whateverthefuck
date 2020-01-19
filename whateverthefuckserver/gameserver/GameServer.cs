@@ -158,11 +158,7 @@ namespace whateverthefuckserver.gameserver
 
                 var message = new CreateLootMessage(
                     lootee,
-                    new BronzeDagger(Rarity.Legendary),
-                    new BronzeDagger(Rarity.Common),
-                    new BronzeHelmet(Rarity.Legendary),
-                    new BronzeHelmet(Rarity.Common),
-                    new Banana(Rarity.Uncommon, 4));
+                    new Banana(Rarity.Common, 20));
                 lootingPlayer.PlayerConnection.SendMessage(message);
             }
         }
@@ -183,6 +179,21 @@ namespace whateverthefuckserver.gameserver
             }
 
             return rt;
+        }
+
+        public void RequestTransaction(TransactionMessage transactionMessage, GamePlayer player)
+        {
+            var transaction = transactionMessage.Transaction;
+
+            if (!transaction.CanAfford(player.Inventory))
+            {
+                return;
+            }
+
+            player.PlayerConnection.SendMessage(transactionMessage);
+
+
+            transaction.Execute(player.Inventory);
         }
 
         private bool CheckRequests(GamePlayer requester, IEnumerable<GameEvent> requests)
