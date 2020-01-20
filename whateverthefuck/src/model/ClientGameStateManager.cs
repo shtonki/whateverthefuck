@@ -56,6 +56,11 @@
         /// <param name="events">The GameEvents to be handled.</param>
         public void UpdateGameState(int tick, IEnumerable<GameEvent> events)
         {
+            foreach (var v in events)
+            {
+                Logging.Log(v.GetType());
+            }
+
             if (tick == 0)
             {
                 this.GameState.HandleGameEvents(events);
@@ -194,6 +199,11 @@
                     Inventory.RemoveItem(item);
                 }
             }
+        }
+
+        public void UpdateSpecialization(SpecializationTree tree)
+        {
+            Program.ServerConnection.SendMessage(new GameEventsMessage((new ChangeSpecializationEvent(Hero.Info.Identifier, tree))));
         }
 
         public void Loot(Lootable lootee)

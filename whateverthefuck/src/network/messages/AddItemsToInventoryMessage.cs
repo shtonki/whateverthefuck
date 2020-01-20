@@ -33,7 +33,7 @@ namespace whateverthefuck.src.network.messages
 
         public override void Decode(WhateverDecoder decoder)
         {
-            this.Items = decoder.DecodeItems();
+            this.Items = decoder.DecodeItemArray();
         }
     }
 }

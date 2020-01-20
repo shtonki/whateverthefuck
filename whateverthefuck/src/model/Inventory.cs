@@ -103,7 +103,7 @@
 
         public void Decode(WhateverDecoder decoder)
         {
-            var items = decoder.DecodeItems();
+            var items = decoder.DecodeItemArray();
             Items.AddRange(items);
         }
 

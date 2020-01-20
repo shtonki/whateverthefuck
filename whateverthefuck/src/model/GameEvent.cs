@@ -44,6 +44,11 @@
                     return new EquipItemEvent();
                 }
 
+                case GameEventType.ChangeSpecialization:
+                {
+                    return new ChangeSpecializationEvent();
+                }
+
                 default:
                 {
                     throw new Exception("Unexpectedly received a " + type);
@@ -59,6 +64,39 @@
         public virtual void Decode(WhateverDecoder decoder)
         {
             Logging.Log(this.Type + "doesn't decode", Logging.LoggingLevel.Error);
+        }
+    }
+
+    public class ChangeSpecializationEvent : GameEvent
+    {
+        public ChangeSpecializationEvent()
+            : this(null, null)
+        {
+        }
+
+        public ChangeSpecializationEvent(EntityIdentifier entityIdentifier, SpecializationTree tree)
+            : base(GameEventType.ChangeSpecialization)
+        {
+            EntityIdentifier = entityIdentifier;
+            Tree = tree;
+        }
+
+        public EntityIdentifier EntityIdentifier { get; private set; }
+
+        public SpecializationTree Tree { get; private set; }
+
+        public override void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode(EntityIdentifier.Id);
+            Tree.Encode(encoder);
+        }
+
+        public override void Decode(WhateverDecoder decoder)
+        {
+            EntityIdentifier = new EntityIdentifier(decoder.DecodeInt());
+            var tree = new SpecializationTree();
+            tree.Decode(decoder);
+            this.Tree = tree;
         }
     }
 
@@ -350,6 +388,8 @@
     public enum GameEventType
     {
         NotSet,
+
+        ChangeSpecialization,
 
         Create,
         Destroy,

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using whateverthefuck.src.model.entities;
+using whateverthefuck.src.util;
 using whateverthefuck.src.view;
 
 namespace whateverthefuck.src.model
 {
-    public class SpecializationTree
+    public class SpecializationTree : IEncodable
     {
         public SpecializationTree()
         {
@@ -40,14 +41,10 @@ namespace whateverthefuck.src.model
             }
         }
 
-        public void Set()
+        public void Set(SpecializationTree other)
         {
+            SetSpecialization(other.GetSpecialization());
             OnChanged?.Invoke();
-        }
-
-        private bool HasSpecialization(Specializations spec, bool[] bools)
-        {
-            return bools[(int)spec];
         }
 
         private bool[] GetSpecialization()
@@ -60,6 +57,14 @@ namespace whateverthefuck.src.model
             }
 
             return rt;
+        }
+
+        private void SetSpecialization(bool[] specs)
+        {
+            foreach (var node in GetNodes())
+            {
+                node.Enabled = specs[(int)node.Specialization];
+            }
         }
 
         private IEnumerable<SpecializationNode> GetNodes()
@@ -77,6 +82,16 @@ namespace whateverthefuck.src.model
             {
                 AddNode(child, list);
             }
+        }
+
+        public void Encode(WhateverEncoder encoder)
+        {
+            encoder.Encode(GetSpecialization());
+        }
+
+        public void Decode(WhateverDecoder decoder)
+        {
+            SetSpecialization(decoder.DecodeBoolArray());
         }
     }
 

@@ -88,6 +88,10 @@ namespace whateverthefuckserver.gameserver
             {
                 PendEvents(requests);
             }
+            else
+            {
+                Logging.Log("Refused request.");
+            }
         }
 
         public void AddUser(GamePlayer player)
@@ -244,6 +248,15 @@ namespace whateverthefuckserver.gameserver
                         var item = requester.Inventory.GetIdentical(eie.Item);
 
                         if (item != null && eie.Equipper.Id == requester.HeroIdentifier.Id)
+                        {
+                            return true;
+                        }
+                    } break;
+
+                    case GameEventType.ChangeSpecialization:
+                    {
+                        var cse = (ChangeSpecializationEvent)request;
+                        if (cse.EntityIdentifier.Id == requester.HeroIdentifier.Id)
                         {
                             return true;
                         }

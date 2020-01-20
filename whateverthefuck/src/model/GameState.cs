@@ -260,9 +260,27 @@
             {
                 this.HandleEvent(eie);
             }
+            else if (e is ChangeSpecializationEvent cse)
+            {
+                this.HandleEvent(cse);
+            }
             else
             {
                 throw new NotImplementedException();
+            }
+        }
+
+        private void HandleEvent(ChangeSpecializationEvent changeSpecializationEvent)
+        {
+            var speccer = GetEntityById(changeSpecializationEvent.EntityIdentifier);
+
+            if (speccer != null)
+            {
+                speccer.SpecializationTree.Set(changeSpecializationEvent.Tree);
+            }
+            else
+            {
+                Logging.Log("Tried to specc for broken entity.");
             }
         }
 

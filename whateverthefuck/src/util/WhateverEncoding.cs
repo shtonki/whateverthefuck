@@ -36,6 +36,11 @@
             this.AppendBytes(value);
         }
 
+        public void Encode(bool value)
+        {
+            this.AppendBytes(value ? (byte)1 : (byte)0);
+        }
+
         public void Encode(long value)
         {
             this.AppendBytes(BitConverter.GetBytes(value));
@@ -72,6 +77,16 @@
                 {
                     item.Encode(this);
                 }
+            }
+        }
+
+        public void Encode(IEnumerable<bool> bools)
+        {
+            Encode(bools.Count());
+
+            foreach (var val in bools)
+            {
+                Encode(val);
             }
         }
 
@@ -119,6 +134,12 @@
             this.position += sizeof(byte);
 
             return returnVal;
+        }
+
+        public bool DecodeBool()
+        {
+            var val = DecodeByte();
+            return val == 1;
         }
 
         public long DecodeLong()
@@ -173,7 +194,7 @@
             return bytes;
         }
 
-        public Item[] DecodeItems()
+        public Item[] DecodeItemArray()
         {
             var itemCount = DecodeInt();
             var items = new Item[itemCount];
@@ -184,6 +205,19 @@
             }
 
             return items;
+        }
+
+        public bool[] DecodeBoolArray()
+        {
+            var boolCount = DecodeInt();
+            var bools = new bool[boolCount];
+
+            for (int i = 0; i < boolCount; i++)
+            {
+                bools[i] = DecodeBool();
+            }
+
+            return bools;
         }
     }
 }

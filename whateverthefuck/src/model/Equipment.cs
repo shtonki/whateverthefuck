@@ -52,7 +52,7 @@ namespace whateverthefuck.src.model
 
         public void Decode(WhateverDecoder decoder)
         {
-            var items = decoder.DecodeItems();
+            var items = decoder.DecodeItemArray();
 
             for (int i = 0; i < ItemArray.Length; i++)
             {

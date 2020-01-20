@@ -16,17 +16,23 @@ namespace whateverthefuck.src.view.guicomponents
 
         public SpecializationPanel(SpecializationTree tree, GLCoordinate size)
         {
-            this.BackColor = Color.Transparent;
+            this.BackColor = Color.Green;
 
             this.Size = size;
 
             this.tree = tree;
             LayoutTree(this.tree);
+
+            var saveButton = new TextPanel("Save", Color.Black);
+            saveButton.Location = new GLCoordinate(0, size.Y - 0.2f);
+            saveButton.BackColor = Color.White;
+            saveButton.OnMouseButtonDown += (c, i) => Save();
+            AddChild(saveButton);
         }
 
         private void Save()
         {
-            tree.Set();
+            Program.GameStateManager.UpdateSpecialization(tree);
         }
 
         private void LayoutTree(SpecializationTree tree)
@@ -38,7 +44,7 @@ namespace whateverthefuck.src.view.guicomponents
             }
 
             panel = new DraggablePanel();
-            panel.Size = new GLCoordinate(Size.X, Size.Y);
+            panel.Size = new GLCoordinate(Size.X, Size.Y - 0.2f);
             panel.BackColor = Color.Black;
 
             LayoutNode(panel, 0, 0, tree.Root);
@@ -52,7 +58,6 @@ namespace whateverthefuck.src.view.guicomponents
             b.Size = new GLCoordinate(0.1f, 0.1f);
             b.Location = new GLCoordinate(0.2f * x, 0.2f * y);
             b.BackColor = Color.Orange;
-            b.OnMouseButtonDown += (c, i) => { Save(); };
 
             panel.AddChild(b);
 
