@@ -26,6 +26,7 @@
             //HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Up, Key.Tab), GameAction.TogglePanel));
             HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.I), GameAction.ToggleInventory));
             HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.C), GameAction.ToggleEquipmentPanel));
+            HotkeyMappings.Add(new HotkeyMapping(InputUnion.MakeKeyboardInput(InputUnion.Directions.Down, Key.N), GameAction.ToggleSpecializationPanel));
         }
 
         private static List<HotkeyMapping> HotkeyMappings { get; } = new List<HotkeyMapping>();

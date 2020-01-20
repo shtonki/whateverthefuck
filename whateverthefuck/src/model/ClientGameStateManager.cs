@@ -449,6 +449,11 @@
                     GUI.ToggleEquipmentPanel();
                 } break;
 
+                case GameAction.ToggleSpecializationPanel:
+                {
+                    GUI.ToggleSpecializationPanel();
+                } break;
+
                 default: throw new Exception("Can't be fucked making a proper message so if you see this someone fucked up bad.");
             }
         }

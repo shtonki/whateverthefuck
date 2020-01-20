@@ -84,11 +84,11 @@ namespace whateverthefuck.src.view.guicomponents
 
                 if (node.Enabled)
                 {
-                    this.AddBorder(Color.AntiqueWhite);
+                    this.AddBorder(Color.Green);
                 }
                 else
                 {
-                    this.AddBorder(Color.Transparent);
+                    this.AddBorder(Color.Red);
                 }
             };
         }
