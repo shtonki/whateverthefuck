@@ -11,12 +11,19 @@ namespace whateverthefuck.src.model
 {
     public class SpecializationTree : IEncodable
     {
+        private const float BaseMoveSpeed = Character.SpeedSlow;
+        private const float BaseDamageTakenMultiplier = 1;
+        private const int BaseGlobalCooldownTicks = 100;
+        private const int BaseMaxHealth = 100;
+        private const int BaseIntelligence = 10;
+        private const int BaseStrength = 10;
+
         public SpecializationTree()
         {
-            var t1 = new SpecializationNode(Specializations.Test1);
-            var t2 = new SpecializationNode(Specializations.Test2);
-            Root = new SpecializationNode(Specializations.Root, t1, t2);
-
+            var speed2 = new SpecializationNode(Specializations.Speed2);
+            var speed1 = new SpecializationNode(Specializations.Speed1, speed2);
+            var int1 = new SpecializationNode(Specializations.Intelligence1);
+            Root = new SpecializationNode(Specializations.Root, speed1, int1);
         }
 
         public event Action OnChanged;
@@ -25,19 +32,29 @@ namespace whateverthefuck.src.model
 
         public void SetBaseStats(StatStruct stats)
         {
-            stats.DamageTakenMultiplier = 1;
-            stats.GlobalCooldown = 1;
-            stats.MaxHealth = 100;
-            stats.MoveSpeed = Character.SpeedSlow;
+            stats.DamageTakenMultiplier = BaseDamageTakenMultiplier;
+            stats.GlobalCooldown = BaseGlobalCooldownTicks;
+            stats.MaxHealth = BaseMaxHealth;
+            stats.MoveSpeed = BaseMoveSpeed;
 
-            stats.Intelligence = 10;
-            stats.Strength = 10;
+            stats.Intelligence = BaseIntelligence;
+            stats.Strength = BaseStrength;
 
             var specs = GetSpecialization();
 
-            if (specs[(int)Specializations.Test1])
+            if (specs[(int)Specializations.Speed1])
             {
-                stats.MoveSpeed *= 2.0f;
+                stats.MoveSpeed += BaseMoveSpeed * 1f;
+            }
+
+            if (specs[(int)Specializations.Speed2])
+            {
+                stats.MoveSpeed += BaseMoveSpeed * 1f;
+            }
+
+            if (specs[(int)Specializations.Intelligence1])
+            {
+                stats.Intelligence += 100;
             }
         }
 
@@ -99,8 +116,9 @@ namespace whateverthefuck.src.model
     {
         Root,
 
-        Test1,
-        Test2,
+        Speed1,
+        Speed2,
+        Intelligence1,
     }
 
     public class SpecializationNode
@@ -121,10 +139,5 @@ namespace whateverthefuck.src.model
         public Specializations Specialization { get; set; }
 
         public Sprite Sprite { get; set; }
-
-        public void Toggle()
-        {
-            Enabled = !Enabled;
-        }
     }
 }

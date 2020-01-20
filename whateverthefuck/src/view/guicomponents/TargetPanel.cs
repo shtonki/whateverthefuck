@@ -106,7 +106,7 @@ namespace whateverthefuck.src.view.guicomponents
                 var sprite = status.Sprite;
 
                 drawAdapter.DrawSprite(X0, Y0, X1, Y1, sprite);
-                drawAdapter.DrawText(FontLoader.BigFont, status.Stacks.ToString(), new GLCoordinate(this.Location.X + X0, this.Location.Y + Y1 + (statusHeight / 3)), QFontAlignment.Left, this.statusStackCountRenderOptions);
+                drawAdapter.DrawText(FontLoader.BigFont, status.Stacks.ToString(), new GLCoordinate(X0, Y1 + (statusHeight / 3)), QFontAlignment.Left, this.statusStackCountRenderOptions);
             }
         }
     }

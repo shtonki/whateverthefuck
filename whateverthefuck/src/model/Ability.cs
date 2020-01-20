@@ -202,7 +202,8 @@
 
         public override IEnumerable<GameEvent> Resolve(GameEntity caster, GameEntity target, GameState gameState)
         {
-            return new GameEvent[] { new HealEvent(caster, target, 20) };
+            var healingAmount = caster.Status.ReadCurrentStats.Intelligence;
+            return new GameEvent[] { new HealEvent(caster, target, healingAmount) };
         }
     }
 

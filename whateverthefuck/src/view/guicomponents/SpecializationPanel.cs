@@ -47,30 +47,35 @@ namespace whateverthefuck.src.view.guicomponents
             panel.Size = new GLCoordinate(Size.X, Size.Y - 0.2f);
             panel.BackColor = Color.Black;
 
-            LayoutNode(panel, 0, 0, tree.Root);
+            LayoutNode(panel, 0, 0, tree.Root).available = true;
 
             AddChild(panel);
         }
 
-        private void LayoutNode(Panel panel, int x, int y, SpecializationNode node)
+        private SpecializationNodePanel LayoutNode(Panel panel, int x, int y, SpecializationNode node)
         {
-            SpecializationNodePanel b = new SpecializationNodePanel(node);
-            b.Size = new GLCoordinate(0.1f, 0.1f);
-            b.Location = new GLCoordinate(0.2f * x, 0.2f * y);
-            b.BackColor = Color.Orange;
+            SpecializationNodePanel nodePanel = new SpecializationNodePanel(node);
+            nodePanel.Size = new GLCoordinate(0.1f, 0.1f);
+            nodePanel.Location = new GLCoordinate(0.2f * x, 0.2f * y);
+            nodePanel.BackColor = Color.Orange;
 
-            panel.AddChild(b);
+            panel.AddChild(nodePanel);
 
             for (int i = 0; i < node.Children.Length; i++)
             {
-                LayoutNode(panel, x + i, y + 1, node.Children[i]);
+                var child = LayoutNode(panel, x + i, y + 1, node.Children[i]);
+                nodePanel.OnToggled += snp => child.ParentToggled(snp);
             }
+
+            return nodePanel;
         }
     }
 
     class SpecializationNodePanel : Panel
     {
         private SpecializationNode node;
+
+        public bool available;
 
         public SpecializationNodePanel(SpecializationNode node)
         {
@@ -80,17 +85,48 @@ namespace whateverthefuck.src.view.guicomponents
 
             this.OnMouseButtonDown += (c, i) =>
             {
-                node.Toggle();
-
-                if (node.Enabled)
+                if (available)
                 {
-                    this.AddBorder(Color.Green);
+                    Toggle();
+                }
+            };
+        }
+
+        public event Action<SpecializationNodePanel> OnToggled;
+
+        public void Toggle()
+        {
+            SetState(!node.Enabled, available);
+        }
+
+        public void ParentToggled(SpecializationNodePanel parent)
+        {
+            SetState(node.Enabled && parent.node.Enabled, parent.node.Enabled);
+        }
+
+        private void SetState(bool specced, bool speccable)
+        {
+            node.Enabled = specced;
+            available = speccable;
+
+            if (specced)
+            {
+                this.AddBorder(Color.Green);
+            }
+            else
+            {
+                if (speccable)
+                {
+                    this.AddBorder(Color.Orange);
                 }
                 else
                 {
+
                     this.AddBorder(Color.Red);
                 }
-            };
+            }
+
+            OnToggled?.Invoke(this);
         }
     }
 }
