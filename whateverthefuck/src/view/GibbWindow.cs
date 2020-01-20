@@ -125,10 +125,8 @@
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
-#if false
             var mouseMovedInput = InputUnion.MakeMouseMoveInput(new ScreenCoordinate(e.X, e.Y), new ScreenCoordinate(e.X - e.XDelta, e.Y - e.YDelta));
             Program.GameStateManager.HandleInput(mouseMovedInput);
-#endif
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)

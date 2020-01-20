@@ -82,7 +82,6 @@
             {
                 drawAdapter.FillRectangle(0, 0, this.Size.X, this.Size.Y, this.BackColor);
             }
-
             if (this.Border != null)
             {
                 drawAdapter.TraceRectangle(0, 0, this.Size.X, this.Size.Y, this.Border.BorderColor, this.Border.Width);

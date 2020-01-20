@@ -43,6 +43,8 @@
 
         private static CastBar CastBar { get; set; }
 
+        private static SpecializationPanel SpecializationPanel { get; set; }
+
         /// <summary>
         /// Creates a GibbWindow on a new thread and wait for the OnLoad event
         /// of said window to be called. Roughly speaking.
@@ -61,7 +63,7 @@
         {
             if (input.IsMouseMove || input.IsMouseInput)
             {
-                if (input.MouseButton.Value == OpenTK.Input.MouseButton.Right && input.Direction == InputUnion.Directions.Up)
+                if (input.IsMouseInput && input.MouseButton.Value == OpenTK.Input.MouseButton.Right && input.Direction == InputUnion.Directions.Up)
                 {
                     HideToolTip();
                 }
@@ -70,7 +72,6 @@
 
                 if (interactedGUIComponent != null)
                 {
-
                     if (input.MouseButton == OpenTK.Input.MouseButton.Right && input.Direction == InputUnion.Directions.Down)
                     {
                         if (interactedGUIComponent is ToolTipper)
@@ -105,15 +106,43 @@
 
         public static void LoadGUI()
         {
+#if false
+            Panel outer = new Panel();
+            outer.Size = new GLCoordinate(1, 1);
+            outer.Location = new GLCoordinate(-1f, -1f);
+            outer.BackColor = Color.Blue;
+
+            DraggablePanel dp = new DraggablePanel();
+            dp.Size = new GLCoordinate(1, 1);
+            dp.BackColor = Color.LightPink;
+            outer.AddChild(dp);
+
+            Button b = new Button();
+            b.Size = new GLCoordinate(0.2f, 0.2f);
+            b.OnMouseButtonDown += (c, i) => { Logging.Log("xd"); };
+            b.BackColor = Color.RosyBrown;
+            dp.AddChild(b);
+
+            GUIComponents.Add(outer);
+#else
             LoadInventoryPanel();
+#endif
         }
 
         public static void LoadHUD(PC hero)
         {
+
+            SpecializationPanel = new SpecializationPanel(hero.SpecializationTree, new GLCoordinate(1.5f, 1.5f));
+            SpecializationPanel.Location = new GLCoordinate(-0.9f, -0.9f);
+            GUIComponents.Add(SpecializationPanel);
+
+#if false
             LoadAbilityBar(hero);
             SetHeroPanel(hero);
             SetCastBar(hero);
             LoadEquipmentPanel(hero);
+
+#endif
         }
 
         public static void ShowLoot(Lootable lootee)
@@ -168,7 +197,7 @@
 
         public static void UpdateInventoryPanel(Inventory inventory)
         {
-            InventoryPanel.Update(inventory);
+            InventoryPanel?.Update(inventory);
         }
 
         public static void ToggleInventoryPanel()
@@ -325,16 +354,22 @@
             {
                 location -= parent.Location;
 
+                bool cont = false;
+
                 foreach (var child in parent.Children)
                 {
                     if (child.Contains(location) && child.Visible)
                     {
                         parent = child;
-                        continue;
+                        cont = true;
+                        break;
                     }
                 }
 
-                return parent;
+                if (!cont)
+                {
+                    return parent;
+                }
             }
         }
 

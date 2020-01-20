@@ -83,7 +83,7 @@
                 this.Hero = (PC)this.GameState.GetEntityById(this.TakeControlId.Value);
                 if (this.Hero != null)
                 {
-                    this.CenterCameraOn(this.Hero);
+                    this.CenterCameraOnHero();
                     GUI.LoadHUD(this.Hero);
                 }
 
@@ -100,7 +100,7 @@
             this.TakeControlId = identifier.Id;
         }
 
-        public void CenterCameraOn(GameEntity entity)
+        public void CenterCameraOnHero()
         {
             this.GameState.CurrentCamera = new FollowCamera(this.Hero);
         }
@@ -219,7 +219,6 @@
 
         public void RequestTransaction(Transaction transaction)
         {
-            Logging.Log(transaction.TransactionIdentifier.ToString());
             Program.ServerConnection.SendMessage(new TransactionMessage(transaction));
         }
 

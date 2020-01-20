@@ -44,6 +44,9 @@
             this.Info.State = GameEntityState.Created;
 
             this.Info.GameLocation = new GameCoordinate(0, 0);
+
+            this.SpecializationTree = new SpecializationTree();
+            this.SpecializationTree.OnChanged += () => { RecalculateBaseStats(); };
         }
 
         public event Action<GameEntity, GameState> OnDeath;
@@ -54,15 +57,22 @@
 
         public event Action<GameEntity> OnInteract;
 
+        // @move to Character
         public EntityStatus Status { get; protected set; }
 
+        // @move to PC
         public Equipment Equipment { get; protected set; }
 
+        // @move to Character
         public EntityAbilities Abilities { get; protected set; }
 
         public EntityInfo Info { get; }
 
+        // @fix only set on Movable?
         public EntityMovement Movements { get; set; } = new EntityMovement();
+
+        // @move to PC
+        public SpecializationTree SpecializationTree { get; protected set; }
 
         // @fix every property below probably belongs somewhere else
 
@@ -71,7 +81,6 @@
         /// <summary>
         /// Gets or sets current movement being made by the GameEntity.
         /// </summary>
-
         // @move to EntityMovements
         public GameCoordinate MovementCache { get; set; } = new GameCoordinate(0, 0);
 
@@ -227,6 +236,15 @@
         {
             this.Status?.Step(this, gameState);
             this.Equipment?.ApplyStaticEffects(this.Status.ReadCurrentStats);
+        }
+
+        private void RecalculateBaseStats()
+        {
+            if (this.Status != null)
+            {
+                this.SpecializationTree.SetBaseStats(this.Status.BaseStats);
+                this.Status.ResetToBaseStats();
+            }
         }
 
     }

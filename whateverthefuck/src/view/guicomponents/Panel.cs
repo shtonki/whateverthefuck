@@ -65,7 +65,7 @@
         public DraggablePanel()
             : base()
         {
-            this.BackColor = Color.Black;
+            BackColor = Color.Transparent;
 
             this.OnMouseButtonDown += (c, i) =>
             {
@@ -89,11 +89,10 @@
                 {
                     var dx = i.PreviousLocation.X - i.Location.X;
                     var dy = i.PreviousLocation.Y - i.Location.Y;
-                    var dcoordinate = new GLCoordinate(dx, dy);
 
-                    foreach (var kid in this.Children)
+                    foreach (var child in Children)
                     {
-                        kid.Location = (GLCoordinate)kid.Location + dcoordinate;
+                        child.Location += new GLCoordinate(dx, dy);
                     }
                 }
             };
@@ -105,5 +104,34 @@
             base.DrawMe(drawAdapter);
             drawAdapter.DeactivateScissor();
         }
+
+#if false
+
+        public override bool Contains(GLCoordinate clicked)
+        {
+            clicked += offset;
+            return base.Contains(clicked);
+        }
+        public override void DrawMe(DrawAdapter drawAdapter)
+        {
+            drawAdapter.ActivateScissor(this.Location as GLCoordinate, this.Size);
+
+            if (this.BackColor != Color.Transparent)
+            {
+                drawAdapter.FillRectangle(0, 0, this.Size.X, this.Size.Y, this.BackColor);
+            }
+
+            drawAdapter.Translate(offset.X, offset.Y);
+
+
+            foreach (var kiddo in this.Children)
+            {
+                kiddo.Draw(drawAdapter);
+            }
+
+            drawAdapter.Translate(-offset.X, -offset.Y);
+            drawAdapter.DeactivateScissor();
+        }
+#endif
     }
 }

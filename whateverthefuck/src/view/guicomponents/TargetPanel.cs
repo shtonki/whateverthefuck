@@ -80,7 +80,7 @@ namespace whateverthefuck.src.view.guicomponents
                 drawAdapter.DrawSprite(castingX0, castingY0, castingX1, castingY1, sprite);
             }
 
-            drawAdapter.DrawText(FontLoader.DefaultFont, this.entity.Info.Level.ToString(), new GLCoordinate(this.Location.X + this.Size.Y, this.Location.Y + this.Size.Y), QuickFont.QFontAlignment.Centre, this.nameRenderOptions);
+            drawAdapter.DrawText(FontLoader.DefaultFont, this.entity.Info.Level.ToString(), new GLCoordinate(this.Size.Y, this.Size.Y), QuickFont.QFontAlignment.Centre, this.nameRenderOptions);
 
             var statusX0 = castingX1;
             var statusY0 = 0;

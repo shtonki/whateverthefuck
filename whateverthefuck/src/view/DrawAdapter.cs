@@ -52,7 +52,7 @@ namespace whateverthefuck.src.view
 
         public void ActivateScissor(GLCoordinate location, GLCoordinate size)
         {
-            var locScreenCoords = GUI.GLToScreenCoordinates(location);
+            var locScreenCoords = GUI.GLToScreenCoordinates(location + GetCurrentTranslation());
             var sizeScreenCoords = GUI.GLToScreenCoordinates(new GLCoordinate(size.X - 1, size.Y - 1));
 
             GL.Scissor(

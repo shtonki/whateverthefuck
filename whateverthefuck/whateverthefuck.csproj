@@ -93,6 +93,7 @@
     <Compile Include="src\model\Item.cs" />
     <Compile Include="src\model\LineOfSight.cs" />
     <Compile Include="src\model\EntityMovement.cs" />
+    <Compile Include="src\model\SpecializationTree.cs" />
     <Compile Include="src\model\Status.cs" />
     <Compile Include="src\model\Transaction.cs" />
     <Compile Include="src\network\messages\AddItemsToInventoryMessage.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="src\view\guicomponents\LootPanel.cs" />
     <Compile Include="src\view\guicomponents\Panel.cs" />
     <Compile Include="src\view\guicomponents\GUIComponent.cs" />
+    <Compile Include="src\view\guicomponents\SpecializationPanel.cs" />
     <Compile Include="src\view\guicomponents\TargetPanel.cs" />
     <Compile Include="src\view\guicomponents\TextPanel.cs" />
     <Compile Include="src\view\LayoutManager.cs" />

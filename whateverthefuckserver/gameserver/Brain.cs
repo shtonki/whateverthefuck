@@ -119,7 +119,7 @@ namespace whateverthefuck.src.model.entities
                         return new GameEvent[] { new UpdateMovementEvent(entity.Info.Identifier, movements) };
                     }
 
-                    if (gameState.StepCounter % 300 == 1)
+                    if (gameState.StepCounter % 300 == 50)
                     {
                         EntityMovement movements = new EntityMovement();
                         return new GameEvent[] { new UpdateMovementEvent(entity.Info.Identifier, movements) };
