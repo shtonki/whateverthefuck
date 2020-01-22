@@ -6,13 +6,13 @@ using whateverthefuck.src.util;
 
 namespace whateverthefuckserver.storage
 {
-    interface ActualDatabaseInterface
+    interface IActualDatabase
     {
         void StoreUserInfo(UserInfo info);
         UserInfo GetUserInfo(string username);
     }
 
-    class SebasLocalDatabase : ActualDatabaseInterface
+    class SebasLocalDatabase : IActualDatabase
     {
         private const string FilePath = "database.txt";
 
