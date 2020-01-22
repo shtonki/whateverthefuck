@@ -12,9 +12,4 @@ namespace whateverthefuckserver.storage
         void AddJson(string collectionName, object o);
         void AddBson(string collectionName, object o);
     }
-
-    interface IStorable
-    {
-        Dictionary<string, string> toStorageFormat();
-    }
 }

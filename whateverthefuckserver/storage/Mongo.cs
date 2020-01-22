@@ -61,7 +61,7 @@ namespace whateverthefuckserver.storage
         {
             var collection = client.GetDatabase(DB_NAME).GetCollection<BsonDocument>(collectionName);
             var document = new BsonDocument();
-
+ 
             document.Add("name", "Seba");
             document.Add("age", 26);
             document.Add("dick", new BsonArray() { "yes", "", "" });

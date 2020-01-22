@@ -51,9 +51,12 @@
     <Compile Include="network\WhateverthefuckServerConnection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="network\WhateverConnectionListeningServer.cs" />
-    <Compile Include="storage\ActualDatabaseInterface.cs" />
+    <Compile Include="storage\IActualDatabase.cs" />
+    <Compile Include="storage\ActualMongo.cs" />
     <Compile Include="storage\DummyStorage.cs" />
+    <Compile Include="storage\IStorable.cs" />
     <Compile Include="storage\IStorage.cs" />
+    <Compile Include="storage\ItemStorable.cs" />
     <Compile Include="storage\Mongo.cs" />
     <Compile Include="gameserver\GamePlayer.cs" />
     <Compile Include="storage\UserInfo.cs" />
